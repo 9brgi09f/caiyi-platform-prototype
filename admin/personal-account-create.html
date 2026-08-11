@@ -18,7 +18,7 @@
 <main class="main-content">
   <div class="page-header"><a class="back-link" href="org-type-list.html?tab=account">← 返回账号管理</a><h2>创建个人账号</h2><p>由运营协助完成个人账号建档，创建后可用于登录并关联机构成员身份。</p></div>
   <div class="content-card">
-    <div class="info-box"><strong>创建规则：</strong>手机号全平台唯一。后台创建仅用于运营协助开户或线下资料建档；创建完成后账号处于已激活状态，但<strong>不自动发放新用户免费体验权益</strong>。正式系统需完成实名、手机号核验和操作审计。</div>
+    <div class="info-box"><strong>创建规则：</strong>手机号全平台唯一。后台创建仅用于运营协助开户或线下资料建档；若该手机号首次创建平台个人账号，则按当前新用户权益规则发放免费体验资格；历史补录或已有账号关联机构时不重复发放。正式系统需完成实名、手机号核验和操作审计。</div>
     <form onsubmit="return handleSubmit(event);">
       <div class="form-section"><div class="section-title">个人实名信息</div><div class="form-grid">
         <div class="form-row"><label class="form-label">姓名<span class="required">*</span></label><input class="form-input" id="userName" type="text" placeholder="请输入真实姓名" required/></div>
@@ -33,7 +33,7 @@
 </main>
 <div class="success-modal-mask" id="successModal"><div class="success-modal" role="dialog" aria-modal="true" aria-labelledby="successTitle"><div class="success-icon">✓</div><div class="success-title" id="successTitle">个人账号已创建</div><div class="success-desc" id="successDesc"></div><a class="btn btn-primary" href="personal-account-view.html?id=4">查看账号详情</a></div></div>
 <script>
-function handleSubmit(event){event.preventDefault();const name=document.getElementById('userName').value.trim()||'该用户';document.getElementById('successDesc').textContent=`已为「${name}」创建平台个人账号。账号已激活，可后续关联机构成员身份；本次后台建档未发放新用户免费体验权益。`;document.getElementById('successModal').classList.add('show');return false;}
+function handleSubmit(event){event.preventDefault();const name=document.getElementById('userName').value.trim()||'该用户';document.getElementById('successDesc').textContent=`已为「${name}」创建平台个人账号。账号已激活，可后续关联机构成员身份；因该账号为首次创建，将按当前新用户权益规则获得免费体验资格。`;document.getElementById('successModal').classList.add('show');return false;}
 </script>
 </body>
 </html>
