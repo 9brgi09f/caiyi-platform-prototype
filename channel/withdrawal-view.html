@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>提现单详情 - 渠道端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+        .info-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; }
+        .info-label { font-size: 13px; color: var(--text-muted); margin-bottom: var(--spacing-xs); }
+        .info-value { font-size: 20px; font-weight: 700; }
+        .timeline { list-style: none; padding: 0; margin: 0; }
+        .timeline li { display: flex; gap: var(--spacing-md); padding: 10px 0; border-left: 2px solid var(--border-light); margin-left: 8px; padding-left: 18px; position: relative; font-size: 14px; }
+        .timeline li::before { content: ''; position: absolute; left: -6px; top: 16px; width: 10px; height: 10px; border-radius: 50%; background: var(--border-color); }
+        .timeline li.done::before { background: var(--success-color); }
+        .timeline li.now::before { background: var(--klein); box-shadow: 0 0 0 4px var(--klein-light); }
+        .timeline li.now { font-weight: 600; }
+        .timeline .tl-time { color: var(--text-muted); font-size: 12px; min-width: 130px; }
+        #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+    </style>
+</head>
+<body>
+<header class="top-bar channel">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">渠</div>
+<span>智采科技</span>
+</div>
+</div>
+</header>
+<aside class="sidebar channel">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon"></span><span>概览</span></a>
+<a class="sidebar-link" href="invite-code.html"><span class="icon"></span><span>我的邀请码</span></a>
+<a class="sidebar-link" href="customer-list.html"><span class="icon"></span><span>客户管理</span></a>
+<a class="sidebar-link" href="referral-list.html"><span class="icon"></span><span>推荐确认单</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon"></span><span>分成结算</span></a>
+<a class="sidebar-link active" href="withdrawal-list.html"><span class="icon"></span><span>提现管理</span></a>
+<a class="sidebar-link" href="bank-card.html"><span class="icon"></span><span>收款账户</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon"></span><span>发票管理</span></a>
+</div>
+</aside>
+<main class="main-content">
+<a class="back-link" href="withdrawal-list.html">← 返回列表</a>
+<div class="page-header">
+<h2 id="pgTitle">提现单详情</h2>
+<p id="pgSub"></p>
+</div>
+<div class="info-grid">
+<div class="info-card"><div class="info-label">提现金额</div><div class="info-value" style="color: var(--klein);" id="vAmount">-</div></div>
+<div class="info-card"><div class="info-label">关联结算单</div><div class="info-value" id="vSt" style="font-size:16px;">-</div></div>
+<div class="info-card"><div class="info-label">发票金额</div><div class="info-value" id="vInvAmt">-</div></div>
+<div class="info-card"><div class="info-label">当前状态</div><div class="info-value" id="vStatus">-</div></div>
+<div class="info-card" id="vPaidCard" style="display:none;"><div class="info-label">实付金额</div><div class="info-value" style="color: var(--klein);" id="vPaid">-</div></div>
+</div>
+<div class="content-card">
+<h3 style="font-size:15px;font-weight:600;margin-bottom:var(--spacing-md);">流程进度（待开票 → 待审核 → 待付款 → 已付款）</h3>
+<ul class="timeline" id="tl"></ul>
+</div>
+<div class="content-card">
+<h3 style="font-size:15px;font-weight:600;margin-bottom:var(--spacing-md);">发票信息</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-md);font-size:14px;" id="invGrid"></div>
+</div>
+</main>
+<div id="toast"></div>
+<script>
+function showToast(msg, icon){
+  var t = document.getElementById('toast');
+  t.textContent = (icon || '\u2713') + ' ' + msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.display = 'none'; }, 2400);
+}
+var DATA = {
+  'CWD20260715001': { amount: '¥2,520.00', st: 'CST20260501', invAmt: '—（待上传）', status: '待开票',
+    tl: [['done','2026-07-15 09:30','发起提现申请（事前审批中，同步金蝶发起财务事前审批）'],['done','2026-07-15 14:00','金蝶财务事前审批通过（转待开票）'],['now','','待上传增值税专用发票（等额 ¥2,520.00），上传后进入平台审核'],['','','待审核'],['','','待付款'],['','','已付款']],
+    inv: [['发票号','—（待上传）'],['票种/税率','增值税专用发票 / 6%（要求）'],['发票抬头','广州市政府采购中心'],['台账状态','—（上传后入台账：待核销）']] },
+  'CWD20260610001': { amount: '¥1,680.00', st: 'CST20260401', invAmt: '¥1,680.00', status: '待审核',
+    tl: [['done','2026-06-10 10:20','发起提现申请（事前审批中，同步金蝶发起财务事前审批）'],['done','2026-06-10 10:50','金蝶财务事前审批通过（转待开票）'],['done','2026-06-10 11:00','上传增值税专用发票（转待审核）'],['now','','平台审核中'],['','','待付款（平台审核通过后推送资金支付审批单，财务在金蝶发起付款，银企直联）'],['','','已付款']],
+    inv: [['发票号','25612000000112233445'],['票种/税率','增值税专用发票 / 6%（不扣减）'],['发票抬头','广州市政府采购中心'],['台账状态','待核销（付款后自动核销）']] },
+  'CWD20260415001': { amount: '¥1,240.00', st: 'CST20260301', invAmt: '¥1,240.00', status: '已付款',
+    tl: [['done','2026-04-15 09:00','发起提现申请（事前审批中，同步金蝶发起财务事前审批）'],['done','2026-04-15 09:40','金蝶财务事前审批通过（转待开票）'],['done','2026-04-15 10:30','上传增值税专用发票（转待审核）'],['done','2026-04-16 14:00','平台审核通过（推送资金支付审批单，转待付款）'],['done','2026-04-17','财务在金蝶发起付款'],['done','2026-04-18 15:20','银企直联付款完成（流水号 SPDB20260418090012）']],
+    inv: [['发票号','25612000000166778899'],['票种/税率','增值税专用发票 / 6%（不扣减）'],['发票抬头','广州市政府采购中心'],['台账状态','已核销（2026-04-18）']] },
+  'CWD20260605003': { amount: '¥2,520.00', st: 'CST20260501', invAmt: '¥2,520.00', status: '已取消',
+    tl: [['done','2026-06-05 15:30','发起提现申请（事前审批中，同步金蝶发起财务事前审批）'],['done','2026-06-05 15:45','金蝶财务事前审批通过（转待开票）'],['done','2026-06-05 16:00','上传增值税专用发票（转待审核）'],['done','2026-06-08 09:00','主动撤回申请（已取消）'],['done','2026-06-08 09:00','关联结算单退回「未提现」，发票作废（需红冲）']],
+    inv: [['发票号','25612000000199001122'],['票种/税率','增值税专用发票 / 6%'],['发票抬头','广州市政府采购中心'],['台账状态','已作废（提现撤回，需红冲；重新提现须重新开票）']] }
+};
+var id = new URLSearchParams(location.search).get('id') || 'CWD20260610001';
+var d = DATA[id] || DATA['CWD20260610001'];
+document.getElementById('pgTitle').textContent = '提现单详情 · ' + id;
+document.getElementById('pgSub').textContent = '必须开具增值税专用发票，发票金额须与提现金额完全一致；1%/3% 税率专票在申请时分别按结算金额 5.29%/3.11% 扣减分成款';
+document.getElementById('vAmount').textContent = d.amount;
+document.getElementById('vSt').textContent = d.st;
+document.getElementById('vInvAmt').textContent = d.invAmt;
+document.getElementById('vStatus').textContent = d.status;
+// 实付金额：仅已付款/已到账展示，实付 = 提现金额 − 分成款扣减（渠道端样例无扣减，数值等于提现金额）
+if (d.status === '已付款' || d.status === '已到账') {
+  document.getElementById('vPaid').textContent = d.paid || d.amount;
+  document.getElementById('vPaidCard').style.display = '';
+}
+document.getElementById('tl').innerHTML = d.tl.map(function(t){
+  return '<li class="' + t[0] + '"><span class="tl-time">' + (t[1] || '—') + '</span><span>' + t[2] + '</span></li>';
+}).join('');
+document.getElementById('invGrid').innerHTML = d.inv.map(function(m){
+  return '<div><div style="font-size:12px;color:var(--text-muted);">' + m[0] + '</div><div style="margin-top:2px;">' + m[1] + '</div></div>';
+}).join('');
+if (d.status === '\u5f85\u5f00\u7968' || d.status === '\u5f85\u5ba1\u6838') {
+  var tlCard = document.getElementById('tl').closest('.content-card') || document.getElementById('tl').parentElement;
+  var bar = document.createElement('div');
+  bar.style.cssText = 'margin-top:var(--spacing-md);display:flex;gap:var(--spacing-md);';
+  if (d.status === '\u5f85\u5f00\u7968') {
+    bar.innerHTML = '<a class="btn btn-primary" href="invoice-upload.html">\u4e0a\u4f20\u53d1\u7968</a>'
+      + '<a class="btn btn-outline" href="withdrawal-list.html?cancel=' + id + '" style="color:var(--danger-color);border-color:var(--danger-color);">\u53d6\u6d88\u7533\u8bf7</a>';
+  } else {
+    bar.innerHTML = '<a class="btn btn-outline" href="withdrawal-list.html?cancel=' + id + '" style="color:var(--danger-color);border-color:var(--danger-color);">\u64a4\u56de\u7533\u8bf7</a>';
+  }
+  tlCard.appendChild(bar);
+}
+</script>
+</body>
+</html>

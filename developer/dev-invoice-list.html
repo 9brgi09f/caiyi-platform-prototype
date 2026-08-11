@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>发票管理 - 开发者端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; }
+        .stat-value { font-size: 24px; font-weight: 700; color: var(--developer-color); }
+        .stat-label { font-size: 13px; color: var(--text-muted); margin-top: var(--spacing-xs); }
+
+        /* 标签页样式 */
+        .tab-nav { display: flex; gap: var(--spacing-xs); margin-bottom: var(--spacing-lg); border-bottom: 2px solid var(--border-light); }
+        .tab-btn { padding: var(--spacing-md) var(--spacing-lg); color: var(--text-secondary); text-decoration: none; border-bottom: 2px solid transparent; margin-bottom: -2px; cursor: pointer; transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none; font-size: 14px; }
+        .tab-btn:hover { color: var(--developer-color); }
+        .tab-btn.active { color: var(--developer-color); border-bottom-color: var(--developer-color); font-weight: 500; }
+
+        /* 发票状态 */
+        .badge-tohexiao { background: #fef3c7; color: #d97706; }  /* 待核销 */
+        .badge-void { background: #f1f5f9; color: #64748b; }      /* 已作废 */
+    </style>
+
+<style id="identity-switcher-css">
+.id-switcher{position:relative;display:inline-flex;align-items:center;}
+.id-trigger{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 6px;border-radius:8px;cursor:pointer;transition:background 0.15s;user-select:none;}
+.id-trigger:hover{background:rgba(0,0,0,0.05);}
+.id-avatar{width:32px;height:32px;border-radius:50%;background:#EFF4FF;color:#2563EB;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.id-info{display:flex;flex-direction:column;align-items:flex-start;line-height:1.3;}
+.id-org{font-size:13px;font-weight:500;color:#1e293b;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.id-type-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;background:#EFF4FF;color:#2563EB;}
+.id-chevron{font-size:10px;color:#94a3b8;margin-left:2px;transition:transform 0.2s;}
+.id-switcher.open .id-chevron{transform:rotate(180deg);}
+.id-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:white;border:1px solid #dfe4ee;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:240px;z-index:999;overflow:hidden;}
+.id-switcher.open .id-menu{display:block;}
+.id-menu-hd{padding:10px 14px 8px;font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:1px;border-bottom:1px solid #ecf0f6;}
+.id-menu-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background 0.15s;text-decoration:none;color:inherit;}
+.id-menu-item:hover{background:#F8FAFC;}
+.id-menu-item.current{background:#F8FAFF;}
+.id-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.id-dot.active{background:#2563EB;}
+.id-dot.idle{background:#dfe4ee;}
+.id-item-body{flex:1;}
+.id-item-org{font-size:13px;font-weight:500;color:#1e293b;}
+.id-item-type{font-size:11px;color:#94a3b8;margin-top:1px;}
+.id-item-tag{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;margin-left:auto;flex-shrink:0;}
+.id-item-tag.current-tag{background:#EFF4FF;color:#2563EB;}
+.id-menu-sep{height:1px;background:#ecf0f6;margin:4px 0;}
+.id-menu-action{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:12px;color:#64748b;cursor:pointer;transition:background 0.15s;text-decoration:none;}
+.id-menu-action:hover{background:#F8FAFC;color:#2563EB;}
+</style>
+</head>
+<body>
+<header class="top-bar developer">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="id-switcher" id="idSwitcher">
+<div class="id-trigger" onclick="toggleIdMenu()">
+<div class="id-avatar">张</div>
+<div class="id-info">
+<span class="id-org">广州某某科技有限公司</span>
+<span class="id-type-badge" style="background:#D1FAE5;color:#059669;">开发者</span>
+</div>
+<span class="id-chevron">▾</span>
+</div>
+<div class="id-menu">
+<div class="id-menu-hd">切换工作台身份</div>
+<div class="id-menu-item current">
+<div class="id-dot active" style="background:#059669;"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">开发者</div>
+</div>
+<span class="id-item-tag current-tag" style="background:#D1FAE5;color:#059669;">当前</span>
+</div>
+<div class="id-menu-item" onclick="location.href='../user/index.html'">
+<div class="id-dot idle"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">采购单位</div>
+</div>
+</div>
+<div class="id-menu-sep"></div>
+<a class="id-menu-action" href="../user/register-select.html">＋ 注册新机构类型</a>
+<a class="id-menu-action" href="#" onclick="alert('已退出登录');return false;">退出登录</a>
+</div>
+</div>
+<script>
+function toggleIdMenu(){
+  var el=document.getElementById('idSwitcher');
+  el.classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  var sw=document.getElementById('idSwitcher');
+  if(sw && !sw.contains(e.target)) sw.classList.remove('open');
+});
+</script>
+</div>
+</header>
+<aside class="sidebar developer">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="agent-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="member-list.html"><span class="icon">👥</span><span>成员管理</span></a>
+<a class="sidebar-link" href="revenue-list.html"><span class="icon">📈</span><span>收入看板</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📄</span><span>结算单</span></a>
+<a class="sidebar-link" href="withdrawal-list.html"><span class="icon">💸</span><span>提现管理</span></a><a class="sidebar-link" href="bank-card.html"><span class="icon">🏦</span><span>收款账户</span></a>
+<a class="sidebar-link active" href="dev-invoice-list.html"><span class="icon">🧾</span><span>发票管理</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<h2>发票管理</h2>
+<p>发票台账：查看提现所开发票及其状态（发票在提现流程中上传，此处不新增）</p>
+</div>
+<div class="stats-grid">
+<div class="stat-card">
+<div class="stat-value">6</div>
+<div class="stat-label">累计上传发票</div>
+</div>
+<div class="stat-card">
+<div class="stat-value">¥11,137.94</div>
+<div class="stat-label">有效发票金额</div>
+</div>
+<div class="stat-card">
+<div class="stat-value" style="color: var(--warning-color);">2</div>
+<div class="stat-label">待核销发票</div>
+</div>
+</div>
+<p style="font-size:12px; color:var(--text-muted); margin:-8px 0 16px;">发票状态：上传后为「待核销」→ 关联提现单付款后「已核销」；若提现被退回/撤回，发票「已作废」（需红冲）。</p>
+<!-- 标签页导航 -->
+<div class="tab-nav">
+<button class="tab-btn active" onclick="filterStatus('all', this)" type="button">全部 (6)</button>
+<button class="tab-btn" onclick="filterStatus('待核销', this)" type="button">待核销 (2)</button>
+<button class="tab-btn" onclick="filterStatus('已核销', this)" type="button">已核销 (3)</button>
+<button class="tab-btn" onclick="filterStatus('已作废', this)" type="button">已作废 (1)</button>
+</div>
+<!-- 全部发票表格 -->
+<div class="content-card">
+<div class="table-wrapper">
+<table class="table">
+<thead>
+<tr>
+<th>发票号</th>
+<th>发票金额</th>
+<th>开票日期</th>
+<th>关联结算单</th>
+<th>关联提现单</th>
+<th>使用状态</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr data-status="待核销">
+<td>25612000000078901234</td>
+<td class="amount positive">¥1,050.00</td>
+<td>2026-05-15</td>
+<td>ST20260201</td>
+<td><a href="withdrawal-view.html" style="color: var(--developer-color);">WD20260515002</a></td>
+<td><span class="badge badge-tohexiao">待核销</span></td>
+<td><a class="btn btn-sm btn-outline" href="dev-invoice-view.html">详情</a></td>
+</tr>
+<tr data-status="待核销">
+<td>25612000000056789012</td>
+<td class="amount positive">¥1,780.50</td>
+<td>2026-05-14</td>
+<td>ST20251201</td>
+<td><a href="withdrawal-view.html" style="color: var(--developer-color);">WD20260514001</a></td>
+<td><span class="badge badge-tohexiao">待核销</span></td>
+<td><a class="btn btn-sm btn-outline" href="dev-invoice-view.html">详情</a></td>
+</tr>
+<tr data-status="已核销">
+<td>25612000000012345678</td>
+<td class="amount positive">¥4,302.76</td>
+<td>2026-05-15</td>
+<td>ST20260301、ST20260401</td>
+<td><a href="withdrawal-view.html" style="color: var(--developer-color);">WD20260515001</a></td>
+<td><span class="badge badge-success">已核销</span></td>
+<td><a class="btn btn-sm btn-outline" href="dev-invoice-view.html">详情</a></td>
+</tr>
+<tr data-status="已作废">
+<td>25612000000033344455</td>
+<td class="amount positive">¥960.00</td>
+<td>2026-05-13</td>
+<td>ST20251101</td>
+<td><a href="withdrawal-view.html" style="color: var(--developer-color);">WD20260513004</a></td>
+<td><span class="badge badge-void">已作废</span></td>
+<td><a class="btn btn-sm btn-outline" href="dev-invoice-view.html">详情</a></td>
+</tr>
+<tr data-status="已核销">
+<td>25612000000045678901</td>
+<td class="amount positive">¥1,240.00</td>
+<td>2026-04-20</td>
+<td>ST20251001</td>
+<td><a href="withdrawal-view.html" style="color: var(--developer-color);">WD20260420003</a></td>
+<td><span class="badge badge-success">已核销</span></td>
+<td><a class="btn btn-sm btn-outline" href="dev-invoice-view.html">详情</a></td>
+</tr>
+<tr data-status="已核销">
+<td>25612000000099887766</td>
+<td class="amount positive">¥1,937.80</td>
+<td>2026-03-20</td>
+<td>ST20250901</td>
+<td><a href="withdrawal-view.html" style="color: var(--developer-color);">WD20260320002</a></td>
+<td><span class="badge badge-success">已核销</span></td>
+<td><a class="btn btn-sm btn-outline" href="dev-invoice-view.html">详情</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+
+</body>
+</html>

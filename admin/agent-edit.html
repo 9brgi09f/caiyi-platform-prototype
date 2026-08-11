@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>修改智能体 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .form-section {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+        }
+        .form-section-title {
+            font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md); border-bottom: 1px solid var(--border-light);
+        }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-lg); }
+        .form-item { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+        .form-item.full-width { grid-column: 1 / -1; }
+        .form-label { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+        .form-hint { font-size: 12px; color: var(--text-muted); }
+        textarea { min-height: 100px; resize: vertical; }
+        .edit-tip { background: var(--admin-light); border: 1px solid var(--admin-color); border-radius: var(--radius-md); padding: var(--spacing-md); margin-bottom: var(--spacing-lg); color: var(--admin-color); font-size: 14px; }
+        .charge-item { background: var(--bg-light, #f8fafc); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: var(--spacing-lg); margin-bottom: var(--spacing-md); }
+        .charge-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--spacing-md); }
+        .charge-title { font-weight: 600; font-size: 14px; }
+        .charge-fields { display: grid; grid-template-columns: 1.2fr 1.2fr 1fr 0.8fr; gap: var(--spacing-md); align-items: start; }
+        .charge-yuan { font-weight: 600; color: var(--admin-color); padding-top: 30px; }
+        @media (max-width: 640px) { .charge-fields { grid-template-columns: 1fr 1fr; } .charge-yuan { padding-top: 8px; } }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link active" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a href="agent-audit-list.html" style="color: white; margin-bottom: var(--spacing-sm); display: inline-block;">← 返回智能体管理</a>
+<h2>修改智能体</h2>
+<p>合规监测智能体（已上架） | 开发者：张开发者</p>
+</div>
+<div class="edit-tip">
+            您正在以平台身份修改该智能体，保存后<strong>直接生效</strong>并通知开发者；如需下架请返回列表操作。
+        </div>
+<form class="form-section">
+<h3 class="form-section-title">基本信息</h3>
+<div class="form-grid">
+<div class="form-item">
+<label class="form-label">应用类型 <span style="color: red;">*</span></label>
+<select class="select" required="">
+<option selected="" value="self">自研智能体</option>
+<option value="third_agent">第三方智能体</option>
+<option value="third_app">第三方应用</option>
+<option value="saas">SaaS</option>
+</select>
+</div>
+<div class="form-item">
+<label class="form-label">产品名称 <span style="color: red;">*</span></label>
+<input class="input" required="" type="text" value="合规监测智能体"/>
+</div>
+<div class="form-item">
+<label class="form-label">产品分类 <span style="color: red;">*</span></label>
+<select class="select" required="">
+<option value="cat_purchase">采购管理</option>
+<option selected="" value="cat_compliance">合规风控</option>
+<option value="cat_data">数据分析</option>
+<option value="cat_service">智能客服</option>
+<option value="cat_policy">政策法规</option>
+</select>
+</div>
+<div class="form-item">
+<label class="form-label">智能体属性</label>
+<select class="select">
+<option selected="">智能辅助审查</option>
+<option>智能评审</option>
+<option>风险防控</option>
+<option>价格比对</option>
+<option>成本分析</option>
+<option>政策咨询</option>
+<option>流程问答</option>
+<option>智能提取</option>
+<option>应标辅助</option>
+<option>资料抽取</option>
+</select>
+</div>
+<div class="form-item">
+<label class="form-label">区域</label>
+<select class="select">
+<option selected="" value="">全国</option>
+<option>北京市</option>
+<option>上海市</option>
+<option>广东省</option>
+<option>浙江省</option>
+<option>江苏省</option>
+<option>四川省</option>
+<option>山东省</option>
+<option>湖北省</option>
+<option>湖南省</option>
+<option value="more">…（其余省份 / 自治区）</option>
+</select>
+</div>
+<div class="form-item">
+<label class="form-label">版本号</label>
+<input class="input" type="text" value="v1.0.0"/>
+</div>
+<div class="form-item">
+<label class="form-label">封面图片</label>
+<button class="btn btn-outline" type="button">更换封面图片</button>
+<span class="form-hint">请上传 大小不超过 5MB 格式为 png/jpg/jpeg 的文件</span>
+</div>
+<div class="form-item">
+<label class="form-label">演示视频</label>
+<button class="btn btn-outline" type="button">更换演示视频</button>
+<span class="form-hint">支持 mp4/webm/mov，大小不超过 500MB</span>
+</div>
+<div class="form-item">
+<label class="form-label">操作手册</label>
+<button class="btn btn-outline" type="button">更换操作手册</button>
+<span class="form-hint">支持 doc/docx/pdf/pptx，大小不超过 200MB</span>
+</div>
+<div class="form-item full-width">
+<label class="form-label">产品描述 <span style="color: red;">*</span></label>
+<textarea class="input">专业的合规监测智能体，帮助企业自动化检查文档合规性，支持合同审查、风险识别、合规报告生成等功能。</textarea>
+</div>
+<div class="form-item full-width">
+<label class="form-label">详细描述</label>
+<textarea class="input">## 功能亮点
+- 合同智能审查与风险识别
+- 合规报告一键生成
+- 支持 PDF / Word / OFD 多种文档格式</textarea>
+</div>
+<div class="form-item full-width">
+<label class="form-label">设置地址</label>
+<input class="input" type="text" value="https://api.example.com/v1/compliance"/>
+</div>
+</div>
+</form>
+<form class="form-section">
+<h3 class="form-section-title">能力与接入</h3>
+<div class="form-grid">
+<div class="form-item">
+<label class="form-label">是否支持 API</label>
+<div style="display:flex;gap:var(--spacing-lg);align-items:center;">
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input checked name="supportApi" type="radio" value="1"/> 是</label>
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input name="supportApi" type="radio" value="0"/> 否</label>
+</div>
+</div>
+<div class="form-item">
+<label class="form-label">是否支持 MCP</label>
+<div style="display:flex;gap:var(--spacing-lg);align-items:center;">
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input name="supportMcp" type="radio" value="1"/> 是</label>
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input checked name="supportMcp" type="radio" value="0"/> 否</label>
+</div>
+</div>
+<div class="form-item">
+<label class="form-label">是否在线运行</label>
+<div style="display:flex;gap:var(--spacing-lg);align-items:center;">
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input checked name="onlineRun" type="radio" value="1"/> 是</label>
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input name="onlineRun" type="radio" value="0"/> 否</label>
+</div>
+</div>
+</div>
+</form>
+<form class="form-section">
+<h3 class="form-section-title">计费配置（开发者自主定价 · 按 token 计费）</h3><div style="background:#EFF4FF;border:1px solid #c7d9fb;border-radius:8px;padding:12px 14px;font-size:13px;color:#1D4ED8;line-height:1.9;margin-bottom:var(--spacing-lg);">本智能体按 <strong>token 计费，换算率（计价规则）由开发者自行设定</strong>（下限 = 平台算力成本单价 0.1 彩豆/千token）；用户每次调用按实际消耗 token × 开发者换算率扣彩豆。分成 =用户消耗彩豆 × 80% − 算力成本彩豆（见“规则设置 → 算力计费规则 / 分佣规则”）。下方为开发者申报的定价与 token 区间，平台可核验或修正。</div><div class="charge-fields"><div class="form-item"><label class="form-label">token → 彩豆 换算率（开发者定价）</label><div style="display:flex;align-items:center;gap:6px;padding-top:4px;">每 1,000 token = <input class="input" min="0.1" step="0.1" style="width:90px;" type="number" value="1"/> 彩豆</div><span class="form-hint">开发者定价·平台可修正，不得低于 0.1</span></div><div class="form-item"><label class="form-label">单次预估 token（下限）</label><input class="input" id="tkMin" min="0" oninput="calcBeanRange()" style="width:140px;" type="number" value="10000"/><span class="form-hint">开发者申报·平台可修正</span></div><div class="form-item"><label class="form-label">单次预估 token（上限）</label><input class="input" id="tkMax" min="0" oninput="calcBeanRange()" style="width:140px;" type="number" value="150000"/><span class="form-hint">开发者申报·平台可修正</span></div><div class="form-item"><label class="form-label">单次 token 上限（熔断）</label><input class="input" id="tkCap" min="0" style="width:140px;" type="number" value="300000"/><span class="form-hint">单次超过此值将截断并提示，防极端输入</span></div><div class="form-item"><label class="form-label">换算后预估彩豆区间</label><div class="charge-yuan" id="beanRange" style="padding-top:6px;">—</div><span class="form-hint">按当前换算率自动计算，用于市场展示</span></div></div><span class="form-hint">平台可核验/修正开发者申报的 token 区间；开发者自行修改需走变更审核流程。</span>
+</form>
+<div style="display: flex; gap: var(--spacing-md); justify-content: center;">
+<a class="btn btn-outline" href="agent-audit-list.html">取消</a>
+<button class="btn btn-primary" onclick="openSave(event)" type="button">保存修改</button>
+</div>
+<!-- 保存确认弹窗 -->
+<div class="modal-overlay" id="saveModal" onclick="if(event.target===this)closeSave()">
+<div class="modal" style="max-width: 420px;">
+<div class="modal-header">
+<span class="modal-title">确认保存修改</span>
+<button class="modal-close" onclick="closeSave()">×</button>
+</div>
+<div class="modal-body">
+<p style="font-size: 14px; margin-bottom: var(--spacing-sm);">确定保存对「合规监测智能体」的修改吗？</p>
+<p style="font-size: 13px; color: var(--text-muted); line-height: 1.7;">平台身份修改<strong>保存后直接生效</strong>，系统将通知开发者本次修改内容。</p>
+</div>
+<div class="modal-footer">
+<button class="btn btn-outline" onclick="closeSave()">取消</button>
+<button class="btn btn-primary" onclick="doSave()">确认保存</button>
+</div>
+</div>
+</div>
+<div id="toast" style="position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25);"></div>
+<script>
+function calcYuan(inp){
+  var n = parseFloat(inp.value) || 0;
+  inp.closest('.charge-item').querySelector('.charge-yuan').textContent = '≈ ¥' + (n * 0.01).toFixed(2);
+}
+function openSave(e){ e.preventDefault(); document.getElementById('saveModal').classList.add('active'); }
+function closeSave(){ document.getElementById('saveModal').classList.remove('active'); }
+function doSave(){
+  closeSave();
+  var t = document.getElementById('toast');
+  t.textContent = '✓ 修改已保存并生效，已通知开发者';
+  t.style.display = 'block';
+  setTimeout(function(){ window.location.href = 'agent-audit-list.html'; }, 1400);
+}
+var TOKEN_RATE=1000;
+function calcBeanRange(){
+  var mn=parseFloat(document.getElementById("tkMin").value)||0;
+  var mx=parseFloat(document.getElementById("tkMax").value)||0;
+  var el=document.getElementById("beanRange");
+  if(mn>0&&mx>0&&mx>=mn) el.textContent="约 "+Math.ceil(mn/TOKEN_RATE)+" ~ "+Math.ceil(mx/TOKEN_RATE)+" 彩豆/次";
+  else el.textContent="—";
+}
+document.addEventListener("DOMContentLoaded",calcBeanRange);
+</script>
+</main>
+</body>
+</html>

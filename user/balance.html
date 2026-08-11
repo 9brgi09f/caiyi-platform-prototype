@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>余额管理 - 用户端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .balance-display { background: linear-gradient(135deg, #2563EB, #1D4ED8); color: white; padding: var(--spacing-xl); border-radius: var(--radius-lg); text-align: center; margin-bottom: var(--spacing-lg); }
+        .balance-amount { font-size: 48px; font-weight: 700; }
+        .balance-unit { font-size: 16px; opacity: 0.8; }
+        .balance-beans { font-size: 20px; margin-top: var(--spacing-sm); opacity: 0.9; }
+        .alert-card { background: #FEF3C7; border: 1px solid #F59E0B; border-radius: var(--radius-md); padding: var(--spacing-md); margin-bottom: var(--spacing-lg); display: flex; align-items: center; gap: var(--spacing-md); }
+        .alert-icon { font-size: 24px; }
+        .transaction-item { display: flex; align-items: center; padding: var(--spacing-md) 0; border-bottom: 1px solid var(--border-light); }
+        .transaction-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: var(--spacing-md); font-size: 18px; }
+        .transaction-info { flex: 1; }
+        .transaction-title { font-weight: 500; margin-bottom: 2px; }
+        .transaction-time { font-size: 12px; color: var(--text-muted); }
+        .transaction-amount { font-weight: 600; font-size: 16px; }
+        .transaction-amount.positive { color: var(--success-color); }
+        .transaction-amount.negative { color: var(--error-color); }
+    </style>
+
+<style id="identity-switcher-css">
+.id-switcher{position:relative;display:inline-flex;align-items:center;}
+.id-trigger{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 6px;border-radius:8px;cursor:pointer;transition:background 0.15s;user-select:none;}
+.id-trigger:hover{background:rgba(0,0,0,0.05);}
+.id-avatar{width:32px;height:32px;border-radius:50%;background:#EFF4FF;color:#2563EB;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.id-info{display:flex;flex-direction:column;align-items:flex-start;line-height:1.3;}
+.id-org{font-size:13px;font-weight:500;color:#1e293b;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.id-type-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;background:#EFF4FF;color:#2563EB;}
+.id-chevron{font-size:10px;color:#94a3b8;margin-left:2px;transition:transform 0.2s;}
+.id-switcher.open .id-chevron{transform:rotate(180deg);}
+.id-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:white;border:1px solid #dfe4ee;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:240px;z-index:999;overflow:hidden;}
+.id-switcher.open .id-menu{display:block;}
+.id-menu-hd{padding:10px 14px 8px;font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:1px;border-bottom:1px solid #ecf0f6;}
+.id-menu-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background 0.15s;text-decoration:none;color:inherit;}
+.id-menu-item:hover{background:#F8FAFC;}
+.id-menu-item.current{background:#F8FAFF;}
+.id-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.id-dot.active{background:#2563EB;}
+.id-dot.idle{background:#dfe4ee;}
+.id-item-body{flex:1;}
+.id-item-org{font-size:13px;font-weight:500;color:#1e293b;}
+.id-item-type{font-size:11px;color:#94a3b8;margin-top:1px;}
+.id-item-tag{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;margin-left:auto;flex-shrink:0;}
+.id-item-tag.current-tag{background:#EFF4FF;color:#2563EB;}
+.id-menu-sep{height:1px;background:#ecf0f6;margin:4px 0;}
+.id-menu-action{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:12px;color:#64748b;cursor:pointer;transition:background 0.15s;text-decoration:none;}
+.id-menu-action:hover{background:#F8FAFC;color:#2563EB;}
+</style>
+</head>
+<body>
+<header class="top-bar user">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="id-switcher" id="idSwitcher">
+<div class="id-trigger" onclick="toggleIdMenu()">
+<div class="id-avatar">李</div>
+<div class="id-info">
+<span class="id-org">广州某某科技有限公司</span>
+<span class="id-type-badge">采购单位</span>
+</div>
+<span class="id-chevron">▾</span>
+</div>
+<div class="id-menu">
+<div class="id-menu-hd">切换工作台身份</div>
+<div class="id-menu-item current">
+<div class="id-dot active"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">采购单位</div>
+</div>
+<span class="id-item-tag current-tag">当前</span>
+</div>
+<div class="id-menu-item" onclick="location.href='../developer/index.html'">
+<div class="id-dot idle"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">开发者</div>
+</div>
+</div>
+<div class="id-menu-sep"></div>
+<a class="id-menu-action" href="../user/register-select.html">＋ 注册新机构类型</a>
+<a class="id-menu-action" href="#" onclick="alert('已退出登录');return false;">退出登录</a>
+</div>
+</div>
+<script>
+function toggleIdMenu(){
+  var el=document.getElementById('idSwitcher');
+  el.classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  var sw=document.getElementById('idSwitcher');
+  if(sw && !sw.contains(e.target)) sw.classList.remove('open');
+});
+</script>
+</div>
+</header>
+<aside class="sidebar user">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">🏪</span><span>概览</span></a>
+<a class="sidebar-link" href="agent-list.html"><span class="icon">🤖</span><span>智能体市场</span></a>
+<a class="sidebar-link" href="recharge-list.html"><span class="icon">充</span><span>账户充值</span></a>
+<a class="sidebar-link active" href="balance.html"><span class="icon">💳</span><span>余额管理</span></a>
+<a class="sidebar-link" href="payment-accounts.html"><span class="icon">🏦</span><span>付款账户</span></a>
+<a class="sidebar-link" href="consumption-list.html"><span class="icon">消</span><span>消费记录</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+</div>
+<div class="sidebar-section">
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<h2>余额管理</h2>
+<p>查看账户余额和变动明细</p>
+</div>
+<div class="balance-display">
+<div class="balance-amount">16,850 彩豆</div>
+<div class="balance-unit">账户余额</div>
+
+</div>
+<div class="alert-card">
+<div class="alert-icon" style="color:#d97706;display:flex;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+<div>
+<div style="font-weight: 600; color: var(--warning-color);">余额提醒</div>
+<div style="font-size: 13px; color: var(--text-secondary);">当前余额充足，可正常使用智能体服务；余额不足时会及时提醒您充值</div>
+</div>
+<a class="btn btn-sm btn-warning" href="recharge-add.html" style="margin-left: auto;">立即充值</a>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
+<div class="stat-card" style="text-align: center;">
+<div style="font-size: 20px; font-weight: 600; color: var(--success-color);">+13,000 彩豆</div>
+<div style="font-size: 13px; color: var(--text-muted);">本月充值</div>
+</div>
+<div class="stat-card" style="text-align: center;">
+<div style="font-size: 20px; font-weight: 600; color: var(--error-color);">-1,150 彩豆</div>
+<div style="font-size: 13px; color: var(--text-muted);">本月消费</div>
+</div>
+<div class="stat-card" style="text-align: center;">
+<div style="font-size: 20px; font-weight: 600; color: var(--user-color);">7</div>
+<div style="font-size: 13px; color: var(--text-muted);">本月调用</div>
+</div>
+
+</div>
+<div class="content-card">
+<div class="content-card-header">
+<h3 class="content-card-title">余额变动明细</h3>
+<div style="display: flex; gap: var(--spacing-sm);">
+<select class="select" style="width: 120px;">
+<option>全部类型</option>
+<option>充值</option>
+<option>消费</option>
+<option>返利</option>
+</select>
+</div>
+</div>
+<div class="transaction-list">
+<div class="transaction-item">
+<div class="transaction-icon" style="background: #FEE2E2; color: var(--error-color);">消</div>
+<div class="transaction-info">
+<div class="transaction-title">智能体调用 - 数据分析智能体</div>
+<div class="transaction-time">2026-05-15 11:05:12 | 300彩豆 | 余额: 16,850彩豆</div>
+</div>
+<div class="transaction-amount" style="color: var(--error-color);">-300 彩豆</div>
+</div>
+<div class="transaction-item">
+<div class="transaction-icon" style="background: #FEE2E2; color: var(--error-color);">消</div>
+<div class="transaction-info">
+<div class="transaction-title">智能体调用 - 合规监测智能体</div>
+<div class="transaction-time">2026-05-15 09:20:45 | 50彩豆 | 余额: 17,150彩豆</div>
+</div>
+<div class="transaction-amount" style="color: var(--error-color);">-50 彩豆</div>
+</div>
+<div class="transaction-item">
+<div class="transaction-icon" style="background: #D1FAE5; color: var(--success-color);">充</div>
+<div class="transaction-info">
+<div class="transaction-title">微信充值 - 获得3,000彩豆</div>
+<div class="transaction-time">2026-05-15 08:00 | 余额: 17,200彩豆</div>
+</div>
+<div class="transaction-amount" style="color: var(--success-color);">+¥30.00</div>
+</div>
+<div class="transaction-item">
+<div class="transaction-icon" style="background: #FEE2E2; color: var(--error-color);">消</div>
+<div class="transaction-info">
+<div class="transaction-title">智能体调用 - 合规监测智能体</div>
+<div class="transaction-time">2026-05-14 15:32:01 | 50彩豆 | 余额: 14,200彩豆</div>
+</div>
+<div class="transaction-amount negative">-50 彩豆</div>
+</div>
+<div class="transaction-item">
+<div class="transaction-icon" style="background: #FEE2E2; color: var(--error-color);">消</div>
+<div class="transaction-info">
+<div class="transaction-title">智能体调用 - 数据分析智能体</div>
+<div class="transaction-time">2026-05-14 14:18:30 | 300彩豆 | 余额: 14,250彩豆</div>
+</div>
+<div class="transaction-amount negative">-300 彩豆</div>
+</div>
+<div class="transaction-item">
+<div class="transaction-icon" style="background: #FEE2E2; color: var(--error-color);">消</div>
+<div class="transaction-info">
+<div class="transaction-title">智能体调用 - 合规监测智能体</div>
+<div class="transaction-time">2026-05-13 16:22:30 | 100彩豆 | 余额: 14,550彩豆</div>
+</div>
+<div class="transaction-amount negative">-100 彩豆</div>
+</div>
+<div class="transaction-item">
+<div class="transaction-icon" style="background: #FEE2E2; color: var(--error-color);">消</div>
+<div class="transaction-info">
+<div class="transaction-title">智能体调用 - 数据分析智能体</div>
+<div class="transaction-time">2026-05-12 10:30:01 | 300彩豆 | 余额: 14,650彩豆</div>
+</div>
+<div class="transaction-amount negative">-300 彩豆</div>
+</div>
+<div class="transaction-item">
+<div class="transaction-icon" style="background: #DCFCE7; color: var(--success-color);">充</div>
+<div class="transaction-info">
+<div class="transaction-title">微信充值 - 获得10,000彩豆</div>
+<div class="transaction-time">2026-05-10 14:30 | 余额: 14,950彩豆</div>
+</div>
+<div class="transaction-amount positive">+¥100.00</div>
+</div>
+<div class="transaction-item">
+<div class="transaction-icon" style="background: #FEE2E2; color: var(--error-color);">消</div>
+<div class="transaction-info">
+<div class="transaction-title">智能体调用 - 合规监测智能体</div>
+<div class="transaction-time">2026-05-08 11:15:30 | 50彩豆 | 余额: 4,950彩豆</div>
+</div>
+<div class="transaction-amount negative">-50 彩豆</div>
+</div>
+<div class="transaction-item">
+<div class="transaction-icon" style="background: #DCFCE7; color: var(--success-color);">充</div>
+<div class="transaction-info">
+<div class="transaction-title">支付宝充值 - 获得5,000彩豆</div>
+<div class="transaction-time">2026-04-25 10:15 | 余额: 5,000彩豆</div>
+</div>
+<div class="transaction-amount positive">+¥50.00</div>
+</div>
+
+</div>
+<div style="padding: var(--spacing-lg); text-align: center;">
+<button class="btn btn-outline">加载更多</button>
+</div>
+</div>
+</main>
+</body>
+</html>

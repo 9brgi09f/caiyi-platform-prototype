@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>渠道商详情 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--spacing-lg); }
+        .info-item .k { font-size: 12px; color: var(--text-muted); }
+        .info-item .v { font-size: 14px; margin-top: 3px; font-weight: 500; }
+        .rec-row { display: flex; gap: var(--spacing-md); padding: 10px 0; border-bottom: 1px solid var(--border-light); font-size: 14px; }
+        .rec-row:last-child { border-bottom: none; }
+        .rec-time { color: var(--text-muted); font-size: 13px; white-space: nowrap; }
+        .notice { background: #FFFBEB; border: 1px solid #fde68a; border-radius: var(--radius-md); padding: var(--spacing-md); font-size: 13px; color: #92400e; line-height: 1.8; margin-top: var(--spacing-md); }
+        #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon"></span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon"></span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon"></span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon"></span><span>智能体管理</span></a>
+<a class="sidebar-link active" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon"></span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon"></span><span>结算管理</span></a>
+
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon"></span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon"></span><span>规则设置</span></a>
+</div>
+</aside>
+<main class="main-content">
+<a class="back-link" href="channel-list.html">← 返回渠道管理</a>
+<div class="page-header" style="display:flex;justify-content:space-between;align-items:center;">
+<div>
+<h2 id="pgTitle">渠道商详情</h2>
+<p id="pgSub">渠道商合作信息、推荐客户与处理记录</p>
+</div>
+<span class="badge badge-warning" id="pgStatus" style="font-size:13px;"></span>
+</div>
+<div class="content-card">
+<h3 style="font-size:16px;margin-bottom:var(--spacing-lg);">基本信息</h3>
+<div class="info-grid" id="infoGrid"></div>
+</div>
+<div class="content-card">
+<h3 style="font-size:16px;margin-bottom:var(--spacing-md);">分成概览</h3>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:var(--spacing-lg);margin-bottom:var(--spacing-sm);">
+<div><div style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">年度累计分成基数（不含税）</div><div id="vBase" style="font-size:20px;font-weight:700;color:var(--klein);"></div></div>
+<div><div style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">本年度累计分成</div><div id="vShare" style="font-size:20px;font-weight:700;"></div></div>
+<div><div style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">分成规则</div><div id="vRule" style="font-size:14px;font-weight:500;margin-top:4px;"></div></div>
+</div>
+</div>
+<div class="content-card">
+<h3 style="font-size:16px;margin-bottom:var(--spacing-md);">推荐客户</h3>
+<div class="table-wrapper">
+<table class="table">
+<thead><tr><th>客户名称</th><th>绑定方式</th><th>确认状态</th><th>年度贡献基数</th></tr></thead>
+<tbody id="custBody"></tbody>
+</table>
+</div>
+</div>
+<div class="content-card">
+<h3 style="font-size:16px;margin-bottom:var(--spacing-md);">合作状态与处理记录</h3>
+<div id="recList"></div>
+<div class="notice" id="recNote" style="display:none;"></div>
+</div>
+</main>
+<div id="toast"></div>
+<script>
+var DATA = {
+  'zc': { name: '广州智采科技有限公司', status: '正常', badge: 'badge-success',
+    info: [['机构名称','广州智采科技有限公司'],['统一社会信用代码','91440101MA5CXXXX2B'],['合作模式','客户推荐'],['长期合作协议','否'],['入驻时间','2026-01-10'],['邀请码','CY-ZC2026'],['联系人 / 电话','陈先生 · 138****6688'],['客户数','4（已确认 3）']],
+    base: '¥46,200.00', share: '¥10,050.00', rule: '新客户阶梯 20%/25%/30%（按年度累计基数）',
+    cust: [['广州建工集团有限公司','邀请码注册（自动确认）','<span class="badge badge-success">已确认</span>','¥24,600.00'],['东莞采购咨询有限公司','邀请码注册（自动确认）','<span class="badge badge-success">已确认</span>','¥6,800.00'],['佛山市政数据服务中心','推荐确认单三方盖章','<span class="badge badge-success">已确认</span>','¥14,800.00'],['珠海智慧城市运营公司','双方盖章 + 证明材料','<span class="badge badge-warning">待审核</span>','—']],
+    rec: [['—','无违规记录，合作状态正常']], note: '' },
+  'hn': { name: '华南数智生态有限公司', status: '正常', badge: 'badge-success',
+    info: [['机构名称','华南数智生态有限公司'],['统一社会信用代码','91440106MA9EXXXX7C'],['合作模式','生态共建'],['长期合作协议','是（华南区数据服务生态合作 2026-2028）'],['入驻时间','2026-02-20'],['邀请码','CY-HN2026'],['联系人 / 电话','吴女士 · 136****3355'],['客户数','—（长期协议定期集中确认）']],
+    base: '¥128,000.00', share: '¥30,720.00', rule: '生态共建比例（≤80%，协议约定 24%）',
+    cust: [['（长期协议客户按季度集中确认，明细见协议附件）','长期协议','<span class="badge badge-success">已确认</span>','¥128,000.00']],
+    rec: [['—','无违规记录，合作状态正常']], note: '' },
+  'ld': { name: '广东联采信息技术有限公司', status: '警告', badge: 'badge-warning',
+    info: [['机构名称','广东联采信息技术有限公司'],['统一社会信用代码','91440111MA9KXXXX3D'],['合作模式','客户推荐'],['长期合作协议','否'],['入驻时间','2026-03-05'],['邀请码','CY-LD2026'],['联系人 / 电话','刘先生 · 135****9911'],['客户数','2']],
+    base: '¥18,600.00', share: '¥3,720.00', rule: '新客户阶梯 20%/25%/30%（按年度累计基数）',
+    cust: [['肇庆公共资源交易中心','邀请码注册（自动确认）','<span class="badge badge-success">已确认</span>','¥12,100.00'],['清远市采购服务有限公司','推荐确认单三方盖章','<span class="badge badge-success">已确认</span>','¥6,500.00']],
+    rec: [['2026-05-20','书面警告：夸大宣传、误导客户——在推广材料中夸大智能体能力承诺（证明材料已归档）'],['2026-05-20','已书面通知渠道商，限期 30 日整改']],
+    note: '警告整改期内：既有分成与已确认推荐关系照常结算；暂停受理新增推荐关系；整改完成经复核可恢复正常，再次违规将终止合作。' },
+  'hb': { name: '深圳慧标科技有限公司', status: '已终止', badge: 'badge-terminated',
+    info: [['机构名称','深圳慧标科技有限公司'],['统一社会信用代码','91440300MA5GXXXX9E'],['合作模式','联合共创'],['长期合作协议','否'],['入驻时间','2026-02-01'],['邀请码','CY-HB2026（已停用）'],['联系人 / 电话','郑先生 · 137****2244'],['客户数','1（关系已解除）']],
+    base: '¥5,200.00', share: '¥1,040.00（已结算至终止日）', rule: '终止合作，不再产生新分成',
+    cust: [['惠州市数字政务服务中心','推荐确认单三方盖章','<span class="badge" style="background:#f1f5f9;color:#64748b;">已解除</span>','¥5,200.00（截至终止日）']],
+    rec: [['2026-04-12','终止合作：未经委托以政采中心名义开展活动（证明材料、终止通知书已归档）'],['2026-04-12','邀请码 CY-HB2026 停用，推荐关系解除'],['2026-04-30','分成结算至终止日（¥1,040.00），涉损失部分依法追责中']],
+    note: '' },
+  'zsj': { name: '珠三角采购服务联盟', status: '正常', badge: 'badge-success',
+    info: [['机构名称','珠三角采购服务联盟'],['统一社会信用代码','91440101MA9XXXX01A'],['合作模式','客户推荐'],['长期合作协议','否'],['入驻时间','2026-07-17（审核通过）'],['邀请码','CY-ZSJ2026'],['联系人 / 电话','林先生 · 139****2288'],['客户数','0']],
+    base: '¥0.00', share: '¥0.00', rule: '新客户阶梯 20%/25%/30%（按年度累计基数）',
+    cust: [['暂无推荐客户','—','—','—']],
+    rec: [['2026-07-17','入驻审核通过：已建档、生成邀请码，渠道商作为供应商同步金蝶']], note: '' }
+};
+var badgeClass = { 'badge-terminated': 'background:#f1f5f9;color:#64748b;' };
+var id = new URLSearchParams(location.search).get('id') || 'zc';
+var d = DATA[id] || DATA['zc'];
+document.getElementById('pgTitle').textContent = '渠道商详情 · ' + d.name;
+var st = document.getElementById('pgStatus');
+st.textContent = d.status;
+st.className = 'badge ' + d.badge;
+if (badgeClass[d.badge]) st.style.cssText += badgeClass[d.badge];
+st.style.fontSize = '13px';
+document.getElementById('infoGrid').innerHTML = d.info.map(function(m){
+  return '<div class="info-item"><div class="k">' + m[0] + '</div><div class="v">' + m[1] + '</div></div>';
+}).join('');
+document.getElementById('vBase').textContent = d.base;
+document.getElementById('vShare').textContent = d.share;
+document.getElementById('vRule').textContent = d.rule;
+document.getElementById('custBody').innerHTML = d.cust.map(function(c){
+  return '<tr><td>' + c[0] + '</td><td>' + c[1] + '</td><td>' + c[2] + '</td><td class="amount">' + c[3] + '</td></tr>';
+}).join('');
+document.getElementById('recList').innerHTML = d.rec.map(function(r){
+  return '<div class="rec-row"><span class="rec-time">' + r[0] + '</span><span>' + r[1] + '</span></div>';
+}).join('');
+if (d.note) { var n = document.getElementById('recNote'); n.textContent = d.note; n.style.display = 'block'; }
+function showToast(msg, icon){
+  var t = document.getElementById('toast');
+  t.textContent = (icon || '✓') + ' ' + msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.display = 'none'; }, 2400);
+}
+</script>
+</body>
+</html>

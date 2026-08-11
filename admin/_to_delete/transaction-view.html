@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>交易详情 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-lg); margin-bottom: var(--spacing-lg); }
+        .info-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); }
+        .info-label { font-size: 13px; color: var(--text-muted); margin-bottom: var(--spacing-xs); }
+        .info-value { font-size: 16px; font-weight: 500; }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link active" href="transactions-list.html"><span class="icon">💳</span><span>交易流水</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+<!-- 数据统计菜单暂隐藏 <a class="sidebar-link" href="statistics.html"><span class="icon">📉</span><span>数据统计</span></a> -->
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a class="back-link" href="transactions-list.html" style="color: white; margin-bottom: var(--spacing-sm);">← 返回列表</a>
+<h2>交易详情</h2>
+<p>订单号：TX20260514001</p>
+</div>
+<div class="info-grid">
+<div class="info-card">
+<div class="info-label">交易金额</div>
+<div class="info-value" style="color: var(--admin-color);">¥19.90</div>
+</div>
+<div class="info-card">
+<div class="info-label">彩豆数量</div>
+<div class="info-value">1,990 彩豆</div>
+</div>
+<div class="info-card">
+<div class="info-label">交易类型</div>
+<div class="info-value"><span class="badge badge-info">消费</span></div>
+</div>
+<div class="info-card">
+<div class="info-label">交易状态</div>
+<div class="info-value"><span class="badge badge-success">成功</span></div>
+</div>
+<div class="info-card">
+<div class="info-label">交易时间</div>
+<div class="info-value">2026-05-14 15:32:25</div>
+</div>
+<div class="info-card">
+<div class="info-label">用户</div>
+<div class="info-value">李用户</div>
+</div>
+<div class="info-card">
+<div class="info-label">智能体</div>
+<div class="info-value">智能客服助手</div>
+</div>
+<div class="info-card">
+<div class="info-label">开发者</div>
+<div class="info-value">AI工作室</div>
+</div>
+<div class="info-card">
+<div class="info-label">支付方式</div>
+<div class="info-value">彩豆</div>
+</div>
+</div>
+<div class="content-card">
+<h3 style="font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);">消费明细</h3>
+<div style="display: grid; gap: var(--spacing-md);">
+<div style="display: flex; justify-content: space-between; padding: var(--spacing-sm) 0; border-bottom: 1px solid var(--border-light);">
+<span style="color: var(--text-secondary);">调用次数</span>
+<span style="font-weight: 500;">1 次</span>
+</div>
+<div style="display: flex; justify-content: space-between; padding: var(--spacing-sm) 0; border-bottom: 1px solid var(--border-light);">
+<span style="color: var(--text-secondary);">本次消耗 token</span>
+<span style="font-weight: 500;">1,990,000 token（折 1,990 彩豆）</span>
+</div>
+<div style="display: flex; justify-content: space-between; padding: var(--spacing-sm) 0;">
+<span style="font-weight: 600;">实付金额</span>
+<span style="font-weight: 700; color: var(--admin-color); font-size: 18px;">¥19.90</span>
+</div>
+</div>
+</div>
+<div style="display: flex; gap: var(--spacing-md); justify-content: center; margin-top: var(--spacing-lg);">
+<a class="btn btn-outline" href="transactions-list.html">返回列表</a>
+<button class="btn btn-outline">导出记录</button>
+</div>
+</main>
+</body>
+</html>

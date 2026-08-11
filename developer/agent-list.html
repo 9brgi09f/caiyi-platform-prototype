@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>智能体列表 - 开发者端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--spacing-lg);
+            padding: 4px 0 18px;
+            margin-bottom: var(--spacing-lg);
+            border-bottom: 1px solid var(--border-light);
+        }
+        .page-header-title {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            min-width: 0;
+        }
+        .page-header-title::before {
+            content: '';
+            width: 3px;
+            height: 42px;
+            flex-shrink: 0;
+            margin-top: 1px;
+            border-radius: 3px;
+            background: #5B8DEF;
+        }
+        .page-header h2 { margin: 0 0 3px; color: var(--text-primary); font-size: 21px; font-weight: 600; }
+        .page-header p { margin: 0; color: var(--text-secondary); font-size: 13px; }
+        .page-header .btn { flex-shrink: 0; }
+        @media (max-width: 640px) {
+            .page-header { align-items: flex-start; flex-direction: column; }
+            .page-header .btn { width: 100%; justify-content: center; }
+        }
+        .agent-card {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-lg);
+            padding: var(--spacing-lg);
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--spacing-md);
+            transition: all 0.2s;
+        }
+        .agent-card:hover { border-color: var(--developer-color); box-shadow: var(--shadow-md); }
+        .agent-avatar {
+            width: 64px; height: 64px;
+            background: var(--developer-light);
+            border-radius: var(--radius-lg);
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .agent-info { flex: 1; }
+        .agent-name { font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-xs); }
+        .agent-meta { display: flex; gap: var(--spacing-lg); font-size: 13px; color: var(--text-secondary); }
+        .agent-meta span { display: flex; align-items: center; gap: var(--spacing-xs); }
+        .agent-actions { display: flex; gap: var(--spacing-sm); }
+        .status-badge {
+            display: inline-flex; align-items: center; gap: var(--spacing-xs);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-md); font-size: 12px; font-weight: 500;
+        }
+        .status-online { background: var(--success-light); color: var(--success-color); }
+        .status-offline { background: var(--border-light); color: var(--text-muted); }
+        .status-audit { background: var(--admin-light); color: var(--admin-color); }
+        .status-rejected { background: #fee2e2; color: var(--danger-color); }
+        .status-draft { background: #f1f5f9; color: #64748b; }
+        .btn-offline { color: var(--danger-color); border-color: var(--danger-color); }
+        #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+    </style>
+
+<style id="identity-switcher-css">
+.id-switcher{position:relative;display:inline-flex;align-items:center;}
+.id-trigger{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 6px;border-radius:8px;cursor:pointer;transition:background 0.15s;user-select:none;}
+.id-trigger:hover{background:rgba(0,0,0,0.05);}
+.id-avatar{width:32px;height:32px;border-radius:50%;background:#EFF4FF;color:#2563EB;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.id-info{display:flex;flex-direction:column;align-items:flex-start;line-height:1.3;}
+.id-org{font-size:13px;font-weight:500;color:#1e293b;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.id-type-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;background:#EFF4FF;color:#2563EB;}
+.id-chevron{font-size:10px;color:#94a3b8;margin-left:2px;transition:transform 0.2s;}
+.id-switcher.open .id-chevron{transform:rotate(180deg);}
+.id-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:white;border:1px solid #dfe4ee;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:240px;z-index:999;overflow:hidden;}
+.id-switcher.open .id-menu{display:block;}
+.id-menu-hd{padding:10px 14px 8px;font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:1px;border-bottom:1px solid #ecf0f6;}
+.id-menu-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background 0.15s;text-decoration:none;color:inherit;}
+.id-menu-item:hover{background:#F8FAFC;}
+.id-menu-item.current{background:#F8FAFF;}
+.id-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.id-dot.active{background:#2563EB;}
+.id-dot.idle{background:#dfe4ee;}
+.id-item-body{flex:1;}
+.id-item-org{font-size:13px;font-weight:500;color:#1e293b;}
+.id-item-type{font-size:11px;color:#94a3b8;margin-top:1px;}
+.id-item-tag{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;margin-left:auto;flex-shrink:0;}
+.id-item-tag.current-tag{background:#EFF4FF;color:#2563EB;}
+.id-menu-sep{height:1px;background:#ecf0f6;margin:4px 0;}
+.id-menu-action{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:12px;color:#64748b;cursor:pointer;transition:background 0.15s;text-decoration:none;}
+.id-menu-action:hover{background:#F8FAFC;color:#2563EB;}
+</style>
+</head>
+<body>
+<header class="top-bar developer">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="id-switcher" id="idSwitcher">
+<div class="id-trigger" onclick="toggleIdMenu()">
+<div class="id-avatar">张</div>
+<div class="id-info">
+<span class="id-org">广州某某科技有限公司</span>
+<span class="id-type-badge" style="background:#D1FAE5;color:#059669;">开发者</span>
+</div>
+<span class="id-chevron">▾</span>
+</div>
+<div class="id-menu">
+<div class="id-menu-hd">切换工作台身份</div>
+<div class="id-menu-item current">
+<div class="id-dot active" style="background:#059669;"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">开发者</div>
+</div>
+<span class="id-item-tag current-tag" style="background:#D1FAE5;color:#059669;">当前</span>
+</div>
+<div class="id-menu-item" onclick="location.href='../user/index.html'">
+<div class="id-dot idle"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">采购单位</div>
+</div>
+</div>
+<div class="id-menu-sep"></div>
+<a class="id-menu-action" href="../user/register-select.html">＋ 注册新机构类型</a>
+<a class="id-menu-action" href="#" onclick="alert('已退出登录');return false;">退出登录</a>
+</div>
+</div>
+<script>
+function toggleIdMenu(){
+  var el=document.getElementById('idSwitcher');
+  el.classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  var sw=document.getElementById('idSwitcher');
+  if(sw && !sw.contains(e.target)) sw.classList.remove('open');
+});
+</script>
+</div>
+</header>
+<aside class="sidebar developer">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link active" href="agent-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="member-list.html"><span class="icon">👥</span><span>成员管理</span></a>
+<a class="sidebar-link" href="revenue-list.html"><span class="icon">📈</span><span>收入看板</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📄</span><span>结算单</span></a>
+<a class="sidebar-link" href="withdrawal-list.html"><span class="icon">💸</span><span>提现管理</span></a><a class="sidebar-link" href="bank-card.html"><span class="icon">🏦</span><span>收款账户</span></a>
+<a class="sidebar-link" href="dev-invoice-list.html"><span class="icon">🧾</span><span>发票管理</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<div class="page-header-title">
+<div>
+<h2>智能体管理</h2>
+<p>查看智能体状态与运营数据</p>
+</div>
+</div>
+<a class="btn btn-primary" href="agent-add.html">+ 创建智能体</a>
+</div>
+<div class="content-card">
+<div class="content-card-header">
+<h3 class="content-card-title">我的智能体 (6)</h3>
+<input class="form-input" placeholder="搜索智能体..." style="width: 200px;" type="text"/>
+</div>
+<div class="tab-nav">
+<button class="tab-btn active" onclick="filterStatus('all', this)" type="button">全部 (6)</button>
+<button class="tab-btn" onclick="filterStatus('草稿', this)" type="button">草稿 (1)</button>
+<button class="tab-btn" onclick="filterStatus('审核中', this)" type="button">审核中 (1)</button>
+<button class="tab-btn" onclick="filterStatus('审核驳回', this)" type="button">审核驳回 (1)</button>
+<button class="tab-btn" onclick="filterStatus('已上架', this)" type="button">已上架 (2)</button>
+<button class="tab-btn" onclick="filterStatus('已下架', this)" type="button">已下架 (1)</button>
+</div>
+<div class="agent-card" data-status="草稿">
+<div class="agent-avatar"><svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cv1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2563EB"/><stop offset="1" stop-color="#1D4ED8"/></linearGradient></defs><rect width="64" height="64" fill="url(#cv1)"/><circle cx="54" cy="10" r="29" fill="#ffffff" opacity="0.10"/><circle cx="8" cy="59" r="20" fill="#ffffff" opacity="0.08"/><g transform="translate(17.9,17.9) scale(1.173)" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></g></svg></div>
+<div class="agent-info">
+<div class="agent-name">招标文件解析智能体</div>
+<div class="agent-meta">
+<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> 使用用户: —</span>
+<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> 本月调用: —</span>
+<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.83z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> 计费: 算力计费（待申报token区间）</span>
+</div>
+</div>
+<span class="status-badge status-draft">● 草稿</span>
+<div class="agent-actions">
+<a class="btn btn-sm btn-outline" href="agent-edit.html">继续编辑</a>
+<a class="btn btn-sm btn-primary" href="agent-edit.html">提交审核</a>
+</div>
+</div>
+<div class="agent-card" data-status="已上架">
+<div class="agent-avatar"><svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cv2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0EA5E9"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs><rect width="64" height="64" fill="url(#cv2)"/><circle cx="54" cy="10" r="29" fill="#ffffff" opacity="0.10"/><circle cx="8" cy="59" r="20" fill="#ffffff" opacity="0.08"/><g transform="translate(17.9,17.9) scale(1.173)" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 11.5 11 13.5 15 9.5"/></g></svg></div>
+<div class="agent-info">
+<div class="agent-name">合规监测智能体</div>
+<div class="agent-meta">
+<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> 使用用户: 1,256</span>
+<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> 本月调用: 8,520</span>
+<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.83z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> 计费: 算力 · 约 10~150 彩豆/次</span>
+</div>
+</div>
+<span class="status-badge status-online">● 已上架</span>
+<div class="agent-actions">
+<a class="btn btn-sm btn-outline" href="agent-view.html">详情</a>
+<a class="btn btn-sm btn-primary" href="agent-edit.html">编辑</a>
+<button class="btn btn-sm btn-outline btn-offline" onclick="openOffline(this)" type="button">下架</button>
+</div>
+</div>
+<div class="agent-card" data-status="已上架">
+<div class="agent-avatar"><svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cv3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366F1"/><stop offset="1" stop-color="#4F46E5"/></linearGradient></defs><rect width="64" height="64" fill="url(#cv3)"/><circle cx="54" cy="10" r="29" fill="#ffffff" opacity="0.10"/><circle cx="8" cy="59" r="20" fill="#ffffff" opacity="0.08"/><g transform="translate(17.9,17.9) scale(1.173)" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></g></svg></div>
+<div class="agent-info">
+<div class="agent-name">数据分析智能体 <span class="status-badge status-audit" style="font-size:11px; padding:2px 8px; vertical-align:middle;">◐ 变更审核中</span></div>
+<div class="agent-meta">
+<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> 使用用户: 892</span>
+<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> 本月调用: 4,060</span>
+<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.83z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> 计费: 按次 · 30 彩豆/次</span>
+</div>
+<div style="font-size:12px; color:var(--admin-color); margin-top:4px;">已提交变更（申报token区间调整），审核期间线上版本继续服务</div>
+</div>
+<span class="status-badge status-online">● 已上架</span>
+<div class="agent-actions">
+<a class="btn btn-sm btn-outline" href="agent-view.html?bill=perCall">详情</a>
+<button aria-disabled="true" class="btn btn-sm btn-outline" onclick="showToast('该智能体已有变更待审核，审核完成后方可再次编辑', '⚠')" style="opacity:.55; cursor:not-allowed;" title="已有变更待审核" type="button">编辑</button>
+<button class="btn btn-sm btn-outline btn-offline" onclick="openOffline(this)" type="button">下架</button>
+</div>
+</div>
+<div class="agent-card" data-status="审核中">
+<div class="agent-avatar"><svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cv4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#14B8A6"/><stop offset="1" stop-color="#0D9488"/></linearGradient></defs><rect width="64" height="64" fill="url(#cv4)"/><circle cx="54" cy="10" r="29" fill="#ffffff" opacity="0.10"/><circle cx="8" cy="59" r="20" fill="#ffffff" opacity="0.08"/><g transform="translate(17.9,17.9) scale(1.173)" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.83z"/><line x1="7" y1="7" x2="7.01" y2="7"/></g></svg></div>
+<div class="agent-info">
+<div class="agent-name">家具比价智能体</div>
+<div class="agent-meta">
+<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> 使用用户: 0</span>
+<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> 本月调用: 0</span>
+<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.83z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> 计费: 算力 · 约 40~150 彩豆/次</span>
+</div>
+</div>
+<span class="status-badge status-audit">◐ 审核中</span>
+<div class="agent-actions">
+<a class="btn btn-sm btn-outline" href="agent-view.html">详情</a>
+</div>
+</div>
+<div class="agent-card" data-status="已下架">
+<div class="agent-avatar"><svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cv5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8B5CF6"/><stop offset="1" stop-color="#7C3AED"/></linearGradient></defs><rect width="64" height="64" fill="url(#cv5)"/><circle cx="54" cy="10" r="29" fill="#ffffff" opacity="0.10"/><circle cx="8" cy="59" r="20" fill="#ffffff" opacity="0.08"/><g transform="translate(17.9,17.9) scale(1.173)" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></g></svg></div>
+<div class="agent-info">
+<div class="agent-name">政策问答智能体</div>
+<div class="agent-meta">
+<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> 使用用户: 340</span>
+<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> 本月调用: 0</span>
+<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.83z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> 计费: 算力 · 约 20~80 彩豆/次</span>
+</div>
+<div style="font-size:12px; color:var(--danger-color); margin-top:4px;">平台下架：内容需整改；整改后请联系平台运营恢复上架</div>
+</div>
+<span class="status-badge status-offline">● 已下架（平台）</span>
+<div class="agent-actions">
+<a class="btn btn-sm btn-outline" href="agent-view.html">详情</a>
+<a class="btn btn-sm btn-primary" href="agent-edit.html">编辑</a>
+</div>
+</div>
+<div class="agent-card" data-status="审核驳回">
+<div class="agent-avatar"><svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cv6" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F59E0B"/><stop offset="1" stop-color="#D97706"/></linearGradient></defs><rect width="64" height="64" fill="url(#cv6)"/><circle cx="54" cy="10" r="29" fill="#ffffff" opacity="0.10"/><circle cx="8" cy="59" r="20" fill="#ffffff" opacity="0.08"/><g transform="translate(17.9,17.9) scale(1.173)" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></g></svg></div>
+<div class="agent-info">
+<div class="agent-name">舆情监测智能体</div>
+<div class="agent-meta">
+<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> 使用用户: 0</span>
+<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> 本月调用: 0</span>
+<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.83z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> 计费: 算力 · 约 30~200 彩豆/次</span>
+</div>
+<div style="font-size:12px; color:var(--danger-color); margin-top:4px;">驳回原因：功能描述与实际能力不符，请修改后重新提交</div>
+</div>
+<span class="status-badge status-rejected">● 审核驳回</span>
+<div class="agent-actions">
+<a class="btn btn-sm btn-outline" href="agent-view.html">详情</a>
+<a class="btn btn-sm btn-primary" href="agent-edit.html">修改重提</a>
+</div>
+</div>
+</div>
+<!-- 下架确认弹窗 -->
+<div class="modal-overlay" id="offlineModal" onclick="if(event.target===this)closeOffline()">
+<div class="modal" style="max-width: 420px;">
+<div class="modal-header">
+<span class="modal-title">确认下架智能体</span>
+<button class="modal-close" onclick="closeOffline()">×</button>
+</div>
+<div class="modal-body">
+<p style="font-size: 14px; margin-bottom: var(--spacing-sm);">确定要下架「<strong id="offlineName"></strong>」吗？</p>
+<p style="font-size: 13px; color: var(--text-muted); line-height: 1.7;">下架后用户将无法调用该智能体，已产生的收入不受影响；您可随时重新上架，重新上架无需平台审核。</p>
+</div>
+<div class="modal-footer">
+<button class="btn btn-outline" onclick="closeOffline()">取消</button>
+<button class="btn btn-danger" onclick="confirmOffline()">确认下架</button>
+</div>
+</div>
+</div>
+<div id="toast"></div>
+<script>
+var offlineCard = null;
+function openOffline(btn){
+  offlineCard = btn.closest('.agent-card');
+  document.getElementById('offlineName').textContent = offlineCard.querySelector('.agent-name').textContent;
+  document.getElementById('offlineModal').classList.add('active');
+}
+function closeOffline(){
+  document.getElementById('offlineModal').classList.remove('active');
+  offlineCard = null;
+}
+function confirmOffline(){
+  if(offlineCard){
+    var badge = offlineCard.querySelector('.status-badge');
+    badge.className = 'status-badge status-offline';
+    badge.textContent = '● 已下架';
+    var btn = offlineCard.querySelector('.btn-offline');
+    btn.classList.remove('btn-offline');
+    btn.textContent = '重新上架';
+    btn.setAttribute('onclick', 'relist(this)');
+    showToast('已下架「' + offlineCard.querySelector('.agent-name').textContent + '」');
+  }
+  document.getElementById('offlineModal').classList.remove('active');
+  offlineCard = null;
+}
+function relist(btn){
+  var card = btn.closest('.agent-card');
+  var badge = card.querySelector('.status-badge');
+  badge.className = 'status-badge status-online';
+  badge.textContent = '● 已上架';
+  btn.classList.add('btn-offline');
+  btn.textContent = '下架';
+  btn.setAttribute('onclick', 'openOffline(this)');
+  showToast('已重新上架「' + card.querySelector('.agent-name').textContent + '」');
+}
+function showToast(msg, icon){
+  var t = document.getElementById('toast');
+  t.textContent = (icon || '✓') + ' ' + msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.display = 'none'; }, 2400);
+}
+</script>
+</main>
+</body>
+</html>

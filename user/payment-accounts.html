@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>付款账户 - 用户端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .balance-display { background: linear-gradient(135deg, #2563EB, #1D4ED8); color: white; padding: var(--spacing-xl); border-radius: var(--radius-lg); text-align: center; margin-bottom: var(--spacing-lg); }
+        .balance-amount { font-size: 48px; font-weight: 700; }
+        .balance-unit { font-size: 16px; opacity: 0.8; }
+        .balance-beans { font-size: 20px; margin-top: var(--spacing-sm); opacity: 0.9; }
+        .alert-card { background: #FEF3C7; border: 1px solid #F59E0B; border-radius: var(--radius-md); padding: var(--spacing-md); margin-bottom: var(--spacing-lg); display: flex; align-items: center; gap: var(--spacing-md); }
+        .alert-icon { font-size: 24px; }
+        .transaction-item { display: flex; align-items: center; padding: var(--spacing-md) 0; border-bottom: 1px solid var(--border-light); }
+        .transaction-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: var(--spacing-md); font-size: 18px; }
+        .transaction-info { flex: 1; }
+        .transaction-title { font-weight: 500; margin-bottom: 2px; }
+        .transaction-time { font-size: 12px; color: var(--text-muted); }
+        .transaction-amount { font-weight: 600; font-size: 16px; }
+        .transaction-amount.positive { color: var(--success-color); }
+        .transaction-amount.negative { color: var(--error-color); }
+    </style>
+
+<style id="identity-switcher-css">
+.id-switcher{position:relative;display:inline-flex;align-items:center;}
+.id-trigger{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 6px;border-radius:8px;cursor:pointer;transition:background 0.15s;user-select:none;}
+.id-trigger:hover{background:rgba(0,0,0,0.05);}
+.id-avatar{width:32px;height:32px;border-radius:50%;background:#EFF4FF;color:#2563EB;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.id-info{display:flex;flex-direction:column;align-items:flex-start;line-height:1.3;}
+.id-org{font-size:13px;font-weight:500;color:#1e293b;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.id-type-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;background:#EFF4FF;color:#2563EB;}
+.id-chevron{font-size:10px;color:#94a3b8;margin-left:2px;transition:transform 0.2s;}
+.id-switcher.open .id-chevron{transform:rotate(180deg);}
+.id-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:white;border:1px solid #dfe4ee;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:240px;z-index:999;overflow:hidden;}
+.id-switcher.open .id-menu{display:block;}
+.id-menu-hd{padding:10px 14px 8px;font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:1px;border-bottom:1px solid #ecf0f6;}
+.id-menu-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background 0.15s;text-decoration:none;color:inherit;}
+.id-menu-item:hover{background:#F8FAFC;}
+.id-menu-item.current{background:#F8FAFF;}
+.id-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.id-dot.active{background:#2563EB;}
+.id-dot.idle{background:#dfe4ee;}
+.id-item-body{flex:1;}
+.id-item-org{font-size:13px;font-weight:500;color:#1e293b;}
+.id-item-type{font-size:11px;color:#94a3b8;margin-top:1px;}
+.id-item-tag{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;margin-left:auto;flex-shrink:0;}
+.id-item-tag.current-tag{background:#EFF4FF;color:#2563EB;}
+.id-menu-sep{height:1px;background:#ecf0f6;margin:4px 0;}
+.id-menu-action{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:12px;color:#64748b;cursor:pointer;transition:background 0.15s;text-decoration:none;}
+.id-menu-action:hover{background:#F8FAFC;color:#2563EB;}
+</style>
+</head>
+<body>
+<header class="top-bar user">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="id-switcher" id="idSwitcher">
+<div class="id-trigger" onclick="toggleIdMenu()">
+<div class="id-avatar">李</div>
+<div class="id-info">
+<span class="id-org">广州某某科技有限公司</span>
+<span class="id-type-badge">采购单位</span>
+</div>
+<span class="id-chevron">▾</span>
+</div>
+<div class="id-menu">
+<div class="id-menu-hd">切换工作台身份</div>
+<div class="id-menu-item current">
+<div class="id-dot active"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">采购单位</div>
+</div>
+<span class="id-item-tag current-tag">当前</span>
+</div>
+<div class="id-menu-item" onclick="location.href='../developer/index.html'">
+<div class="id-dot idle"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">开发者</div>
+</div>
+</div>
+<div class="id-menu-sep"></div>
+<a class="id-menu-action" href="../user/register-select.html">＋ 注册新机构类型</a>
+<a class="id-menu-action" href="#" onclick="alert('已退出登录');return false;">退出登录</a>
+</div>
+</div>
+<script>
+function toggleIdMenu(){
+  var el=document.getElementById('idSwitcher');
+  el.classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  var sw=document.getElementById('idSwitcher');
+  if(sw && !sw.contains(e.target)) sw.classList.remove('open');
+});
+</script>
+</div>
+</header>
+<aside class="sidebar user">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">🏪</span><span>概览</span></a>
+<a class="sidebar-link" href="agent-list.html"><span class="icon">🤖</span><span>智能体市场</span></a>
+<a class="sidebar-link" href="recharge-list.html"><span class="icon">💰</span><span>账户充值</span></a>
+<a class="sidebar-link" href="balance.html"><span class="icon">💳</span><span>余额管理</span></a>
+<a class="sidebar-link active" href="payment-accounts.html"><span class="icon">🏦</span><span>付款账户</span></a>
+<a class="sidebar-link" href="consumption-list.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+</div>
+<div class="sidebar-section">
+</div>
+</aside>
+<main class="main-content"><div class="page-header"><h2>付款账户</h2><p>管理个人与企业付款账户</p></div><div class="content-card"><div class="content-card-header"><h3 class="content-card-title">付款账户</h3><a class="btn btn-primary" href="account-add.html">+ 添加账户</a></div><p style="color:var(--text-muted);font-size:13px;margin:8px 0 16px;">管理您的付款账户，支持个人账户与企业账户；付款时可选择使用其中任一账户。</p><table class="table"><thead><tr><th>开户银行</th><th>卡号 / 账户号</th><th>账户类型</th><th>状态</th><th>操作</th></tr></thead><tbody>
+<tr data-bank="招商银行" data-no="6214 **** **** 3333" data-name="李伟" data-branch="北京分行营业部" data-time="2026-04-02 11:30" data-status="默认付款账户" data-type="个人账户" data-default="1">
+<td>招商银行</td><td>6214 **** **** 3333</td><td><span class="badge badge-info">个人账户</span></td><td><span class="badge badge-success">默认</span></td>
+<td style="white-space:nowrap;"><a href="javascript:void(0)" onclick="openAcctDetail(this)">详情</a> · <a href="account-add.html?mode=edit&amp;bank=招商银行&amp;no=6214000000003333&amp;name=李伟&amp;type=personal">编辑</a> · <a href="javascript:void(0)" onclick="openAcctDel(this)" style="color:var(--danger-color);">删除</a></td>
+</tr>
+<tr data-bank="招商银行" data-no="6214 **** **** 8888" data-name="北京科技有限公司" data-branch="北京中关村支行" data-time="2026-04-10 14:00" data-status="正常" data-type="企业账户 · 主账户" data-default="0">
+<td>招商银行</td><td>6214 **** **** 8888</td><td><span class="badge badge-primary">企业账户 · 主账户</span></td><td>-</td>
+<td style="white-space:nowrap;"><a href="javascript:void(0)" onclick="openAcctDetail(this)">详情</a> · <a href="account-add.html?mode=edit&amp;bank=招商银行&amp;no=6214000000008888&amp;name=北京科技有限公司&amp;type=company">编辑</a> · <a href="javascript:void(0)" onclick="showToast('已将 招商银行 ****8888 设为默认付款账户')">设为默认</a> · <a href="javascript:void(0)" onclick="openAcctDel(this)" style="color:var(--danger-color);">删除</a></td>
+</tr>
+<tr data-bank="工商银行" data-no="6222 **** **** 6666" data-name="北京科技有限公司" data-branch="北京海淀支行" data-time="2026-04-15 09:20" data-status="正常" data-type="企业账户 · 子账户" data-default="0">
+<td>工商银行</td><td>6222 **** **** 6666</td><td><span class="badge badge-primary">企业账户 · 子账户</span></td><td>-</td>
+<td style="white-space:nowrap;"><a href="javascript:void(0)" onclick="openAcctDetail(this)">详情</a> · <a href="account-add.html?mode=edit&amp;bank=工商银行&amp;no=6222000000006666&amp;name=北京科技有限公司&amp;type=company">编辑</a> · <a href="javascript:void(0)" onclick="showToast('已将 工商银行 ****6666 设为主账户')">设为主账户</a> · <a href="javascript:void(0)" onclick="openAcctDel(this)" style="color:var(--danger-color);">删除</a></td>
+</tr>
+</tbody></table></div>
+
+<!-- 账户详情弹窗 -->
+<div class="modal-overlay" id="acctDetailModal" onclick="if(event.target===this)closeAcctDetail()">
+<div class="modal" style="max-width: 420px;">
+<div class="modal-header">
+<span class="modal-title">账户详情</span>
+<button class="modal-close" onclick="closeAcctDetail()">×</button>
+</div>
+<div class="modal-body">
+<div style="display:grid; grid-template-columns:88px 1fr; row-gap:10px; font-size:14px;">
+<span style="color:var(--text-muted);">账户类型</span><span id="adType">—</span>
+<span style="color:var(--text-muted);">开户银行</span><span id="adBank">—</span>
+<span style="color:var(--text-muted);">卡号/账户号</span><span id="adNo">—</span>
+<span style="color:var(--text-muted);">开户名称</span><span id="adName">—</span>
+<span style="color:var(--text-muted);">开户支行</span><span id="adBranch">—</span>
+<span style="color:var(--text-muted);">添加时间</span><span id="adTime">—</span>
+<span style="color:var(--text-muted);">状态</span><span id="adStatus">—</span>
+</div>
+</div>
+<div class="modal-footer">
+<button class="btn btn-outline" onclick="closeAcctDetail()">关闭</button>
+</div>
+</div>
+</div>
+<!-- 删除确认弹窗 -->
+<div class="modal-overlay" id="acctDelModal" onclick="if(event.target===this)closeAcctDel()">
+<div class="modal" style="max-width: 400px;">
+<div class="modal-header">
+<span class="modal-title">确认删除账户</span>
+<button class="modal-close" onclick="closeAcctDel()">×</button>
+</div>
+<div class="modal-body">
+<p style="font-size:14px; margin-bottom:8px;">确定删除「<strong id="delAcctName"></strong>」吗？</p>
+<p style="font-size:13px; color:var(--text-muted); line-height:1.7;" id="delAcctTip">删除后不可恢复，如需继续使用需重新添加。</p>
+</div>
+<div class="modal-footer">
+<button class="btn btn-outline" onclick="closeAcctDel()">取消</button>
+<button class="btn btn-danger" onclick="confirmAcctDel()">确认删除</button>
+</div>
+</div>
+</div>
+<div id="toast" style="position:fixed;top:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:10px 20px;border-radius:8px;font-size:14px;display:none;z-index:1200;box-shadow:0 4px 16px rgba(0,0,0,.25);"></div>
+<script>
+var delRow=null;
+function openAcctDetail(btn){
+  var tr=btn.closest('tr'); var d=tr.dataset;
+  ['adType','adBank','adNo','adName','adBranch','adTime','adStatus'].forEach(function(id,i){
+    var keys=['type','bank','no','name','branch','time','status'];
+    document.getElementById(id).textContent=d[keys[i]]||'—';
+  });
+  document.getElementById('acctDetailModal').classList.add('active');
+}
+function closeAcctDetail(){ document.getElementById('acctDetailModal').classList.remove('active'); }
+function openAcctDel(btn){
+  delRow=btn.closest('tr');
+  document.getElementById('delAcctName').textContent=delRow.dataset.bank+' '+delRow.dataset.no;
+  document.getElementById('delAcctTip').textContent = delRow.dataset.default==='1'
+    ? '该账户为默认账户，删除后请及时将其它账户设为默认；删除后不可恢复。'
+    : '删除后不可恢复，如需继续使用需重新添加。';
+  document.getElementById('acctDelModal').classList.add('active');
+}
+function closeAcctDel(){ document.getElementById('acctDelModal').classList.remove('active'); delRow=null; }
+function confirmAcctDel(){
+  if(delRow){ showToast('已删除「'+delRow.dataset.bank+' '+delRow.dataset.no+'」'); delRow.remove(); }
+  document.getElementById('acctDelModal').classList.remove('active'); delRow=null;
+}
+function showToast(msg){
+  var t=document.getElementById('toast'); t.textContent='✓ '+msg; t.style.display='block';
+  clearTimeout(t._timer); t._timer=setTimeout(function(){t.style.display='none';},2400);
+}
+</script>
+</main>
+</body>
+</html>

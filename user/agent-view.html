@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>智能体详情 - 用户端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .agent-icon { width: 80px; height: 80px; border-radius: var(--radius-lg); overflow: hidden; }
+        .pricing-card { background: linear-gradient(135deg, var(--user-light), #e9d5ff); border-radius: var(--radius-lg); padding: var(--spacing-xl); text-align: center; }
+        .pricing-amount { font-size: 30px; font-weight: 700; color: var(--user-color); }
+        .pricing-unit { font-size: 13px; color: var(--text-secondary); }
+        .info-line { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-light); font-size: 14px; }
+        .info-line:last-child { border-bottom: none; }
+        .info-line .k { color: var(--text-muted); }
+        .free-benefit{margin-top:var(--spacing-lg);padding:14px 15px;border:1px solid #A7F3D0;border-radius:var(--radius-md);background:#ECFDF5;color:#065F46;}
+        .free-benefit.warn{border-color:#FDE68A;background:#FFFBEB;color:#92400E;}
+        .free-benefit.done{border-color:var(--border-light);background:var(--bg-light);color:var(--text-secondary);}
+        .free-benefit-title{font-size:13px;font-weight:650;margin-bottom:5px;}.free-benefit-text{font-size:12.5px;line-height:1.7;}
+        .call-feedback{display:none;margin-top:var(--spacing-md);padding:10px 12px;border-radius:var(--radius-md);background:#EFF4FF;color:#1D4ED8;font-size:13px;line-height:1.6;}
+    </style>
+
+<style id="identity-switcher-css">
+.id-switcher{position:relative;display:inline-flex;align-items:center;}
+.id-trigger{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 6px;border-radius:8px;cursor:pointer;transition:background 0.15s;user-select:none;}
+.id-trigger:hover{background:rgba(0,0,0,0.05);}
+.id-avatar{width:32px;height:32px;border-radius:50%;background:#EFF4FF;color:#2563EB;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.id-info{display:flex;flex-direction:column;align-items:flex-start;line-height:1.3;}
+.id-org{font-size:13px;font-weight:500;color:#1e293b;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.id-type-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;background:#EFF4FF;color:#2563EB;}
+.id-chevron{font-size:10px;color:#94a3b8;margin-left:2px;transition:transform 0.2s;}
+.id-switcher.open .id-chevron{transform:rotate(180deg);}
+.id-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:white;border:1px solid #dfe4ee;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:240px;z-index:999;overflow:hidden;}
+.id-switcher.open .id-menu{display:block;}
+.id-menu-hd{padding:10px 14px 8px;font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:1px;border-bottom:1px solid #ecf0f6;}
+.id-menu-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background 0.15s;text-decoration:none;color:inherit;}
+.id-menu-item:hover{background:#F8FAFC;}
+.id-menu-item.current{background:#F8FAFF;}
+.id-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.id-dot.active{background:#2563EB;}
+.id-dot.idle{background:#dfe4ee;}
+.id-item-body{flex:1;}
+.id-item-org{font-size:13px;font-weight:500;color:#1e293b;}
+.id-item-type{font-size:11px;color:#94a3b8;margin-top:1px;}
+.id-item-tag{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;margin-left:auto;flex-shrink:0;}
+.id-item-tag.current-tag{background:#EFF4FF;color:#2563EB;}
+.id-menu-sep{height:1px;background:#ecf0f6;margin:4px 0;}
+.id-menu-action{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:12px;color:#64748b;cursor:pointer;transition:background 0.15s;text-decoration:none;}
+.id-menu-action:hover{background:#F8FAFC;color:#2563EB;}
+</style>
+</head>
+<body>
+<header class="top-bar user">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="id-switcher" id="idSwitcher">
+<div class="id-trigger" onclick="toggleIdMenu()">
+<div class="id-avatar">李</div>
+<div class="id-info">
+<span class="id-org">广州某某科技有限公司</span>
+<span class="id-type-badge">采购单位</span>
+</div>
+<span class="id-chevron">▾</span>
+</div>
+<div class="id-menu">
+<div class="id-menu-hd">切换工作台身份</div>
+<div class="id-menu-item current">
+<div class="id-dot active"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">采购单位</div>
+</div>
+<span class="id-item-tag current-tag">当前</span>
+</div>
+<div class="id-menu-item" onclick="location.href='../developer/index.html'">
+<div class="id-dot idle"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">开发者</div>
+</div>
+</div>
+<div class="id-menu-sep"></div>
+<a class="id-menu-action" href="../user/register-select.html">＋ 注册新机构类型</a>
+<a class="id-menu-action" href="#" onclick="alert('已退出登录');return false;">退出登录</a>
+</div>
+</div>
+<script>
+function toggleIdMenu(){
+  var el=document.getElementById('idSwitcher');
+  el.classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  var sw=document.getElementById('idSwitcher');
+  if(sw && !sw.contains(e.target)) sw.classList.remove('open');
+});
+</script>
+</div>
+</header>
+<aside class="sidebar user">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">🏪</span><span>概览</span></a>
+<a class="sidebar-link active" href="agent-list.html"><span class="icon">🤖</span><span>智能体市场</span></a>
+<a class="sidebar-link" href="recharge-list.html"><span class="icon">💰</span><span>账户充值</span></a>
+<a class="sidebar-link" href="balance.html"><span class="icon">💳</span><span>余额管理</span></a>
+<a class="sidebar-link" href="payment-accounts.html"><span class="icon">🏦</span><span>付款账户</span></a>
+<a class="sidebar-link" href="consumption-list.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+</div>
+<div class="sidebar-section">
+</div>
+</aside>
+<main class="main-content">
+<a class="back-link" href="agent-list.html" style="color: var(--user-color); margin-bottom: var(--spacing-md); display: inline-block;">← 返回智能体市场</a>
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--spacing-lg);">
+<!-- 左侧：智能体信息 -->
+<div>
+<div class="content-card">
+<div style="display: flex; gap: var(--spacing-xl); margin-bottom: var(--spacing-xl);">
+<div class="agent-icon" id="agentBanner"></div>
+<div style="flex: 1;">
+<h2 id="agentName" style="margin-bottom: var(--spacing-xs);"></h2>
+<div id="agentBadges" style="display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-sm);"></div>
+<div id="agentMeta" style="color: var(--text-secondary); font-size: 14px;"></div>
+</div>
+</div>
+<h3 style="margin-bottom: var(--spacing-md);">功能介绍</h3>
+<p id="agentDesc" style="color: var(--text-secondary); line-height: 1.8; margin-bottom: var(--spacing-lg);"></p>
+<h3 style="margin-bottom: var(--spacing-md);">服务说明</h3>
+<ul id="serviceDesc" style="color: var(--text-secondary); line-height: 2; padding-left: var(--spacing-lg);">
+<li>本智能体<strong>按实际使用量计费</strong>，用户无需选择套餐或计费方案</li>
+<li>每次调用按实际使用量扣除相应彩豆，用得多扣得多、用得少扣得少</li>
+<li>彩豆余额不足时将无法使用，系统会提示充值；扣费明细可在“消费记录”中查询</li>
+<li>市场展示为<strong>典型区间参考</strong>，实际以本次真实消耗结算，输入较多时可能高于上限</li>
+</ul>
+<div class="free-benefit" id="freeBenefit"><div class="free-benefit-title" id="freeBenefitTitle">新用户体验权益</div><div class="free-benefit-text" id="freeBenefitText"></div></div>
+</div>
+<!-- 计费方式 -->
+<div class="content-card">
+<h3 class="content-card-title" id="billTitle">计费方式（按使用量计费）</h3>
+<div class="info-line"><span class="k">计费方式</span><span id="billModeVal">按实际使用量计费</span></div>
+<div class="info-line"><span class="k" id="beanRangeLabel">单次预估花费（参考）</span><span id="beanRangeRow" style="font-weight:600;color:var(--user-color);"></span></div>
+<div id="billNote" style="background:#FFFBEB;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:12.5px;color:#92400e;line-height:1.8;margin-top:var(--spacing-md);">
+以上为典型花费参考；实际按本次使用量结算，<strong>输入内容较多（如上传文件较多）时可能高于参考区间</strong>。每笔费用可在消费记录中查看明细。
+</div>
+</div>
+</div>
+<!-- 右侧：定价卡片 -->
+<div>
+<div class="pricing-card">
+<div class="pricing-amount" id="beanRangeBig"></div>
+<div class="pricing-unit" id="billUnit">按实际使用量计费 · 用多少扣多少</div>
+<div id="monthUse" style="margin-top: var(--spacing-md); font-size: 13px; color: var(--text-secondary);"></div>
+</div>
+<div class="content-card" style="margin-top: var(--spacing-lg);">
+<h3 style="margin-bottom: var(--spacing-md);">当前余额</h3>
+<div style="font-size: 28px; font-weight: 700; color: var(--user-color);">16,850 彩豆</div>
+<div style="background: var(--bg-light); border-radius: var(--radius-md); padding: var(--spacing-md); margin: var(--spacing-md) 0;">
+<div style="display: flex; justify-content: space-between; margin-bottom: var(--spacing-xs);">
+<span id="refLabel" style="font-size: 13px;"></span>
+<span id="refCount" style="font-weight: 600;"></span>
+</div>
+<div style="background: var(--border-light); border-radius: 4px; height: 6px;">
+<div style="background: var(--user-color); width: 82%; border-radius: 4px; height: 100%;"></div>
+</div>
+</div>
+<a class="btn btn-outline" href="recharge-add.html" style="width: 100%; margin-bottom: var(--spacing-sm);">充值彩豆</a>
+<a class="btn btn-outline" href="balance.html" style="width: 100%;">余额明细</a>
+</div>
+<button class="btn btn-primary" id="useBtn" style="width: 100%; margin-top: var(--spacing-lg); padding: var(--spacing-lg); font-size: 16px;">开始使用</button><div class="call-feedback" id="callFeedback"></div>
+</div>
+</div>
+</main>
+<script>
+var RATE = 1000; /* 每 1,000 token = 1 彩豆 */
+var ICON = {
+  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 11.5 11 13.5 15 9.5"/>',
+  bars: '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
+  pen: '<path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>',
+  img: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>',
+  globe: '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+  list: '<path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2"/><rect x="8" y="2" width="8" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/>'
+};
+var DATA = {
+  compliance: { name:'合规监测智能体', cat:'合规审查', status:'使用中', dev:'张开发者', usage:'1,256 家在用',
+    grad:['#0EA5E9','#2563EB'], icon:'shield', tkMin:10000, tkMax:150000, freeLeft:16, freeTotal:20,
+    desc:'合规监测智能体是一款专业的文档合规性检查工具，帮助企业自动化检查各类文档是否符合内部规范和外部法规要求。支持自定义规则库、智能识别敏感信息、自动生成合规报告等功能。',
+    month:'本月累计调用 4 次，消耗 250 彩豆' },
+  data: { name:'政府采购数据分析与可视化洞察决策辅助智能体', cat:'数据分析', status:'', dev:'数擎科技', usage:'892 家在用',
+    grad:['#6366F1','#4F46E5'], icon:'bars', billMode:'perCall', price:30, tkMin:120000, tkMax:500000, freeLeft:2, freeTotal:20,
+    desc:'数据分析智能体支持上传数据一键生成可视化报表与洞察结论，覆盖多维透视、趋势预测与异常识别，帮助采购单位快速读懂数据、辅助决策。',
+    month:'本月累计调用 2 次，消耗 600 彩豆' },
+  copy: { name:'文案生成智能体', cat:'内容创作', status:'', dev:'灵犀工场', usage:'2,103 家在用',
+    grad:['#8B5CF6','#7C3AED'], icon:'pen', tkMin:40000, tkMax:150000, freeLeft:0, freeTotal:20,
+    desc:'文案生成智能体覆盖营销、公文、方案等多种场景，输入要点即可秒出成稿，支持多轮润色与风格切换，显著提升文档撰写效率。',
+    month:'本月累计调用 6 次，消耗 480 彩豆' },
+  image: { name:'图片处理智能体', cat:'图像处理', status:'', dev:'像素智能', usage:'1,567 家在用',
+    grad:['#F59E0B','#D97706'], icon:'img', tkMin:5000, tkMax:200000,
+    desc:'图片处理智能体提供智能抠图、老照片修复、画质增强与格式转换等能力，支持批量处理，输出高清可商用素材。',
+    month:'本月累计调用 3 次，消耗 300 彩豆' },
+  translate: { name:'智能翻译智能体', cat:'办公效率', status:'新上架', dev:'语桥科技', usage:'328 家在用',
+    grad:['#10B981','#059669'], icon:'globe', tkMin:2000, tkMax:50000, /* 按次本期暂不做：billMode:'perCall', price:20, */
+    desc:'智能翻译智能体支持中英日等多语种互译，内置专业术语库，保留原文排版格式，按实际使用量计费。',
+    month:'本月暂无调用记录' },
+  meeting: { name:'会议纪要智能体', cat:'办公效率', status:'新上架', dev:'效率星球', usage:'456 家在用',
+    grad:['#EC4899','#DB2777'], icon:'list', tkMin:30000, tkMax:120000, /* 按次本期暂不做：billMode:'perCall', price:80, */
+    desc:'会议纪要智能体支持上传录音或文字，自动区分发言人、提炼要点，生成结构化会议纪要与待办清单，会后整理更省心。',
+    month:'本月暂无调用记录' },
+};
+function fmtTk(n){ return n.toLocaleString('zh-CN'); }
+var id = new URLSearchParams(location.search).get('id') || 'compliance';
+var d = DATA[id] || DATA.compliance;
+if (typeof d.freeTotal === 'undefined') { d.freeTotal = 20; d.freeLeft = 20; }
+function paidRule(){ return d.billMode === 'perCall' ? d.price + ' 彩豆/次' : '按实际 Token 用量计费'; }
+function renderFreeBenefit(){
+  var box = document.getElementById('freeBenefit');
+  var title = document.getElementById('freeBenefitTitle');
+  var text = document.getElementById('freeBenefitText');
+  box.className = 'free-benefit';
+  if (d.freeLeft > 2) {
+    title.textContent = '新用户体验权益 · 剩余 ' + d.freeLeft + ' / ' + d.freeTotal + ' 次';
+    text.textContent = '本次调用将优先使用 1 次免费体验；免费次数用完后，按 ' + paidRule() + ' 扣费。';
+  } else if (d.freeLeft > 0) {
+    box.classList.add('warn');
+    title.textContent = '新用户体验权益 · 仅剩 ' + d.freeLeft + ' 次';
+    text.textContent = '本次将使用' + (d.freeLeft === 1 ? '最后 1 次' : ' 1 次') + '免费体验；次数用完后按 ' + paidRule() + ' 扣费。';
+  } else {
+    box.classList.add('done');
+    title.textContent = '新用户免费体验已用完';
+    text.textContent = '本次调用将按 ' + paidRule() + ' 扣费。';
+  }
+}
+document.title = d.name + ' - 用户端';
+document.getElementById('agentBanner').innerHTML =
+  '<svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">'
+  + '<defs><linearGradient id="uvg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+d.grad[0]+'"/><stop offset="1" stop-color="'+d.grad[1]+'"/></linearGradient></defs>'
+  + '<rect width="80" height="80" fill="url(#uvg)"/><circle cx="68" cy="12" r="36" fill="#ffffff" opacity="0.10"/><circle cx="10" cy="74" r="26" fill="#ffffff" opacity="0.08"/>'
+  + '<g transform="translate(22.4,22.4) scale(1.467)" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+ICON[d.icon]+'</g></svg>';
+document.getElementById('agentName').textContent = d.name;
+var badges = '<span class="badge badge-info">'+d.cat+'</span>';
+if (d.status === '使用中') badges += ' <span class="badge badge-success">使用中</span>';
+else if (d.status === '新上架') badges += ' <span class="badge" style="background:#ECFDF5;color:#059669;">新上架</span>';
+document.getElementById('agentBadges').innerHTML = badges;
+document.getElementById('agentMeta').innerHTML = '<span>开发者：'+d.dev+'</span><span style="margin-left: var(--spacing-md);">'+d.usage+'</span>';
+document.getElementById('agentDesc').textContent = d.desc;
+document.getElementById('monthUse').textContent = d.month;
+renderFreeBenefit();
+if (d.billMode === 'perCall') {
+  var pc = d.price;
+  document.getElementById('beanRangeRow').textContent = pc + ' 彩豆/次（固定）';
+  document.getElementById('beanRangeBig').textContent = pc + ' 彩豆';
+  document.getElementById('billTitle').textContent = '计费方式（按次计费）';
+  document.getElementById('billModeVal').textContent = '按次计费（每次固定扣费）';
+  document.getElementById('beanRangeLabel').textContent = '每次调用固定扣费';
+  document.getElementById('billUnit').textContent = '按次计费 · 每次固定扣费';
+  document.getElementById('billNote').innerHTML = '本智能体<strong>按次计费</strong>：每次调用固定扣除 ' + pc + ' 彩豆，无论输入多少、使用轻重，每次都是固定价格。每笔费用可在消费记录中查看明细。';
+  document.getElementById('serviceDesc').innerHTML = '<li>本智能体<strong>按次计费</strong>，每次调用固定扣除 ' + pc + ' 彩豆</li><li>费用与输入内容多少、使用量无关，价格固定透明、可预期</li><li>彩豆余额不足时将无法使用，系统会提示充值；扣费明细可在“消费记录”中查询</li><li>适合处理量稳定、单次价格固定的场景</li>';
+  document.getElementById('refLabel').textContent = '当前余额可调用约';
+  document.getElementById('refCount').textContent = Math.floor(16850 / pc).toLocaleString('zh-CN') + ' 次';
+} else {
+  var bMin = Math.ceil(d.tkMin/RATE), bMax = Math.ceil(d.tkMax/RATE);
+  document.getElementById('beanRangeRow').textContent = '约 ' + bMin + ' ~ ' + bMax + ' 彩豆/次';
+  document.getElementById('beanRangeBig').textContent = '约 ' + bMin + '~' + bMax + ' 彩豆';
+  var avg = Math.round((bMin + bMax) / 2);
+  document.getElementById('refLabel').textContent = '按平均消耗可支持约';
+  document.getElementById('refCount').textContent = Math.floor(16850 / avg).toLocaleString('zh-CN') + ' 次';
+}
+document.getElementById('useBtn').onclick = function(){
+  var feedback = document.getElementById('callFeedback');
+  feedback.style.display = 'block';
+  if (d.freeLeft > 0) {
+    d.freeLeft--;
+    feedback.textContent = '已使用 1 次免费体验，' + d.name + ' 剩余 ' + d.freeLeft + ' 次免费体验。';
+    renderFreeBenefit();
+  } else {
+    feedback.textContent = '免费体验已用完，本次调用将按 ' + paidRule() + ' 扣费。';
+  }
+};
+</script>
+</body>
+</html>

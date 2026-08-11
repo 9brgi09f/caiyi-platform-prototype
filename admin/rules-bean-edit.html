@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>彩豆规则 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .form-section {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+        }
+        .form-section-title {
+            font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md); border-bottom: 1px solid var(--border-light);
+        }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); }
+        .form-item { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+        .form-item.full-width { grid-column: 1 / -1; }
+        .form-label { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+        .form-hint { font-size: 12px; color: var(--text-muted); }
+        .recharge-tier { display: flex; align-items: center; gap: var(--spacing-md); margin-bottom: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-light); border-radius: var(--radius-md); }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link active" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+<!-- 数据统计菜单暂隐藏 <a class="sidebar-link" href="statistics.html"><span class="icon">📉</span><span>数据统计</span></a> -->
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a class="back-link" href="rules-list.html" style="color: white; margin-bottom: var(--spacing-sm);">← 返回列表</a>
+<h2>彩豆规则</h2>
+<p>配置彩豆充值比例与赠送规则</p>
+</div>
+<form class="form-section">
+<h3 class="form-section-title">基础比例配置</h3>
+<div class="form-grid">
+<div class="form-item">
+<label class="form-label">充值比例</label>
+<div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+<span>1 元 = </span>
+<input class="input" style="width: 100px;" type="number" value="100"/>
+<span>彩豆</span>
+</div>
+<span class="form-hint">人民币与彩豆的兑换比例</span>
+</div>
+<div class="form-item">
+<label class="form-label">最小充值金额</label>
+<div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+<input class="input" style="width: 100px;" type="number" value="10"/>
+<span>元</span>
+</div>
+<span class="form-hint">单次充值最低金额限制</span>
+</div>
+<div class="form-item">
+<label class="form-label">最大单次充值</label>
+<div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+<input class="input" style="width: 120px;" type="number" value="10000"/>
+<span>元</span>
+</div>
+</div>
+<div class="form-item">
+<span class="form-hint">彩豆默认永久有效，不设有效期。</span>
+</div>
+</div>
+</form>
+<form class="form-section">
+<h3 class="form-section-title">充值赠送规则</h3>
+<div style="padding: var(--spacing-md); background: #fef3c7; border: 1px solid #fbbf24; border-radius: var(--radius-md); color: #92400e; font-size: 13px; margin-bottom: var(--spacing-lg);"><strong>⏳ 本期暂不支持充值赠送</strong>：赠送彩豆功能（如充值满额赠送）本期暂不上线；以下配置界面先行保留、暂不生效，后续版本再启用。</div>
+<div class="form-item full-width">
+<label style="display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-light); border-radius: var(--radius-md);">
+<input disabled="" type="checkbox"/>
+<div>
+<div style="font-weight: 500; color: var(--text-muted);">启用充值赠送（本期暂不可用）</div>
+<div style="font-size: 12px; color: var(--text-muted);">达到一定金额时赠送额外彩豆</div>
+</div>
+</label>
+</div>
+<div style="margin-top: var(--spacing-lg); opacity: 0.55; pointer-events: none;">
+<div class="recharge-tier">
+<span style="width: 120px; font-weight: 500;">充值满</span>
+<input class="input" style="width: 100px;" type="number" value="100"/>
+<span>元，赠送</span>
+<input class="input" style="width: 100px;" type="number" value="10"/>
+<span>%</span>
+<button class="btn btn-sm btn-outline" type="button">删除</button>
+</div>
+<div class="recharge-tier">
+<span style="width: 120px; font-weight: 500;">充值满</span>
+<input class="input" style="width: 100px;" type="number" value="500"/>
+<span>元，赠送</span>
+<input class="input" style="width: 100px;" type="number" value="15"/>
+<span>%</span>
+<button class="btn btn-sm btn-outline" type="button">删除</button>
+</div>
+<div class="recharge-tier">
+<span style="width: 120px; font-weight: 500;">充值满</span>
+<input class="input" style="width: 100px;" type="number" value="1000"/>
+<span>元，赠送</span>
+<input class="input" style="width: 100px;" type="number" value="20"/>
+<span>%</span>
+<button class="btn btn-sm btn-outline" type="button">删除</button>
+</div>
+<button class="btn btn-sm btn-outline" style="margin-top: var(--spacing-sm);" type="button">+ 添加阶梯</button>
+</div>
+<p style="margin-top: var(--spacing-md); padding: var(--spacing-md); background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-md); color: #1e40af; font-size: 13px;">赠送彩豆为营销促销额度，单独记账：不计入分账基数与开票金额，财务计入"销售费用-用户促销"。实付与赠送按本金分摊系数（实付金额÷总彩豆）拆分核算。</p>
+</form>
+<form class="form-section">
+<h3 class="form-section-title">彩豆与金额比例修改记录</h3>
+<div class="form-item full-width">
+<span class="form-hint">每次修改比例都会保存记录，便于追踪审计</span>
+</div>
+<div class="table-wrapper">
+<table class="table">
+<thead>
+<tr>
+<th>修改时间</th>
+<th>比例值（1彩豆=）</th>
+<th>对应汇率（1元=）</th>
+<th>操作人</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-05-01 09:00</td>
+<td>¥0.01</td>
+<td>100 彩豆</td>
+<td>管理员</td>
+</tr>
+<tr>
+<td>2026-03-15 14:30</td>
+<td>¥0.012</td>
+<td>≈83 彩豆</td>
+<td>管理员</td>
+</tr>
+<tr>
+<td>2026-01-01 00:00</td>
+<td>¥0.01</td>
+<td>100 彩豆</td>
+<td>系统</td>
+</tr>
+</tbody>
+</table>
+</div>
+</form>
+<div style="display: flex; gap: var(--spacing-md); justify-content: center;">
+<a class="btn btn-outline" href="rules-list.html">取消</a>
+<button class="btn btn-primary" type="submit">保存配置（将生成修改记录）</button>
+</div>
+</main>
+</body>
+</html>

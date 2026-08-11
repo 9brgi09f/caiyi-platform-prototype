@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>智能体审核详情 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .detail-section {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+        }
+        .detail-section-title {
+            font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md); border-bottom: 1px solid var(--border-light);
+        }
+        .detail-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-lg); }
+        .detail-item { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+        .detail-item.full-width { grid-column: 1 / -1; }
+        .detail-label { font-size: 13px; color: var(--text-muted); }
+        .detail-value { font-size: 15px; color: var(--text-primary); font-weight: 500; }
+        .ratio-bar {
+            width: 220px; height: 12px; border-radius: 6px; overflow: hidden;
+            display: flex; background: var(--bg-light);
+        }
+        .ratio-bar .dev { background: var(--success-color); height: 100%; width: 0; }
+        .ratio-bar .plat { background: var(--admin-color); height: 100%; width: 0; }
+        .form-hint { font-size: 12px; color: var(--text-muted); }
+            .info-section { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-xl); margin-bottom: var(--spacing-lg); }
+        .info-header { display: flex; align-items: flex-start; gap: var(--spacing-lg); margin-bottom: var(--spacing-lg); }
+        .info-avatar { width: 80px; height: 80px; background: var(--admin-light); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 40px; overflow: hidden; }
+        .info-title { flex: 1; }
+        .info-title h3 { font-size: 20px; margin-bottom: var(--spacing-xs); }
+        .info-tags { display: flex; gap: var(--spacing-xs); flex-wrap: wrap; }
+        .info-tag { padding: 4px 8px; background: var(--admin-light); color: var(--admin-color); border-radius: var(--radius-sm); font-size: 12px; }
+        .info-status { display: inline-flex; align-items: center; gap: var(--spacing-xs); padding: var(--spacing-xs) var(--spacing-md); border-radius: var(--radius-md); font-size: 13px; font-weight: 500; }
+        .status-audit { background: #fef3c7; color: #b45309; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-lg); }
+        .info-label { font-size: 13px; color: var(--text-muted); margin-bottom: var(--spacing-xs); }
+        .info-value { font-size: 15px; font-weight: 500; color: var(--text-primary); }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link active" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a href="agent-audit-list.html" style="color: white; margin-bottom: var(--spacing-sm); display: inline-block;">← 返回智能体管理</a>
+<h2>智能体审核详情 <span class="badge" id="typeBadge" style="background:#dbeafe; color:#2563eb; vertical-align:middle; font-size:13px;">首次上架</span></h2>
+<p id="headerInfo">申请编号：AA20260514001 | 状态：待审核</p>
+</div>
+<div style="max-width: 900px;">
+<!-- 基本信息 -->
+<div class="info-section">
+<h3 style="font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);">基本信息</h3>
+<div class="info-header">
+<div class="info-avatar"><svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cv1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3B82F6"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs><rect width="80" height="80" fill="url(#cv1)"/><circle cx="68" cy="12" r="36" fill="#ffffff" opacity="0.10"/><circle cx="10" cy="74" r="26" fill="#ffffff" opacity="0.08"/><g transform="translate(24,24)" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="12" height="12" rx="2"/><rect x="18" y="2" width="12" height="12" rx="2"/><rect x="2" y="18" width="12" height="12" rx="2"/><rect x="18" y="18" width="12" height="12" rx="2"/></g></svg></div>
+<div class="info-title">
+<h3 id="agentName">家具比价智能体</h3>
+<div class="info-tags">
+<span class="info-tag">智能</span>
+<span class="info-tag">比价</span>
+<span class="info-tag">家具</span>
+</div>
+</div>
+<span class="info-status status-audit" id="statusBadge">● 待审核</span>
+</div>
+<div class="info-grid">
+<div class="info-item"><div class="info-label">应用类型</div><div class="info-value">自研智能体</div></div>
+<div class="info-item"><div class="info-label">开发者</div><div class="info-value">张开发者</div></div>
+<div class="info-item"><div class="info-label">产品分类</div><div class="info-value">生活服务</div></div>
+<div class="info-item"><div class="info-label">智能体属性</div><div class="info-value">价格比对</div></div>
+<div class="info-item"><div class="info-label">区域</div><div class="info-value">全国</div></div>
+<div class="info-item"><div class="info-label">版本号</div><div class="info-value">v1.0.0</div></div>
+<div class="info-item"><div class="info-label">提交时间</div><div class="info-value">2026-05-14 09:30</div></div>
+<div class="info-item"><div class="info-label">封面图片</div><div class="info-value"><a href="#" style="color: var(--admin-color);">封面图.png</a></div></div>
+<div class="info-item"><div class="info-label">演示视频</div><div class="info-value"><a href="#" style="color: var(--admin-color);">demo.mp4</a></div></div>
+<div class="info-item"><div class="info-label">操作手册</div><div class="info-value"><a href="#" style="color: var(--admin-color);">操作手册.pdf</a></div></div>
+<div class="info-item"><div class="info-label">设置地址</div><div class="info-value" style="font-size: 13px;">https://api.example.com/v1/furniture</div></div>
+</div>
+<div style="margin-top: var(--spacing-lg);">
+<div class="info-label">产品描述</div>
+<p style="font-size: 14px; color: var(--text-secondary); margin-top: var(--spacing-xs);">家具商品比价智能体，支持多平台家具价格比对、历史价格走势查询与低价提醒。</p>
+</div>
+<div style="margin-top: var(--spacing-lg);">
+<div class="info-label">详细描述</div>
+<p style="font-size: 14px; color: var(--text-secondary); margin-top: var(--spacing-xs); white-space: pre-line;">## 功能亮点
+- 多平台家具价格实时比对
+- 历史价格走势与低价提醒
+- 支持按品类、品牌、材质筛选</p>
+</div>
+</div>
+<!-- 能力与接入 -->
+<div class="info-section">
+<h3 style="font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);">能力与接入</h3>
+<div class="info-grid">
+<div class="info-item"><div class="info-label">是否支持 API</div><div class="info-value" style="color: var(--success-color);">是</div></div>
+<div class="info-item"><div class="info-label">是否支持 MCP</div><div class="info-value" style="color: var(--text-muted);">否</div></div>
+<div class="info-item"><div class="info-label">是否在线运行</div><div class="info-value" style="color: var(--success-color);">是</div></div>
+</div>
+</div>
+<!-- 计费信息（与开发者端一致的独立卡片） -->
+<div class="detail-section">
+<h3 class="detail-section-title">计费信息（开发者自主定价 · 按 token 计费）</h3>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--spacing-lg);">
+<div><div style="font-size:13px;color:var(--text-muted);">token → 彩豆 换算率（开发者定价）</div><div style="margin-top:3px;font-weight:600;color:var(--admin-color);">每 1,000 token = 1 彩豆</div></div>
+<div><div style="font-size:13px;color:var(--text-muted);">单次预估 token 区间</div><div style="margin-top:3px;font-weight:500;" id="tkRange">80,000 ~ 150,000</div></div>
+<div><div style="font-size:13px;color:var(--text-muted);">换算后彩豆区间（市场展示）</div><div style="margin-top:3px;font-weight:600;color:var(--klein,#2563EB);" id="beanRange">约 80 ~ 150 彩豆/次</div></div>
+<div><div style="font-size:13px;color:var(--text-muted);">单次熔断上限</div><div style="margin-top:3px;font-weight:500;" id="tkCap">300,000 token</div></div>
+</div>
+<p style="font-size:12px;color:var(--text-muted);margin-top:var(--spacing-md);">换算率由开发者自行定价（下限 = 平台算力成本单价 0.1 彩豆/千token）；实际扣费按用户本次真实消耗 token 结算。<strong>审核要点：核验定价不低于成本下限、申报 token 区间是否合理。</strong></p>
+</div>
+<!-- 变更内容（仅变更审核单显示） -->
+<div class="detail-section" id="changeSection" style="display: none; border-left: 4px solid #7c3aed;">
+<h3 class="detail-section-title">变更内容</h3>
+<p style="font-size: 13px; color: var(--text-muted); margin-bottom: var(--spacing-md);">该智能体已上架，本单为变更审核；审核期间线上版本继续服务，通过后新版本自动替换生效，驳回不影响线上版本。</p>
+<div class="table-wrapper">
+<table class="table">
+<thead>
+<tr><th>变更项</th><th>变更前（线上版本）</th><th>变更后（待审版本）</th></tr>
+</thead>
+<tbody>
+<tr><td>申报预估 token 区间</td><td>100,000 ~ 300,000（约 100~300 彩豆）</td><td style="color:#7c3aed; font-weight:600;">120,000 ~ 350,000（约 120~350 彩豆）</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- 审核操作 -->
+<div class="detail-section">
+<h3 class="detail-section-title">审核操作</h3>
+<div class="detail-item full-width" style="margin-bottom: var(--spacing-lg);">
+<span class="detail-label">审核备注（驳回时必填）</span>
+<textarea class="input" id="auditRemark" placeholder="如有审核备注请在此填写..." rows="2"></textarea>
+</div>
+<div style="display: flex; gap: var(--spacing-md); justify-content: center;">
+<a class="btn btn-outline" href="agent-audit-list.html">取消</a>
+<button class="btn btn-primary" onclick="approveAgent()">审核通过</button>
+<button class="btn" onclick="rejectAgent()" style="background: #dc2626; color: white;">驳回申请</button>
+</div>
+</div>
+</div>
+</main>
+<script>
+        var IS_CHANGE = new URLSearchParams(window.location.search).get('type') === 'change';
+        if (IS_CHANGE) {
+            var tb = document.getElementById('typeBadge');
+            tb.textContent = '变更审核';
+            tb.style.background = '#ede9fe';
+            tb.style.color = '#7c3aed';
+            document.getElementById('headerInfo').textContent = '申请编号：AC20260516001 | 状态：待审核';
+            document.getElementById('agentName').textContent = '数据分析智能体（已上架）';
+            document.getElementById('changeSection').style.display = '';
+            document.getElementById('tkRange').textContent = '120,000 ~ 350,000';
+            document.getElementById('beanRange').textContent = '约 120 ~ 350 彩豆/次';
+        }
+        function approveAgent() {
+            var msg = IS_CHANGE
+                ? '确认审核通过？新版本将替换线上版本生效（申报 token 区间 100k~300k → 120k~350k）。'
+                : '确认审核通过？智能体将上架，按开发者自主定价计费；分成 =用户消耗彩豆 × 80% − 算力成本彩豆。';
+            if (confirm(msg)) {
+                alert(IS_CHANGE ? '审核已通过，新版本已替换线上版本生效' : '审核已通过，智能体已上架');
+                window.location.href = 'agent-audit-list.html';
+            }
+        }
+        function rejectAgent() {
+            var remark = document.getElementById('auditRemark').value;
+            if (!remark) {
+                alert('驳回申请需填写审核备注（驳回原因）');
+                return;
+            }
+            if (confirm(IS_CHANGE ? '确认驳回该变更申请？线上版本不受影响。' : '确认驳回该智能体上架申请？')) {
+                alert(IS_CHANGE ? '已驳回变更申请，线上版本继续服务，已通知开发者' : '已驳回申请，已通知开发者');
+                window.location.href = 'agent-audit-list.html';
+            }
+        }
+    </script>
+</body>
+</html>

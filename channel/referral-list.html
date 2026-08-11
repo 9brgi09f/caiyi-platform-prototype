@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>推荐确认单 - 渠道端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; }
+        .stat-value { font-size: 24px; font-weight: 700; color: var(--klein); }
+        .stat-label { font-size: 13px; color: var(--text-muted); margin-top: var(--spacing-xs); }
+        #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+    </style>
+</head>
+<body>
+<header class="top-bar channel">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">渠</div>
+<span>智采科技</span>
+</div>
+</div>
+</header>
+<aside class="sidebar channel">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon"></span><span>概览</span></a>
+<a class="sidebar-link" href="invite-code.html"><span class="icon"></span><span>我的邀请码</span></a>
+<a class="sidebar-link" href="customer-list.html"><span class="icon"></span><span>客户管理</span></a>
+<a class="sidebar-link active" href="referral-list.html"><span class="icon"></span><span>推荐确认单</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon"></span><span>分成结算</span></a>
+<a class="sidebar-link" href="withdrawal-list.html"><span class="icon"></span><span>提现管理</span></a>
+<a class="sidebar-link" href="bank-card.html"><span class="icon"></span><span>收款账户</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon"></span><span>发票管理</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+<div>
+<h2>推荐确认单</h2>
+<p>无法通过邀请码绑定的客户，提交确认单及证明材料确认推荐关系</p>
+</div>
+<div style="display:flex;gap:8px;">
+<a class="btn btn-outline" download="" href="推荐确认单模板.docx" style="color:#fff;border-color:rgba(255,255,255,.7);">下载确认单模板</a>
+<button class="btn btn-primary" onclick="document.getElementById('addModal').classList.add('active')" style="background:#fff;color:var(--klein);border-color:#fff;" type="button">+ 新增确认单</button>
+</div>
+</div>
+<div class="content-card">
+<div class="tab-nav">
+<button class="tab-btn active" onclick="filterStatus('all', this)" type="button">全部 (3)</button>
+<button class="tab-btn" onclick="filterStatus('待确认', this)" type="button">待确认 (1)</button>
+<button class="tab-btn" onclick="filterStatus('已确认', this)" type="button">已确认 (1)</button>
+<button class="tab-btn" onclick="filterStatus('已驳回', this)" type="button">已驳回 (1)</button>
+</div>
+<div class="table-wrapper">
+<table class="table table-wide">
+<thead><tr><th>确认单号</th><th>被推荐方</th><th>确认方式</th><th>提交时间</th><th>状态</th><th>操作</th></tr></thead>
+<tbody>
+<tr data-status="待确认">
+<td>RT20260628001</td><td>珠海智慧城市运营公司</td><td>双方盖章 + 授权委托文件</td><td>2026-06-28 14:20</td>
+<td><span class="badge badge-warning">待确认</span></td>
+<td><a class="btn btn-sm btn-outline" href="referral-view.html?id=RT20260628001">详情</a></td>
+</tr>
+<tr data-status="已确认">
+<td>RT20260322001</td><td>佛山市政数据服务中心</td><td>三方盖章</td><td>2026-03-22 10:00</td>
+<td><span class="badge badge-success">已确认</span></td>
+<td><a class="btn btn-sm btn-outline" href="referral-view.html?id=RT20260322001">详情</a></td>
+</tr>
+<tr data-status="已驳回">
+<td>RT20260510002</td><td>中山采联信息有限公司</td><td>双方盖章</td><td>2026-05-10 16:40</td>
+<td><span class="badge badge-danger">已驳回</span></td>
+<td><a class="btn btn-sm btn-outline" href="referral-view.html?id=RT20260510002">详情</a> <button class="btn btn-sm btn-primary" onclick="document.getElementById('addModal').classList.add('active')" type="button">重新提交</button></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p style="font-size:12px;color:var(--text-muted);margin-top:var(--spacing-sm);">注：渠道商处于警告整改期时，平台暂停受理新增推荐关系；终止合作后邀请码停用，终止日后客户消费不再计入分成基数。</p>
+</div>
+<!-- 新增确认单弹窗 -->
+<div class="modal-overlay" id="addModal" onclick="if(event.target===this)this.classList.remove('active')">
+<div class="modal" style="max-width: 520px;">
+<div class="modal-header"><span class="modal-title">新增推荐确认单</span><button class="modal-close" onclick="document.getElementById('addModal').classList.remove('active')">×</button></div>
+<div class="modal-body">
+<div style="margin-bottom: var(--spacing-md);"><label style="font-size:13px;color:var(--text-muted);">被推荐方名称</label><input class="input" style="width:100%;margin-top:4px;" type="text"/></div>
+<div style="margin-bottom: var(--spacing-md);"><label style="font-size:13px;color:var(--text-muted);">统一社会信用代码</label><input class="input" maxlength="18" style="width:100%;margin-top:4px;" type="text"/></div>
+<div style="margin-bottom: var(--spacing-md);"><label style="font-size:13px;color:var(--text-muted);">确认方式</label>
+<select class="select" style="width:100%;margin-top:4px;">
+<option>三方盖章（渠道商+被推荐方+政采中心）</option>
+<option>双方盖章 + 授权委托文件</option>
+<option>双方盖章 + 合作协议/会议纪要/邮件往来</option>
+</select></div>
+<p style="font-size:12px;color:var(--text-muted);margin-bottom:var(--spacing-md);">请先<a download="" href="推荐确认单模板.docx" style="color:var(--klein);font-weight:600;">下载《推荐确认单》模板</a>，按三方（或双方+证明材料）要求盖章后上传扫描件。</p>
+<div><label style="font-size:13px;color:var(--text-muted);">盖章件/证明材料</label>
+<div style="border:1px dashed var(--border-color);border-radius:var(--radius-md);padding:var(--spacing-md);text-align:center;color:var(--text-muted);font-size:13px;margin-top:4px;cursor:pointer;">点击上传（pdf/jpg/png，可多份）</div></div>
+</div>
+<div class="modal-footer">
+<button class="btn btn-outline" onclick="document.getElementById('addModal').classList.remove('active')">取消</button>
+<button class="btn btn-primary" onclick="document.getElementById('addModal').classList.remove('active');showToast('确认单已提交，状态：待确认')">提交</button>
+</div>
+</div>
+</div>
+</main>
+<div id="toast"></div>
+<script>
+function showToast(msg, icon){
+  var t = document.getElementById('toast');
+  t.textContent = (icon || '\u2713') + ' ' + msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.display = 'none'; }, 2400);
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>开发者发票详情 - 财务端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .detail-section {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+        }
+        .detail-section-title {
+            font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md); border-bottom: 1px solid var(--border-light);
+        }
+        .detail-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-lg); }
+        .detail-item { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+        .detail-item.full-width { grid-column: 1 / -1; }
+        .detail-label { font-size: 13px; color: var(--text-muted); }
+        .detail-value { font-size: 15px; color: var(--text-primary); font-weight: 500; }
+
+        .invoice-preview {
+            border: 1px solid var(--border-color); border-radius: var(--radius-md);
+            padding: var(--spacing-md); background: var(--border-light);
+            display: flex; align-items: center; gap: var(--spacing-md);
+        }
+        .invoice-icon { font-size: 32px; }
+        .invoice-info { flex: 1; }
+        .invoice-name { font-weight: 500; color: var(--text-primary); }
+        .invoice-size { font-size: 12px; color: var(--text-muted); }
+
+        .badge-pending { background: #fef3c7; color: #d97706; }
+        .badge-success { background: #d1fae5; color: #059669; }
+
+        .auto-note {
+            background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-md);
+            padding: var(--spacing-md); color: #1e40af; font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+<header class="top-bar finance">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">财</div>
+<span>财务人员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar finance">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+<a class="sidebar-link" href="withdrawal-pay-list.html"><span class="icon">💸</span><span>提现打款</span></a>
+<a class="sidebar-link active" href="invoice-list.html"><span class="icon">🧾</span><span>发票管理</span></a>
+<a class="sidebar-link" href="reconciliation-list.html"><span class="icon">📋</span><span>对账报表</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a href="invoice-list.html" style="color: white; margin-bottom: var(--spacing-sm); display: inline-block;">← 返回发票列表</a>
+<h2>开发者发票详情</h2>
+<p>发票号：25612000000012345678 | 状态：已核销</p>
+</div>
+<div style="max-width: 860px;">
+<!-- 发票信息 -->
+<div class="detail-section">
+<h3 class="detail-section-title">发票信息</h3>
+<div class="detail-grid">
+<div class="detail-item">
+<span class="detail-label">开票方</span>
+<span class="detail-value">张开发者</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">纳税人识别号</span>
+<span class="detail-value">91110000XXXXXXXX</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">发票类型 / 税率</span>
+<span class="detail-value">增值税专用发票 / 6%</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">发票号</span>
+<span class="detail-value">25612000000012345678</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">发票金额</span>
+<span class="detail-value" style="color: var(--finance-color); font-size: 18px;">¥4,302.76</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">分成款扣减</span>
+<span class="detail-value">¥0.00</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">实付金额</span>
+<span class="detail-value">¥4,302.76</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">收到时间</span>
+<span class="detail-value">2026-05-15 11:00</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">发票抬头</span>
+<span class="detail-value">广州市政府采购中心</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">当前状态</span>
+<span class="detail-value"><span class="badge badge-success">已核销</span></span>
+</div>
+<div class="detail-item full-width">
+<span class="detail-label">发票文件</span>
+<div class="invoice-preview">
+<span class="invoice-icon" style="display:inline-flex;color:var(--klein);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+<div class="invoice-info">
+<div class="invoice-name">发票_25612000000012345678.pdf</div>
+<div class="invoice-size">1.8 MB · 收到于 2026-05-15 11:00</div>
+</div>
+<button class="btn btn-sm btn-outline">预览</button>
+</div>
+</div>
+</div>
+</div>
+<!-- 关联提现单 -->
+<div class="detail-section">
+<h3 class="detail-section-title">关联提现单</h3>
+<div class="detail-grid">
+<div class="detail-item">
+<span class="detail-label">提现单号</span>
+<span class="detail-value">WD20260515001</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">提现金额</span>
+<span class="detail-value">¥4,302.76</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">金额核对</span>
+<span class="detail-value" style="color: var(--success-color);">✓ 与发票金额一致</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">付款状态</span>
+<span class="detail-value">已付款</span>
+</div>
+</div>
+<div class="auto-note" style="margin-top: var(--spacing-lg);">
+发票已随资金支付审批单推送金蝶校验；付款完成后系统自动核销，无需人工操作。
+</div>
+</div>
+<div style="display: flex; gap: var(--spacing-md); justify-content: center;">
+<a class="btn btn-outline" href="invoice-list.html">返回发票列表</a>
+</div>
+</div>
+</main>
+</body>
+</html>

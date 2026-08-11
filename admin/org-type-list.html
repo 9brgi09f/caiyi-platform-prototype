@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>机构管理 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+.page-header{background:linear-gradient(135deg,#2563EB,#1D4ED8);color:white;padding:var(--spacing-lg) var(--spacing-xl);border-radius:var(--radius-lg);margin-bottom:var(--spacing-lg);}
+.page-header h2{color:white;margin-bottom:var(--spacing-xs);}
+.page-header p{opacity:.9;font-size:14px;}
+.tab-nav-lg{display:flex;gap:0;margin-bottom:var(--spacing-lg);border-bottom:2px solid var(--border-light);}
+.tab-nav-lg .tab-btn{font-size:15px;padding:var(--spacing-md) var(--spacing-xl);}
+.info-box{background:var(--klein-light);border:1px solid #bfdbfe;border-radius:var(--radius-md);padding:var(--spacing-md);font-size:13px;color:#1d4ed8;margin-bottom:var(--spacing-lg);}
+.toggle-on{display:inline-flex;align-items:center;gap:4px;background:#d1fae5;color:#059669;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:500;}
+.toggle-off{display:inline-flex;align-items:center;gap:4px;background:#f1f5f9;color:#94a3b8;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:500;}
+.badge-yes{background:#d1fae5;color:#059669;}
+.badge-no{background:#f1f5f9;color:#94a3b8;}
+.badge-buyer{background:#dbeafe;color:#2563eb;}
+.badge-supplier{background:#d1fae5;color:#059669;}
+.badge-agency{background:#ede9fe;color:#7c3aed;}
+.badge-developer{background:#fef3c7;color:#d97706;}
+.badge-supervisor{background:#f0fdf4;color:#166534;}
+.badge-active{background:#d1fae5;color:#059669;}
+.badge-pending{background:#fef3c7;color:#d97706;}
+.badge-rejected{background:#fee2e2;color:#dc2626;}
+.badge-admin{background:#dbeafe;color:#2563eb;}
+.badge-operator{background:#ede9fe;color:#7c3aed;}
+.badge-readonly{background:#f1f5f9;color:#64748b;}
+.search-bar{display:flex;gap:var(--spacing-sm);margin-bottom:var(--spacing-md);}
+.search-bar input{flex:1;padding:var(--spacing-sm) var(--spacing-md);border:1px solid var(--border-color);border-radius:var(--radius-md);font-size:14px;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--spacing-md);margin-bottom:var(--spacing-lg);}
+.stat-card{background:var(--card-bg);border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:var(--spacing-lg);text-align:center;}
+.stat-value{font-size:24px;font-weight:700;}
+.stat-label{font-size:13px;color:var(--text-muted);margin-top:var(--spacing-xs);}
+.audit-tip{font-size:13px;color:#166534;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:var(--radius-md);padding:var(--spacing-md);margin-bottom:var(--spacing-lg);}
+.badge-approved{background:#d1fae5;color:#059669;}
+@media(max-width:720px){.stats-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user"><div class="top-bar-avatar">管</div><span>管理员</span></div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon">📡</span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a>
+<a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+
+<a class="sidebar-link active" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<h2>机构管理</h2>
+<p>统一配置机构类型、处理注册审核并管理机构账号、个人账号及子账号。</p>
+</div>
+<div class="tab-nav-lg">
+<button class="tab-btn active" onclick="switchTab(this,'tab1')">机构类型</button>
+<button class="tab-btn" onclick="switchTab(this,'tab2')">注册审核 <span class="sidebar-badge">3</span></button>
+<button class="tab-btn" onclick="switchTab(this,'tab3')">账号管理</button>
+</div>
+<div id="tab1" class="tab-panel active">
+<div class="content-card">
+<div class="content-card-header">
+<h3 class="content-card-title">机构类型列表</h3>
+<a class="btn btn-primary" href="org-type-edit.html">+ 新增机构类型</a>
+</div>
+<div class="table-wrapper">
+<table class="table table-wide">
+<thead>
+<tr><th>类型名称</th><th>注册渠道</th><th>审核方式</th><th>注册账号数</th><th>操作</th></tr>
+</thead>
+<tbody>
+<tr>
+<td>采购单位</td>
+<td><span class="badge badge-yes">公开注册</span></td>
+<td><span class="badge badge-yes">需审核</span></td>
+<td>23个</td>
+<td><a class="btn btn-sm btn-outline" href="org-type-view.html">查看</a><a class="btn btn-sm btn-outline" href="org-type-edit.html" style="margin-left:6px;">编辑</a></td>
+</tr>
+<tr>
+<td>供应商</td>
+<td><span class="badge badge-yes">公开注册</span></td>
+<td><span class="badge badge-yes">需审核</span></td>
+<td>11个</td>
+<td><a class="btn btn-sm btn-outline" href="org-type-view.html">查看</a><a class="btn btn-sm btn-outline" href="org-type-edit.html" style="margin-left:6px;">编辑</a></td>
+</tr>
+<tr>
+<td>代理机构</td>
+<td><span class="badge badge-yes">公开注册</span></td>
+<td><span class="badge badge-yes">需审核</span></td>
+<td>5个</td>
+<td><a class="btn btn-sm btn-outline" href="org-type-view.html">查看</a><a class="btn btn-sm btn-outline" href="org-type-edit.html" style="margin-left:6px;">编辑</a></td>
+</tr>
+<tr>
+<td>开发者</td>
+<td><span class="badge badge-yes">公开注册</span></td>
+<td><span class="badge badge-yes">需审核</span></td>
+<td>8个</td>
+<td><a class="btn btn-sm btn-outline" href="org-type-view.html">查看</a><a class="btn btn-sm btn-outline" href="org-type-edit.html" style="margin-left:6px;">编辑</a></td>
+</tr>
+<tr>
+<td>个人用户</td>
+<td><span class="badge badge-yes">公开注册</span></td>
+<td><span class="badge" style="background:#D1FAE5;color:#059669;">免审</span></td>
+<td>0个</td>
+<td><a class="btn btn-sm btn-outline" href="org-type-view.html">查看</a><a class="btn btn-sm btn-outline" href="org-type-edit.html" style="margin-left:6px;">编辑</a></td>
+</tr>
+<tr>
+<td>采购监管</td>
+<td><span class="badge badge-no">后台新增</span></td>
+<td><span class="badge badge-no">—</span></td>
+<td>3个</td>
+<td><a class="btn btn-sm btn-outline" href="org-type-view.html">查看</a><a class="btn btn-sm btn-outline" href="org-type-edit.html" style="margin-left:6px;">编辑</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="tab2" class="tab-panel">
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-value" style="color:#d97706;">3</div><div class="stat-label">待审核</div></div>
+<div class="stat-card"><div class="stat-value" style="color:#059669;">6</div><div class="stat-label">今日通过</div></div>
+<div class="stat-card"><div class="stat-value" style="color:#dc2626;">1</div><div class="stat-label">今日驳回</div></div>
+<div class="stat-card"><div class="stat-value">47</div><div class="stat-label">本月注册总数</div></div>
+</div>
+<div class="audit-tip">
+💡 个人用户注册免审核，提交后自动激活，<strong>不进入审核列表</strong>。审核列表仅显示企业/机构类型注册申请。
+</div>
+<div class="tab-nav">
+<button class="tab-btn active" onclick="filterAuditTab(this,'all')">全部 (47)</button>
+<button class="tab-btn" onclick="filterAuditTab(this,'pending')">待审核 (3)</button>
+<button class="tab-btn" onclick="filterAuditTab(this,'approved')">已通过 (40)</button>
+<button class="tab-btn" onclick="filterAuditTab(this,'rejected')">已驳回 (4)</button>
+</div>
+<div class="content-card">
+<div class="content-card-header">
+<h3 class="content-card-title">申请列表</h3>
+</div>
+<div class="table-wrapper">
+<table class="table table-wide">
+<thead>
+<tr>
+<th>申请时间</th><th>组织名称</th><th>统一社会信用代码</th><th>机构类型</th><th>经办人</th><th>手机号</th><th>申请状态</th><th>操作</th>
+</tr>
+</thead>
+<tbody id="auditTableBody">
+<tr data-audit-status="pending">
+<td>2026-08-07 09:12</td><td>广州采购科技集团</td><td>91440101MA1234XX00</td>
+<td><span class="badge badge-buyer">采购单位</span></td><td>李明</td><td>138****1234</td>
+<td><span class="badge badge-pending">待审核</span></td>
+<td><a class="btn btn-sm btn-primary" href="register-audit-detail.html?id=1">审核</a></td>
+</tr>
+<tr data-audit-status="pending">
+<td>2026-08-07 08:45</td><td>深圳智算供应有限公司</td><td>91440300MA5678XX00</td>
+<td><span class="badge badge-supplier">供应商</span></td><td>王芳</td><td>139****5678</td>
+<td><span class="badge badge-pending">待审核</span></td>
+<td><a class="btn btn-sm btn-primary" href="register-audit-detail.html?id=2">审核</a></td>
+</tr>
+<tr data-audit-status="pending">
+<td>2026-08-07 07:30</td><td>广州中介代理机构</td><td>91440101MA9012XX00</td>
+<td><span class="badge badge-agency">代理机构</span></td><td>张伟</td><td>137****9012</td>
+<td><span class="badge badge-pending">待审核</span></td>
+<td><a class="btn btn-sm btn-primary" href="register-audit-detail.html?id=3">审核</a></td>
+</tr>
+<tr data-audit-status="approved">
+<td>2026-08-06 16:20</td><td>彩翼科技有限公司</td><td>91440101MA3456XX00</td>
+<td><span class="badge badge-developer">开发者</span></td><td>陈晓</td><td>136****3456</td>
+<td><span class="badge badge-approved">已通过</span></td>
+<td><a class="btn btn-sm btn-outline" href="register-audit-detail.html?view=1">查看</a></td>
+</tr>
+<tr data-audit-status="approved">
+<td>2026-08-06 14:10</td><td>省采购中心</td><td>91440000MA7890XX00</td>
+<td><span class="badge badge-buyer">采购单位</span></td><td>刘洋</td><td>135****7890</td>
+<td><span class="badge badge-approved">已通过</span></td>
+<td><a class="btn btn-sm btn-outline" href="register-audit-detail.html?view=1">查看</a></td>
+</tr>
+<tr data-audit-status="rejected">
+<td>2026-08-05 11:00</td><td>广州测试供应公司</td><td>91440101MA1122XX00</td>
+<td><span class="badge badge-supplier">供应商</span></td><td>赵雪</td><td>134****1122</td>
+<td><span class="badge badge-rejected">已驳回</span></td>
+<td><a class="btn btn-sm btn-outline" href="register-audit-detail.html?view=1">查看</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="tab3" class="tab-panel">
+<div class="tab-nav">
+<button class="tab-btn active" onclick="filterAccountType(this,'org')">机构账号</button>
+<button class="tab-btn" onclick="filterAccountType(this,'personal')">个人账号</button>
+<button class="tab-btn" onclick="filterAccountType(this,'sub')">子账号</button>
+</div>
+<div class="content-card" id="orgAccountCard">
+<div class="content-card-header">
+<h3 class="content-card-title">机构账号列表</h3>
+<a class="btn btn-primary" href="org-create.html">+ 新增机构</a>
+</div>
+<div class="table-wrapper">
+<table class="table table-wide">
+<thead>
+<tr><th>机构名称</th><th>统一社会信用代码</th><th>机构类型</th><th>主账号手机号</th><th>状态</th><th>注册时间</th><th>操作</th></tr>
+</thead>
+<tbody id="orgAccountTable">
+<tr>
+<td>广州采购科技集团</td><td>91440101MA1234XX00</td>
+<td><span class="badge badge-buyer">采购单位</span></td>
+<td>138****1234</td>
+<td><span class="badge badge-active">已激活</span></td>
+<td>2026-07-10</td>
+<td><a class="btn btn-sm btn-outline" href="org-view.html">查看</a><a class="btn btn-sm btn-outline" href="org-create.html?mode=edit" style="margin-left:6px;">编辑</a></td>
+</tr>
+<tr>
+<td>彩翼科技有限公司</td><td>91440101MA3456XX00</td>
+<td><span class="badge badge-developer">开发者</span></td>
+<td>136****3456</td>
+<td><span class="badge badge-active">已激活</span></td>
+<td>2026-07-05</td>
+<td><a class="btn btn-sm btn-outline" href="org-view.html">查看</a><a class="btn btn-sm btn-outline" href="org-create.html?mode=edit" style="margin-left:6px;">编辑</a></td>
+</tr>
+<tr>
+<td>省采购中心</td><td>91440000MA7890XX00</td>
+<td><span class="badge badge-buyer">采购单位</span></td>
+<td>135****7890</td>
+<td><span class="badge badge-active">已激活</span></td>
+<td>2026-06-20</td>
+<td><a class="btn btn-sm btn-outline" href="org-view.html">查看</a><a class="btn btn-sm btn-outline" href="org-create.html?mode=edit" style="margin-left:6px;">编辑</a></td>
+</tr>
+<tr>
+<td>广州测试供应公司</td><td>91440101MA1122XX00</td>
+<td><span class="badge badge-supplier">供应商</span></td>
+<td>134****1122</td>
+<td><span class="badge badge-rejected">已驳回</span></td>
+<td>2026-08-05</td>
+<td><a class="btn btn-sm btn-outline" href="org-view.html">查看</a><a class="btn btn-sm btn-outline" href="org-create.html?mode=edit" style="margin-left:6px;">编辑</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="content-card" id="personalAccountCard" style="display:none;">
+<div class="content-card-header">
+<h3 class="content-card-title">个人账号列表</h3>
+</div>
+<div class="table-wrapper">
+<table class="table table-wide">
+<thead>
+<tr><th>姓名</th><th>身份证号</th><th>手机号</th><th>关联机构身份</th><th>账号状态</th><th>注册时间</th><th>操作</th></tr>
+</thead>
+<tbody id="personalAccountTable">
+<tr>
+<td>张三</td>
+<td>3301****1990****12</td>
+<td>138****5678</td>
+<td>广州采购科技集团 · 主账号</td>
+<td><span class="badge badge-active">已激活</span></td>
+<td>2026-08-08</td>
+<td><a class="btn btn-sm btn-outline" href="personal-account-view.html?id=1">查看</a></td>
+</tr>
+<tr>
+<td>李四</td>
+<td>4401****1988****25</td>
+<td>139****8765</td>
+<td>—</td>
+<td><span class="badge badge-active">已激活</span></td>
+<td>2026-08-07</td>
+<td><a class="btn btn-sm btn-outline" href="personal-account-view.html?id=2">查看</a></td>
+</tr>
+<tr>
+<td>王五</td>
+<td>3101****1992****08</td>
+<td>137****4321</td>
+<td>彩翼科技有限公司 · 子账号</td>
+<td><span class="badge badge-active">已激活</span></td>
+<td>2026-08-05</td>
+<td><a class="btn btn-sm btn-outline" href="personal-account-view.html?id=3">查看</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="content-card" id="subAccountCard" style="display:none;">
+<div class="content-card-header">
+<h3 class="content-card-title">子账号列表</h3>
+</div>
+<div class="table-wrapper">
+<table class="table table-wide">
+<thead>
+<tr><th>所属机构</th><th>子账号手机号</th><th>姓名</th><th>角色</th><th>状态</th><th>创建时间</th></tr>
+</thead>
+<tbody>
+<tr>
+<td>广州采购科技集团 <span class="badge badge-buyer">采购单位</span></td>
+<td>13912345678</td><td>刘小明</td>
+<td><span class="badge badge-operator">操作员</span></td>
+<td><span class="badge badge-active">已激活</span></td>
+<td>2026-07-15</td>
+</tr>
+<tr>
+<td>广州采购科技集团 <span class="badge badge-buyer">采购单位</span></td>
+<td>13987654321</td><td>王丽</td>
+<td><span class="badge badge-readonly">只读</span></td>
+<td><span class="badge badge-active">已激活</span></td>
+<td>2026-07-18</td>
+</tr>
+<tr>
+<td>深圳智算供应有限公司 <span class="badge badge-supplier">供应商</span></td>
+<td>13611111111</td><td>赵强</td>
+<td><span class="badge badge-admin">管理员</span></td>
+<td><span class="badge badge-active">已激活</span></td>
+<td>2026-07-20</td>
+</tr>
+<tr>
+<td>彩翼科技有限公司 <span class="badge badge-developer">开发者</span></td>
+<td>13522222222</td><td>孙月</td>
+<td><span class="badge badge-operator">操作员</span></td>
+<td><span class="badge badge-active">已激活</span></td>
+<td>2026-08-01</td>
+</tr>
+<tr>
+<td>彩翼科技有限公司 <span class="badge badge-developer">开发者</span></td>
+<td>13533333333</td><td>李雷</td>
+<td><span class="badge badge-readonly">只读</span></td>
+<td><span class="badge" style="background:#f1f5f9;color:#94a3b8;">已停用</span></td>
+<td>2026-07-25</td>
+</tr>
+<tr>
+<td>广州中介代理机构 <span class="badge badge-agency">代理机构</span></td>
+<td>13644444444</td><td>韩梅梅</td>
+<td><span class="badge badge-operator">操作员</span></td>
+<td><span class="badge badge-active">已激活</span></td>
+<td>2026-08-03</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<script>
+function switchTab(btn,tabId){
+  document.querySelectorAll('.tab-nav-lg .tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+}
+
+function filterAuditTab(btn,status){
+  document.querySelectorAll('#tab2 .tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#auditTableBody tr').forEach(row=>{
+    row.style.display = status === 'all' || row.dataset.auditStatus === status ? '' : 'none';
+  });
+}
+
+function filterAccountType(btn,type){
+  document.querySelectorAll('#tab3 .tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('orgAccountCard').style.display = type === 'org' ? 'block' : 'none';
+  document.getElementById('personalAccountCard').style.display = type === 'personal' ? 'block' : 'none';
+  document.getElementById('subAccountCard').style.display = type === 'sub' ? 'block' : 'none';
+}
+
+const initialTab = new URLSearchParams(window.location.search).get('tab');
+if(initialTab === 'audit'){
+  switchTab(document.querySelector('.tab-nav-lg .tab-btn:nth-child(2)'), 'tab2');
+}
+if(initialTab === 'account'){
+  switchTab(document.querySelector('.tab-nav-lg .tab-btn:nth-child(3)'), 'tab3');
+}
+</script>
+</body>
+</html>

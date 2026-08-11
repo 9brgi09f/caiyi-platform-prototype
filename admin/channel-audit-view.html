@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>入驻审核详情 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--spacing-lg); }
+        .info-item .k { font-size: 12px; color: var(--text-muted); }
+        .info-item .v { font-size: 14px; margin-top: 3px; font-weight: 500; }
+        .mat-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-light); font-size: 14px; }
+        .mat-row:last-child { border-bottom: none; }
+        .mat-ok { color: #059669; font-weight: 600; margin-right: 8px; }
+        .mat-na { color: var(--text-muted); font-weight: 600; margin-right: 8px; }
+        .check-item { font-size: 13px; color: var(--text-secondary); line-height: 2.1; }
+        .check-item .mat-ok { margin-right: 6px; }
+        .btn-danger-outline { color: var(--danger-color); border-color: var(--danger-color); }
+        #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon"></span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon"></span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon"></span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon"></span><span>智能体管理</span></a>
+<a class="sidebar-link active" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon"></span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon"></span><span>结算管理</span></a>
+
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon"></span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon"></span><span>规则设置</span></a>
+</div>
+</aside>
+<main class="main-content">
+<a class="back-link" href="channel-list.html">← 返回渠道管理</a>
+<div class="page-header" style="display:flex;justify-content:space-between;align-items:center;">
+<div>
+<h2>入驻审核 · 珠三角采购服务联盟</h2>
+<p>渠道商入驻申请审核；通过后建档、生成邀请码，并作为供应商同步金蝶</p>
+</div>
+<span class="badge badge-warning" style="font-size:13px;">待审核</span>
+</div>
+<div class="content-card">
+<h3 style="font-size:16px;margin-bottom:var(--spacing-lg);">申请信息</h3>
+<div class="info-grid">
+<div class="info-item"><div class="k">机构名称</div><div class="v">珠三角采购服务联盟</div></div>
+<div class="info-item"><div class="k">统一社会信用代码</div><div class="v">91440101MA9XXXX01A</div></div>
+<div class="info-item"><div class="k">法定代表人</div><div class="v">林建军</div></div>
+<div class="info-item"><div class="k">联系人 / 电话</div><div class="v">林先生 · 139****2288</div></div>
+<div class="info-item"><div class="k">申请时间</div><div class="v">2026-07-15 14:30</div></div>
+<div class="info-item"><div class="k">拟合作模式</div><div class="v"><span class="badge" style="background:#dbeafe;color:#2563eb;">客户推荐</span></div></div>
+<div class="info-item"><div class="k">长期合作协议</div><div class="v">意向（入驻后另行洽谈）</div></div>
+<div class="info-item"><div class="k">注册地址</div><div class="v">广州市天河区珠江新城华夏路 26 号</div></div>
+</div>
+</div>
+<div class="content-card">
+<h3 style="font-size:16px;margin-bottom:var(--spacing-md);">专业能力与资源渠道说明</h3>
+<p style="font-size:14px;color:var(--text-secondary);line-height:1.9;">本机构长期服务珠三角地区政府采购代理业务，拥有采购人客户资源 60 余家，团队具备政府采购法规咨询、电子化采购系统实施经验；拟通过既有客户网络推荐采购人单位使用彩翼平台智能体服务，并配合平台开展产品宣讲与试用推广。</p>
+</div>
+<div class="content-card">
+<h3 style="font-size:16px;margin-bottom:var(--spacing-md);">申请材料</h3>
+<div class="mat-row"><span><span class="mat-ok">✓</span>营业执照副本（加盖公章）</span><button class="btn btn-sm btn-outline" onclick="showToast('演示环境：材料影像预览略')" type="button">查看</button></div>
+<div class="mat-row"><span><span class="mat-ok">✓</span>法定代表人身份证明</span><button class="btn btn-sm btn-outline" onclick="showToast('演示环境：材料影像预览略')" type="button">查看</button></div>
+<div class="mat-row"><span><span class="mat-ok">✓</span>专业能力与资源渠道说明</span><button class="btn btn-sm btn-outline" onclick="showToast('演示环境：材料影像预览略')" type="button">查看</button></div>
+<div class="mat-row"><span><span class="mat-na">○</span>长期合作协议（生态共建模式适用，本次暂不涉及）</span><span style="font-size:12px;color:var(--text-muted);">无需提供</span></div>
+</div>
+<div class="content-card">
+<h3 style="font-size:16px;margin-bottom:var(--spacing-md);">准入核验</h3>
+<div class="check-item"><span class="mat-ok">✓</span>主体依法设立并有效存续（国家企业信用信息公示系统核验 2026-07-16）</div>
+<div class="check-item"><span class="mat-ok">✓</span>具备相应专业能力与资源渠道</div>
+<div class="check-item"><span class="mat-ok">✓</span>无失信被执行记录（信用中国查询 2026-07-16）</div>
+<div class="check-item"><span class="mat-ok">✓</span>近三年无政府采购领域违法违规记录</div>
+</div>
+<div class="content-card">
+<h3 style="font-size:16px;margin-bottom:var(--spacing-md);">审核意见</h3>
+<textarea class="input" id="auditReason" placeholder="驳回时必填；通过时选填" rows="3" style="width:100%;"></textarea>
+<p style="font-size:12px;color:var(--text-muted);margin-top:var(--spacing-sm);">审核通过：建档并生成专属邀请码，渠道商作为供应商同步金蝶；驳回：填写原因后通知申请机构修改重新提交。审核通过不等同于推荐关系成立，推荐关系仍须逐一确认。</p>
+<div style="display:flex;gap:var(--spacing-md);justify-content:flex-end;margin-top:var(--spacing-md);">
+<button class="btn btn-outline btn-danger-outline" onclick="doReject()" type="button">驳回</button>
+<button class="btn btn-primary" onclick="doPass()" type="button">审核通过</button>
+</div>
+</div>
+</main>
+<div id="toast"></div>
+<script>
+function doPass(){ location.href = 'channel-list.html?audit=pass'; }
+function doReject(){
+  var r = document.getElementById('auditReason').value.trim();
+  if(!r){ showToast('驳回须填写审核意见', '⚠'); return; }
+  location.href = 'channel-list.html?audit=reject&reason=' + encodeURIComponent(r);
+}
+function showToast(msg, icon){
+  var t = document.getElementById('toast');
+  t.textContent = (icon || '✓') + ' ' + msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.display = 'none'; }, 2400);
+}
+</script>
+</body>
+</html>

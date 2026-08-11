@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>奖励规则 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .form-section {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+        }
+        .form-section-title {
+            font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md); border-bottom: 1px solid var(--border-light);
+        }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); }
+        .form-item { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+        .form-item.full-width { grid-column: 1 / -1; }
+        .form-label { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+        .form-hint { font-size: 12px; color: var(--text-muted); }
+        .reward-item { display: flex; align-items: center; gap: var(--spacing-md); margin-bottom: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-light); border-radius: var(--radius-md); }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link active" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+<!-- 数据统计菜单暂隐藏 <a class="sidebar-link" href="statistics.html"><span class="icon">📉</span><span>数据统计</span></a> -->
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a class="back-link" href="rules-list.html" style="color: white; margin-bottom: var(--spacing-sm);">← 返回列表</a>
+<h2>奖励规则</h2>
+<p>配置邀请奖励、消费返利和活动奖励规则</p>
+</div>
+<form class="form-section">
+<h3 class="form-section-title">邀请奖励规则</h3>
+<div class="form-item full-width">
+<label style="display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-light); border-radius: var(--radius-md);">
+<input checked="" type="checkbox"/>
+<div>
+<div style="font-weight: 500;">启用邀请奖励</div>
+<div style="font-size: 12px; color: var(--text-muted);">用户邀请新用户注册可获得奖励</div>
+</div>
+</label>
+</div>
+<div class="form-grid" style="margin-top: var(--spacing-lg);">
+<div class="form-item">
+<label class="form-label">邀请奖励比例</label>
+<div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+<input class="input" style="width: 80px;" type="number" value="10"/>
+<span>%</span>
+</div>
+<span class="form-hint">被邀请人消费时，邀请人获得的奖励比例</span>
+</div>
+<div class="form-item">
+<label class="form-label">奖励上限（单人）</label>
+<div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+<input class="input" style="width: 100px;" type="number" value="500"/>
+<span>元</span>
+</div>
+<span class="form-hint">邀请人通过邀请获得奖励的总上限</span>
+</div>
+<div class="form-item">
+<label class="form-label">被邀请人有效期</label>
+<div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+<input class="input" style="width: 80px;" type="number" value="365"/>
+<span>天</span>
+</div>
+<span class="form-hint">被邀请人注册后多少天内消费可给邀请人奖励</span>
+</div>
+<div class="form-item">
+<label class="form-label">奖励发放方式</label>
+<select class="select">
+<option selected="" value="real">实时到账</option>
+<option value="month">次月结算</option>
+</select>
+</div>
+</div>
+</form>
+<form class="form-section">
+<h3 class="form-section-title">消费返利规则</h3>
+<div class="form-item full-width">
+<label style="display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-light); border-radius: var(--radius-md);">
+<input checked="" type="checkbox"/>
+<div>
+<div style="font-weight: 500;">启用消费返利</div>
+<div style="font-size: 12px; color: var(--text-muted);">用户消费后获得一定比例的返利</div>
+</div>
+</label>
+</div>
+<div class="reward-item" style="margin-top: var(--spacing-md);">
+<span style="width: 120px; font-weight: 500;">月消费返利</span>
+<input class="input" style="width: 80px;" type="number" value="1"/>
+<span>%（返利比例）</span>
+</div>
+<div class="reward-item">
+<span style="width: 120px; font-weight: 500;">返利上限</span>
+<input class="input" style="width: 100px;" type="number" value="100"/>
+<span>元/月</span>
+</div>
+<div class="form-item" style="margin-top: var(--spacing-md);">
+<label class="form-label">返利到账方式</label>
+<select class="select">
+<option selected="" value="balance">到账户余额</option>
+<option value="bean">到彩豆账户</option>
+</select>
+</div>
+</form>
+<form class="form-section">
+<h3 class="form-section-title">新用户奖励</h3>
+<div class="form-item full-width">
+<label style="display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-light); border-radius: var(--radius-md);">
+<input checked="" type="checkbox"/>
+<div>
+<div style="font-weight: 500;">启用新用户奖励</div>
+<div style="font-size: 12px; color: var(--text-muted);">新用户注册即送体验金/彩豆</div>
+</div>
+</label>
+</div>
+<div class="reward-item" style="margin-top: var(--spacing-md);">
+<span style="width: 120px; font-weight: 500;">注册奖励</span>
+<input class="input" style="width: 100px;" type="number" value="10"/>
+<select class="select" style="width: 100px;">
+<option selected="" value="bean">彩豆</option>
+<option value="money">元</option>
+</select>
+</div>
+<div class="form-item" style="margin-top: var(--spacing-md);">
+<label class="form-label">首充奖励</label>
+<div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+<span>首次充值满</span>
+<input class="input" style="width: 80px;" type="number" value="50"/>
+<span>元，赠送</span>
+<input class="input" style="width: 80px;" type="number" value="20"/>
+<span>%</span>
+</div>
+</div>
+</form>
+<form class="form-section">
+<h3 class="form-section-title">活跃奖励规则</h3>
+<div class="form-item full-width">
+<label style="display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-light); border-radius: var(--radius-md);">
+<input type="checkbox"/>
+<div>
+<div style="font-weight: 500;">启用连续签到奖励</div>
+<div style="font-size: 12px; color: var(--text-muted);">用户连续签到可获得递增奖励</div>
+</div>
+</label>
+</div>
+<div class="reward-item" style="margin-top: var(--spacing-md);">
+<span style="width: 120px; font-weight: 500;">每日签到</span>
+<input class="input" style="width: 80px;" type="number" value="1"/>
+<span>彩豆</span>
+</div>
+<div class="reward-item">
+<span style="width: 120px; font-weight: 500;">连续7天</span>
+<input class="input" style="width: 80px;" type="number" value="10"/>
+<span>彩豆</span>
+</div>
+<div class="reward-item">
+<span style="width: 120px; font-weight: 500;">连续30天</span>
+<input class="input" style="width: 80px;" type="number" value="50"/>
+<span>彩豆</span>
+</div>
+</form>
+<div style="display: flex; gap: var(--spacing-md); justify-content: center;">
+<a class="btn btn-outline" href="rules-list.html">取消</a>
+<button class="btn btn-primary" type="submit">保存配置</button>
+</div>
+<div class="content-card" style="margin-top:16px;"><div class="content-card-header"><h3 class="content-card-title">充值阶梯赠送彩豆配置</h3><a class="btn btn-primary" href="#">+ 新增档位</a></div><p style="color:var(--text-muted);font-size:13px;margin:8px 0;">用户充值按“就近向下取档”赠送（如充 190 元按 100 元档赠送）。赠送彩豆为营销额度，不计入分账基数。</p><table class="table"><thead><tr><th>充值档位（≥元）</th><th>赠送比例</th><th>示例赠送彩豆</th><th>状态</th><th>操作</th></tr></thead><tbody><tr><td>30</td><td>5%</td><td>150</td><td><span class="badge badge-success">启用</span></td><td><a href="#">编辑</a></td></tr><tr><td>100</td><td>10%</td><td>1,000</td><td><span class="badge badge-success">启用</span></td><td><a href="#">编辑</a></td></tr><tr><td>200</td><td>15%</td><td>3,000</td><td><span class="badge badge-success">启用</span></td><td><a href="#">编辑</a></td></tr><tr><td>500</td><td>20%</td><td>10,000</td><td><span class="badge badge-success">启用</span></td><td><a href="#">编辑</a></td></tr></tbody></table></div></main>
+</body>
+</html>

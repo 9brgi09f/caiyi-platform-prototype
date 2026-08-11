@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>发票详情 - 财务端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .detail-section {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+        }
+        .detail-section-title {
+            font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md); border-bottom: 1px solid var(--border-light);
+        }
+        .detail-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-lg); }
+        .detail-item { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+        .detail-item.full-width { grid-column: 1 / -1; }
+        .detail-label { font-size: 13px; color: var(--text-muted); }
+        .detail-value { font-size: 15px; color: var(--text-primary); font-weight: 500; }
+        
+        .timeline { display: flex; flex-direction: column; gap: var(--spacing-md); }
+        .timeline-item { display: flex; gap: var(--spacing-md); position: relative; }
+        .timeline-item:not(:last-child)::after { content: ''; position: absolute; left: 11px; top: 24px; width: 2px; height: calc(100% + var(--spacing-md)); background: var(--border-light); }
+        .timeline-dot { width: 24px; height: 24px; border-radius: 50%; background: var(--border-light); display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+        .timeline-dot.active { background: var(--finance-color); color: white; }
+        .timeline-dot.completed { background: var(--success-color); color: white; }
+        .timeline-content { flex: 1; }
+        .timeline-title { font-weight: 500; color: var(--text-primary); }
+        .timeline-time { font-size: 12px; color: var(--text-muted); }
+        
+        .badge-pending { background: #fef3c7; color: #d97706; }
+        .badge-processing { background: #dbeafe; color: #2563eb; }
+        .badge-success { background: #d1fae5; color: #059669; }
+        .badge-shipped { background: #f3e8ff; color: #7c3aed; }
+    </style>
+</head>
+<body>
+<header class="top-bar finance">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">财</div>
+<span>财务人员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar finance">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+<a class="sidebar-link" href="withdrawal-pay-list.html"><span class="icon">💸</span><span>提现打款</span></a>
+<a class="sidebar-link active" href="invoice-list.html"><span class="icon">🧾</span><span>发票管理</span></a>
+<a class="sidebar-link" href="reconciliation-list.html"><span class="icon">📋</span><span>对账报表</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a href="invoice-list.html" style="color: white; margin-bottom: var(--spacing-sm); display: inline-block;">← 返回发票列表</a>
+<h2>发票详情</h2>
+<p>申请单号：INV20260514001 | 状态：开票中</p>
+</div>
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--spacing-lg);">
+<div>
+<!-- 申请信息 -->
+<div class="detail-section">
+<h3 class="detail-section-title">申请信息</h3>
+<div class="detail-grid">
+<div class="detail-item">
+<span class="detail-label">申请单号</span>
+<span class="detail-value">INV20260514001</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">申请时间</span>
+<span class="detail-value">2026-05-14 10:00</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">用户名称</span>
+<span class="detail-value">北京科技有限公司</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">联系电话</span>
+<span class="detail-value">138****1234</span>
+</div>
+</div>
+</div>
+<!-- 发票信息 -->
+<div class="detail-section">
+<h3 class="detail-section-title">发票信息</h3>
+<div class="detail-grid">
+<div class="detail-item">
+<span class="detail-label">发票类型</span>
+<span class="detail-value">增值税普通发票</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">发票金额</span>
+<span class="detail-value" style="color: var(--finance-color); font-size: 20px; font-weight: 700;">¥4.50</span>
+</div>
+<div class="detail-item full-width">
+<span class="detail-label">发票抬头</span>
+<span class="detail-value">北京科技有限公司</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">纳税人识别号</span>
+<span class="detail-value">91110108MA01XXXX20</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">开户银行</span>
+<span class="detail-value">中国工商银行北京分行</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">银行账号</span>
+<span class="detail-value">6222 **** **** 1234</span>
+</div>
+</div>
+</div>
+<!-- 关联消费记录 -->
+<div class="detail-section">
+<h3 class="detail-section-title">关联消费记录</h3>
+<div class="table-wrapper">
+<table class="table">
+<thead>
+<tr>
+<th>订单号</th>
+<th>智能体</th>
+<th>消费金额</th>
+<th>消费时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>XF20260514153201</td>
+<td>合规监测智能体</td>
+<td class="amount">¥0.50</td>
+<td>2026-05-14 15:32</td>
+</tr>
+<tr>
+<td>XF20260514141830</td>
+<td>数据分析智能体</td>
+<td class="amount">¥3.00</td>
+<td>2026-05-14 14:18</td>
+</tr>
+<tr>
+<td>XF20260513162230</td>
+<td>合规监测智能体</td>
+<td class="amount">¥1.00</td>
+<td>2026-05-13 16:22</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td colspan="2" style="text-align: right; font-weight: 600;">合计</td>
+<td class="amount positive" style="font-weight: 700;">¥4.50</td>
+<td></td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+</div>
+<div>
+<!-- 处理进度 -->
+<div class="detail-section">
+<h3 class="detail-section-title">处理进度</h3>
+<div class="timeline">
+<div class="timeline-item">
+<div class="timeline-dot completed">✓</div>
+<div class="timeline-content">
+<div class="timeline-title">用户提交申请</div>
+<div class="timeline-time">2026-05-14 10:00</div>
+</div>
+</div>
+<div class="timeline-item">
+<div class="timeline-dot completed">✓</div>
+<div class="timeline-content">
+<div class="timeline-title">平台审核通过</div>
+<div class="timeline-time">2026-05-14 14:00</div>
+</div>
+</div>
+<div class="timeline-item">
+<div class="timeline-dot active">3</div>
+<div class="timeline-content">
+<div class="timeline-title">开票处理中</div>
+<div class="timeline-time">审核通过后已自动提交开票</div>
+</div>
+</div>
+<div class="timeline-item">
+<div class="timeline-dot">4</div>
+<div class="timeline-content">
+<div class="timeline-title">已开票</div>
+<div class="timeline-time">-</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body>
+</html>

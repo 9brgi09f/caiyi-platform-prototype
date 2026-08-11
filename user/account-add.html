@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>添加账户 - 用户端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .balance-display { background: linear-gradient(135deg, #2563EB, #1D4ED8); color: white; padding: var(--spacing-xl); border-radius: var(--radius-lg); text-align: center; margin-bottom: var(--spacing-lg); }
+        .balance-amount { font-size: 48px; font-weight: 700; }
+        .balance-unit { font-size: 16px; opacity: 0.8; }
+        .balance-beans { font-size: 20px; margin-top: var(--spacing-sm); opacity: 0.9; }
+        .alert-card { background: #FEF3C7; border: 1px solid #F59E0B; border-radius: var(--radius-md); padding: var(--spacing-md); margin-bottom: var(--spacing-lg); display: flex; align-items: center; gap: var(--spacing-md); }
+        .alert-icon { font-size: 24px; }
+        .transaction-item { display: flex; align-items: center; padding: var(--spacing-md) 0; border-bottom: 1px solid var(--border-light); }
+        .transaction-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: var(--spacing-md); font-size: 18px; }
+        .transaction-info { flex: 1; }
+        .transaction-title { font-weight: 500; margin-bottom: 2px; }
+        .transaction-time { font-size: 12px; color: var(--text-muted); }
+        .transaction-amount { font-weight: 600; font-size: 16px; }
+        .transaction-amount.positive { color: var(--success-color); }
+        .transaction-amount.negative { color: var(--error-color); }
+    </style>
+
+<style id="identity-switcher-css">
+.id-switcher{position:relative;display:inline-flex;align-items:center;}
+.id-trigger{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 6px;border-radius:8px;cursor:pointer;transition:background 0.15s;user-select:none;}
+.id-trigger:hover{background:rgba(0,0,0,0.05);}
+.id-avatar{width:32px;height:32px;border-radius:50%;background:#EFF4FF;color:#2563EB;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.id-info{display:flex;flex-direction:column;align-items:flex-start;line-height:1.3;}
+.id-org{font-size:13px;font-weight:500;color:#1e293b;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.id-type-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;background:#EFF4FF;color:#2563EB;}
+.id-chevron{font-size:10px;color:#94a3b8;margin-left:2px;transition:transform 0.2s;}
+.id-switcher.open .id-chevron{transform:rotate(180deg);}
+.id-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:white;border:1px solid #dfe4ee;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:240px;z-index:999;overflow:hidden;}
+.id-switcher.open .id-menu{display:block;}
+.id-menu-hd{padding:10px 14px 8px;font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:1px;border-bottom:1px solid #ecf0f6;}
+.id-menu-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background 0.15s;text-decoration:none;color:inherit;}
+.id-menu-item:hover{background:#F8FAFC;}
+.id-menu-item.current{background:#F8FAFF;}
+.id-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.id-dot.active{background:#2563EB;}
+.id-dot.idle{background:#dfe4ee;}
+.id-item-body{flex:1;}
+.id-item-org{font-size:13px;font-weight:500;color:#1e293b;}
+.id-item-type{font-size:11px;color:#94a3b8;margin-top:1px;}
+.id-item-tag{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;margin-left:auto;flex-shrink:0;}
+.id-item-tag.current-tag{background:#EFF4FF;color:#2563EB;}
+.id-menu-sep{height:1px;background:#ecf0f6;margin:4px 0;}
+.id-menu-action{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:12px;color:#64748b;cursor:pointer;transition:background 0.15s;text-decoration:none;}
+.id-menu-action:hover{background:#F8FAFC;color:#2563EB;}
+</style>
+</head>
+<body>
+<header class="top-bar user">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="id-switcher" id="idSwitcher">
+<div class="id-trigger" onclick="toggleIdMenu()">
+<div class="id-avatar">李</div>
+<div class="id-info">
+<span class="id-org">广州某某科技有限公司</span>
+<span class="id-type-badge">采购单位</span>
+</div>
+<span class="id-chevron">▾</span>
+</div>
+<div class="id-menu">
+<div class="id-menu-hd">切换工作台身份</div>
+<div class="id-menu-item current">
+<div class="id-dot active"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">采购单位</div>
+</div>
+<span class="id-item-tag current-tag">当前</span>
+</div>
+<div class="id-menu-item" onclick="location.href='../developer/index.html'">
+<div class="id-dot idle"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">开发者</div>
+</div>
+</div>
+<div class="id-menu-sep"></div>
+<a class="id-menu-action" href="../user/register-select.html">＋ 注册新机构类型</a>
+<a class="id-menu-action" href="#" onclick="alert('已退出登录');return false;">退出登录</a>
+</div>
+</div>
+<script>
+function toggleIdMenu(){
+  var el=document.getElementById('idSwitcher');
+  el.classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  var sw=document.getElementById('idSwitcher');
+  if(sw && !sw.contains(e.target)) sw.classList.remove('open');
+});
+</script>
+</div>
+</header>
+<aside class="sidebar user">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">🏪</span><span>概览</span></a>
+<a class="sidebar-link" href="agent-list.html"><span class="icon">🤖</span><span>智能体市场</span></a>
+<a class="sidebar-link" href="recharge-list.html"><span class="icon">💰</span><span>账户充值</span></a>
+<a class="sidebar-link" href="balance.html"><span class="icon">💳</span><span>余额管理</span></a>
+<a class="sidebar-link active" href="payment-accounts.html"><span class="icon">🏦</span><span>付款账户</span></a>
+<a class="sidebar-link" href="consumption-list.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+</div>
+<div class="sidebar-section">
+</div>
+</aside>
+<main class="main-content"><a class="back-link" href="payment-accounts.html" style="color:var(--user-color);margin-bottom:var(--spacing-md);display:inline-block;">← 返回付款账户</a><div class="content-card" style="max-width:560px;"><h2 style="margin-bottom:8px;">添加账户</h2><p style="color:var(--text-muted);font-size:13px;margin-bottom:20px;">绑定用于付款的银行账户，支持个人账户与企业账户；付款时可选择使用。</p><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">账户类型</label><div style="display:flex;gap:24px;"><label style="cursor:pointer;"><input checked="" name="acctKind" type="radio"/> 个人账户</label><label style="cursor:pointer;"><input name="acctKind" type="radio"/> 企业账户</label></div></div><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">开户银行</label><select style="width:100%;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;"><option>请选择开户银行</option><option>招商银行</option><option>工商银行</option><option>建设银行</option><option>中国银行</option><option>农业银行</option><option>浦发银行</option></select></div><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">卡号 / 账户号</label><input placeholder="请输入银行卡号或对公账户号" style="width:100%;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;"/></div><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">开户名称</label><input placeholder="个人填持卡人姓名 / 企业填企业名称" style="width:100%;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;"/></div><div style="margin-bottom:16px;"><label style="font-size:14px;cursor:pointer;"><input type="checkbox"/> 设为默认付款账户</label></div><div style="display:flex;gap:12px;margin-top:20px;"><a class="btn btn-outline" href="payment-accounts.html" style="flex:1;text-align:center;">取消</a><a class="btn btn-primary" href="payment-accounts.html" style="flex:1;text-align:center;">确认添加</a></div></div></main>
+<script>
+(function(){
+  var q=new URLSearchParams(location.search);
+  if(q.get('mode')!=='edit') return;
+  var h2=document.querySelector('.content-card h2');
+  if(h2) h2.textContent='编辑账户信息';
+  document.title=document.title.replace('绑定银行卡','编辑收款账户').replace('添加账户','编辑账户');
+  var sel=document.querySelector('.content-card select');
+  if(sel&&q.get('bank')){ for(var i=0;i<sel.options.length;i++){ if(sel.options[i].text===q.get('bank')) sel.selectedIndex=i; } }
+  var inputs=document.querySelectorAll('.content-card input[placeholder]');
+  if(inputs[0]&&q.get('no')) inputs[0].value=q.get('no');
+  if(inputs[1]&&q.get('name')) inputs[1].value=q.get('name');
+  if(q.get('type')==='company'){ var radios=document.querySelectorAll('input[name="acctKind"]'); if(radios[1]){ radios[0].checked=false; radios[1].checked=true; } }
+  var ok=document.querySelector('.content-card .btn-primary');
+  if(ok) ok.textContent='保存修改';
+})();
+</script>
+</body>
+</html>

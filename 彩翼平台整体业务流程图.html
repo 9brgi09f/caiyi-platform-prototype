@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>彩翼平台 · 财务全链路整体流程图</title>
+<style>
+    :root {
+        --klein: #002FA8;
+        --klein-deep: #00227A;
+        --gold: #F5C518;
+        --white: #ffffff;
+        /* 身份色 */
+        --c-user: #3B82F6;      /* 企业用户 */
+        --c-dev: #10B981;       /* 开发者/渠道商 */
+        --c-ops: #F59E0B;       /* 平台运营 */
+        --c-fin: #A855F7;       /* 财务共享服务中心 */
+        --c-sys: #64748B;       /* 系统自动 */
+        --c-bank: #06B6D4;      /* 银行 */
+        --c-kd: #E11D48;        /* 金蝶 */
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+        background: var(--white);
+        color: #1e293b;
+        padding: 32px 24px 48px;
+    }
+    .page-title { text-align: center; color: var(--klein); margin-bottom: 6px; font-size: 26px; letter-spacing: 2px; }
+    .page-sub { text-align: center; color: #64748b; font-size: 13px; margin-bottom: 24px; }
+    /* 图例 */
+    .legend { display: flex; flex-wrap: wrap; gap: 10px 18px; justify-content: center; margin-bottom: 28px; }
+    .legend-item { display: flex; align-items: center; gap: 6px; color: #475569; font-size: 12px; }
+    .dot { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+    /* 阶段区块（每阶段一个浅色底） */
+    .stage {
+        border-radius: 14px;
+        padding: 18px 20px;
+        margin: 0 auto 18px;
+        max-width: 1680px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+    }
+    .stage.s1 { background: #EFF6FF; border-color: #bfdbfe; }  /* 充值-蓝 */
+    .stage.s2 { background: #ECFEFF; border-color: #a5f3fc; }  /* 消费-青 */
+    .stage.s3 { background: #F0FDF4; border-color: #bbf7d0; }  /* 收入确认-绿 */
+    .stage.s4 { background: #FEFCE8; border-color: #fde68a; }  /* 分佣-黄 */
+    .stage.s4b { background: #FDF2F8; border-color: #fbcfe8; }  /* 渠道分成-粉 */
+    .stage.s5 { background: #FFF7ED; border-color: #fed7aa; }  /* 提现-橙 */
+    .stage.s6 { background: #FAF5FF; border-color: #e9d5ff; }  /* 开票-紫 */
+    .stage.s8 { background: #F1F5F9; border-color: #cbd5e1; }  /* 对账-灰 */
+    .stage-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+    .stage-no {
+        background: var(--klein); color: var(--white);
+        font-weight: 800; font-size: 15px;
+        border-radius: 8px; padding: 3px 12px; flex-shrink: 0;
+    }
+    .stage-name { color: var(--klein-deep); font-size: 17px; font-weight: 700; letter-spacing: 1px; }
+    .stage-note { color: #94a3b8; font-size: 12px; }
+    .flow { display: flex; align-items: stretch; gap: 0; overflow-x: auto; padding-bottom: 6px; }
+    .node {
+        background: var(--white);
+        border-radius: 10px;
+        padding: 12px 14px;
+        min-width: 200px; max-width: 236px;
+        flex-shrink: 0;
+        border: 1px solid #e2e8f0;
+        border-top: 4px solid var(--c-sys);
+        box-shadow: 0 1px 4px rgba(15,23,42,0.08);
+        display: flex; flex-direction: column; gap: 7px;
+    }
+    .node.user  { border-top-color: var(--c-user); }
+    .node.dev   { border-top-color: var(--c-dev); }
+    .node.ops   { border-top-color: var(--c-ops); }
+    .node.fin   { border-top-color: var(--c-fin); }
+    .node.sys   { border-top-color: var(--c-sys); }
+    .node.bank  { border-top-color: var(--c-bank); }
+    .node.kd    { border-top-color: var(--c-kd); }
+    .node.ext   { background: #fbfdff; border: 1.5px dashed #94a3b8; border-top-width: 4px; border-top-style: solid; }
+    .n-title { font-size: 14px; font-weight: 700; color: #0f172a; line-height: 1.35; }
+    .n-desc { font-size: 11.5px; color: #64748b; line-height: 1.5; flex: 1; }
+    .n-trigger { font-size: 11px; color: #92400e; background: #FFFBEB; border: 1px dashed #fcd34d; border-radius: 6px; padding: 3px 6px; line-height: 1.5; }
+    .n-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+    .tag { font-size: 10.5px; padding: 2px 7px; border-radius: 999px; color: #fff; white-space: nowrap; }
+    .tag.role-user { background: var(--c-user); }
+    .tag.role-dev  { background: var(--c-dev); }
+    .tag.role-ops  { background: var(--c-ops); }
+    .tag.role-fin  { background: var(--c-fin); }
+    .tag.role-sys  { background: var(--c-sys); }
+    .tag.role-bank { background: var(--c-bank); }
+    .tag.role-kd   { background: var(--c-kd); }
+    .tag.plat { background: #eef2ff; color: var(--klein); border: 1px solid #c7d2fe; }
+    .arrow {
+        display: flex; align-items: center; justify-content: center;
+        color: var(--klein); font-size: 20px; font-weight: 700;
+        padding: 0 8px; flex-shrink: 0;
+    }
+    .state { color: var(--klein); background: #eef2ff; border-radius: 4px; padding: 0 4px; font-weight: 600; }
+    /* 系统对接一览 */
+    .sys-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 14px; max-width: 1680px; margin: 0 auto; }
+    .sys-card { background: var(--white); border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 18px; box-shadow: 0 1px 4px rgba(15,23,42,0.08); }
+    .sys-card h3 { font-size: 15px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; color: #0f172a; }
+    .sys-card ul { list-style: none; }
+    .sys-card li { font-size: 12px; color: #475569; padding: 4px 0; border-bottom: 1px dashed #e2e8f0; display: flex; justify-content: space-between; gap: 10px; }
+    .sys-card li:last-child { border-bottom: none; }
+    .dir { color: var(--klein); font-weight: 600; white-space: nowrap; }
+    .section-title { color: var(--klein-deep); font-size: 17px; font-weight: 700; letter-spacing: 1px; max-width: 1680px; margin: 30px auto 14px; display: flex; align-items: center; gap: 10px; }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: #e2e8f0; }
+    .footnote { max-width: 1680px; margin: 22px auto 0; background: #FFFBEB; border: 1px solid #fde68a; border-radius: 10px; padding: 12px 16px; color: #92400e; font-size: 12px; line-height: 1.8; }
+</style>
+</head>
+<body>
+<h1 class="page-title">彩翼平台 · 财务全链路整体流程图</h1>
+<p class="page-sub">覆盖充值 → 消费 → 收入确认 → 分佣 → 渠道分成 → 提现 → 开票 → 对账 8 大阶段</p>
+<!-- 图例 -->
+<div class="legend">
+<span class="legend-item"><span class="dot" style="background:var(--c-user)"></span>企业用户</span>
+<span class="legend-item"><span class="dot" style="background:var(--c-dev)"></span>开发者/渠道商</span>
+<span class="legend-item"><span class="dot" style="background:var(--c-ops)"></span>平台运营</span>
+<span class="legend-item"><span class="dot" style="background:var(--c-fin)"></span>财务共享服务中心</span>
+<span class="legend-item"><span class="dot" style="background:var(--c-sys)"></span>系统自动</span>
+<span class="legend-item"><span class="dot" style="background:var(--c-bank)"></span>银行（聚合支付/银企直联）</span>
+<span class="legend-item"><span class="dot" style="background:var(--c-kd)"></span>金蝶苍穹业财系统</span>
+<span class="legend-item" style="color:#94a3b8">虚线卡片 = 外部系统执行</span>
+<span class="legend-item" style="color:#92400e">黄框 = 跨系统触发方式（⚡事件实时 · ⏰定时跑批 · ↩️异步回调 · 🏦银行自动）</span>
+</div>
+
+<!-- ① 充值 -->
+<div class="stage s1">
+<div class="stage-head"><span class="stage-no">①</span><span class="stage-name">充值（资金流入）</span></div>
+<div class="flow">
+<div class="node user">
+<div class="n-title">发起充值</div>
+<div class="n-tags"><span class="tag role-user">企业用户</span><span class="tag plat">彩翼·用户端</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node bank ext">
+<div class="n-title">聚合支付收款</div>
+<div class="n-trigger">⚡ 用户支付时平台实时调支付API拉起收银台，结果由银行异步回调平台</div>
+<div class="n-tags"><span class="tag role-bank">聚合支付银行</span><span class="tag plat">银行收银台</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node sys">
+<div class="n-title">彩豆入账 + 生成充值记录</div>
+<div class="n-desc">实付与赠送彩豆分账入台账，计算本金分摊系数（实付÷总彩豆）</div>
+<div class="n-tags"><span class="tag role-sys">系统自动</span><span class="tag plat">彩翼·平台</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node bank ext">
+<div class="n-title">资金清算归集至平台资金池</div>
+<div class="n-trigger">🏦 银行按清算周期（日终/T+1）自动结算入账，平台以对账单核对</div>
+<div class="n-tags"><span class="tag role-bank">聚合支付银行</span><span class="tag plat">资金池对公账户（结算银行）</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node kd ext">
+<div class="n-title">生成预收款凭证</div>
+<div class="n-trigger">⚡ 充值支付回调落账后，平台自动调金蝶收款单接口实时推送（失败重试+日终补推）</div>
+<div class="n-tags"><span class="tag role-kd">金蝶</span><span class="tag plat">金蝶苍穹</span></div>
+</div>
+</div>
+</div>
+
+<!-- ② 消费 -->
+<div class="stage s2">
+<div class="stage-head"><span class="stage-no">②</span><span class="stage-name">消费扣费（使用智能体）</span></div>
+<div class="flow">
+<div class="node user">
+<div class="n-title">调用智能体/模型/数据服务</div>
+<div class="n-tags"><span class="tag role-user">企业用户</span><span class="tag plat">彩翼·用户端</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node sys">
+<div class="n-title">鉴权扣费</div>
+<div class="n-tags"><span class="tag role-sys">系统自动</span><span class="tag plat">彩翼·计费引擎</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node sys">
+<div class="n-title">生成消费记录</div>
+<div class="n-tags"><span class="tag role-sys">系统自动</span><span class="tag plat">彩翼·平台</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node sys">
+<div class="n-title">消费数据按日传结算银行<br/>（作为资金划转依据）</div>
+<div class="n-trigger">⏰ 平台日终定时跑批，推送前一日消费明细至银行</div>
+<div class="n-tags"><span class="tag role-sys">系统自动</span><span class="tag plat">彩翼 → 银行接口</span></div>
+</div>
+</div>
+</div>
+
+<!-- ③ 收入确认与资金划转 -->
+<div class="stage s3">
+<div class="stage-head"><span class="stage-no">③</span><span class="stage-name">收入确认 · 资金划转</span></div>
+<div class="flow">
+<div class="node bank ext">
+<div class="n-title">资金池 → 自有资金账户划转</div>
+<div class="n-trigger">🏦 银行收到日消费数据后按协议自动划转，无需平台逐笔触发</div>
+<div class="n-tags"><span class="tag role-bank">结算银行</span><span class="tag plat">银行账户体系</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node sys">
+<div class="n-title">划转结果回传彩翼平台</div>
+<div class="n-trigger">↩️ 银行划转完成后将划转结果/回单回传平台，平台落账并与消费明细核对</div>
+<div class="n-tags"><span class="tag role-sys">系统自动</span><span class="tag plat">银行 → 彩翼</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node sys">
+<div class="n-title">划转/消费数据同步金蝶</div>
+<div class="n-trigger">⏰ 平台日终跑批，将划转结果与消费明细统一调金蝶应收单接口推送</div>
+<div class="n-tags"><span class="tag role-sys">系统自动</span><span class="tag plat">彩翼 → 金蝶</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node kd ext">
+<div class="n-title">收入确认 · 生成凭证</div>
+<div class="n-desc">按实付口径确认（消耗彩豆×本金分摊系数）</div>
+<div class="n-trigger">↩️ 金蝶收到应收单后自动生成<strong>收入确认凭证</strong>与<strong>资金转账凭证</strong>，确认当期收入</div>
+<div class="n-tags"><span class="tag role-kd">金蝶</span><span class="tag role-fin">财务共享中心</span><span class="tag plat">金蝶苍穹</span></div>
+</div>
+</div>
+</div>
+
+<!-- ④ 分佣 -->
+<div class="stage s4">
+<div class="stage-head"><span class="stage-no">④</span><span class="stage-name">分佣结算（开发者/渠道商）</span></div>
+<div class="flow">
+<div class="node ops">
+<div class="n-title">智能体审核（含token区间）</div>
+<div class="n-desc">首次上架与变更共用一条审核线，内容与定价一并审核；变更审核期间线上版本继续服务，通过后新版本替换生效</div>
+<div class="n-tags"><span class="tag role-ops">平台运营</span><span class="tag plat">彩翼·管理端</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node sys">
+<div class="n-title">实时计算分佣</div>
+<div class="n-desc">分佣随消费实时入账，开发者端实时可见；分佣基数为分摊后现金基数（消耗彩豆×本金分摊系数），赠送额度不参与分账</div>
+<div class="n-tags"><span class="tag role-sys">系统自动</span><span class="tag plat">彩翼·结算引擎</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node sys">
+<div class="n-title">按月生成结算单</div>
+<div class="n-trigger">⏰ 每月1日定时跑批，按自然月汇总分佣生成结算单</div>
+<div class="n-tags"><span class="tag role-sys">系统自动</span><span class="tag plat">彩翼·平台</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node ops">
+<div class="n-title">运营确认结算单</div>
+<div class="n-desc">运营核对分佣明细，确认后推送开发者确认（同时发待办与短信）</div>
+<div class="n-tags"><span class="tag role-ops">平台运营</span><span class="tag plat">彩翼·管理端</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node dev">
+<div class="n-title">开发者确认结算单</div>
+<div class="n-desc">开发者核对后确认；5个工作日未确认自动延后下月</div>
+<div class="n-tags"><span class="tag role-dev">开发者</span><span class="tag plat">彩翼·开发者端</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node sys">
+<div class="n-title">计入可提现金额</div>
+<div class="n-tags"><span class="tag role-sys">系统自动</span><span class="tag plat">彩翼·平台</span></div>
+</div>
+</div>
+</div>
+
+<!-- ⑤ 提现 -->
+<!-- ⑤ 渠道分成 -->
+<div class="stage s4b">
+<div class="stage-head"><span class="stage-no">⑤</span><span class="stage-name">渠道分成（渠道商）</span></div>
+<div class="flow">
+<div class="node dev">
+<div class="n-title">邀请码绑定客户</div>
+<div class="n-desc">客户注册填报邀请码自动确认推荐关系；无法邀请码绑定的提交《推荐确认单》（三方盖章 / 双方盖章+证明材料 / 审批小组认定），经运营审核确认</div>
+<div class="n-tags"><span class="tag role-dev">渠道商</span><span class="tag plat">彩翼·渠道端</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node sys">
+<div class="n-title">客户消费归集</div>
+<div class="n-desc">被推荐客户收入（不含税·实付口径）按客户归属计入渠道商年度累计分成基数，自首次推荐确认日起算、每满一个自然年度清零</div>
+<div class="n-tags"><span class="tag role-sys">系统自动</span><span class="tag plat">彩翼·结算引擎</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node sys">
+<div class="n-title">阶梯分成计算</div>
+<div class="n-desc">新客户 20%/25%/30%、存续客户 10%/15%/20%（按累计基数扣除增值税后分段套算）；生态共建上限80%；超上限须主任办公会特批</div>
+<div class="n-tags"><span class="tag role-sys">系统自动</span><span class="tag plat">彩翼·结算引擎</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node sys">
+<div class="n-title">按月生成渠道结算单</div>
+<div class="n-trigger">⏰ 每月1日定时跑批；运营确认 → 渠道商确认（5个工作日逾期并入下月），确认后计入可提现金额</div>
+<div class="n-tags"><span class="tag role-sys">系统自动</span><span class="tag role-ops">平台运营</span><span class="tag role-dev">渠道商</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node dev">
+<div class="n-title">提现（并入⑥提现流程）</div>
+<div class="n-desc">待开票→待审核→待付款→已付款；上传与提现金额完全一致的增值税专用发票，渠道商作为供应商同步金蝶（复用供应商/应付单/付款单接口）</div>
+<div class="n-tags"><span class="tag role-dev">渠道商</span><span class="tag role-fin">财务共享中心</span></div>
+</div>
+</div>
+</div>
+
+<div class="stage s5">
+<div class="stage-head"><span class="stage-no">⑥</span><span class="stage-name">提现（资金流出 · 开发者/渠道商付款）</span></div>
+<div class="flow">
+<div class="node dev">
+<div class="n-title">发起提现申请<br/>（单据：<span class="state">事前审批中</span>）</div>
+<div class="n-desc">申请时选定开票税率：6% 专票不扣减；3%/1% 专票分别按结算金额 3.11%/5.29% 扣减分成款；提交后同步金蝶发起事前审批，审批通过前可取消申请</div>
+<div class="n-tags"><span class="tag role-dev">开发者</span><span class="tag plat">彩翼·开发者端</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node fin ext">
+<div class="n-title">财务事前审批</div>
+<div class="n-trigger">⚡ 提现申请提交事件触发同步金蝶，财务走内部审批流（人工）</div>
+<div class="n-tags"><span class="tag role-fin">财务共享中心</span><span class="tag plat">金蝶苍穹</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node sys">
+<div class="n-title">审批结果回传彩翼</div>
+<div class="n-trigger">↩️ 审批/退回经"单据状态回传接口(4.3)"回传平台；退回则提现单退回，可修改后重新发起</div>
+<div class="n-tags"><span class="tag role-sys">系统自动</span><span class="tag plat">金蝶 → 彩翼</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node dev">
+<div class="n-title">上传增值税发票<br/>（转<span class="state">待审核</span>）</div>
+<div class="n-desc">事前审批通过后上传；发票金额=提现金额、税率与申请时所选一致</div>
+<div class="n-tags"><span class="tag role-dev">开发者</span><span class="tag plat">彩翼·开发者端</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node ops">
+<div class="n-title">平台提现审核</div>
+<div class="n-desc">审核退回可修改申请/重传发票后重提，或撤回（已开发票需红冲）</div>
+<div class="n-tags"><span class="tag role-ops">平台运营</span><span class="tag plat">彩翼·管理端</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node sys">
+<div class="n-title">推送资金支付审批单</div>
+<div class="n-trigger">⚡ 平台提现审核通过事件触发，自动调金蝶付款单接口（含发票+收款账户）</div>
+<div class="n-tags"><span class="tag role-sys">系统自动</span><span class="tag plat">彩翼 → 金蝶</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node fin ext">
+<div class="n-title">银企直联对公转账</div>
+<div class="n-trigger">⚡ 财务在金蝶发起付款，由金蝶银企直联模块调银行接口执行</div>
+<div class="n-tags"><span class="tag role-fin">财务共享中心</span><span class="tag role-bank">银行</span><span class="tag plat">金蝶·银企直联</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node sys">
+<div class="n-title">付款回传 · 状态闭环</div>
+<div class="n-trigger">↩️ 付款完成后金蝶通过"收、付款信息回写接口(4.1)"回写平台，平台更新状态</div>
+<div class="n-tags"><span class="tag role-sys">系统自动</span><span class="tag plat">银行/金蝶 → 彩翼</span></div>
+</div>
+</div>
+</div>
+
+<!-- ⑥ 企业用户开票 -->
+<div class="stage s6">
+<div class="stage-head"><span class="stage-no">⑦</span><span class="stage-name">企业用户开票（平台 → 用户）</span></div>
+<div class="flow">
+<div class="node user">
+<div class="n-title">提交开票申请</div>
+<div class="n-desc">充值发票（预付卡·0税率）与消费发票两类并行、互不影响；消费发票按实付口径（消耗彩豆×本金分摊系数），赠送彩豆不计入</div>
+<div class="n-tags"><span class="tag role-user">企业用户</span><span class="tag plat">彩翼·用户端</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node ops">
+<div class="n-title">运营审核</div>
+<div class="n-tags"><span class="tag role-ops">平台运营</span><span class="tag plat">彩翼·管理端</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node sys">
+<div class="n-title">推送金蝶开票</div>
+<div class="n-trigger">⚡ 运营审核通过事件触发，平台自动调金蝶开票申请接口</div>
+<div class="n-tags"><span class="tag role-sys">系统自动</span><span class="tag plat">彩翼 → 金蝶</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node kd ext">
+<div class="n-title">开具电子发票</div>
+<div class="n-trigger">↩️ 金蝶收到开票申请后完成开票（自动/财务确认）</div>
+<div class="n-tags"><span class="tag role-kd">金蝶</span><span class="tag role-fin">财务共享中心</span><span class="tag plat">金蝶苍穹</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node sys">
+<div class="n-title">发票回传 · 用户下载</div>
+<div class="n-trigger">↩️ 金蝶开票完成后调平台发票回传接口（异步回调）</div>
+<div class="n-tags"><span class="tag role-sys">系统自动</span><span class="tag plat">金蝶 → 彩翼·用户端</span></div>
+</div>
+</div>
+</div>
+
+<!-- ⑦ 对账 -->
+<div class="stage s8">
+<div class="stage-head"><span class="stage-no">⑧</span><span class="stage-name">对账管理</span></div>
+<div class="flow">
+<div class="node sys">
+<div class="n-title">日对账（自动）</div>
+<div class="n-desc">覆盖平台内部、银行侧、支付渠道、金蝶四个维度</div>
+<div class="n-trigger">⏰ 平台定时任务拉取银行回单、支付渠道账单、金蝶凭证，与平台流水自动比对</div>
+<div class="n-tags"><span class="tag role-sys">系统自动</span><span class="tag plat">彩翼·对账引擎</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node sys">
+<div class="n-title">生成对账结果</div>
+<div class="n-tags"><span class="tag role-sys">系统自动</span><span class="tag plat">彩翼·财务端</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node fin">
+<div class="n-title">差异人工核实处理</div>
+<div class="n-tags"><span class="tag role-fin">财务共享中心</span><span class="tag plat">彩翼·财务端</span></div>
+</div>
+<div class="arrow">→</div>
+<div class="node fin">
+<div class="n-title">月度对账报告</div>
+<div class="n-desc">每月全量：充值/消费/分佣/提现；另支持按需对账</div>
+<div class="n-tags"><span class="tag role-fin">财务共享中心</span><span class="tag plat">彩翼·财务端</span></div>
+</div>
+</div>
+</div>
+
+<!-- 系统对接一览 -->
+<div class="section-title">外部系统对接一览</div>
+<div class="sys-grid">
+<div class="sys-card">
+<h3><span class="dot" style="background:var(--c-kd)"></span>金蝶苍穹业财一体化（规格书 V1.79）</h3>
+<ul>
+<li>开票申请接口（3.13） <span class="dir">平台 → 金蝶</span></li>
+<li>收款单接口 Recbill（充值预收，3.6） <span class="dir">平台 → 金蝶</span></li>
+<li>付款单接口 CasPayBill（提现付款，3.5） <span class="dir">平台 → 金蝶</span></li>
+<li>应收单接口 FinarBill（消费收入，3.3） <span class="dir">平台 → 金蝶</span></li>
+<li>客户新增接口·单一/批量（企业用户，3.14/3.15） <span class="dir">平台 → 金蝶</span></li>
+<li>供应商新增接口·单一/批量（开发者，3.16/3.17） <span class="dir">平台 → 金蝶</span></li>
+<li>发票回传接口（4.2） <span class="dir">金蝶 → 平台</span></li>
+<li>收、付款信息回写接口（4.1） <span class="dir">金蝶 → 平台</span></li>
+<li>单据状态回传接口（审批状态/退回，4.3） <span class="dir">金蝶 → 平台</span></li>
+</ul>
+</div>
+<div class="sys-card">
+<h3><span class="dot" style="background:var(--c-bank)"></span>聚合支付银行（充值收款）</h3>
+<ul>
+<li>微信 / 支付宝 / 银联网银 / 银联快捷 / 数字人民币 <span class="dir">B2C + B2B</span></li>
+<li>支付、查询标准 API（银行侧含退款接口，本期暂不启用） <span class="dir">银行 ↔ 平台</span></li>
+<li>网页 / APP / 小程序多形态 <span class="dir">—</span></li>
+<li>单笔交易 ≤2 秒 · 7×24 小时 <span class="dir">SLA</span></li>
+<li>账户体系：对公交易账户 + 结算账户 + 虚拟子账户（中心/用户/开发者绑定平台ID，便于归集对账） <span class="dir">开户方案</span></li>
+</ul>
+</div>
+<div class="sys-card">
+<h3><span class="dot" style="background:var(--c-bank)"></span>银企直联（浦发接口说明书 20260107）</h3>
+<ul>
+<li>账户余额查询 4402 / 交易明细查询 8924·A560 <span class="dir">对账依据</span></li>
+<li>单笔支付 8801 / 批量支付 8800 / 支付撤销 8809 <span class="dir">提现付款</span></li>
+<li>电子回单下载 DY47·DY48 <span class="dir">财务凭证</span></li>
+<li>OFD 对账单申请 DY49 <span class="dir">对账文件</span></li>
+</ul>
+</div>
+</div>
+
+</body>
+</html>

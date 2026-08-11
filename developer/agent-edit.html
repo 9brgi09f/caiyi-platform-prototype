@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>编辑智能体 - 开发者端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .form-section {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+        }
+        .form-section-title {
+            font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md); border-bottom: 1px solid var(--border-light);
+        }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-lg); }
+        .form-item { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+        .form-item.full-width { grid-column: 1 / -1; }
+        .form-label { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+        .form-hint { font-size: 12px; color: var(--text-muted); }
+        textarea { min-height: 120px; resize: vertical; }
+        .tag-input { display: flex; flex-wrap: wrap; gap: var(--spacing-xs); padding: var(--spacing-sm); border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--card-bg); }
+        .tag-input input { border: none; outline: none; flex: 1; min-width: 100px; background: transparent; }
+        .tag-item { display: flex; align-items: center; gap: 4px; padding: 4px 8px; background: var(--developer-light); color: var(--developer-color); border-radius: var(--radius-sm); font-size: 13px; }
+        .edit-tip { background: var(--admin-light); border: 1px solid var(--admin-color); border-radius: var(--radius-md); padding: var(--spacing-md); margin-bottom: var(--spacing-lg); display: flex; align-items: center; gap: var(--spacing-sm); color: var(--admin-color); font-size: 14px; }
+        /* 计费配置 */
+        .charge-item { background: var(--bg-light, #f8fafc); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: var(--spacing-lg); margin-bottom: var(--spacing-md); }
+        .charge-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--spacing-md); }
+        .charge-title { font-weight: 600; font-size: 14px; }
+        .charge-fields { display: grid; grid-template-columns: 1.2fr 1.2fr 1fr 0.8fr; gap: var(--spacing-md); align-items: start; }
+        .charge-yuan { font-weight: 600; color: var(--developer-color); padding-top: 30px; }
+        .pricing-note { background: var(--developer-light); border-radius: var(--radius-md); padding: var(--spacing-md); margin-top: var(--spacing-md); font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+        .pricing-note strong { color: var(--developer-color); }
+        .charge-code { margin-top: var(--spacing-sm); }
+        .code-display { font-family: 'Courier New', monospace; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-size: 12px; color: var(--text-secondary); display: inline-block; }
+        .pricing-desc { background: var(--developer-light); border: 1px solid var(--developer-color); border-radius: var(--radius-md); padding: var(--spacing-md); margin-top: var(--spacing-md); }
+        .pricing-desc h4 { color: var(--developer-color); font-size: 14px; margin-bottom: var(--spacing-sm); }
+        .pricing-desc .desc-row { display: flex; gap: var(--spacing-sm); font-size: 13px; margin-bottom: 6px; color: var(--text-secondary); }
+        .pricing-desc .desc-row span:first-child { color: var(--developer-color); font-weight: 600; }
+        @media (max-width: 640px) { .charge-fields { grid-template-columns: 1fr 1fr; } .charge-yuan { padding-top: 8px; } }
+    </style>
+
+<style id="identity-switcher-css">
+.id-switcher{position:relative;display:inline-flex;align-items:center;}
+.id-trigger{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 6px;border-radius:8px;cursor:pointer;transition:background 0.15s;user-select:none;}
+.id-trigger:hover{background:rgba(0,0,0,0.05);}
+.id-avatar{width:32px;height:32px;border-radius:50%;background:#EFF4FF;color:#2563EB;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.id-info{display:flex;flex-direction:column;align-items:flex-start;line-height:1.3;}
+.id-org{font-size:13px;font-weight:500;color:#1e293b;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.id-type-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;background:#EFF4FF;color:#2563EB;}
+.id-chevron{font-size:10px;color:#94a3b8;margin-left:2px;transition:transform 0.2s;}
+.id-switcher.open .id-chevron{transform:rotate(180deg);}
+.id-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:white;border:1px solid #dfe4ee;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:240px;z-index:999;overflow:hidden;}
+.id-switcher.open .id-menu{display:block;}
+.id-menu-hd{padding:10px 14px 8px;font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:1px;border-bottom:1px solid #ecf0f6;}
+.id-menu-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background 0.15s;text-decoration:none;color:inherit;}
+.id-menu-item:hover{background:#F8FAFC;}
+.id-menu-item.current{background:#F8FAFF;}
+.id-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.id-dot.active{background:#2563EB;}
+.id-dot.idle{background:#dfe4ee;}
+.id-item-body{flex:1;}
+.id-item-org{font-size:13px;font-weight:500;color:#1e293b;}
+.id-item-type{font-size:11px;color:#94a3b8;margin-top:1px;}
+.id-item-tag{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;margin-left:auto;flex-shrink:0;}
+.id-item-tag.current-tag{background:#EFF4FF;color:#2563EB;}
+.id-menu-sep{height:1px;background:#ecf0f6;margin:4px 0;}
+.id-menu-action{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:12px;color:#64748b;cursor:pointer;transition:background 0.15s;text-decoration:none;}
+.id-menu-action:hover{background:#F8FAFC;color:#2563EB;}
+</style>
+</head>
+<body>
+<header class="top-bar developer">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="id-switcher" id="idSwitcher">
+<div class="id-trigger" onclick="toggleIdMenu()">
+<div class="id-avatar">张</div>
+<div class="id-info">
+<span class="id-org">广州某某科技有限公司</span>
+<span class="id-type-badge" style="background:#D1FAE5;color:#059669;">开发者</span>
+</div>
+<span class="id-chevron">▾</span>
+</div>
+<div class="id-menu">
+<div class="id-menu-hd">切换工作台身份</div>
+<div class="id-menu-item current">
+<div class="id-dot active" style="background:#059669;"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">开发者</div>
+</div>
+<span class="id-item-tag current-tag" style="background:#D1FAE5;color:#059669;">当前</span>
+</div>
+<div class="id-menu-item" onclick="location.href='../user/index.html'">
+<div class="id-dot idle"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">采购单位</div>
+</div>
+</div>
+<div class="id-menu-sep"></div>
+<a class="id-menu-action" href="../user/register-select.html">＋ 注册新机构类型</a>
+<a class="id-menu-action" href="#" onclick="alert('已退出登录');return false;">退出登录</a>
+</div>
+</div>
+<script>
+function toggleIdMenu(){
+  var el=document.getElementById('idSwitcher');
+  el.classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  var sw=document.getElementById('idSwitcher');
+  if(sw && !sw.contains(e.target)) sw.classList.remove('open');
+});
+</script>
+</div>
+</header>
+<aside class="sidebar developer">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link active" href="agent-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="member-list.html"><span class="icon">👥</span><span>成员管理</span></a>
+<a class="sidebar-link" href="revenue-list.html"><span class="icon">📈</span><span>收入看板</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📄</span><span>结算单</span></a>
+<a class="sidebar-link" href="withdrawal-list.html"><span class="icon">💸</span><span>提现管理</span></a><a class="sidebar-link" href="bank-card.html"><span class="icon">🏦</span><span>收款账户</span></a>
+<a class="sidebar-link" href="dev-invoice-list.html"><span class="icon">🧾</span><span>发票管理</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a class="back-link" href="agent-list.html" style="color: white; margin-bottom: var(--spacing-sm);">
+                ← 返回列表
+            </a>
+<h2>编辑智能体</h2>
+<p>修改智能体配置信息，修改后需重新审核</p>
+</div>
+<div class="edit-tip">
+            您正在编辑"合规监测智能体"（已上架）。提交变更后<strong>线上版本继续服务</strong>，新版本经平台审核通过后自动替换生效；审核驳回不影响线上版本。
+        </div>
+<form class="form-section">
+<h3 class="form-section-title">基本信息</h3>
+<div class="form-grid">
+<div class="form-item">
+<label class="form-label">应用类型 <span style="color: red;">*</span></label>
+<select class="select" required="">
+<option selected="" value="self">自研智能体</option>
+<option value="third_agent">第三方智能体</option>
+<option value="third_app">第三方应用</option>
+<option value="saas">SaaS</option>
+</select>
+</div>
+<div class="form-item">
+<label class="form-label">产品名称 <span style="color: red;">*</span></label>
+<input class="input" required="" type="text" value="合规监测智能体"/>
+</div>
+<div class="form-item">
+<label class="form-label">产品分类 <span style="color: red;">*</span></label>
+<select class="select" required="">
+<option value="cat_purchase">采购管理</option>
+<option selected="" value="cat_compliance">合规风控</option>
+<option value="cat_data">数据分析</option>
+<option value="cat_service">智能客服</option>
+<option value="cat_policy">政策法规</option>
+</select>
+</div>
+<div class="form-item">
+<label class="form-label">智能体属性</label>
+<select class="select">
+<option selected="">智能辅助审查</option>
+<option>智能评审</option>
+<option>风险防控</option>
+<option>价格比对</option>
+<option>成本分析</option>
+<option>政策咨询</option>
+<option>流程问答</option>
+<option>智能提取</option>
+<option>应标辅助</option>
+<option>资料抽取</option>
+</select>
+</div>
+<div class="form-item">
+<label class="form-label">区域</label>
+<select class="select">
+<option selected="" value="">全国</option>
+<option>北京市</option>
+<option>上海市</option>
+<option>广东省</option>
+<option>浙江省</option>
+<option>江苏省</option>
+<option>四川省</option>
+<option>山东省</option>
+<option>湖北省</option>
+<option>湖南省</option>
+<option value="more">…（其余省份 / 自治区）</option>
+</select>
+</div>
+<div class="form-item">
+<label class="form-label">版本号</label>
+<input class="input" type="text" value="v1.0.0"/>
+</div>
+<div class="form-item">
+<label class="form-label">封面图片</label>
+<button class="btn btn-outline" type="button">更换封面图片</button>
+<span class="form-hint">请上传 大小不超过 5MB 格式为 png/jpg/jpeg 的文件</span>
+</div>
+<div class="form-item">
+<label class="form-label">演示视频</label>
+<button class="btn btn-outline" type="button">更换演示视频</button>
+<span class="form-hint">支持 mp4/webm/mov，大小不超过 500MB</span>
+</div>
+<div class="form-item">
+<label class="form-label">操作手册</label>
+<button class="btn btn-outline" type="button">更换操作手册</button>
+<span class="form-hint">支持 doc/docx/pdf/pptx，大小不超过 200MB</span>
+</div>
+<div class="form-item full-width">
+<label class="form-label">智能体标签</label>
+<div class="tag-input">
+<span class="tag-item">智能 <span style="cursor:pointer;">×</span></span>
+<span class="tag-item">高效 <span style="cursor:pointer;">×</span></span>
+<span class="tag-item">合规 <span style="cursor:pointer;">×</span></span>
+<input placeholder="输入后按回车添加" type="text"/>
+</div>
+</div>
+<div class="form-item full-width">
+<label class="form-label">产品描述 <span style="color: red;">*</span></label>
+<textarea class="input">专业的合规监测智能体，帮助企业自动化检查文档合规性，支持合同审查、风险识别、合规报告生成等功能。</textarea>
+</div>
+<div class="form-item full-width">
+<label class="form-label">详细描述</label>
+<textarea class="input" placeholder="请输入产品详细描述（Markdown 格式）">## 功能亮点
+- 合同智能审查与风险识别
+- 合规报告一键生成
+- 支持 PDF / Word / OFD 多种文档格式</textarea>
+</div>
+<div class="form-item full-width">
+<label class="form-label">设置地址</label>
+<input class="input" type="text" value="https://api.example.com/v1/compliance"/>
+<span class="form-hint">智能体访问 / 设置入口地址</span>
+</div>
+</div>
+</form>
+<form class="form-section">
+<h3 class="form-section-title">能力与接入</h3>
+<div class="form-grid">
+<div class="form-item">
+<label class="form-label">是否支持 API</label>
+<div style="display:flex;gap:var(--spacing-lg);align-items:center;">
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input checked name="supportApi" type="radio" value="1"/> 是</label>
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input name="supportApi" type="radio" value="0"/> 否</label>
+</div>
+</div>
+<div class="form-item">
+<label class="form-label">是否支持 MCP</label>
+<div style="display:flex;gap:var(--spacing-lg);align-items:center;">
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input name="supportMcp" type="radio" value="1"/> 是</label>
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input checked name="supportMcp" type="radio" value="0"/> 否</label>
+</div>
+</div>
+<div class="form-item">
+<label class="form-label">是否在线运行</label>
+<div style="display:flex;gap:var(--spacing-lg);align-items:center;">
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input checked name="onlineRun" type="radio" value="1"/> 是</label>
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input name="onlineRun" type="radio" value="0"/> 否</label>
+</div>
+</div>
+</div>
+</form>
+<form class="form-section">
+<h3 class="form-section-title">计费配置（开发者自主定价）</h3><p class="form-hint" style="margin:-8px 0 var(--spacing-lg);">新用户免费体验次数由平台运营统一配置，免费调用成本由平台承担，开发者无需配置且不产生分成。</p>
+<div class="form-item" style="margin-bottom: var(--spacing-lg);">
+<label class="form-label">计费方式 <span style="color:red;">*</span></label>
+<div style="display:flex; gap:var(--spacing-lg); align-items:center; flex-wrap:wrap;">
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input checked name="billMode" onchange="switchBillMode()" type="radio" value="token"/> 按 token 计费</label>
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input name="billMode" onchange="switchBillMode()" type="radio" value="perCall"/> 按次计费</label>
+<span class="form-hint">按 token：按实际消耗量折算彩豆；按次：每次调用固定扣费、与用量无关</span>
+</div>
+</div>
+<!-- 是否收费：本期仅支持「收费 + 自主定价」，免费功能先隐藏（恢复时移除下方 form-item 的 display:none 即可） -->
+<div class="form-item" style="display:none;margin-bottom: var(--spacing-lg);">
+<label class="form-label">是否收费</label>
+<div style="display:flex; gap:var(--spacing-lg); align-items:center; flex-wrap:wrap;">
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input checked name="charge" onchange="toggleCharge()" type="radio" value="paid"/> 收费</label>
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input name="charge" onchange="toggleCharge()" type="radio" value="free"/> 免费</label>
+<span class="form-hint">免费智能体用户可直接调用、不扣彩豆（算力成本由平台承担，受免费额度限制）</span>
+</div>
+</div>
+<div id="chargeDetail">
+<div id="modeToken">
+<div style="background:#EFF4FF;border:1px solid #c7d9fb;border-radius:8px;padding:12px 14px;font-size:13px;color:#1D4ED8;line-height:1.9;margin-bottom:var(--spacing-lg);">本智能体的 <strong>token → 彩豆 换算率（计价规则）由您自行设定</strong>：用户每次调用按实际消耗 token × 您的换算率折算成彩豆扣费。请注意：<strong>最终收入需扣除平台算力成本</strong>（当前算力成本 <strong>每 1,000 token = 0.1 彩豆</strong>），即 <strong>最终收入 =用户消耗彩豆 × 80% − 算力成本彩豆</strong>（开发者分成 80% / 平台 20%）。</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:var(--spacing-md);">
+<div class="form-item"><label class="form-label">token → 彩豆 换算率<span style="color:red;">*</span></label><div style="display:flex;align-items:center;gap:6px;">每 1,000 token = <input class="input" id="devRate" min="0.1" oninput="calcBeanRange()" step="0.1" style="width:90px;" type="number" value="1"/> 彩豆</div><span class="form-hint">您的定价，不得低于平台算力成本单价（0.1 彩豆/千token）；调价随变更审核生效</span></div>
+<div class="form-item"><label class="form-label">单次预估 token（下限）<span style="color:red;">*</span></label><input class="input" id="tkMin" min="0" oninput="calcBeanRange()" type="number" value="10000"/><span class="form-hint">典型最少一次消耗</span></div>
+<div class="form-item"><label class="form-label">单次预估 token（上限）<span style="color:red;">*</span></label><input class="input" id="tkMax" min="0" oninput="calcBeanRange()" type="number" value="150000"/><span class="form-hint">典型较多一次消耗</span></div>
+<div class="form-item"><label class="form-label">单次 token 上限（熔断）</label><input class="input" id="tkCap" min="0" type="number" value="300000"/><span class="form-hint">单次超过此值将截断并提示，防极端输入</span></div>
+<div class="form-item"><label class="form-label">换算后预估彩豆区间</label><div id="beanRange" style="font-weight:600;color:var(--user-color);font-size:16px;margin-top:4px;">—</div><span class="form-hint">按您设定的换算率自动计算，用于市场展示</span></div>
+</div>
+<div id="incomePreview" style="background:var(--bg-light);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--text-secondary);margin-top:var(--spacing-md);line-height:1.8;">收入测算：填写换算率后自动测算</div>
+<div class="pricing-desc">
+<h4>计费说明</h4>
+<div class="desc-row"><span>1.</span><span>自主定价：本智能体的 token → 彩豆 换算率由您设定，用户每次调用按实际消耗 token × 您的换算率扣彩豆。</span></div>
+<div class="desc-row"><span>2.</span><span>算力成本：平台算力成本单价当前为每 1,000 token = 0.1 彩豆（平台配置、可调整），从您的收入中扣除；定价不得低于该成本价。</span></div>
+<div class="desc-row"><span>3.</span><span>市场展示：按您申报的 token 区间 × 您的换算率折算出彩豆区间展示；实际以本次真实消耗结算，输入较多时可能高于上限。</span></div>
+<div class="desc-row"><span>4.</span><span>收入分成：最终收入 =用户消耗彩豆 × 80% − 算力成本彩豆（开发者 80% / 平台 20%，见分佣规则）；月度结算单按此口径出具。</span></div>
+</div>
+</div><!-- /modeToken -->
+<div id="modePerCall" style="display:none;">
+<div style="background:#EFF4FF;border:1px solid #c7d9fb;border-radius:8px;padding:12px 14px;font-size:13px;color:#1D4ED8;line-height:1.9;margin-bottom:var(--spacing-lg);">本智能体<strong>按次计费</strong>：用户每次调用<strong>固定扣除您设定的彩豆数</strong>，与实际 token 消耗无关。请注意：<strong>最终收入仍需扣除平台算力成本</strong>（算力成本按实际消耗 token 计，当前 <strong>每 1,000 token = 0.1 彩豆</strong>），即 <strong>最终收入 = 每次价格 × 80% − 算力成本彩豆</strong>（开发者分成 80% / 平台 20%）。</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:var(--spacing-md);">
+<div class="form-item"><label class="form-label">每次价格（彩豆/次）<span style="color:red;">*</span></label><div style="display:flex;align-items:center;gap:6px;">每次调用扣 <input class="input" id="pcPrice" min="1" oninput="calcPerCall()" step="1" style="width:100px;" type="number" value="50"/> 彩豆</div><span class="form-hint">用户每次调用固定扣除的彩豆数，由您定价</span></div>
+<div class="form-item"><label class="form-label">单次预估 token<span style="color:red;">*</span></label><input class="input" id="pcTk" min="0" oninput="calcPerCall()" type="number" value="100000"/><span class="form-hint">仅用于估算平台算力成本与您的收入，不影响用户扣费</span></div>
+<div class="form-item"><label class="form-label">单次 token 上限（熔断）</label><input class="input" id="pcCap" min="0" type="number" value="300000"/><span class="form-hint">单次超过此值将截断并提示，防极端输入</span></div>
+</div>
+<div id="pcIncomePreview" style="background:var(--bg-light);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--text-secondary);margin-top:var(--spacing-md);line-height:1.8;">收入测算：填写每次价格与预估 token 后自动测算</div>
+<div class="pricing-desc">
+<h4>计费说明</h4>
+<div class="desc-row"><span>1.</span><span>按次计费：用户每次调用固定扣除 N 彩豆，与本次 token 消耗量无关。</span></div>
+<div class="desc-row"><span>2.</span><span>算力成本：平台算力成本仍按实际消耗 token 计（每 1,000 token = 0.1 彩豆，平台配置），从您的收入中扣除。</span></div>
+<div class="desc-row"><span>3.</span><span>收入分成：最终收入 = 每次价格 × 80% − 算力成本彩豆（开发者 80% / 平台 20%，见分佣规则）；月度结算单按此口径出具。</span></div>
+<div class="desc-row"><span>4.</span><span>定价约束：每次价格 × 80% 须不低于单次预估算力成本，否则每次调用将亏损、无法提交。</span></div>
+</div>
+</div>
+<div id="chargeError" style="display:none; color: var(--danger-color); font-size: 13px; margin-top: var(--spacing-sm);"></div>
+</div>
+</form>
+<div style="text-align:center; margin-bottom: var(--spacing-md); color: var(--text-muted); font-size: 13px;">修改内容（含计费方式、定价与用量配置）将随本次变更一并送审，审核期间线上版本按原计费规则继续服务。</div>
+<div style="display: flex; gap: var(--spacing-md); justify-content: center;">
+<a class="btn btn-outline" href="agent-list.html">取消</a>
+<button class="btn btn-primary" onclick="submitChange(event)" type="button">提交变更审核</button>
+</div>
+<!-- 提交变更弹窗 -->
+<div class="modal-overlay" id="changeModal" onclick="if(event.target===this)closeChange()">
+<div class="modal" style="max-width: 440px;">
+<div class="modal-header">
+<span class="modal-title">已提交变更审核</span>
+<button class="modal-close" onclick="closeChange()">×</button>
+</div>
+<div class="modal-body">
+<div style="width:56px;height:56px;border-radius:50%;background:var(--developer-light);color:var(--developer-color);display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto var(--spacing-md);">✓</div>
+<p style="font-size:14px;text-align:center;margin-bottom:var(--spacing-sm);">变更已提交，等待平台审核</p>
+<p style="font-size:13px;color:var(--text-muted);line-height:1.7;">审核期间<strong>线上版本继续正常服务</strong>；审核通过后新版本自动替换生效，审核驳回则线上版本不受影响，您可修改后重新提交。</p>
+</div>
+<div class="modal-footer">
+<a class="btn btn-primary" href="agent-list.html">返回列表</a>
+</div>
+</div>
+</div>
+</main>
+<script>
+function toggleCharge(){
+  var paid = document.querySelector('input[name="charge"][value="paid"]').checked;
+  document.getElementById('chargeDetail').style.display = paid ? '' : 'none';
+}
+var COST_RATE = 0.1; /* 平台算力成本：每 1,000 token = 0.1 彩豆（平台配置） */
+var DEV_SHARE = 0.8; /* 开发者分成 80% */
+function calcBeanRange(){
+  var rate = parseFloat(document.getElementById('devRate').value) || 0;
+  var mn = parseFloat(document.getElementById('tkMin').value) || 0;
+  var mx = parseFloat(document.getElementById('tkMax').value) || 0;
+  var el = document.getElementById('beanRange');
+  if (rate > 0 && mn > 0 && mx > 0 && mx >= mn) el.textContent = '约 ' + Math.ceil(mn/1000*rate) + ' ~ ' + Math.ceil(mx/1000*rate) + ' 彩豆/次';
+  else el.textContent = '—';
+  var ip = document.getElementById('incomePreview');
+  if (rate >= COST_RATE) {
+    var pay = 100 * rate, cost = 100 * COST_RATE;
+    var income = pay * DEV_SHARE - cost;
+    ip.innerHTML = '收入测算（以单次消耗 100,000 token 为例）：用户支付 <strong>' + pay.toFixed(0) + ' 彩豆</strong> × 80% − 算力成本 <strong>' + cost.toFixed(0) + ' 彩豆</strong> → 您的最终收入 ≈ <strong style="color:var(--developer-color);">' + income.toFixed(1) + ' 彩豆</strong>（分佣基数 × 分佣比例 − 算力成本）';
+  } else if (rate > 0) {
+    ip.innerHTML = '<span style="color:var(--danger-color);">⚠ 当前定价低于平台算力成本单价（0.1 彩豆/千token），每次调用都将亏损，无法提交</span>';
+  } else {
+    ip.textContent = '收入测算：填写换算率后自动测算';
+  }
+}
+function switchBillMode(){
+  var mode = document.querySelector('input[name="billMode"]:checked').value;
+  document.getElementById('modeToken').style.display = mode==='token' ? '' : 'none';
+  document.getElementById('modePerCall').style.display = mode==='perCall' ? '' : 'none';
+}
+function calcPerCall(){
+  var price = parseFloat(document.getElementById('pcPrice').value) || 0;
+  var tk = parseFloat(document.getElementById('pcTk').value) || 0;
+  var ip = document.getElementById('pcIncomePreview');
+  if (price > 0 && tk > 0) {
+    var cost = tk/1000*COST_RATE;
+    var income = price*DEV_SHARE - cost;
+    if (income > 0) {
+      ip.innerHTML = '收入测算：用户每次支付 <strong>' + price + ' 彩豆</strong> × 80% − 算力成本 <strong>' + cost.toFixed(1) + ' 彩豆</strong>（预估 ' + tk.toLocaleString() + ' token）→ 您的最终收入 ≈ <strong style="color:var(--developer-color);">' + income.toFixed(1) + ' 彩豆/次</strong>';
+    } else {
+      ip.innerHTML = '<span style="color:var(--danger-color);">⚠ 每次价格 × 80%（' + (price*DEV_SHARE).toFixed(1) + ' 彩豆）低于预估算力成本（' + cost.toFixed(1) + ' 彩豆），每次调用将亏损，无法提交</span>';
+    }
+  } else {
+    ip.textContent = '收入测算：填写每次价格与预估 token 后自动测算';
+  }
+}
+function showChargeError(msg){
+  var e = document.getElementById('chargeError');
+  e.textContent = '\u26a0 ' + msg; e.style.display = 'block';
+  setTimeout(function(){ e.style.display = 'none'; }, 2600);
+}
+function validateCharge(){
+  var paid = document.querySelector('input[name="charge"][value="paid"]').checked;
+  if(!paid) return true;
+  var mode = document.querySelector('input[name="billMode"]:checked').value;
+  if(mode === 'perCall'){
+    var price = parseFloat(document.getElementById('pcPrice').value) || 0;
+    var tk = parseFloat(document.getElementById('pcTk').value) || 0;
+    if(!price){ showChargeError('请设定每次价格（彩豆/次）'); return false; }
+    if(!tk){ showChargeError('请填写单次预估 token（用于估算力成本）'); return false; }
+    if(price*DEV_SHARE < tk/1000*COST_RATE){ showChargeError('每次价格 × 80% 低于预估算力成本，每次调用将亏损，无法提交'); return false; }
+    return true;
+  }
+  var rate = parseFloat(document.getElementById('devRate').value) || 0;
+  if(!rate){ showChargeError('请设定 token → 彩豆 换算率（计价规则）'); return false; }
+  if(rate < 0.1){ showChargeError('换算率不得低于平台算力成本单价（0.1 彩豆/千token）'); return false; }
+  var mn = parseFloat(document.getElementById('tkMin').value) || 0;
+  var mx = parseFloat(document.getElementById('tkMax').value) || 0;
+  if(!mn || !mx){ showChargeError('请填写单次预估 token 区间（下限与上限）'); return false; }
+  if(mx < mn){ showChargeError('token 上限不能小于下限'); return false; }
+  return true;
+}
+document.addEventListener('DOMContentLoaded', function(){ calcBeanRange(); calcPerCall(); switchBillMode(); });
+</script>
+</body>
+</html>

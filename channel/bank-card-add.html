@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>添加收款账户 - 渠道端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+    </style>
+</head>
+<body>
+<header class="top-bar channel">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">渠</div>
+<span>智采科技</span>
+</div>
+</div>
+</header>
+<aside class="sidebar channel">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon"></span><span>概览</span></a>
+<a class="sidebar-link" href="invite-code.html"><span class="icon"></span><span>我的邀请码</span></a>
+<a class="sidebar-link" href="customer-list.html"><span class="icon"></span><span>客户管理</span></a>
+<a class="sidebar-link" href="referral-list.html"><span class="icon"></span><span>推荐确认单</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon"></span><span>分成结算</span></a>
+<a class="sidebar-link" href="withdrawal-list.html"><span class="icon"></span><span>提现管理</span></a>
+<a class="sidebar-link active" href="bank-card.html"><span class="icon"></span><span>收款账户</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon"></span><span>发票管理</span></a>
+</div>
+</aside>
+<main class="main-content"><a class="back-link" href="bank-card.html" style="color:var(--klein);margin-bottom:var(--spacing-md);display:inline-block;">← 返回收款账户</a><div class="content-card" style="max-width:560px;"><h2 style="margin-bottom:8px;">添加收款账户</h2><p style="color:var(--text-muted);font-size:13px;margin-bottom:20px;">渠道分成款通过银企直联转入默认收款账户；渠道商须使用与营业执照名称一致的对公账户。</p><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">账户类型</label><div style="display:flex;gap:20px;font-size:14px;"><label style="cursor:pointer;"><input checked="" name="acctKind" type="radio"/> 对公账户</label><label style="cursor:not-allowed;color:var(--text-muted);" title="渠道商仅支持对公账户"><input disabled="" name="acctKind" type="radio"/> 个人账户（不支持）</label></div></div><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">开户银行</label><select style="width:100%;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;"><option>请选择开户银行</option><option>招商银行</option><option>工商银行</option><option>建设银行</option><option>中国银行</option><option>农业银行</option><option>浦发银行</option></select></div><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">对公账户号</label><input placeholder="请输入对公账户号" style="width:100%;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;"/></div><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">开户名称</label><input placeholder="须与营业执照名称一致" style="width:100%;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;" value="广州智采科技有限公司"/></div><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">开户支行</label><input placeholder="请输入开户支行（选填）" style="width:100%;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;"/></div><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">经办人手机号</label><div style="display:flex;gap:12px;"><input placeholder="请输入银行预留手机号" style="flex:1;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;"/><button class="btn btn-outline" onclick="showToast('验证码已发送，请注意查收')" style="white-space:nowrap;" type="button">获取验证码</button></div></div><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">短信验证码</label><input maxlength="6" placeholder="请输入 6 位验证码" style="width:200px;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;"/></div><div style="margin-bottom:16px;"><label style="font-size:14px;cursor:pointer;"><input type="checkbox"/> 设为默认收款账户</label></div><div style="display:flex;gap:12px;margin-top:20px;"><a class="btn btn-outline" href="bank-card.html" style="flex:1;text-align:center;">取消</a><a class="btn btn-primary" href="bank-card.html?added=1" style="flex:1;text-align:center;">确认添加</a></div></div></main>
+<div id="toast"></div>
+<script>
+function showToast(msg, icon){
+  var t = document.getElementById('toast');
+  t.textContent = (icon || '✓') + ' ' + msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.display = 'none'; }, 2400);
+}
+</script>
+</body>
+</html>

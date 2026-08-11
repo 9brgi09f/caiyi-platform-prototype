@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>渠道管理 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; }
+        .stat-value { font-size: 24px; font-weight: 700; color: var(--klein); }
+        .stat-label { font-size: 13px; color: var(--text-muted); margin-top: var(--spacing-xs); }
+        .badge-mode-ref { background: #dbeafe; color: #2563eb; }
+        .badge-mode-co { background: #ede9fe; color: #7c3aed; }
+        .badge-mode-eco { background: #d1fae5; color: #059669; }
+        .badge-terminated { background: #f1f5f9; color: #64748b; }
+        .btn-danger-outline { color: var(--danger-color); border-color: var(--danger-color); }
+        #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon"></span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon"></span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon"></span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon"></span><span>智能体管理</span></a>
+<a class="sidebar-link active" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon"></span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon"></span><span>结算管理</span></a>
+
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon"></span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon"></span><span>规则设置</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<h2>渠道管理</h2>
+<p>渠道商入驻审核、状态管理与推荐关系审核</p>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-value">5</div><div class="stat-label">渠道商总数</div></div>
+<div class="stat-card"><div class="stat-value" style="color: var(--warning-color);">1</div><div class="stat-label">待入驻审核</div></div>
+<div class="stat-card"><div class="stat-value" style="color: var(--warning-color);">1</div><div class="stat-label">待推荐关系审核</div></div>
+<div class="stat-card"><div class="stat-value">¥198,000</div><div class="stat-label">本年度渠道分成基数（4家合计）</div></div>
+</div>
+<!-- 主 tab：渠道商 / 推荐关系 -->
+<div class="tab-nav">
+<button class="tab-btn active" onclick="switchMain('partner', this)" style="font-size: 15px; font-weight: 600;" type="button">渠道商 (5)</button>
+<button class="tab-btn" onclick="switchMain('referral', this)" style="font-size: 15px; font-weight: 600;" type="button">推荐关系 (5)</button>
+</div>
+<!-- ============ 渠道商 ============ -->
+<div class="main-tab" id="partnerTab">
+<div class="content-card">
+<div class="tab-nav">
+<button class="tab-btn active" onclick="filterStatus('all', this, '#partnerTable tbody tr')" type="button">全部 (5)</button>
+<button class="tab-btn" onclick="filterStatus('待审核', this, '#partnerTable tbody tr')" type="button">待入驻审核 (1)</button>
+<button class="tab-btn" onclick="filterStatus('正常', this, '#partnerTable tbody tr')" type="button">正常 (2)</button>
+<button class="tab-btn" onclick="filterStatus('警告', this, '#partnerTable tbody tr')" type="button">警告 (1)</button>
+<button class="tab-btn" onclick="filterStatus('已终止', this, '#partnerTable tbody tr')" type="button">已终止 (1)</button>
+</div>
+<div class="table-wrapper">
+<table class="table table-wide" id="partnerTable">
+<thead><tr><th>渠道商</th><th>合作模式</th><th>长期协议</th><th>入驻/申请时间</th><th>客户数</th><th>年度分成基数</th><th>状态</th><th>操作</th></tr></thead>
+<tbody>
+<tr data-status="待审核" style="background: #fffbeb;">
+<td><span class="p-name">珠三角采购服务联盟</span><div style="font-size:11px;color:var(--text-muted);margin-top:2px;">统一社会信用代码 91440101MA9XXXX01A</div></td>
+<td><span class="badge badge-mode-ref">客户推荐</span></td><td>意向</td><td>2026-07-15</td><td>—</td><td>—</td>
+<td><span class="badge badge-warning">待审核</span></td>
+<td><a class="btn btn-sm btn-primary" href="channel-audit-view.html">入驻审核</a></td>
+</tr>
+<tr data-status="正常">
+<td><span class="p-name">广州智采科技有限公司</span></td>
+<td><span class="badge badge-mode-ref">客户推荐</span></td><td>否</td><td>2026-01-10</td><td>4</td><td class="amount">¥46,200.00</td>
+<td><span class="badge badge-success">正常</span></td>
+<td style="white-space:nowrap;">
+<a class="btn btn-sm btn-outline" href="channel-view.html?id=zc">详情</a>
+<button class="btn btn-sm btn-outline" onclick="openDeal(this, '警告')" type="button">警告</button>
+<button class="btn btn-sm btn-outline btn-danger-outline" onclick="openDeal(this, '终止')" type="button">终止合作</button>
+</td>
+</tr>
+<tr data-status="正常">
+<td><span class="p-name">华南数智生态有限公司</span></td>
+<td><span class="badge badge-mode-eco">生态共建</span></td><td>是</td><td>2026-02-20</td><td>—</td><td class="amount">¥128,000.00</td>
+<td><span class="badge badge-success">正常</span></td>
+<td style="white-space:nowrap;">
+<a class="btn btn-sm btn-outline" href="channel-view.html?id=hn">详情</a>
+<button class="btn btn-sm btn-outline" onclick="openDeal(this, '警告')" type="button">警告</button>
+<button class="btn btn-sm btn-outline btn-danger-outline" onclick="openDeal(this, '终止')" type="button">终止合作</button>
+</td>
+</tr>
+<tr data-status="警告">
+<td><span class="p-name">广东联采信息技术有限公司</span></td>
+<td><span class="badge badge-mode-ref">客户推荐</span></td><td>否</td><td>2026-03-05</td><td>2</td><td class="amount">¥18,600.00</td>
+<td><span class="badge badge-warning">警告</span></td>
+<td style="white-space:nowrap;">
+<a class="btn btn-sm btn-outline" href="channel-view.html?id=ld">详情</a>
+<button class="btn btn-sm btn-outline" onclick="recover(this)" type="button">恢复正常</button>
+<button class="btn btn-sm btn-outline btn-danger-outline" onclick="openDeal(this, '终止')" type="button">终止合作</button>
+</td>
+</tr>
+<tr data-status="已终止">
+<td><span class="p-name">深圳慧标科技有限公司</span></td>
+<td><span class="badge badge-mode-co">联合共创</span></td><td>否</td><td>2026-02-01</td><td>1</td><td class="amount">¥5,200.00</td>
+<td><span class="badge badge-terminated">已终止</span></td>
+<td><a class="btn btn-sm btn-outline" href="channel-view.html?id=hb">详情</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- ============ 推荐关系 ============ -->
+<div class="main-tab" id="referralTab" style="display: none;">
+<div class="content-card">
+<div class="tab-nav">
+<button class="tab-btn active" onclick="filterStatus('all', this, '#referralTable tbody tr')" type="button">全部 (5)</button>
+<button class="tab-btn" onclick="filterStatus('待审核', this, '#referralTable tbody tr')" type="button">待审核 (1)</button>
+<button class="tab-btn" onclick="filterStatus('已确认', this, '#referralTable tbody tr')" type="button">已确认 (3)</button>
+<button class="tab-btn" onclick="filterStatus('已驳回', this, '#referralTable tbody tr')" type="button">已驳回 (1)</button>
+</div>
+<div class="table-wrapper">
+<table class="table table-wide" id="referralTable">
+<thead><tr><th>被推荐客户</th><th>渠道商</th><th>确认方式</th><th>提交/绑定时间</th><th>状态</th><th>操作</th></tr></thead>
+<tbody>
+<tr data-status="待审核" style="background: #fffbeb;">
+<td>珠海智慧城市运营公司</td><td>广州智采科技有限公司</td><td>双方盖章 + 授权委托文件（RT20260628001）</td><td>2026-06-28</td>
+<td><span class="badge badge-warning">待审核</span></td>
+<td><a class="btn btn-sm btn-primary" href="referral-audit-view.html">审核</a></td>
+</tr>
+<tr data-status="已确认">
+<td>广州建工集团有限公司</td><td>广州智采科技有限公司</td><td>邀请码注册（CY-ZC2026，自动确认）</td><td>2026-01-15</td>
+<td><span class="badge badge-success">已确认</span></td>
+<td><a class="btn btn-sm btn-outline" href="referral-view.html?id=gj">详情</a></td>
+</tr>
+<tr data-status="已确认">
+<td>东莞采购咨询有限公司</td><td>广州智采科技有限公司</td><td>邀请码注册（CY-ZC2026，自动确认）</td><td>2026-05-10</td>
+<td><span class="badge badge-success">已确认</span></td>
+<td><a class="btn btn-sm btn-outline" href="referral-view.html?id=dg">详情</a></td>
+</tr>
+<tr data-status="已确认">
+<td>佛山市政数据服务中心</td><td>广州智采科技有限公司</td><td>推荐确认单三方盖章（RT20260322001）</td><td>2026-03-22</td>
+<td><span class="badge badge-success">已确认</span></td>
+<td><a class="btn btn-sm btn-outline" href="referral-view.html?id=fs">详情</a></td>
+</tr>
+<tr data-status="已驳回">
+<td>中山采联信息有限公司</td><td>广州智采科技有限公司</td><td>双方盖章（RT20260510002）</td><td>2026-05-10</td>
+<td><span class="badge badge-danger">已驳回</span></td>
+<td><a class="btn btn-sm btn-outline" href="referral-view.html?id=zs">详情</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<!-- 警告/终止弹窗 -->
+<div class="modal-overlay" id="dealModal" onclick="if(event.target===this)closeDeal()">
+<div class="modal" style="max-width: 540px;">
+<div class="modal-header"><span class="modal-title" id="dealTitle">处理</span><button class="modal-close" onclick="closeDeal()">×</button></div>
+<div class="modal-body">
+<p style="font-size: 14px; margin-bottom: var(--spacing-md);">渠道商：<strong id="dealName"></strong></p>
+<div style="margin-bottom: var(--spacing-md);"><label style="font-size:13px;color:var(--text-muted);">违规类型（必选）</label>
+<select class="select" id="dealType" style="width:100%;margin-top:4px;">
+<option value="">请选择违规类型</option>
+<option>夸大宣传、误导客户</option>
+<option>未经委托以政采中心名义开展活动</option>
+<option>违规承诺或利益输送</option>
+<option>泄露客户信息</option>
+<option>其他违规行为</option>
+</select></div>
+<div style="margin-bottom: var(--spacing-md);"><label style="font-size:13px;color:var(--text-muted);">处理原因（必填，将留痕并通知渠道商）</label>
+<textarea class="input" id="dealReason" rows="2" style="width:100%;margin-top:4px;"></textarea></div>
+<div style="margin-bottom: var(--spacing-md);"><label style="font-size:13px;color:var(--text-muted);">证明材料（必传：核查记录 / 警告函 / 终止通知书等，PDF/JPG）</label>
+<div id="dealEvid" onclick="pickEvid()" style="border:1px dashed var(--border-color);border-radius:var(--radius-md);padding:var(--spacing-md);text-align:center;color:var(--text-muted);font-size:13px;cursor:pointer;margin-top:4px;">点击上传证明材料</div></div>
+<label style="font-size:13px;cursor:pointer;"><input checked="" id="dealNotify" type="checkbox"/> 同步书面通知渠道商（站内通知 + 邮寄警告函/终止通知书）</label>
+<div id="dealImpact" style="background:#FFFBEB;border:1px solid #fde68a;border-radius:var(--radius-md);padding:var(--spacing-md);font-size:13px;color:#92400e;line-height:1.8;margin-top:var(--spacing-md);"></div>
+</div>
+<div class="modal-footer">
+<button class="btn btn-outline" onclick="closeDeal()">取消</button>
+<button class="btn btn-danger" onclick="confirmDeal()">确认处理</button>
+</div>
+</div>
+</div>
+<div id="toast"></div>
+<script>
+function switchMain(tab, btn){
+  document.querySelectorAll('.tab-nav')[0].querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('partnerTab').style.display = tab === 'partner' ? 'block' : 'none';
+  document.getElementById('referralTab').style.display = tab === 'referral' ? 'block' : 'none';
+}
+var dealRow = null, dealKind = '';
+var PID = { '广州智采科技有限公司': 'zc', '华南数智生态有限公司': 'hn', '广东联采信息技术有限公司': 'ld', '深圳慧标科技有限公司': 'hb', '珠三角采购服务联盟': 'zsj' };
+var IMPACT = {
+  '警告': '处理影响：不影响既有分成与已确认推荐关系（照常结算）；记入合作档案并书面通知渠道商限时整改；<strong>整改期内暂停受理该渠道商新增推荐关系</strong>；再次违规或整改不到位升级为终止合作。',
+  '终止': '处理影响：<strong>邀请码立即停用、推荐关系解除</strong>；终止日后客户消费不再计入分成基数；终止日前已产生分成按规则结算至终止日；处理记录归档，造成损失的依法追责。'
+};
+function openDeal(btn, type){
+  dealRow = btn.closest('tr'); dealKind = type;
+  document.getElementById('dealTitle').textContent = type === '警告' ? '书面警告' : '终止合作';
+  document.getElementById('dealName').textContent = dealRow.querySelector('.p-name').textContent;
+  document.getElementById('dealReason').value = '';
+  document.getElementById('dealType').selectedIndex = 0;
+  var ev = document.getElementById('dealEvid');
+  ev.dataset.ok = ''; ev.style.color = 'var(--text-muted)'; ev.style.borderColor = 'var(--border-color)'; ev.textContent = '点击上传证明材料';
+  document.getElementById('dealNotify').checked = true;
+  document.getElementById('dealImpact').innerHTML = IMPACT[type];
+  document.getElementById('dealModal').classList.add('active');
+}
+function pickEvid(){
+  var ev = document.getElementById('dealEvid');
+  ev.dataset.ok = '1'; ev.style.color = '#059669'; ev.style.borderColor = '#059669';
+  ev.textContent = '\u2713 已选择：违规核查记录_20260717.pdf（演示）';
+}
+function closeDeal(){ document.getElementById('dealModal').classList.remove('active'); dealRow = null; }
+function confirmDeal(){
+  var vt = document.getElementById('dealType').value;
+  if(!vt){ showToast('请选择违规类型', '⚠'); return; }
+  var r = document.getElementById('dealReason').value.trim();
+  if(!r){ showToast('请填写处理原因', '⚠'); return; }
+  if(document.getElementById('dealEvid').dataset.ok !== '1'){ showToast('请上传证明材料（留痕必需）', '⚠'); return; }
+  if(dealRow){
+    var name = dealRow.querySelector('.p-name').textContent;
+    if(dealKind === '警告'){
+      dealRow.setAttribute('data-status', '警告');
+      dealRow.cells[6].innerHTML = '<span class="badge badge-warning">警告</span>';
+      showToast('已对「' + name + '」发出书面警告并留痕' + (document.getElementById('dealNotify').checked ? '，已通知渠道商' : ''));
+    } else {
+      dealRow.setAttribute('data-status', '已终止');
+      dealRow.cells[6].innerHTML = '<span class="badge badge-terminated">已终止</span>';
+      dealRow.cells[7].innerHTML = (PID[name] ? '<a class="btn btn-sm btn-outline" href="channel-view.html?id=' + PID[name] + '">详情</a>' : '<button class="btn btn-sm btn-outline" type="button" onclick="showToast(\'终止处理记录及证明材料已归档\')">详情</button>');
+      showToast('已终止与「' + name + '」的合作并留痕' + (document.getElementById('dealNotify').checked ? '，已通知渠道商' : ''));
+    }
+  }
+  closeDeal();
+}
+function recover(btn){
+  var row = btn.closest('tr');
+  row.setAttribute('data-status', '正常');
+  row.cells[6].innerHTML = '<span class="badge badge-success">正常</span>';
+  row.cells[7].innerHTML = '<a class="btn btn-sm btn-outline" href="channel-view.html?id=ld">详情</a> <button class="btn btn-sm btn-outline" type="button" onclick="openDeal(this, \'警告\')">警告</button> <button class="btn btn-sm btn-outline btn-danger-outline" type="button" onclick="openDeal(this, \'终止\')">终止合作</button>';
+  showToast('「' + row.querySelector('.p-name').textContent + '」整改完成，已恢复正常');
+}
+
+function showToast(msg, icon){
+  var t = document.getElementById('toast');
+  t.textContent = (icon || '\u2713') + ' ' + msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.display = 'none'; }, 2400);
+}
+/* 详情页审核后回跳处理 */
+function setTabCount(scope, label, n){
+  document.querySelectorAll(scope + ' .tab-btn').forEach(function(b){
+    if (b.textContent.indexOf(label) === 0) b.textContent = label + ' (' + n + ')';
+  });
+}
+document.addEventListener('DOMContentLoaded', function(){
+  var q = new URLSearchParams(location.search);
+  var audit = q.get('audit');
+  if (audit) {
+    var row = document.querySelector('#partnerTable tr[data-status="待审核"]');
+    if (row) {
+      row.style.background = '';
+      if (audit === 'pass') {
+        row.setAttribute('data-status', '正常');
+        row.cells[2].textContent = '否'; row.cells[4].textContent = '0'; row.cells[5].innerHTML = '<span class="amount">¥0.00</span>';
+        row.cells[6].innerHTML = '<span class="badge badge-success">正常</span>';
+        row.cells[7].innerHTML = '<a class="btn btn-sm btn-outline" href="channel-view.html?id=zsj">详情</a>';
+        setTabCount('#partnerTab', '待入驻审核', 0); setTabCount('#partnerTab', '正常', 3);
+        showToast('入驻审核通过：已建档、生成邀请码，并作为供应商同步金蝶');
+      } else {
+        var r = q.get('reason') || '材料不符合要求';
+        row.setAttribute('data-status', '已驳回');
+        row.cells[6].innerHTML = '<span class="badge badge-danger">已驳回</span>';
+        row.cells[7].innerHTML = '<button class="btn btn-sm btn-outline" type="button" onclick="showToast(\'已通知申请机构修改后重新提交\')">详情</button>';
+        setTabCount('#partnerTab', '待入驻审核', 0);
+        showToast('已驳回，已通知申请机构修改后重新提交');
+      }
+      var st = document.querySelectorAll('.stat-card')[1]; if (st) st.querySelector('.stat-value').textContent = '0';
+    }
+  }
+  var ref = q.get('ref');
+  if (ref) {
+    switchMain('referral', document.querySelectorAll('.tab-nav')[0].querySelectorAll('.tab-btn')[1]);
+    var row2 = document.querySelector('#referralTable tr[data-status="待审核"]');
+    if (row2) {
+      row2.style.background = '';
+      if (ref === 'pass') {
+        row2.setAttribute('data-status', '已确认');
+        row2.cells[4].innerHTML = '<span class="badge badge-success">已确认</span>';
+        row2.cells[5].innerHTML = '<a class="btn btn-sm btn-outline" href="referral-view.html?id=hz">详情</a>';
+        setTabCount('#referralTab', '待审核', 0); setTabCount('#referralTab', '已确认', 4);
+        showToast('推荐关系已确认，客户收入将计入该渠道商分成基数');
+      } else {
+        var r2 = q.get('reason') || '证明材料不足';
+        row2.setAttribute('data-status', '已驳回');
+        row2.cells[4].innerHTML = '<span class="badge badge-danger">已驳回</span>';
+        row2.cells[5].innerHTML = '<a class="btn btn-sm btn-outline" href="referral-view.html?id=hz_rej&reason=' + encodeURIComponent(r2) + '">详情</a>';
+        setTabCount('#referralTab', '待审核', 0); setTabCount('#referralTab', '已驳回', 2);
+        showToast('已驳回，已通知渠道商补充材料后重新提交');
+      }
+      var st2 = document.querySelectorAll('.stat-card')[2]; if (st2) st2.querySelector('.stat-value').textContent = '0';
+    }
+  }
+});
+</script>
+</body>
+</html>

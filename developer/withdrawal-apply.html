@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>提现申请 - 开发者端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .form-section {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+        }
+        .form-section-title {
+            font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md); border-bottom: 1px solid var(--border-light);
+        }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); }
+        .form-item { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+        .form-item.full-width { grid-column: 1 / -1; }
+        .form-label { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+        .form-hint { font-size: 12px; color: var(--text-muted); }
+        .badge-pending { background: #fef3c7; color: #d97706; }
+
+        /* 已结算记录选择 */
+        .settlement-select {
+            background: var(--border-light);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+        .settlement-select-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: var(--spacing-md); padding-bottom: var(--spacing-sm);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .settlement-select-title { font-weight: 600; color: var(--text-primary); }
+        
+        /* 选择操作栏 */
+        .selection-bar {
+            display: none;
+            background: var(--developer-light);
+            border: 1px solid var(--developer-color);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+            align-items: center;
+        }
+        .selection-bar.active { display: flex; }
+        .selection-info { display: flex; gap: var(--spacing-lg); flex: 1; }
+        .selection-item { display: flex; align-items: center; gap: var(--spacing-xs); }
+        .selection-item .label { color: var(--text-secondary); font-size: 13px; }
+        .selection-item .value { color: var(--developer-color); font-weight: 600; font-size: 16px; }
+        .checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: var(--developer-color); }
+        
+        /* 发票上传 */
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-xl);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .upload-area:hover {
+            border-color: var(--developer-color);
+            background: var(--developer-light);
+        }
+        .upload-icon { font-size: 48px; color: var(--text-muted); margin-bottom: var(--spacing-md); }
+        .upload-text { color: var(--text-secondary); margin-bottom: var(--spacing-sm); }
+        .upload-hint { font-size: 12px; color: var(--text-muted); }
+        
+        .file-item {
+            display: flex; align-items: center; gap: var(--spacing-md);
+            padding: var(--spacing-md); background: var(--border-light);
+            border-radius: var(--radius-md); margin-top: var(--spacing-md);
+        }
+        .file-icon { font-size: 24px; }
+        .file-info { flex: 1; }
+        .file-name { font-weight: 500; color: var(--text-primary); }
+        .file-size { font-size: 12px; color: var(--text-muted); }
+        .file-remove { color: var(--danger-color); cursor: pointer; }
+        
+        /* 流程提示 */
+        .process-tips {
+            background: var(--developer-light); border-radius: var(--radius-md);
+            padding: var(--spacing-md); margin-bottom: var(--spacing-lg);
+        }
+        .process-tips h4 { color: var(--developer-color); margin-bottom: var(--spacing-sm); font-size: 14px; }
+        .process-tips ul { margin: 0; padding-left: var(--spacing-lg); color: var(--text-secondary); font-size: 13px; }
+        .process-tips li { margin-bottom: var(--spacing-xs); }
+    </style>
+
+<style id="identity-switcher-css">
+.id-switcher{position:relative;display:inline-flex;align-items:center;}
+.id-trigger{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 6px;border-radius:8px;cursor:pointer;transition:background 0.15s;user-select:none;}
+.id-trigger:hover{background:rgba(0,0,0,0.05);}
+.id-avatar{width:32px;height:32px;border-radius:50%;background:#EFF4FF;color:#2563EB;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.id-info{display:flex;flex-direction:column;align-items:flex-start;line-height:1.3;}
+.id-org{font-size:13px;font-weight:500;color:#1e293b;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.id-type-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;background:#EFF4FF;color:#2563EB;}
+.id-chevron{font-size:10px;color:#94a3b8;margin-left:2px;transition:transform 0.2s;}
+.id-switcher.open .id-chevron{transform:rotate(180deg);}
+.id-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:white;border:1px solid #dfe4ee;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:240px;z-index:999;overflow:hidden;}
+.id-switcher.open .id-menu{display:block;}
+.id-menu-hd{padding:10px 14px 8px;font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:1px;border-bottom:1px solid #ecf0f6;}
+.id-menu-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background 0.15s;text-decoration:none;color:inherit;}
+.id-menu-item:hover{background:#F8FAFC;}
+.id-menu-item.current{background:#F8FAFF;}
+.id-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.id-dot.active{background:#2563EB;}
+.id-dot.idle{background:#dfe4ee;}
+.id-item-body{flex:1;}
+.id-item-org{font-size:13px;font-weight:500;color:#1e293b;}
+.id-item-type{font-size:11px;color:#94a3b8;margin-top:1px;}
+.id-item-tag{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;margin-left:auto;flex-shrink:0;}
+.id-item-tag.current-tag{background:#EFF4FF;color:#2563EB;}
+.id-menu-sep{height:1px;background:#ecf0f6;margin:4px 0;}
+.id-menu-action{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:12px;color:#64748b;cursor:pointer;transition:background 0.15s;text-decoration:none;}
+.id-menu-action:hover{background:#F8FAFC;color:#2563EB;}
+</style>
+</head>
+<body>
+<header class="top-bar developer">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="id-switcher" id="idSwitcher">
+<div class="id-trigger" onclick="toggleIdMenu()">
+<div class="id-avatar">张</div>
+<div class="id-info">
+<span class="id-org">广州某某科技有限公司</span>
+<span class="id-type-badge" style="background:#D1FAE5;color:#059669;">开发者</span>
+</div>
+<span class="id-chevron">▾</span>
+</div>
+<div class="id-menu">
+<div class="id-menu-hd">切换工作台身份</div>
+<div class="id-menu-item current">
+<div class="id-dot active" style="background:#059669;"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">开发者</div>
+</div>
+<span class="id-item-tag current-tag" style="background:#D1FAE5;color:#059669;">当前</span>
+</div>
+<div class="id-menu-item" onclick="location.href='../user/index.html'">
+<div class="id-dot idle"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">采购单位</div>
+</div>
+</div>
+<div class="id-menu-sep"></div>
+<a class="id-menu-action" href="../user/register-select.html">＋ 注册新机构类型</a>
+<a class="id-menu-action" href="#" onclick="alert('已退出登录');return false;">退出登录</a>
+</div>
+</div>
+<script>
+function toggleIdMenu(){
+  var el=document.getElementById('idSwitcher');
+  el.classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  var sw=document.getElementById('idSwitcher');
+  if(sw && !sw.contains(e.target)) sw.classList.remove('open');
+});
+</script>
+</div>
+</header>
+<aside class="sidebar developer">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="agent-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="member-list.html"><span class="icon">👥</span><span>成员管理</span></a>
+<a class="sidebar-link" href="revenue-list.html"><span class="icon">📈</span><span>收入看板</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📄</span><span>结算单</span></a>
+<a class="sidebar-link active" href="withdrawal-list.html"><span class="icon">💸</span><span>提现管理</span></a><a class="sidebar-link" href="bank-card.html"><span class="icon">🏦</span><span>收款账户</span></a>
+<a class="sidebar-link" href="dev-invoice-list.html"><span class="icon">🧾</span><span>发票管理</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a href="withdrawal-list.html" style="color: white; margin-bottom: var(--spacing-sm); display: inline-block;">← 返回提现管理</a>
+<h2>发起提现申请</h2>
+<p>从已结算记录中选择并提交提现申请</p>
+</div>
+<!-- 流程提示 -->
+<div class="process-tips">
+<h4>提现流程说明</h4>
+<ul>
+<li>提现只能从已结算且待提现状态的记录中发起</li>
+<li><strong>必须开具增值税专用发票</strong>（抬头：广州市政府采购中心）；申请时选择开票税率</li>
+<li>如开具 <strong>1%、3%</strong> 税率专用发票，需扣减分成款，扣款比例分别为<strong>结算金额的 5.29% 与 3.11%</strong>；提现金额 = 结算金额 − 分成款扣减</li>
+<li>提交后生成提现单（<strong>事前审批中</strong>），同步金蝶由财务进行<strong>事前审批</strong>；审批通过转“待开票”，上传发票转“待审核”，平台审核通过后由财务完成付款；<strong>发票金额须与提现金额完全一致</strong></li>
+</ul>
+</div>
+<!-- 已结算记录选择 -->
+<div class="settlement-select">
+<div class="settlement-select-header">
+<span class="settlement-select-title">选择结算记录</span>
+<span style="color: var(--text-muted); font-size: 13px;">可提现总额：¥4,302.76</span>
+</div>
+<!-- 选择操作栏 -->
+<div class="selection-bar" id="selectionBar">
+<div class="selection-info">
+<div class="selection-item">
+<span class="label">已选记录</span>
+<span class="value" id="selectedCount">0</span>
+<span class="label">条</span>
+</div>
+<div class="selection-item">
+<span class="label">结算金额合计</span>
+<span class="value">¥<span id="selectedAmount">0.00</span></span>
+</div>
+</div>
+<button class="btn btn-sm btn-outline" onclick="clearSelection()" type="button">清空选择</button>
+</div>
+<div class="table-wrapper">
+<table class="table">
+<thead>
+<tr>
+<th style="width: 50px;">
+<input class="checkbox" id="selectAll" onchange="toggleSelectAll(this)" type="checkbox"/>
+</th>
+<th>结算单号</th>
+<th>结算周期</th>
+<th>结算金额</th>
+<th>结算时间</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody id="settlementTableBody">
+<tr data-amount="2279.76" data-id="ST20260401">
+<td><input class="checkbox record-checkbox" onchange="updateSelection()" type="checkbox"/></td>
+<td>ST20260401</td>
+<td>2026年4月</td>
+<td class="amount positive">¥2,279.76</td>
+<td>2026-05-01</td>
+<td><span class="badge badge-pending">待提现</span></td>
+</tr>
+<tr data-amount="2023.00" data-id="ST20260301">
+<td><input class="checkbox record-checkbox" onchange="updateSelection()" type="checkbox"/></td>
+<td>ST20260301</td>
+<td>2026年3月</td>
+<td class="amount positive">¥2,023.00</td>
+<td>2026-04-01</td>
+<td><span class="badge badge-pending">待提现</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<form class="form-section">
+<h3 class="form-section-title">提现信息</h3>
+<div class="form-grid">
+<div class="form-item full-width">
+<label class="form-label">结算单号</label>
+<input class="input" id="settlementIds" readonly="" type="text" value="请先选择结算记录"/>
+</div>
+<div class="form-item">
+<label class="form-label">结算金额合计</label>
+<input class="input" id="settleTotal" readonly="" type="text" value="¥0.00"/>
+</div>
+<div class="form-item">
+<label class="form-label">开票税率 <span style="color: red;">*</span></label>
+<select class="input" id="invTaxRate" onchange="updateWithdrawalInfo()">
+<option value="0.06">6%（增值税专用发票 · 不扣减）</option>
+<option value="0.03">3%（专票 · 按结算金额扣减 3.11%）</option>
+<option value="0.01">1%（专票 · 按结算金额扣减 5.29%）</option>
+</select>
+<span class="form-hint">按实际可开具的专票税率选择；选 1%/3% 将扣减分成款</span>
+</div>
+<div class="form-item">
+<label class="form-label">分成款扣减</label>
+<input class="input" id="deductAmount" readonly="" type="text" value="¥0.00"/>
+<span class="form-hint" id="deductHint">开 6% 专票不扣减</span>
+</div>
+<div class="form-item">
+<label class="form-label">提现金额（=发票应开金额）</label>
+<input class="input" id="withdrawalAmount" readonly="" style="color: var(--developer-color); font-weight: 600;" type="text" value="¥0.00"/>
+<span class="form-hint">提现金额 = 结算金额 − 分成款扣减；发票金额须与提现金额完全一致</span>
+</div>
+<div class="form-item">
+<label class="form-label">申请时间</label>
+<input class="input" readonly="" type="text" value="2026-05-15 10:30"/>
+</div>
+</div>
+</form>
+<form class="form-section">
+<h3 class="form-section-title">补充说明</h3>
+<div class="form-item full-width">
+<label class="form-label">备注（选填）</label>
+<textarea class="input" placeholder="如有补充说明请在此填写..." rows="3"></textarea>
+</div>
+</form>
+<div style="display: flex; gap: var(--spacing-md); justify-content: center;">
+<a class="btn btn-outline" href="withdrawal-list.html">取消</a>
+<button class="btn btn-primary" disabled="" id="submitBtn" onclick="submitApplication()" type="button">提交申请</button>
+</div>
+<div class="content-card" style="margin-top:16px;"><div class="content-card-header"><h3 class="content-card-title">到账银行卡</h3><a class="btn btn-secondary" href="bank-card.html">管理银行卡</a></div><div style="margin-top:10px;"><label><input checked="" name="bankcard" type="radio"/> 招商银行 尾号 8888（默认）</label></div><div style="margin-top:6px;"><label><input name="bankcard" type="radio"/> 工商银行 尾号 6666</label></div><p style="color:var(--text-muted);font-size:13px;margin:8px 0;">提现将打款至所选银行卡。</p></div>
+<!-- 提交成功·事前审批提醒弹窗 -->
+<div class="modal-overlay" id="submitModal">
+<div class="modal" style="max-width: 420px;">
+<div class="modal-body" style="text-align: center; padding: var(--spacing-xl);">
+<div style="width:56px;height:56px;border-radius:50%;background:var(--developer-light);color:var(--developer-color);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto var(--spacing-md);">✓</div>
+<div style="font-size:18px;font-weight:600;margin-bottom:var(--spacing-xs);">提现申请已提交</div>
+<div style="font-size:14px;color:var(--text-muted);line-height:1.7;">提现单已生成，状态为 <strong style="color:var(--warning-color);">事前审批中</strong>，已同步金蝶由财务进行事前审批。<br/>审批通过后转「待开票」，届时再按申请时选择的税率开具并上传增值税专用发票，<strong>发票金额须与提现金额完全一致</strong>。</div>
+</div>
+<div class="modal-footer" style="justify-content:center;">
+<a class="btn btn-primary" href="withdrawal-list.html">查看提现记录</a>
+</div>
+</div>
+</div>
+</main>
+<script>
+        let selectedRecords = [];
+        function updateSelection() {
+            const checkboxes = document.querySelectorAll('.record-checkbox:checked');
+            const selectionBar = document.getElementById('selectionBar');
+            const selectAll = document.getElementById('selectAll');
+            const submitBtn = document.getElementById('submitBtn');
+            selectedRecords = [];
+            let totalAmount = 0;
+            checkboxes.forEach(cb => {
+                const row = cb.closest('tr');
+                selectedRecords.push({ id: row.dataset.id, amount: parseFloat(row.dataset.amount) });
+                totalAmount += parseFloat(row.dataset.amount);
+            });
+            document.getElementById('selectedCount').textContent = selectedRecords.length;
+            document.getElementById('selectedAmount').textContent = totalAmount.toFixed(2);
+            selectionBar.classList.toggle('active', selectedRecords.length > 0);
+            const allCheckboxes = document.querySelectorAll('.record-checkbox');
+            selectAll.checked = checkboxes.length === allCheckboxes.length && allCheckboxes.length > 0;
+            selectAll.indeterminate = checkboxes.length > 0 && checkboxes.length < allCheckboxes.length;
+            updateWithdrawalInfo();
+            submitBtn.disabled = selectedRecords.length === 0;
+        }
+        // 扣减比例（财务确认口径）：1% 专票扣结算金额的 5.29%，3% 专票扣 3.11%，6% 不扣减
+        const DEDUCT_RATE = { '0.06': 0, '0.03': 0.0311, '0.01': 0.0529 };
+        function fmtY(n) { return '¥' + n.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+        function updateWithdrawalInfo() {
+            const settlementIds = document.getElementById('settlementIds');
+            const total = selectedRecords.reduce((sum, r) => sum + r.amount, 0);
+            const rateKey = document.getElementById('invTaxRate').value;
+            const deduct = Math.round(total * (DEDUCT_RATE[rateKey] || 0) * 100) / 100;
+            const net = Math.round((total - deduct) * 100) / 100;
+            settlementIds.value = selectedRecords.length ? selectedRecords.map(r => r.id).join('、 ') : '请先选择结算记录';
+            document.getElementById('settleTotal').value = fmtY(total);
+            const dEl = document.getElementById('deductAmount');
+            dEl.value = fmtY(deduct);
+            dEl.style.color = deduct > 0 ? 'var(--danger-color)' : '';
+            document.getElementById('deductHint').textContent = deduct > 0
+                ? '按结算金额 ' + fmtY(total) + ' × ' + ((DEDUCT_RATE[rateKey] || 0) * 100).toFixed(2) + '% 扣减'
+                : '开 6% 专票不扣减';
+            document.getElementById('withdrawalAmount').value = fmtY(net);
+        }
+        function toggleSelectAll(checkbox) {
+            document.querySelectorAll('.record-checkbox').forEach(cb => cb.checked = checkbox.checked);
+            updateSelection();
+        }
+        function clearSelection() {
+            document.querySelectorAll('.record-checkbox').forEach(cb => cb.checked = false);
+            document.getElementById('selectAll').checked = false;
+            updateSelection();
+        }
+        function submitApplication() {
+            if (selectedRecords.length === 0) { alert('请至少选择一条结算记录'); return; }
+            // 提现单生成，状态“事前审批中”；弹窗提醒等待金蝶财务事前审批
+            document.getElementById('submitModal').classList.add('active');
+        }
+        document.addEventListener('DOMContentLoaded', updateSelection);
+    </script>
+</body>
+</html>

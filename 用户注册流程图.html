@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>彩翼平台 · 用户注册流程图</title>
+<style>
+:root{--klein:#2563eb;--kdark:#1d4ed8;--klight:#eff4ff;--green:#10b981;--amber:#f59e0b;--gray:#64748b;--border:#e2e8f0}*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#fff;color:#1e293b;padding:32px 24px 60px}.page-title{text-align:center;color:var(--klein);margin-bottom:6px;font-size:24px;letter-spacing:2px}.page-sub{text-align:center;color:#64748b;font-size:13px;margin-bottom:24px}.legend{display:flex;flex-wrap:wrap;gap:10px 18px;justify-content:center;max-width:960px;margin:0 auto 28px;padding:12px 16px;background:#f8fafc;border:1px solid var(--border);border-radius:10px}.legend-item{display:flex;align-items:center;gap:6px;color:#475569;font-size:12px}.leg-box{width:14px;height:14px;border-radius:3px;display:inline-block}.leg-box.blue{background:var(--klight);border:1.5px solid var(--klein)}.leg-box.ext{background:#f8fafc;border:1.5px dashed #94a3b8}.stage{max-width:960px;margin:0 auto 22px;padding:20px 22px;border:1px solid var(--border);border-radius:14px;background:#f8fafc}.stage.s1{background:#eff6ff;border-color:#bfdbfe}.stage.s2{background:#ecfeff;border-color:#a5f3fc}.stage.s3{background:#f0fdf4;border-color:#bbf7d0}.stage.s4{background:#fffbeb;border-color:#fde68a}.stage-head{display:flex;align-items:baseline;gap:12px;margin-bottom:16px}.stage-no{padding:3px 12px;border-radius:8px;background:var(--klein);color:#fff;font-size:14px;font-weight:800;flex-shrink:0}.stage-name{color:var(--kdark);font-size:16px;font-weight:700;letter-spacing:1px}.flow{display:flex;align-items:center;gap:0;flex-wrap:wrap;padding-bottom:4px}.node{min-width:120px;max-width:185px;flex-shrink:0;padding:10px 14px;border:1.5px solid var(--klein);border-radius:10px;background:#fff;color:#0f172a;text-align:center;font-size:13px;font-weight:600;line-height:1.5}.node .sub{margin-top:3px;color:#64748b;font-size:11px;font-weight:400}.node.ext{border:1.5px dashed #94a3b8;background:#f8fafc;color:#475569}.node.state-node{border-color:var(--klein);background:var(--klight);color:var(--kdark);font-weight:700}.node.end-node{border-color:var(--kdark);background:var(--klein);color:#fff}.arrow{display:flex;align-items:center;justify-content:center;padding:0 6px;color:var(--klein);font-size:18px;font-weight:700;flex-shrink:0;user-select:none}.branch-wrap{margin-top:12px}.branch-divider{display:flex;align-items:center;gap:8px;margin-bottom:8px;color:#94a3b8;font-size:12px}.branch-divider:before,.branch-divider:after{height:1px;flex:1;background:#e2e8f0;content:''}.branch-row{display:flex;align-items:center;gap:0;margin-bottom:10px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;background:rgba(255,255,255,.6)}.path-tag{margin-right:10px;padding:3px 10px;border-radius:999px;color:#fff;font-size:12px;font-weight:700;white-space:nowrap;flex-shrink:0}.path-tag.approve{background:var(--green)}.path-tag.reject{background:#ef4444}.swim-label{margin-right:10px;padding:3px 10px;border-radius:6px;background:var(--gray);color:#fff;font-size:12px;font-weight:700;flex-shrink:0}.swim-label.user{background:var(--klein)}.swim-label.ops{background:var(--amber);color:#1e293b}.swim-label.sys{background:var(--gray)}.notice{margin:10px 0 16px;padding:10px 14px;border:1px solid #86efac;border-radius:8px;background:#d1fae5;color:#14532d;font-size:13px;line-height:1.7}.scope-note{max-width:960px;margin:0 auto 22px;padding:12px 16px;border-left:4px solid var(--amber);border-radius:8px;background:#fffbeb;color:#92400e;font-size:13px;line-height:1.7}footer{max-width:960px;margin:20px auto 0;color:#94a3b8;text-align:center;font-size:12.5px}@media(max-width:640px){body{padding:24px 14px 44px}.stage{padding:18px 14px}.node{min-width:108px;max-width:158px}.branch-row{align-items:flex-start;flex-wrap:wrap}.page-title{font-size:20px}}@media print{body{padding:16px}.stage{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<h1 class="page-title">彩翼平台 · 用户注册流程图</h1>
+<p class="page-sub">个人账号注册与免费体验资格 · 企业/机构审核 · 已有账号新增机构身份 · 成员管理与账号访问辅助流程</p>
+
+<div class="legend">
+  <span class="legend-item"><span class="leg-box blue"></span>本期原型覆盖</span>
+  <span class="legend-item"><span class="leg-box ext"></span>正式系统衔接 / 后续处理</span>
+  <span class="legend-item" style="color:#10b981">● 审核通过</span>
+  <span class="legend-item" style="color:#ef4444">● 审核驳回</span>
+</div>
+
+<div class="stage s1">
+  <div class="stage-head"><span class="stage-no">流程一</span><span class="stage-name">公开注册：个人账号或企业/机构身份</span></div>
+  <div class="notice"><strong>统一账号规则：</strong>手机号全平台唯一，对应一个长期保留的平台个人账号。个人用户注册后直接使用个人身份；企业/机构申请审核通过后，为申请人的个人账号新增机构主账号成员关系。</div>
+  <div class="branch-divider">选择注册身份</div>
+  <div class="branch-row">
+    <span class="path-tag approve">个人用户</span>
+    <div class="node">填写个人信息<div class="sub">姓名 · 身份证号 · 手机号 · 密码 · 协议</div></div><span class="arrow">→</span>
+    <div class="node">提交注册</div><span class="arrow">→</span>
+    <div class="node state-node">【免审开通试用】</div><span class="arrow">→</span>
+    <div class="node">初始化免费体验资格<div class="sub">每个智能体首次调用时初始化次数</div></div><span class="arrow">→</span>
+    <div class="node end-node">以个人身份登录使用</div>
+  </div>
+  <div class="branch-row">
+    <span class="path-tag" style="background:#2563eb">企业 / 机构</span>
+    <div class="node">选择机构类型<div class="sub">采购单位 / 供应商 / 代理机构 / 开发者</div></div><span class="arrow">→</span>
+    <div class="node">上传营业执照并核对信息<div class="sub">营业执照必传 · OCR 模拟识别名称与信用代码</div></div><span class="arrow">→</span>
+    <div class="node">填写经办人与账号信息<div class="sub">手机号关联平台个人账号</div></div><span class="arrow">→</span>
+    <div class="node state-node">【提交待审核】</div>
+  </div>
+  <div class="branch-wrap">
+    <div class="branch-divider">企业 / 机构运营审核分支</div>
+    <div class="branch-row"><span class="path-tag approve">通过</span><div class="node state-node">【机构身份已激活】</div><span class="arrow">→</span><div class="node">增加机构主账号成员关系</div><span class="arrow">→</span><div class="node ext">按类型执行账户初始化 / 金蝶建档等</div><span class="arrow">→</span><div class="node end-node">按「机构 + 角色」使用</div></div>
+    <div class="branch-row"><span class="path-tag reject">驳回</span><div class="node state-node">【已驳回】</div><span class="arrow">→</span><div class="node">查看驳回原因并修改资料</div><span class="arrow">→</span><div class="node">重新提交审核</div></div>
+  </div>
+</div>
+
+<div class="stage s2">
+  <div class="stage-head"><span class="stage-no">流程二</span><span class="stage-name">已有个人账号新增机构身份 / 同主体新增机构类型</span></div>
+  <div class="flow">
+    <div class="node">已有个人账号登录</div><span class="arrow">→</span>
+    <div class="node">发起新增机构类型申请</div><span class="arrow">→</span>
+    <div class="node">输入统一社会信用代码<div class="sub">识别已有企业主体并带出组织名称</div></div><span class="arrow">→</span>
+    <div class="node">补充本次申请资料<div class="sub">营业执照、经办人及机构类型资料</div></div><span class="arrow">→</span>
+    <div class="node state-node">【提交待审核】</div><span class="arrow">→</span>
+    <div class="node">运营审核</div><span class="arrow">→</span>
+    <div class="node state-node">【新增机构身份已激活】</div><span class="arrow">→</span>
+    <div class="node end-node">切换「机构 + 主账号」身份</div>
+  </div>
+</div>
+
+<div class="stage s3">
+  <div class="stage-head"><span class="stage-no">流程三</span><span class="stage-name">机构成员管理（本期原型）</span></div>
+  <div class="flow" style="margin-bottom:10px"><span class="swim-label user">机构主账号 / 管理员</span><div class="node">进入成员管理</div><span class="arrow">→</span><div class="node">查看或搜索成员</div><span class="arrow">→</span><div class="node">调整成员角色<div class="sub">管理员 / 操作员 / 只读</div></div><span class="arrow">→</span><div class="node">停用成员</div></div>
+  <div class="flow"><span class="swim-label sys">平台规则</span><div class="node ext">成员管理的是机构成员关系</div><span class="arrow">→</span><div class="node ext">停用或移除成员关系后，平台个人账号仍长期保留</div></div>
+</div>
+
+<div class="scope-note"><strong>本期边界：</strong>成员邀请、未注册手机号激活、短信邀请链接、激活 Token、待激活状态及设置初始密码等完整链路暂不纳入本期原型与需求范围；后续应基于「平台个人账号 + 机构成员关系」建设。</div>
+
+<div class="stage s4">
+  <div class="stage-head"><span class="stage-no">流程四</span><span class="stage-name">登录与忘记密码（辅助流程）</span></div>
+  <div class="branch-divider">登录方式</div>
+  <div class="branch-row"><span class="path-tag" style="background:#2563eb">登录</span><div class="node">账号密码登录</div><span class="arrow">或</span><div class="node">手机号验证码登录</div><span class="arrow">→</span><div class="node">同意用户协议与隐私政策</div><span class="arrow">→</span><div class="node end-node">进入最近使用身份</div></div>
+  <div class="branch-row"><span class="path-tag" style="background:#f59e0b;color:#1e293b">忘记密码</span><div class="node">验证手机号</div><span class="arrow">→</span><div class="node">输入短信验证码</div><span class="arrow">→</span><div class="node">设置新密码</div><span class="arrow">→</span><div class="node end-node">返回登录</div></div>
+</div>
+
+<footer>彩翼公共采购智能体协同管理平台 · 用户注册流程图 V1.1 · 2026-08-11</footer>
+</body>
+</html>

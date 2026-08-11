@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>申请提现 - 渠道端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .step-title { font-size: 15px; font-weight: 600; margin-bottom: var(--spacing-md); display: flex; align-items: center; gap: 8px; }
+        .step-no { width: 22px; height: 22px; border-radius: 50%; background: var(--klein); color: #fff; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; }
+        .notice { background: #FFFBEB; border: 1px solid #fde68a; border-radius: var(--radius-md); padding: var(--spacing-md); font-size: 13px; color: #92400e; line-height: 1.9; }
+        .amount-big { font-size: 32px; font-weight: 800; color: var(--klein); }
+        #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+    </style>
+</head>
+<body>
+<header class="top-bar channel">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">渠</div>
+<span>智采科技</span>
+</div>
+</div>
+</header>
+<aside class="sidebar channel">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon"></span><span>概览</span></a>
+<a class="sidebar-link" href="invite-code.html"><span class="icon"></span><span>我的邀请码</span></a>
+<a class="sidebar-link" href="customer-list.html"><span class="icon"></span><span>客户管理</span></a>
+<a class="sidebar-link" href="referral-list.html"><span class="icon"></span><span>推荐确认单</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon"></span><span>分成结算</span></a>
+<a class="sidebar-link active" href="withdrawal-list.html"><span class="icon"></span><span>提现管理</span></a>
+<a class="sidebar-link" href="bank-card.html"><span class="icon"></span><span>收款账户</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon"></span><span>发票管理</span></a>
+</div>
+</aside>
+<main class="main-content">
+<a class="back-link" href="settlement-list.html">← 返回分成结算</a>
+<div class="page-header">
+<h2>申请提现</h2>
+<p>勾选已确认且未提现的结算单发起提现；提交后须上传等额增值税专用发票</p>
+</div>
+<div class="content-card">
+<div class="step-title"><span class="step-no">1</span>选择结算单（已确认 · 未提现）</div>
+<div class="table-wrapper">
+<table class="table">
+<thead><tr><th style="width:40px;"></th><th>结算单号</th><th>结算周期</th><th>分成金额</th><th>状态</th></tr></thead>
+<tbody>
+<tr>
+<td><input checked="" id="stCheck" onchange="calc()" style="width:17px;height:17px;accent-color:var(--klein);" type="checkbox"/></td>
+<td>CST20260601</td>
+<td>2026年6月</td>
+<td class="amount">¥4,610.00</td>
+<td><span class="badge badge-success">已确认</span> <span class="badge" style="background:#f1f5f9;color:#64748b;">未提现</span></td>
+</tr>
+<tr style="opacity:.55;">
+<td><input disabled="" style="width:17px;height:17px;" type="checkbox"/></td>
+<td>CST20260501</td>
+<td>2026年5月</td>
+<td class="amount">¥2,520.00</td>
+<td><span class="badge badge-success">已确认</span> <span class="badge badge-info">提现中</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p style="font-size:12px;color:var(--text-muted);margin-top:var(--spacing-sm);">提示：CST20260501 曾发起提现（CWD20260605003）后撤回、原发票已作废，2026-07-15 已重新发起 CWD20260715001；提现中/已提现的结算单不可再次勾选。</p>
+</div>
+<div class="content-card">
+<div class="step-title"><span class="step-no">2</span>提现金额</div>
+<div class="amount-big" id="sumAmount">¥4,610.00</div>
+<p style="font-size:12px;color:var(--text-muted);margin-top:6px;">最低提现门槛 ≥ ¥100，单笔上限 ¥500,000；提现窗口期：每月 1-10 日（可配置）</p>
+</div>
+<div class="content-card">
+<div class="step-title"><span class="step-no">3</span>收款账户</div>
+<div style="display:flex;align-items:center;gap:var(--spacing-md);font-size:14px;">
+<div style="flex:1;">招商银行广州分行 · 对公账户 · 7559 **** **** 8899（广州智采科技有限公司）<span class="badge badge-primary" style="margin-left:8px;">默认</span></div>
+<a class="btn btn-sm btn-outline" href="bank-card.html">更换</a>
+</div>
+</div>
+<div class="content-card">
+<div class="step-title"><span class="step-no">4</span>发票要求</div>
+<div class="notice">
+提交后提现单状态为「事前审批中」，系统同步金蝶发起财务事前审批；审批通过后转「待开票」，届时请开具并上传与提现金额<strong>等额</strong>的<strong>增值税专用发票</strong>，抬头：<strong>广州市政府采购中心</strong>（金蝶退回则转「审批退回」，可修改后重新提交）；<br/>
+必须开具增值税专用发票；如开 1%、3% 税率专票，将在申请时分别按结算金额的 5.29% 与 3.11% 扣减分成款，提现金额 = 结算金额 − 扣减，发票金额须与提现金额完全一致。
+</div>
+</div>
+<div style="display:flex;gap:var(--spacing-md);justify-content:center;">
+<a class="btn btn-outline" href="settlement-list.html">取消</a>
+<button class="btn btn-primary" id="submitBtn" onclick="submitApply()" type="button">提交提现申请</button>
+</div>
+</main>
+<!-- 提交成功弹窗 -->
+<div class="modal-overlay" id="okModal" onclick="if(event.target===this)this.classList.remove('active')">
+<div class="modal" style="max-width: 460px;">
+<div class="modal-header"><span class="modal-title">提现申请已提交</span><button class="modal-close" onclick="document.getElementById('okModal').classList.remove('active')">×</button></div>
+<div class="modal-body">
+<div style="text-align:center;margin-bottom:var(--spacing-md);">
+<div style="width:56px;height:56px;border-radius:50%;background:var(--klein-light);color:var(--klein);font-size:28px;display:inline-flex;align-items:center;justify-content:center;">✓</div>
+</div>
+<p style="font-size:14px;line-height:1.9;">提现单 <strong>CWD20260716001</strong>（¥4,610.00，关联 CST20260601）已生成，当前状态为「<strong style="color:#d97706;">事前审批中</strong>」，已同步金蝶发起财务事前审批。<br/>事前审批通过后提现单转「待开票」，届时请在提现管理中上传与提现金额等额的增值税专用发票，上传后进入平台审核。</p>
+</div>
+<div class="modal-footer">
+<a class="btn btn-outline" href="settlement-list.html">返回列表</a>
+<a class="btn btn-primary" href="withdrawal-list.html">查看提现单</a>
+</div>
+</div>
+</div>
+<div id="toast"></div>
+<script>
+function calc(){
+  var on = document.getElementById('stCheck').checked;
+  document.getElementById('sumAmount').textContent = on ? '¥4,610.00' : '¥0.00';
+  document.getElementById('submitBtn').disabled = !on;
+  document.getElementById('submitBtn').style.opacity = on ? '1' : '.5';
+}
+function submitApply(){
+  if(!document.getElementById('stCheck').checked){ showToast('请先勾选结算单', '⚠'); return; }
+  document.getElementById('okModal').classList.add('active');
+}
+function showToast(msg, icon){
+  var t = document.getElementById('toast');
+  t.textContent = (icon || '\u2713') + ' ' + msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.display = 'none'; }, 2400);
+}
+</script>
+</body>
+</html>

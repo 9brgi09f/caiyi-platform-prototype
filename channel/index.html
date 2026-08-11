@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>概览 - 渠道端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; }
+        .stat-value { font-size: 24px; font-weight: 700; color: var(--klein); }
+        .stat-label { font-size: 13px; color: var(--text-muted); margin-top: var(--spacing-xs); }
+        #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+    </style>
+</head>
+<body>
+<header class="top-bar channel">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">渠</div>
+<span>智采科技</span>
+</div>
+</div>
+</header>
+<aside class="sidebar channel">
+<div class="sidebar-section">
+<a class="sidebar-link active" href="index.html"><span class="icon"></span><span>概览</span></a>
+<a class="sidebar-link" href="invite-code.html"><span class="icon"></span><span>我的邀请码</span></a>
+<a class="sidebar-link" href="customer-list.html"><span class="icon"></span><span>客户管理</span></a>
+<a class="sidebar-link" href="referral-list.html"><span class="icon"></span><span>推荐确认单</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon"></span><span>分成结算</span></a>
+<a class="sidebar-link" href="withdrawal-list.html"><span class="icon"></span><span>提现管理</span></a>
+<a class="sidebar-link" href="bank-card.html"><span class="icon"></span><span>收款账户</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon"></span><span>发票管理</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<h2>欢迎回来，广州智采科技有限公司</h2>
+<p>合作模式：客户推荐 · 入驻时间 2026-01-10 · 状态正常</p>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-value">4</div><div class="stat-label">我的客户（已确认 3）</div></div>
+<div class="stat-card"><div class="stat-value">¥46,200</div><div class="stat-label">年度累计分成基数（不含税）</div></div>
+<div class="stat-card"><div class="stat-value">¥10,050</div><div class="stat-label">本年度累计分成</div></div>
+<div class="stat-card"><div class="stat-value" style="color: var(--warning-color);">¥0.00</div><div class="stat-label">可提现金额</div></div>
+</div>
+<div class="content-card">
+<div class="content-card-header">
+<h3 class="content-card-title">待处理事项</h3>
+</div>
+<div class="table-wrapper">
+<table class="table">
+<thead><tr><th>类型</th><th>内容</th><th>金额</th><th>时间</th><th>操作</th></tr></thead>
+<tbody>
+<tr>
+<td><span class="badge" style="background:#fef3c7;color:#d97706;">提现开票</span></td>
+<td>提现单 CWD20260715001 待上传增值税专用发票</td>
+<td class="amount">¥2,520.00</td>
+<td>2026-07-15 09:30</td>
+<td><a class="btn btn-sm btn-primary" href="invoice-upload.html">去上传</a></td>
+</tr>
+<tr>
+<td><span class="badge badge-warning">结算确认</span></td>
+<td>2026年6月分成结算单待确认（CST20260601）</td>
+<td class="amount">¥4,610.00</td>
+<td>2026-07-01 09:00</td>
+<td><a class="btn btn-sm btn-primary" href="settlement-list.html">去确认</a></td>
+</tr>
+<tr>
+<td><span class="badge badge-info">推荐确认</span></td>
+<td>珠海智慧城市运营公司推荐确认单待平台审核确认</td>
+<td>—</td>
+<td>2026-06-28 14:20</td>
+<td><a class="btn btn-sm btn-outline" href="referral-list.html">查看</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="content-card">
+<div class="content-card-header">
+<h3 class="content-card-title">我的邀请码</h3>
+<a class="btn btn-sm btn-outline" href="invite-code.html">查看详情</a>
+</div>
+<div style="display: flex; align-items: center; gap: var(--spacing-lg);">
+<div style="font-size: 28px; font-weight: 700; color: var(--klein); letter-spacing: 3px;">CY-ZC2026</div>
+<button class="btn btn-sm btn-primary" onclick="showToast('邀请码已复制')" type="button">复制邀请码</button>
+<span style="font-size: 13px; color: var(--text-muted);">被推荐企业注册时填报此码，即确认推荐关系</span>
+</div>
+</div>
+</main>
+<div id="toast"></div>
+<script>
+function showToast(msg, icon){
+  var t = document.getElementById('toast');
+  t.textContent = (icon || '\u2713') + ' ' + msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.display = 'none'; }, 2400);
+}
+
+</script>
+</body>
+</html>

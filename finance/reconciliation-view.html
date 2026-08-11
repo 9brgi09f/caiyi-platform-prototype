@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>对账明细 - 财务端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+        .info-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; }
+        .info-label { font-size: 13px; color: var(--text-muted); margin-bottom: var(--spacing-xs); }
+        .info-value { font-size: 20px; font-weight: 700; }
+        .info-value.diff { color: var(--danger-color); }
+        .toolbar { display: flex; gap: var(--spacing-sm); align-items: center; flex-wrap: wrap; margin-bottom: var(--spacing-md); }
+        .dim-bar { display: flex; gap: var(--spacing-sm); align-items: center; flex-wrap: wrap; margin-bottom: var(--spacing-lg); }
+        .field-panel-wrap { position: relative; }
+        .field-panel {
+            display: none; position: absolute; top: 110%; left: 0; z-index: 50;
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);
+            padding: var(--spacing-lg); width: 620px; max-width: 90vw;
+        }
+        .field-panel.show { display: block; }
+        .field-panel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-sm); margin: var(--spacing-md) 0; }
+        .field-panel-grid label { display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; }
+        .field-panel-actions { display: flex; gap: var(--spacing-sm); justify-content: flex-end; border-top: 1px solid var(--border-light); padding-top: var(--spacing-md); }
+        .switch-label { display: flex; align-items: center; gap: 6px; font-size: 14px; cursor: pointer; }
+        .table-wrapper { overflow-x: auto; }
+        .table th, .table td { white-space: nowrap; }
+        .hint { font-size: 12px; color: var(--text-muted); }
+        .badge-difftype { background: #fee2e2; color: #dc2626; }
+        .empty-note { text-align: center; color: var(--text-muted); padding: var(--spacing-xl); font-size: 14px; }
+        #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+</style>
+</head>
+<body>
+<header class="top-bar finance">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">财</div>
+<span>财务人员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar finance">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+<a class="sidebar-link" href="withdrawal-pay-list.html"><span class="icon">💸</span><span>提现打款</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">🧾</span><span>发票管理</span></a>
+<a class="sidebar-link active" href="reconciliation-list.html"><span class="icon">📋</span><span>对账报表</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a class="back-link" href="reconciliation-list.html" style="color: white; margin-bottom: var(--spacing-sm);">← 返回对账报表</a>
+<h2 id="pageTitle">对账明细</h2>
+<p id="pageSub"></p>
+</div>
+<!-- ============ 日批次明细视图 ============ -->
+<div id="dayView">
+<div class="dim-bar">
+<span style="font-size: 14px; color: var(--text-secondary);">对账维度</span>
+<select class="select" id="dimSelect" onchange="switchDim()" style="width: 180px;"></select>
+<span style="font-size: 14px; color: var(--text-secondary); margin-left: var(--spacing-md);">对账日期（数据日期）</span>
+<select class="select" id="dateSelect" onchange="switchDate()" style="width: 150px;"></select>
+</div>
+<div class="info-grid">
+<div class="info-card">
+<div class="info-label" id="sumLabel1">平台侧</div>
+<div class="info-value" id="sumVal1">-</div>
+</div>
+<div class="info-card">
+<div class="info-label" id="sumLabel2">对方侧</div>
+<div class="info-value" id="sumVal2">-</div>
+</div>
+<div class="info-card">
+<div class="info-label">差异</div>
+<div class="info-value" id="sumVal3">-</div>
+</div>
+<div class="info-card">
+<div class="info-label">差异处理（已处理 / 差异笔数）</div>
+<div class="info-value" id="sumVal4">-</div>
+</div>
+</div>
+<div class="toolbar">
+<label class="switch-label"><input id="diffOnly" onchange="renderTable()" type="checkbox"/>只看差异记录</label>
+<input class="input" placeholder="搜索单号..." style="width: 180px;" type="text"/>
+<button class="btn btn-primary" onclick="renderTable()" type="button">查询</button>
+<div class="field-panel-wrap">
+<button class="btn btn-outline" onclick="togglePanel()" type="button">自定义字段 <span id="fieldCount"></span> ▾</button>
+<div class="field-panel" id="fieldPanel">
+<strong style="font-size: 14px;">选择查询/导出字段</strong>
+<div class="hint" style="margin-top: 4px;">勾选的字段将显示在下方表格中，导出时也按此字段范围输出；默认勾选核心字段</div>
+<div class="field-panel-grid" id="fieldGrid"></div>
+<div class="field-panel-actions">
+<button class="btn btn-sm btn-outline" onclick="setAll(true)" type="button">全选</button>
+<button class="btn btn-sm btn-outline" onclick="setAll(false)" type="button">清空</button>
+<button class="btn btn-sm btn-primary" onclick="applyFields()" type="button">应用</button>
+</div>
+</div>
+</div>
+<button class="btn btn-success" onclick="exportData()" type="button">导出 Excel</button>
+</div>
+<div class="content-card">
+<div class="table-wrapper">
+<table class="table table-wide">
+<thead id="tableHead"></thead>
+<tbody id="tableBody"></tbody>
+</table>
+</div>
+<div class="empty-note" id="pendingNote" style="display: none;"></div>
+<p class="hint" id="tableSummary" style="margin-top: var(--spacing-sm);"></p>
+</div>
+</div>
+<!-- ============ 月度报告视图 ============ -->
+<div id="monthView" style="display: none;">
+<div class="info-grid">
+<div class="info-card"><div class="info-label">充值总额</div><div class="info-value" id="mSum1">-</div></div>
+<div class="info-card"><div class="info-label">消费总额</div><div class="info-value" id="mSum2">-</div></div>
+<div class="info-card"><div class="info-label">分佣总额</div><div class="info-value" id="mSum3">-</div></div>
+<div class="info-card"><div class="info-label">提现总额</div><div class="info-value" id="mSum4">-</div></div>
+</div>
+<div class="content-card">
+<div class="content-card-header">
+<h3 class="content-card-title">四维度核对结论</h3>
+<span class="hint">月报告由当月全部日批次汇总生成</span>
+</div>
+<div class="table-wrapper">
+<table class="table">
+<thead>
+<tr>
+<th>对账维度</th>
+<th>当月批次数</th>
+<th>已平批次</th>
+<th>差异批次</th>
+<th>差异处理</th>
+<th>核对结论</th>
+</tr>
+</thead>
+<tbody id="mDimBody"></tbody>
+</table>
+</div>
+</div>
+<div class="content-card">
+<h3 style="font-size: 15px; font-weight: 600; margin-bottom: var(--spacing-sm);">复核结论</h3>
+<p id="mConclusion" style="font-size: 14px; line-height: 1.8;"></p>
+</div>
+</div>
+</main>
+<!-- 差异处理弹窗 -->
+<div class="modal-overlay" id="diffModal" onclick="if(event.target===this)closeDiff()">
+<div class="modal" style="max-width: 460px;">
+<div class="modal-header">
+<span class="modal-title">差异处理</span>
+<button class="modal-close" onclick="closeDiff()">×</button>
+</div>
+<div class="modal-body">
+<p style="font-size: 14px; margin-bottom: var(--spacing-sm);">单号：<strong id="diffOrderNo"></strong></p>
+<label style="font-size: 13px; color: var(--text-muted);">处理结论（如：渠道延迟入账次日已到账；已发起人工补单；差异已上报核实）</label>
+<textarea class="input" id="diffReason" rows="3" style="margin-top: 6px; width: 100%;"></textarea>
+</div>
+<div class="modal-footer">
+<button class="btn btn-outline" onclick="closeDiff()">取消</button>
+<button class="btn btn-primary" onclick="confirmDiff()">确认处理</button>
+</div>
+</div>
+</div>
+<div id="toast"></div>
+<script>
+// ================= 维度字段定义（def=true 为默认勾选的核心字段） =================
+const DIMENSIONS = {
+  channel: {
+    name: '支付渠道对账', sub: '平台充值订单 vs 支付渠道账单（微信/支付宝/银联等）',
+    fields: [
+      { key: 'orderNo', label: '充值单号', def: true },
+      { key: 'time', label: '充值时间', def: false },
+      { key: 'user', label: '用户', def: true },
+      { key: 'orderType', label: '订单类型', def: false },
+      { key: 'channel', label: '支付渠道', def: true },
+      { key: 'amount', label: '平台金额(元)', def: true },
+      { key: 'otherAmount', label: '渠道金额(元)', def: true },
+      { key: 'buyBeans', label: '购买彩豆', def: false },
+      { key: 'giftBeans', label: '赠送彩豆', def: false },
+      { key: 'ratio', label: '本金分摊系数', def: false },
+      { key: 'beforeBal', label: '充值前余额', def: false },
+      { key: 'afterBal', label: '充值后余额', def: false },
+      { key: 'otherNo', label: '渠道交易号', def: true },
+      { key: 'matchStatus', label: '对账结果', def: true },
+      { key: 'diffType', label: '差异类型', def: true },
+      { key: 'handleStatus', label: '处理状态', def: true }
+    ]
+  },
+  bank: {
+    name: '银行侧对账', sub: '平台收付款流水 vs 银行回单明细（银企直联自动拉取）',
+    fields: [
+      { key: 'orderNo', label: '交易单号', def: true },
+      { key: 'time', label: '交易时间', def: false },
+      { key: 'bizType', label: '业务类型', def: true },
+      { key: 'amount', label: '平台金额(元)', def: true },
+      { key: 'otherNo', label: '银行流水号', def: true },
+      { key: 'otherAmount', label: '银行金额(元)', def: true },
+      { key: 'matchStatus', label: '对账结果', def: true },
+      { key: 'diffType', label: '差异类型', def: true },
+      { key: 'handleStatus', label: '处理状态', def: true }
+    ]
+  },
+  kingdee: {
+    name: '金蝶系统对账', sub: '平台业务数据 vs 金蝶财务凭证',
+    fields: [
+      { key: 'orderNo', label: '业务单号', def: true },
+      { key: 'time', label: '单据日期', def: false },
+      { key: 'bizType', label: '单据类型', def: true },
+      { key: 'amount', label: '平台金额(元)', def: true },
+      { key: 'otherNo', label: '金蝶凭证号', def: true },
+      { key: 'otherAmount', label: '金蝶金额(元)', def: true },
+      { key: 'matchStatus', label: '对账结果', def: true },
+      { key: 'diffType', label: '差异类型', def: true },
+      { key: 'handleStatus', label: '处理状态', def: true }
+    ]
+  },
+  internal: {
+    name: '平台内部对账', sub: '平台业务记录 vs 账户余额变动（充值/消费/分佣）',
+    fields: [
+      { key: 'orderNo', label: '业务单号', def: true },
+      { key: 'time', label: '业务时间', def: false },
+      { key: 'bizType', label: '业务类型', def: true },
+      { key: 'user', label: '用户', def: false },
+      { key: 'agent', label: '智能体', def: false },
+      { key: 'price', label: '计费方式', def: false },
+      { key: 'channel', label: '渠道', def: false },
+      { key: 'beans', label: '彩豆变动', def: false },
+      { key: 'ratio', label: '本金分摊系数', def: false },
+      { key: 'amount', label: '记账金额(元)', def: true },
+      { key: 'otherAmount', label: '账户变动金额(元)', def: true },
+      { key: 'beforeBal', label: '变动前余额', def: false },
+      { key: 'afterBal', label: '变动后余额', def: false },
+      { key: 'matchStatus', label: '对账结果', def: true },
+      { key: 'diffType', label: '差异类型', def: true },
+      { key: 'handleStatus', label: '处理状态', def: true }
+    ]
+  }
+};
+
+// ================= 日批次数据（key = dim|数据日期） =================
+const BATCHES = {
+  'channel|2026-05-15': { status: '已平',
+    summary: { l1: '平台侧', v1: '1 笔 / ¥30.00', l2: '渠道侧', v2: '1 笔 / ¥30.00', diff: '0 笔 / ¥0.00', handle: '0 / 0' },
+    rows: [{ orderNo: 'RC20260515001', time: '2026-05-15 08:00', user: '李用户', orderType: '充值', channel: '微信支付', amount: '30.00', otherAmount: '30.00', buyBeans: '3,000', giftBeans: '0', ratio: '0.01', beforeBal: '¥142.00 / 14,200 彩豆', afterBal: '¥172.00 / 17,200 彩豆', otherNo: 'WX20260515080001', matchStatus: '已匹配', diffType: '-', handleStatus: '-' }] },
+  'channel|2026-05-13': { status: '存在差异',
+    summary: { l1: '平台侧', v1: '1 笔 / ¥50.00', l2: '渠道侧', v2: '0 笔 / ¥0.00', diff: '1 笔 / ¥50.00', handle: '0 / 1' },
+    rows: [{ orderNo: 'RC20260513150000', time: '2026-05-13 15:00', user: '王五', orderType: '充值', channel: '支付宝', amount: '50.00', otherAmount: '-', buyBeans: '5,000（待入账）', giftBeans: '0（待入账）', ratio: '-', beforeBal: '-', afterBal: '-', otherNo: '未回单', matchStatus: '未匹配', diffType: '单边账', handleStatus: '未处理' }] },
+  'channel|2026-05-10': { status: '已平',
+    summary: { l1: '平台侧', v1: '1 笔 / ¥100.00', l2: '渠道侧', v2: '1 笔 / ¥100.00', diff: '0 笔 / ¥0.00', handle: '0 / 0' },
+    rows: [{ orderNo: 'RC20260510001', time: '2026-05-10 14:30', user: '李用户', orderType: '充值', channel: '微信支付', amount: '100.00', otherAmount: '100.00', buyBeans: '10,000', giftBeans: '0', ratio: '0.01', beforeBal: '¥49.50 / 4,950 彩豆', afterBal: '¥149.50 / 14,950 彩豆', otherNo: 'WX20260510143001', matchStatus: '已匹配', diffType: '-', handleStatus: '-' }] },
+  'bank|2026-05-15': { status: '对账中',
+    summary: { l1: '平台侧', v1: '1 笔 / ¥30.00', l2: '银行侧', v2: '回单未出', diff: '-', handle: '-' },
+    rows: [], pendingNote: '银行回单按清算周期（日终 / T+1）出账，回单到达后自动比对并更新本批次结果。' },
+  'bank|2026-05-10': { status: '已平',
+    summary: { l1: '平台侧', v1: '1 笔 / ¥100.00', l2: '银行侧', v2: '1 笔 / ¥100.00', diff: '0 笔 / ¥0.00', handle: '0 / 0' },
+    rows: [{ orderNo: 'JY20260510090001', time: '2026-05-10 14:35', bizType: '充值收款', amount: '100.00', otherNo: 'SPDB20260510090001', otherAmount: '100.00', matchStatus: '已匹配', diffType: '-', handleStatus: '-' }] },
+  'kingdee|2026-05-15': { status: '已平',
+    summary: { l1: '平台侧', v1: '1 笔 / ¥30.00', l2: '金蝶侧', v2: '1 笔 / ¥30.00', diff: '0 笔 / ¥0.00', handle: '0 / 0' },
+    rows: [{ orderNo: 'SK20260515001', time: '2026-05-15', bizType: '收款单', amount: '30.00', otherNo: '记-20260515-007', otherAmount: '30.00', matchStatus: '已匹配', diffType: '-', handleStatus: '-' }] },
+  'kingdee|2026-05-10': { status: '已平',
+    summary: { l1: '平台侧', v1: '1 笔 / ¥100.00', l2: '金蝶侧', v2: '1 笔 / ¥100.00', diff: '0 笔 / ¥0.00', handle: '0 / 0' },
+    rows: [{ orderNo: 'SK20260510001', time: '2026-05-10', bizType: '收款单', amount: '100.00', otherNo: '记-20260510-018', otherAmount: '100.00', matchStatus: '已匹配', diffType: '-', handleStatus: '-' }] },
+  'internal|2026-05-15': { status: '已平',
+    summary: { l1: '业务侧', v1: '3 笔 / ¥33.50', l2: '账户侧', v2: '3 笔 / ¥33.50', diff: '0 笔 / ¥0.00', handle: '0 / 0' },
+    rows: [
+      { orderNo: 'RC20260515001', time: '2026-05-15 08:00', bizType: '充值到账', user: '李用户', agent: '-', price: '-', channel: '微信支付', beans: '+3,000', ratio: '0.01', amount: '30.00', otherAmount: '30.00', beforeBal: '¥142.00 / 14,200 彩豆', afterBal: '¥172.00 / 17,200 彩豆', matchStatus: '已匹配', diffType: '-', handleStatus: '-' },
+      { orderNo: 'XF20260515092045', time: '2026-05-15 09:20', bizType: '消费扣费', user: '李用户', agent: '合规监测智能体', price: '平台算力（token）', channel: 'API', beans: '-50', ratio: '0.01', amount: '0.50', otherAmount: '0.50', beforeBal: '¥172.00 / 17,200 彩豆', afterBal: '¥171.50 / 17,150 彩豆', matchStatus: '已匹配', diffType: '-', handleStatus: '-' },
+      { orderNo: 'XF20260515110512', time: '2026-05-15 11:05', bizType: '消费扣费', user: '李用户', agent: '数据分析智能体', price: '平台算力（token）', channel: 'API', beans: '-300', ratio: '0.01', amount: '3.00', otherAmount: '3.00', beforeBal: '¥171.50 / 17,150 彩豆', afterBal: '¥168.50 / 16,850 彩豆', matchStatus: '已匹配', diffType: '-', handleStatus: '-' }
+    ] },
+  'internal|2026-05-14': { status: '已平',
+    summary: { l1: '业务侧', v1: '2 笔 / ¥3.50', l2: '账户侧', v2: '2 笔 / ¥3.50', diff: '0 笔 / ¥0.00', handle: '0 / 0' },
+    rows: [
+      { orderNo: 'XF20260514141830', time: '2026-05-14 14:18', bizType: '消费扣费', user: '李用户', agent: '数据分析智能体', price: '平台算力（token）', channel: 'API', beans: '-300', ratio: '0.01', amount: '3.00', otherAmount: '3.00', beforeBal: '¥145.50 / 14,550 彩豆', afterBal: '¥142.50 / 14,250 彩豆', matchStatus: '已匹配', diffType: '-', handleStatus: '-' },
+      { orderNo: 'XF20260514153201', time: '2026-05-14 15:32', bizType: '消费扣费', user: '李用户', agent: '合规监测智能体', price: '平台算力（token）', channel: 'API', beans: '-50', ratio: '0.01', amount: '0.50', otherAmount: '0.50', beforeBal: '¥142.50 / 14,250 彩豆', afterBal: '¥142.00 / 14,200 彩豆', matchStatus: '已匹配', diffType: '-', handleStatus: '-' }
+    ] },
+  'internal|2026-05-13': { status: '已平',
+    summary: { l1: '业务侧', v1: '1 笔 / ¥1.00', l2: '账户侧', v2: '1 笔 / ¥1.00', diff: '0 笔 / ¥0.00', handle: '0 / 0' },
+    rows: [{ orderNo: 'XF20260513162230', time: '2026-05-13 16:22', bizType: '消费扣费', user: '李用户', agent: '合规监测智能体', price: '平台算力（token）', channel: 'API', beans: '-100', ratio: '0.01', amount: '1.00', otherAmount: '1.00', beforeBal: '¥146.50 / 14,650 彩豆', afterBal: '¥145.50 / 14,550 彩豆', matchStatus: '已匹配', diffType: '-', handleStatus: '-' }] },
+  'internal|2026-05-12': { status: '已平',
+    summary: { l1: '业务侧', v1: '1 笔 / ¥3.00', l2: '账户侧', v2: '1 笔 / ¥3.00', diff: '0 笔 / ¥0.00', handle: '0 / 0' },
+    rows: [{ orderNo: 'XF20260512103001', time: '2026-05-12 10:30', bizType: '消费扣费', user: '李用户', agent: '数据分析智能体', price: '平台算力（token）', channel: 'API', beans: '-300', ratio: '0.01', amount: '3.00', otherAmount: '3.00', beforeBal: '¥149.50 / 14,950 彩豆', afterBal: '¥146.50 / 14,650 彩豆', matchStatus: '已匹配', diffType: '-', handleStatus: '-' }] },
+  'internal|2026-05-10': { status: '已平',
+    summary: { l1: '业务侧', v1: '1 笔 / ¥100.00', l2: '账户侧', v2: '1 笔 / ¥100.00', diff: '0 笔 / ¥0.00', handle: '0 / 0' },
+    rows: [{ orderNo: 'RC20260510001', time: '2026-05-10 14:30', bizType: '充值到账', user: '李用户', agent: '-', price: '-', channel: '微信支付', beans: '+10,000', ratio: '0.01', amount: '100.00', otherAmount: '100.00', beforeBal: '¥49.50 / 4,950 彩豆', afterBal: '¥149.50 / 14,950 彩豆', matchStatus: '已匹配', diffType: '-', handleStatus: '-' }] },
+  'internal|2026-05-08': { status: '已平',
+    summary: { l1: '业务侧', v1: '1 笔 / ¥0.50', l2: '账户侧', v2: '1 笔 / ¥0.50', diff: '0 笔 / ¥0.00', handle: '0 / 0' },
+    rows: [{ orderNo: 'XF20260508111530', time: '2026-05-08 11:15', bizType: '消费扣费', user: '李用户', agent: '合规监测智能体', price: '平台算力（token）', channel: 'API', beans: '-50', ratio: '0.01', amount: '0.50', otherAmount: '0.50', beforeBal: '¥50.00 / 5,000 彩豆', afterBal: '¥49.50 / 4,950 彩豆', matchStatus: '已匹配', diffType: '-', handleStatus: '-' }] }
+};
+
+// ================= 月度报告数据 =================
+const MONTH_REPORTS = {
+  '2026-04': {
+    title: '2026年4月', sums: ['¥45,680.00', '¥12,350.00', '¥8,240.00', '¥15,680.00'],
+    dims: [
+      { name: '平台内部对账', total: 30, ok: 30, diff: 0, handle: '-', result: '已平' },
+      { name: '银行侧对账', total: 22, ok: 22, diff: 0, handle: '-', result: '已平' },
+      { name: '支付渠道对账', total: 26, ok: 26, diff: 0, handle: '-', result: '已平' },
+      { name: '金蝶系统对账', total: 18, ok: 18, diff: 0, handle: '-', result: '已平' }
+    ],
+    conclusion: '2026年4月充值、消费、分佣、提现四类资金按日全量核对，四个维度共 96 个批次全部已平，无未处理差异。报告已由财务共享中心复核确认。'
+  },
+  '2026-03': {
+    title: '2026年3月', sums: ['¥38,200.00', '¥10,800.00', '¥7,100.00', '¥12,400.00'],
+    dims: [
+      { name: '平台内部对账', total: 31, ok: 31, diff: 0, handle: '-', result: '已平' },
+      { name: '银行侧对账', total: 21, ok: 21, diff: 0, handle: '-', result: '已平' },
+      { name: '支付渠道对账', total: 25, ok: 24, diff: 1, handle: '1 / 1 已处理', result: '差异已处理 · 平' },
+      { name: '金蝶系统对账', total: 17, ok: 17, diff: 0, handle: '-', result: '已平' }
+    ],
+    conclusion: '2026年3月四个维度共 94 个批次，其中支付渠道对账 1 笔单边账差异（渠道延迟入账，次日到账后核销），处理后全部已平。报告已由财务共享中心复核确认。'
+  }
+};
+
+// ================= 路由与渲染 =================
+const params = new URLSearchParams(location.search);
+const viewType = params.get('type') || 'day';
+let dim = params.get('dim') || 'channel';
+let date = params.get('date') || '2026-05-13';
+if (!BATCHES[dim + '|' + date]) {
+  const k = Object.keys(BATCHES).find(k => k.startsWith(dim + '|')) || 'channel|2026-05-13';
+  dim = k.split('|')[0]; date = k.split('|')[1];
+}
+let selected = new Set();
+
+function batch() { return BATCHES[dim + '|' + date]; }
+function initSelected() {
+  selected = new Set(DIMENSIONS[dim].fields.filter(f => f.def).map(f => f.key));
+}
+function buildDimBar() {
+  document.getElementById('dimSelect').innerHTML = Object.keys(DIMENSIONS).map(k =>
+    '<option value="' + k + '"' + (k === dim ? ' selected' : '') + '>' + DIMENSIONS[k].name + '</option>').join('');
+  const dates = Object.keys(BATCHES).filter(k => k.startsWith(dim + '|')).map(k => k.split('|')[1]).sort().reverse();
+  document.getElementById('dateSelect').innerHTML = dates.map(d =>
+    '<option value="' + d + '"' + (d === date ? ' selected' : '') + '>' + d + '</option>').join('');
+}
+function switchDim() {
+  dim = document.getElementById('dimSelect').value;
+  const dates = Object.keys(BATCHES).filter(k => k.startsWith(dim + '|')).map(k => k.split('|')[1]).sort().reverse();
+  if (!dates.includes(date)) date = dates[0];
+  initSelected(); buildDimBar(); updateHeader(); renderTable();
+}
+function switchDate() {
+  date = document.getElementById('dateSelect').value;
+  updateHeader(); renderTable();
+}
+function statusBadge(st) {
+  if (st === '已平') return '<strong style="color:#86efac;">已平</strong>';
+  if (st === '存在差异') return '<strong style="color:#fca5a5;">存在差异</strong>';
+  return '<strong style="color:#fde68a;">对账中</strong>';
+}
+function updateHeader() {
+  const d = DIMENSIONS[dim], b = batch();
+  document.getElementById('pageTitle').textContent = '对账明细 · ' + date + ' ' + d.name;
+  document.getElementById('pageSub').innerHTML = d.sub + ' · 状态：' + statusBadge(b.status);
+  document.getElementById('sumLabel1').textContent = b.summary.l1;
+  document.getElementById('sumVal1').textContent = b.summary.v1;
+  document.getElementById('sumLabel2').textContent = b.summary.l2;
+  document.getElementById('sumVal2').textContent = b.summary.v2;
+  const v3 = document.getElementById('sumVal3');
+  v3.textContent = b.summary.diff;
+  v3.className = 'info-value' + (b.status === '存在差异' ? ' diff' : '');
+  const v4 = document.getElementById('sumVal4');
+  v4.textContent = b.summary.handle;
+  v4.className = 'info-value' + (b.status === '存在差异' ? ' diff' : '');
+}
+function togglePanel() {
+  buildPanel();
+  document.getElementById('fieldPanel').classList.toggle('show');
+}
+function buildPanel() {
+  document.getElementById('fieldGrid').innerHTML = DIMENSIONS[dim].fields.map(f =>
+    '<label><input type="checkbox" value="' + f.key + '"' + (selected.has(f.key) ? ' checked' : '') + '/>' + f.label + '</label>'
+  ).join('');
+}
+function setAll(on) {
+  document.querySelectorAll('#fieldGrid input').forEach(cb => cb.checked = on);
+}
+function applyFields() {
+  const checked = [...document.querySelectorAll('#fieldGrid input:checked')].map(cb => cb.value);
+  if (checked.length === 0) { showToast('请至少选择一个字段', '⚠'); return; }
+  selected = new Set(checked);
+  document.getElementById('fieldPanel').classList.remove('show');
+  renderTable();
+}
+function visibleRows() {
+  const diffOnly = document.getElementById('diffOnly').checked;
+  const rows = batch().rows;
+  return diffOnly ? rows.filter(r => r.matchStatus === '未匹配') : rows;
+}
+function renderTable() {
+  const b = batch();
+  const note = document.getElementById('pendingNote');
+  if (b.rows.length === 0 && b.pendingNote) {
+    document.getElementById('tableHead').innerHTML = '';
+    document.getElementById('tableBody').innerHTML = '';
+    document.getElementById('tableSummary').textContent = '';
+    note.textContent = b.pendingNote;
+    note.style.display = 'block';
+    document.getElementById('fieldCount').textContent = '';
+    return;
+  }
+  note.style.display = 'none';
+  const fields = DIMENSIONS[dim].fields.filter(f => selected.has(f.key));
+  const rows = visibleRows();
+  document.getElementById('tableHead').innerHTML =
+    '<tr>' + fields.map(f => '<th>' + f.label + '</th>').join('') + '<th>操作</th></tr>';
+  document.getElementById('tableBody').innerHTML = rows.map(r => {
+    const cells = fields.map(f => {
+      const v = r[f.key] === undefined ? '-' : r[f.key];
+      if (f.key === 'matchStatus') {
+        const cls = v === '已匹配' ? 'badge-success' : 'badge-danger';
+        return '<td><span class="badge ' + cls + '">' + v + '</span></td>';
+      }
+      if (f.key === 'diffType') {
+        return v && v !== '-' ? '<td><span class="badge badge-difftype">' + v + '</span></td>' : '<td>-</td>';
+      }
+      if (f.key === 'handleStatus') {
+        if (v === '未处理') return '<td><span class="badge badge-warning">' + v + '</span></td>';
+        if (v === '已处理') return '<td><span class="badge badge-success">' + v + '</span></td>';
+      }
+      return '<td>' + v + '</td>';
+    }).join('');
+    const op = (r.matchStatus === '未匹配' && r.handleStatus === '未处理')
+      ? '<td><button class="btn btn-sm btn-primary" onclick="openDiff(\'' + r.orderNo + '\')" type="button">差异处理</button></td>'
+      : '<td>-</td>';
+    return '<tr' + (r.matchStatus === '未匹配' ? ' style="background:#fff5f5;"' : '') + '>' + cells + op + '</tr>';
+  }).join('');
+  document.getElementById('tableSummary').textContent =
+    '共 ' + rows.length + ' 条记录 · 当前显示 ' + fields.length + ' / ' + DIMENSIONS[dim].fields.length + ' 个字段';
+  document.getElementById('fieldCount').textContent = '(' + selected.size + ')';
+}
+// ============ 差异处理弹窗 ============
+let diffTarget = null;
+function openDiff(orderNo) {
+  diffTarget = orderNo;
+  document.getElementById('diffOrderNo').textContent = orderNo;
+  document.getElementById('diffReason').value = '';
+  document.getElementById('diffModal').classList.add('active');
+}
+function closeDiff() {
+  document.getElementById('diffModal').classList.remove('active');
+  diffTarget = null;
+}
+function confirmDiff() {
+  const reason = document.getElementById('diffReason').value.trim();
+  if (!reason) { showToast('请填写处理结论', '⚠'); return; }
+  const b = batch();
+  const row = b.rows.find(r => r.orderNo === diffTarget);
+  if (row) {
+    row.handleStatus = '已处理';
+    b.summary.handle = '1 / 1';
+  }
+  closeDiff();
+  updateHeader(); renderTable();
+  showToast('已记录处理结论，该笔差异标记为已处理');
+}
+function exportData() {
+  const fields = DIMENSIONS[dim].fields.filter(f => selected.has(f.key));
+  const rows = visibleRows();
+  showToast('已导出「' + date + ' ' + DIMENSIONS[dim].name + '明细」' + rows.length + ' 条 · ' + fields.length + ' 个字段（示例）');
+}
+function showToast(msg, icon) {
+  const t = document.getElementById('toast');
+  t.textContent = (icon || '✓') + ' ' + msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function () { t.style.display = 'none'; }, 2600);
+}
+document.addEventListener('click', function (e) {
+  const wrap = document.querySelector('.field-panel-wrap');
+  if (wrap && !wrap.contains(e.target)) document.getElementById('fieldPanel').classList.remove('show');
+});
+// ============ 月度报告渲染 ============
+function renderMonth() {
+  const m = MONTH_REPORTS[params.get('month')] || MONTH_REPORTS['2026-04'];
+  document.getElementById('dayView').style.display = 'none';
+  document.getElementById('monthView').style.display = 'block';
+  document.getElementById('pageTitle').textContent = '月度对账报告 · ' + m.title;
+  document.getElementById('pageSub').innerHTML = '充值 / 消费 / 分佣 / 提现四类资金全量核对 · 状态：' + statusBadge('已平');
+  ['mSum1', 'mSum2', 'mSum3', 'mSum4'].forEach((id, i) => document.getElementById(id).textContent = m.sums[i]);
+  document.getElementById('mDimBody').innerHTML = m.dims.map(d =>
+    '<tr><td>' + d.name + '</td><td>' + d.total + '</td><td>' + d.ok + '</td><td>' + (d.diff || '0') + '</td><td>' + d.handle + '</td>' +
+    '<td><span class="badge badge-success">' + d.result + '</span></td></tr>').join('');
+  document.getElementById('mConclusion').textContent = m.conclusion;
+}
+// ============ 入口 ============
+if (viewType === 'month') {
+  renderMonth();
+} else {
+  initSelected(); buildDimBar(); updateHeader(); renderTable();
+}
+</script>
+</body>
+</html>

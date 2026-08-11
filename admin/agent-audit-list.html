@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>智能体管理 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; }
+        .stat-value { font-size: 24px; font-weight: 700; color: var(--admin-color); }
+        .stat-label { font-size: 13px; color: var(--text-muted); margin-top: var(--spacing-xs); }
+        .type-first { background: #dbeafe; color: #2563eb; }
+        .type-change { background: #ede9fe; color: #7c3aed; }
+        .badge-offline { background: #f1f5f9; color: #64748b; }
+        .btn-takedown { color: var(--danger-color); border-color: var(--danger-color); }
+        #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link active" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<h2>智能体管理</h2>
+<p>审核与管理开发者上架的智能体</p>
+</div>
+<div class="stats-grid">
+<div class="stat-card">
+<div class="stat-value">2</div>
+<div class="stat-label">待审核</div>
+</div>
+<div class="stat-card">
+<div class="stat-value">4</div>
+<div class="stat-label">本月已审核</div>
+</div>
+<div class="stat-card">
+<div class="stat-value">3</div>
+<div class="stat-label">通过</div>
+</div>
+<div class="stat-card">
+<div class="stat-value">1</div>
+<div class="stat-label">驳回</div>
+</div>
+</div>
+<div class="content-card">
+<div class="content-card-header">
+<h3 class="content-card-title">智能体列表</h3>
+<div style="display: flex; gap: var(--spacing-sm);">
+<select class="select" style="width: 130px;">
+<option>全部类型</option>
+<option>首次上架</option>
+<option>变更审核</option>
+</select>
+</div>
+</div>
+<div class="tab-nav">
+<button class="tab-btn active" onclick="agentTab('all', this)" type="button">全部 (14)</button>
+<button class="tab-btn" onclick="agentTab('待审核', this)" type="button">待审核 (2)</button>
+<button class="tab-btn" onclick="agentTab('已通过', this)" type="button">已通过 (10)</button>
+<button class="tab-btn" onclick="agentTab('已驳回', this)" type="button">已驳回 (1)</button>
+<button class="tab-btn" onclick="agentTab('已下架', this)" type="button">已下架 (1)</button>
+</div>
+<div class="table-wrapper">
+<table class="table table-wide">
+<thead>
+<tr>
+<th>智能体</th>
+<th>开发者</th>
+<th>审核类型</th>
+<th>分类</th>
+<th>提交时间</th>
+<th>状态</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody id="agentTbody">
+<tr data-status="待审核">
+<td>数据分析智能体<div style="font-size:12px; color:var(--text-muted); margin-top:2px;">变更项：token 区间调整（单次预估 100k~300k → 120k~350k token）</div></td>
+<td>张开发者</td>
+<td><span class="badge type-change">变更审核</span></td>
+<td>办公效率</td>
+<td>2026-05-16 10:20</td>
+<td><span class="badge badge-warning">待审核</span></td>
+<td><a class="btn btn-sm btn-primary" href="agent-audit-view.html?type=change">审核</a></td>
+</tr>
+<tr data-status="待审核">
+<td>家具比价智能体</td>
+<td>张开发者</td>
+<td><span class="badge type-first">首次上架</span></td>
+<td>生活服务</td>
+<td>2026-05-14 09:30</td>
+<td><span class="badge badge-warning">待审核</span></td>
+<td><a class="btn btn-sm btn-primary" href="agent-audit-view.html">审核</a></td>
+</tr>
+<tr data-status="已通过">
+<td><span class="agent-cell">合规监测智能体</span></td>
+<td>张开发者</td>
+<td><span class="badge type-first">首次上架</span></td>
+<td>金融理财</td>
+<td>2026-02-25 14:00</td>
+<td><span class="badge badge-success">已通过</span></td>
+<td style="white-space:nowrap;">
+<a class="btn btn-sm btn-outline" href="agent-audit-view.html">详情</a>
+<a class="btn btn-sm btn-outline" href="agent-edit.html">修改</a>
+<button class="btn btn-sm btn-outline btn-takedown" onclick="openTakedown(this)" type="button">下架</button>
+</td>
+</tr>
+<tr data-status="已通过">
+<td><span class="agent-cell">智能客服助手</span></td>
+<td>AI工作室</td>
+<td><span class="badge type-first">首次上架</span></td>
+<td>办公效率</td>
+<td>2026-03-10 10:20</td>
+<td><span class="badge badge-success">已通过</span></td>
+<td style="white-space:nowrap;">
+<a class="btn btn-sm btn-outline" href="agent-audit-view.html">详情</a>
+<a class="btn btn-sm btn-outline" href="agent-edit.html">修改</a>
+<button class="btn btn-sm btn-outline btn-takedown" onclick="openTakedown(this)" type="button">下架</button>
+</td>
+</tr>
+<tr data-status="已通过">
+<td><span class="agent-cell">营销文案生成器</span></td>
+<td>汇智数据</td>
+<td><span class="badge type-first">首次上架</span></td>
+<td>办公效率</td>
+<td>2026-04-02 16:40</td>
+<td><span class="badge badge-success">已通过</span></td>
+<td style="white-space:nowrap;">
+<a class="btn btn-sm btn-outline" href="agent-audit-view.html">详情</a>
+<a class="btn btn-sm btn-outline" href="agent-edit.html">修改</a>
+<button class="btn btn-sm btn-outline btn-takedown" onclick="openTakedown(this)" type="button">下架</button>
+</td>
+</tr>
+<tr data-status="已驳回">
+<td>舆情监测智能体</td>
+<td>张开发者</td>
+<td><span class="badge type-first">首次上架</span></td>
+<td>数据分析</td>
+<td>2026-04-20 11:15</td>
+<td><span class="badge badge-danger">已驳回</span></td>
+<td><a class="btn btn-sm btn-outline" href="agent-audit-view.html">详情</a></td>
+</tr>
+<tr data-status="已下架">
+<td><span class="agent-cell">政策问答智能体</span></td>
+<td>张开发者</td>
+<td><span class="badge type-first">首次上架</span></td>
+<td>政策法规</td>
+<td>2026-03-05 09:40</td>
+<td><span class="badge badge-offline">已下架（平台）</span></td>
+<td style="white-space:nowrap;"><a class="btn btn-sm btn-outline" href="agent-audit-view.html">详情</a> <button class="btn btn-sm btn-primary" onclick="relist(this)" type="button">重新上架</button></td>
+</tr>
+<tr data-status="已通过">
+<td><span class="agent-cell">政策法规问答智能体</span></td>
+<td>张开发者</td>
+<td><span class="badge type-first">首次上架</span></td>
+<td>政策法规</td>
+<td>2026-05-11 10:00</td>
+<td><span class="badge badge-success">已通过</span></td>
+<td style="white-space:nowrap;">
+<a class="btn btn-sm btn-outline" href="agent-audit-view.html">详情</a>
+<a class="btn btn-sm btn-outline" href="agent-edit.html">修改</a>
+<button class="btn btn-sm btn-outline btn-takedown" onclick="openTakedown(this)" type="button">下架</button>
+</td>
+</tr>
+<tr data-status="已通过">
+<td><span class="agent-cell">招标文件生成智能体</span></td>
+<td>慧采科技</td>
+<td><span class="badge type-first">首次上架</span></td>
+<td>办公效率</td>
+<td>2026-05-09 15:20</td>
+<td><span class="badge badge-success">已通过</span></td>
+<td style="white-space:nowrap;">
+<a class="btn btn-sm btn-outline" href="agent-audit-view.html">详情</a>
+<a class="btn btn-sm btn-outline" href="agent-edit.html">修改</a>
+<button class="btn btn-sm btn-outline btn-takedown" onclick="openTakedown(this)" type="button">下架</button>
+</td>
+</tr>
+<tr data-status="已通过">
+<td><span class="agent-cell">供应商资质核查智能体</span></td>
+<td>信联数据</td>
+<td><span class="badge type-first">首次上架</span></td>
+<td>合规审查</td>
+<td>2026-05-07 11:10</td>
+<td><span class="badge badge-success">已通过</span></td>
+<td style="white-space:nowrap;">
+<a class="btn btn-sm btn-outline" href="agent-audit-view.html">详情</a>
+<a class="btn btn-sm btn-outline" href="agent-edit.html">修改</a>
+<button class="btn btn-sm btn-outline btn-takedown" onclick="openTakedown(this)" type="button">下架</button>
+</td>
+</tr>
+<tr data-status="已通过">
+<td><span class="agent-cell">合同审查智能体</span></td>
+<td>法智科技</td>
+<td><span class="badge type-first">首次上架</span></td>
+<td>合规审查</td>
+<td>2026-05-06 09:40</td>
+<td><span class="badge badge-success">已通过</span></td>
+<td style="white-space:nowrap;">
+<a class="btn btn-sm btn-outline" href="agent-audit-view.html">详情</a>
+<a class="btn btn-sm btn-outline" href="agent-edit.html">修改</a>
+<button class="btn btn-sm btn-outline btn-takedown" onclick="openTakedown(this)" type="button">下架</button>
+</td>
+</tr>
+<tr data-status="已通过">
+<td><span class="agent-cell">采购数据分析智能体</span></td>
+<td>数擎科技</td>
+<td><span class="badge type-first">首次上架</span></td>
+<td>数据分析</td>
+<td>2026-05-05 14:30</td>
+<td><span class="badge badge-success">已通过</span></td>
+<td style="white-space:nowrap;">
+<a class="btn btn-sm btn-outline" href="agent-audit-view.html">详情</a>
+<a class="btn btn-sm btn-outline" href="agent-edit.html">修改</a>
+<button class="btn btn-sm btn-outline btn-takedown" onclick="openTakedown(this)" type="button">下架</button>
+</td>
+</tr>
+<tr data-status="已通过">
+<td><span class="agent-cell">询价比价智能体</span></td>
+<td>比得科技</td>
+<td><span class="badge type-first">首次上架</span></td>
+<td>生活服务</td>
+<td>2026-05-03 16:00</td>
+<td><span class="badge badge-success">已通过</span></td>
+<td style="white-space:nowrap;">
+<a class="btn btn-sm btn-outline" href="agent-audit-view.html">详情</a>
+<a class="btn btn-sm btn-outline" href="agent-edit.html">修改</a>
+<button class="btn btn-sm btn-outline btn-takedown" onclick="openTakedown(this)" type="button">下架</button>
+</td>
+</tr>
+<tr data-status="已通过">
+<td><span class="agent-cell">会议纪要智能体</span></td>
+<td>云记科技</td>
+<td><span class="badge type-first">首次上架</span></td>
+<td>办公效率</td>
+<td>2026-05-02 10:25</td>
+<td><span class="badge badge-success">已通过</span></td>
+<td style="white-space:nowrap;">
+<a class="btn btn-sm btn-outline" href="agent-audit-view.html">详情</a>
+<a class="btn btn-sm btn-outline" href="agent-edit.html">修改</a>
+<button class="btn btn-sm btn-outline btn-takedown" onclick="openTakedown(this)" type="button">下架</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="agentPager" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:var(--spacing-md);font-size:13px;color:var(--text-secondary);">
+<div>共 <strong id="agTotal">0</strong> 条 · 每页
+<select id="agSize" onchange="agentSetSize(this.value)" style="padding:4px 8px;border:1px solid var(--border-light);border-radius:6px;font-size:13px;">
+<option value="10">10</option><option value="20">20</option><option value="50">50</option>
+</select> 条</div>
+<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+<button class="btn btn-sm btn-outline" id="agPrev" onclick="agentGoto(agState.page-1)" type="button">上一页</button>
+<span id="agPages" style="display:flex;gap:4px;"></span>
+<button class="btn btn-sm btn-outline" id="agNext" onclick="agentGoto(agState.page+1)" type="button">下一页</button>
+<span style="margin-left:6px;">跳至 <input id="agJump" max="1" min="1" onkeydown="if(event.key==='Enter')agentJump()" style="width:52px;padding:4px 6px;border:1px solid var(--border-light);border-radius:6px;" type="number"/> 页</span>
+<button class="btn btn-sm btn-outline" onclick="agentJump()" type="button">跳转</button>
+</div>
+</div>
+</div>
+<div class="content-card" style="margin-top: var(--spacing-lg);">
+<div class="content-card-header">
+<h3 class="content-card-title">首页精选位</h3>
+<div style="display:flex;gap:8px;align-items:center;">
+<span style="font-size:12px;color:var(--text-muted);" id="featCount">已选 3 / 12</span>
+<button class="btn btn-sm btn-outline" onclick="openFeatPicker()" type="button">+ 添加精选</button>
+<button class="btn btn-sm btn-primary" onclick="saveFeatOrder()" type="button">保存排序</button>
+</div>
+</div>
+<p style="color:var(--text-muted);font-size:13px;margin:4px 0 12px;">精选位在用户端市场顶部优先展示（最多 12 个），数字越小越靠前；<strong>非精选智能体按综合排序（调用量 / 上架时间）自动排列</strong>，无需逐个手动维护，智能体再多也不受影响。</p>
+<div class="table-wrapper">
+<table class="table">
+<thead>
+<tr><th style="width:96px;">展示顺序</th><th>智能体</th><th>开发者</th><th>分类</th><th style="width:70px;">操作</th></tr>
+</thead>
+<tbody id="featBody"></tbody>
+</table>
+</div>
+<div id="featEmpty" style="display:none;color:var(--text-muted);font-size:13px;padding:16px;text-align:center;">暂无精选智能体，点「+ 添加精选」从已上架智能体中挑选。</div>
+</div>
+<!-- 添加精选选择器 -->
+<div class="modal-overlay" id="featPickerModal" onclick="if(event.target===this)closeFeatPicker()">
+<div class="modal" style="max-width: 560px;">
+<div class="modal-header"><span class="modal-title">添加精选 · 从已上架智能体中选择</span><button class="modal-close" onclick="closeFeatPicker()" type="button">×</button></div>
+<div class="modal-body">
+<input class="input" id="featSearch" oninput="renderFeatPicker()" placeholder="搜索智能体名称 / 开发者 / 分类…" style="margin-bottom:12px;" type="text"/>
+<div id="featPickerList" style="max-height:340px;overflow:auto;"></div>
+</div>
+<div class="modal-footer"><button class="btn btn-outline" onclick="closeFeatPicker()" type="button">关闭</button></div>
+</div>
+</div>
+<!-- 平台下架确认弹窗 -->
+<div class="modal-overlay" id="takedownModal" onclick="if(event.target===this)closeTakedown()">
+<div class="modal" style="max-width: 430px;">
+<div class="modal-header">
+<span class="modal-title">确认下架智能体</span>
+<button class="modal-close" onclick="closeTakedown()">×</button>
+</div>
+<div class="modal-body">
+<p style="font-size: 14px; margin-bottom: var(--spacing-sm);">确定要下架「<strong id="takedownName"></strong>」吗？</p>
+<p style="font-size: 13px; color: var(--text-muted); line-height: 1.7;">平台下架后用户将无法调用该智能体，系统将通知开发者；如需恢复可在本页重新上架。</p>
+<div class="detail-item" style="margin-top: var(--spacing-md);">
+<span style="font-size:13px; color:var(--text-muted);">下架原因（将同步给开发者）</span>
+<textarea class="input" id="takedownReason" placeholder="请填写下架原因..." rows="2" style="margin-top:6px;"></textarea>
+</div>
+</div>
+<div class="modal-footer">
+<button class="btn btn-outline" onclick="closeTakedown()">取消</button>
+<button class="btn btn-danger" onclick="confirmTakedown()">确认下架</button>
+</div>
+</div>
+</div>
+<div id="toast"></div>
+<script>
+var tdRow = null;
+function openTakedown(btn){
+  tdRow = btn.closest('tr');
+  document.getElementById('takedownName').textContent = tdRow.querySelector('.agent-cell').textContent;
+  document.getElementById('takedownReason').value = '';
+  document.getElementById('takedownModal').classList.add('active');
+}
+function closeTakedown(){
+  document.getElementById('takedownModal').classList.remove('active');
+  tdRow = null;
+}
+function confirmTakedown(){
+  var reason = document.getElementById('takedownReason').value.trim();
+  if(!reason){ showToast('请填写下架原因', '⚠'); return; }
+  if(tdRow){
+    var name = tdRow.querySelector('.agent-cell').textContent;
+    var statusTd = tdRow.cells[5];
+    statusTd.innerHTML = '<span class="badge badge-offline">已下架（平台）</span>';
+    var opTd = tdRow.cells[6];
+    opTd.innerHTML = '<a class="btn btn-sm btn-outline" href="agent-audit-view.html">详情</a> <button class="btn btn-sm btn-primary" type="button" onclick="relist(this)">重新上架</button>';
+    tdRow.setAttribute('data-status', '已下架');
+    showToast('已下架「' + name + '」，已通知开发者');
+  }
+  document.getElementById('takedownModal').classList.remove('active');
+  tdRow = null;
+  if (typeof renderAgentPage === 'function') renderAgentPage();
+}
+function relist(btn){
+  var row = btn.closest('tr');
+  var name = row.querySelector('.agent-cell').textContent;
+  row.cells[5].innerHTML = '<span class="badge badge-success">已通过</span>';
+  row.cells[6].innerHTML = '<a class="btn btn-sm btn-outline" href="agent-audit-view.html">详情</a> '
+    + '<a class="btn btn-sm btn-outline" href="agent-edit.html">修改</a> '
+    + '<button class="btn btn-sm btn-outline btn-takedown" type="button" onclick="openTakedown(this)">下架</button>';
+  row.setAttribute('data-status', '已通过');
+  showToast('已重新上架「' + name + '」');
+  if (typeof renderAgentPage === 'function') renderAgentPage();
+}
+/* 首页精选位：有限精选集手动排序（置顶），其余智能体前端按综合排序自动排列 */
+var MAX_FEAT = 12;
+var ALL_ONLINE = [
+  {name:'合规监测智能体', dev:'张开发者', cat:'金融理财'},
+  {name:'智能客服助手', dev:'AI工作室', cat:'办公效率'},
+  {name:'营销文案生成器', dev:'汇智数据', cat:'办公效率'},
+  {name:'政策法规问答智能体', dev:'张开发者', cat:'政策法规'},
+  {name:'招标文件生成智能体', dev:'慧采科技', cat:'办公效率'},
+  {name:'供应商资质核查智能体', dev:'信联数据', cat:'合规审查'},
+  {name:'合同审查智能体', dev:'法智科技', cat:'合规审查'},
+  {name:'采购数据分析智能体', dev:'数擎科技', cat:'数据分析'},
+  {name:'询价比价智能体', dev:'比得科技', cat:'生活服务'},
+  {name:'会议纪要智能体', dev:'云记科技', cat:'办公效率'}
+];
+var FEATURED = ['合规监测智能体','智能客服助手','营销文案生成器'];
+function agentByName(n){ for(var i=0;i<ALL_ONLINE.length;i++){ if(ALL_ONLINE[i].name===n) return ALL_ONLINE[i]; } return {name:n,dev:'-',cat:'-'}; }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function renderFeat(){
+  var tb = document.getElementById('featBody'), empty = document.getElementById('featEmpty');
+  document.getElementById('featCount').textContent = '已选 ' + FEATURED.length + ' / ' + MAX_FEAT;
+  if(!FEATURED.length){ tb.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  tb.innerHTML = FEATURED.map(function(n,i){
+    var a = agentByName(n);
+    return '<tr><td><input class="input ord-input" type="number" min="1" style="width:64px;" value="'+(i+1)+'"/></td>'
+      + '<td>'+esc(a.name)+'</td><td>'+esc(a.dev)+'</td><td>'+esc(a.cat)+'</td>'
+      + '<td><a href="javascript:void(0)" onclick="removeFeat(\''+esc(a.name)+'\')" style="color:var(--danger-color);font-size:13px;">移出</a></td></tr>';
+  }).join('');
+}
+function saveFeatOrder(){
+  var rows = [].slice.call(document.querySelectorAll('#featBody tr'));
+  if(!rows.length){ showToast('精选位为空，请先添加精选', '⚠'); return; }
+  var items = rows.map(function(r){ return { name:r.cells[1].textContent, order:parseInt(r.cells[0].querySelector('input').value,10) }; });
+  if(items.some(function(i){ return !i.order || i.order<1; })){ showToast('展示顺序需为大于 0 的整数', '⚠'); return; }
+  var seen={}, dup=false; items.forEach(function(i){ if(seen[i.order]) dup=true; seen[i.order]=true; });
+  if(dup){ showToast('展示顺序不可重复，请检查', '⚠'); return; }
+  items.sort(function(a,b){ return a.order-b.order; });
+  FEATURED = items.map(function(i){ return i.name; });
+  renderFeat();
+  showToast('已保存精选排序：' + FEATURED.join(' → '));
+}
+function removeFeat(name){ FEATURED = FEATURED.filter(function(n){ return n!==name; }); renderFeat(); showToast('已移出精选：' + name); }
+function openFeatPicker(){ document.getElementById('featSearch').value=''; renderFeatPicker(); document.getElementById('featPickerModal').classList.add('active'); }
+function closeFeatPicker(){ document.getElementById('featPickerModal').classList.remove('active'); }
+function renderFeatPicker(){
+  var kw = (document.getElementById('featSearch').value||'').trim().toLowerCase();
+  var full = FEATURED.length >= MAX_FEAT;
+  var avail = ALL_ONLINE.filter(function(a){ return FEATURED.indexOf(a.name)<0; })
+    .filter(function(a){ return !kw || (a.name+a.dev+a.cat).toLowerCase().indexOf(kw)>-1; });
+  var box = document.getElementById('featPickerList');
+  if(!avail.length){ box.innerHTML = '<p style="color:var(--text-muted);font-size:13px;padding:16px;text-align:center;">'+(kw?'没有匹配的智能体':'全部已上架智能体都已加入精选')+'</p>'; return; }
+  box.innerHTML = avail.map(function(a){
+    return '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 8px;border-bottom:1px solid var(--border-light);">'
+      + '<div><div style="font-weight:500;font-size:14px;">'+esc(a.name)+'</div><div style="font-size:12px;color:var(--text-muted);">'+esc(a.dev)+' · '+esc(a.cat)+'</div></div>'
+      + '<button class="btn btn-sm '+(full?'btn-outline':'btn-primary')+'" '+(full?'disabled style="opacity:.5;"':'')+' onclick="addFeat(\''+esc(a.name)+'\')" type="button">'+(full?'已满':'+ 添加')+'</button></div>';
+  }).join('');
+}
+function addFeat(name){
+  if(FEATURED.length>=MAX_FEAT){ showToast('精选位已满（最多 '+MAX_FEAT+' 个）', '⚠'); return; }
+  if(FEATURED.indexOf(name)<0){ FEATURED.push(name); }
+  renderFeat(); renderFeatPicker();
+  showToast('已加入精选：' + name);
+}
+/* 智能体列表分页（与状态标签页联动） */
+var agState = { tab:'all', page:1, size:10 };
+function agentAllRows(){ return [].slice.call(document.querySelectorAll('#agentTbody > tr')); }
+function agentRows(){ return agentAllRows().filter(function(r){ var s=r.getAttribute('data-status')||''; return agState.tab==='all' || s===agState.tab; }); }
+function updateAgentTabCounts(){
+  var rows = agentAllRows();
+  var c = { all: rows.length, '待审核':0, '已通过':0, '已驳回':0, '已下架':0 };
+  rows.forEach(function(r){ var s=r.getAttribute('data-status'); if(c[s]!==undefined) c[s]++; });
+  document.querySelectorAll('.tab-nav .tab-btn').forEach(function(b){
+    var m=(b.getAttribute('onclick')||'').match(/agentTab\('([^']+)'/);
+    if(!m) return; var st=m[1];
+    b.textContent = (st==='all'?'全部':st) + ' (' + (c[st==='all'?'all':st]||0) + ')';
+  });
+}
+function renderAgentPage(){
+  updateAgentTabCounts();
+  var rows = agentRows(), total = rows.length;
+  var pages = Math.max(1, Math.ceil(total/agState.size));
+  if(agState.page>pages) agState.page=pages;
+  if(agState.page<1) agState.page=1;
+  agentAllRows().forEach(function(r){ r.style.display='none'; });
+  var start=(agState.page-1)*agState.size;
+  rows.slice(start, start+agState.size).forEach(function(r){ r.style.display=''; });
+  document.getElementById('agTotal').textContent = total;
+  var html=''; for(var i=1;i<=pages;i++){ html += '<button type="button" class="btn btn-sm '+(i===agState.page?'btn-primary':'btn-outline')+'" onclick="agentGoto('+i+')" style="min-width:32px;">'+i+'</button>'; }
+  document.getElementById('agPages').innerHTML = html;
+  var prev=document.getElementById('agPrev'), next=document.getElementById('agNext');
+  prev.disabled = agState.page<=1; prev.style.opacity = prev.disabled?'.5':'';
+  next.disabled = agState.page>=pages; next.style.opacity = next.disabled?'.5':'';
+  var jump=document.getElementById('agJump'); if(jump){ jump.max=pages; jump.placeholder=agState.page+'/'+pages; }
+}
+function agentTab(status, btn){
+  var nav = btn.closest('.tab-nav');
+  if(nav) nav.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  agState.tab = status; agState.page = 1;
+  renderAgentPage();
+}
+function agentGoto(n){ agState.page = n; renderAgentPage(); }
+function agentSetSize(v){ agState.size = parseInt(v,10)||10; agState.page = 1; renderAgentPage(); }
+function agentJump(){ var el=document.getElementById('agJump'); var v=parseInt(el.value,10); if(v){ agentGoto(v); el.value=''; } }
+renderFeat();
+renderAgentPage();
+function showToast(msg, icon){
+  var t = document.getElementById('toast');
+  t.textContent = (icon || '✓') + ' ' + msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.display = 'none'; }, 2400);
+}
+</script>
+</main>
+</body>
+</html>

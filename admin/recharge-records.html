@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>充值记录 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .filter-bar {
+            display: flex; gap: var(--spacing-sm); align-items: center;
+            margin-bottom: var(--spacing-lg); padding: var(--spacing-md);
+            background: var(--card-bg); border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light); flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link active" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+<!-- 数据统计菜单暂隐藏 <a class="sidebar-link" href="statistics.html"><span class="icon">📉</span><span>数据统计</span></a> -->
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<h2>企业用户充值记录</h2>
+<p>查看所有企业用户的充值订单详情，包含彩豆与金额的完整变动信息</p>
+</div>
+<!-- 筛选栏 -->
+<div class="filter-bar">
+<span style="color: var(--text-secondary); font-size: 13px;">时间：</span>
+<input class="input" style="width: 140px;" type="date" value="2026-04-01"/>
+<span style="color: var(--text-muted);">至</span>
+<input class="input" style="width: 140px;" type="date" value="2026-05-15"/>
+<input class="input" placeholder="搜索用户/订单号" style="width: 180px;" type="text"/>
+<button class="btn btn-sm btn-primary">查询</button>
+<button class="btn btn-sm btn-outline">导出</button>
+</div>
+<!-- 充值记录表格 -->
+<div class="content-card">
+<div class="content-card-header">
+<h3 class="content-card-title">充值订单明细</h3>
+<span style="font-size: 13px; color: var(--text-muted);">共 4 条记录</span>
+</div>
+<div class="table-wrapper">
+<table class="table table-wide">
+<thead>
+<tr>
+<th>时间</th>
+<th>用户</th>
+<th>订单号</th>
+<th>充值金额</th>
+<th>购买彩豆</th>
+<th>赠送彩豆</th>
+<th>状态</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr data-time="2026-05-15 08:00" data-user="李用户" data-order="RC20260515001" data-type="充值" data-channel="微信支付" data-money="¥30.00" data-buy="3,000" data-gift="0" data-ratio="0.01" data-before="¥142.00 / 14,200 彩豆" data-after="¥172.00 / 17,200 彩豆" data-state="成功">
+<td>2026-05-15 08:00</td>
+<td>李用户</td>
+<td><code>RC20260515001</code></td>
+<td class="amount positive">¥30.00</td>
+<td class="amount">3,000</td>
+<td class="amount">0</td>
+<td><span class="badge badge-success">成功</span></td>
+<td><button class="btn btn-sm btn-outline" onclick="openRcDetail(this)" type="button">详情</button></td>
+</tr>
+<tr data-time="2026-05-13 15:00" data-user="王五" data-order="RC20260513150000" data-type="充值" data-channel="支付宝" data-money="¥50.00" data-buy="5,000（待入账）" data-gift="0（待入账）" data-ratio="-" data-before="-" data-after="-" data-state="处理中">
+<td>2026-05-13 15:00</td>
+<td>王五</td>
+<td><code>RC20260513150000</code></td>
+<td class="amount positive">¥50.00</td>
+<td class="amount">5,000</td>
+<td class="amount">0</td>
+<td><span class="badge badge-warning">处理中</span></td>
+<td><button class="btn btn-sm btn-outline" onclick="openRcDetail(this)" type="button">详情</button></td>
+</tr>
+<tr data-time="2026-05-10 14:30" data-user="李用户" data-order="RC20260510001" data-type="充值" data-channel="微信支付" data-money="¥100.00" data-buy="10,000" data-gift="0" data-ratio="0.01" data-before="¥49.50 / 4,950 彩豆" data-after="¥149.50 / 14,950 彩豆" data-state="成功">
+<td>2026-05-10 14:30</td>
+<td>李用户</td>
+<td><code>RC20260510001</code></td>
+<td class="amount positive">¥100.00</td>
+<td class="amount">10,000</td>
+<td class="amount">0</td>
+<td><span class="badge badge-success">成功</span></td>
+<td><button class="btn btn-sm btn-outline" onclick="openRcDetail(this)" type="button">详情</button></td>
+</tr>
+<tr data-time="2026-04-25 10:15" data-user="李用户" data-order="RC20260425001" data-type="充值" data-channel="支付宝" data-money="¥50.00" data-buy="5,000" data-gift="0" data-ratio="0.01" data-before="¥0.00 / 0 彩豆" data-after="¥50.00 / 5,000 彩豆" data-state="成功">
+<td>2026-04-25 10:15</td>
+<td>李用户</td>
+<td><code>RC20260425001</code></td>
+<td class="amount positive">¥50.00</td>
+<td class="amount">5,000</td>
+<td class="amount">0</td>
+<td><span class="badge badge-success">成功</span></td>
+<td><button class="btn btn-sm btn-outline" onclick="openRcDetail(this)" type="button">详情</button></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- 充值订单详情弹窗 -->
+<div class="modal-overlay" id="rcDetailModal" onclick="if(event.target===this)closeRcDetail()">
+<div class="modal" style="max-width: 600px;">
+<div class="modal-header">
+<span class="modal-title">充值订单详情</span>
+<button class="modal-close" onclick="closeRcDetail()">×</button>
+</div>
+<div class="modal-body">
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md) var(--spacing-lg);">
+<div><div style="font-size:12px;color:var(--text-muted);">订单号</div><div style="font-size:14px;font-weight:500;margin-top:2px;" id="rd-order">—</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">充值时间</div><div style="font-size:14px;font-weight:500;margin-top:2px;" id="rd-time">—</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">用户</div><div style="font-size:14px;font-weight:500;margin-top:2px;" id="rd-user">—</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">状态</div><div style="margin-top:2px;"><span class="badge badge-success" id="rd-state">—</span></div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">订单类型</div><div style="font-size:14px;font-weight:500;margin-top:2px;" id="rd-type">—</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">支付渠道</div><div style="font-size:14px;font-weight:500;margin-top:2px;" id="rd-channel">—</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">充值金额</div><div style="font-size:14px;font-weight:500;margin-top:2px;" id="rd-money">—</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">购买彩豆</div><div style="font-size:14px;font-weight:500;margin-top:2px;" id="rd-buy">—</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">赠送彩豆</div><div style="font-size:14px;font-weight:500;margin-top:2px;" id="rd-gift">—</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">充值前余额</div><div style="font-size:14px;font-weight:500;margin-top:2px;" id="rd-before">—</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">充值后余额</div><div style="font-size:14px;font-weight:500;margin-top:2px;" id="rd-after">—</div></div>
+</div>
+</div>
+<div class="modal-footer">
+<button class="btn btn-outline" onclick="closeRcDetail()">关闭</button>
+</div>
+</div>
+</div>
+<script>
+function openRcDetail(btn){
+  var d = btn.closest('tr').dataset;
+  ['order','time','user','state','type','channel','money','buy','gift','before','after'].forEach(function(k){
+    var el = document.getElementById('rd-' + k);
+    if (el) el.textContent = d[k] || '—';
+  });
+  var st = document.getElementById('rd-state');
+  st.className = 'badge ' + (d.state === '成功' ? 'badge-success' : d.state === '处理中' ? 'badge-warning' : 'badge-danger');
+  document.getElementById('rcDetailModal').classList.add('active');
+}
+function closeRcDetail(){
+  document.getElementById('rcDetailModal').classList.remove('active');
+}
+</script>
+</main>
+</body>
+</html>

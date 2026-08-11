@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>结算单 - 开发者端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; }
+        .stat-value { font-size: 24px; font-weight: 700; color: var(--developer-color); }
+        .stat-label { font-size: 13px; color: var(--text-muted); margin-top: var(--spacing-xs); }
+        
+        /* 标签页样式 */
+        .tab-nav { display: flex; gap: var(--spacing-xs); margin-bottom: var(--spacing-lg); border-bottom: 2px solid var(--border-light); }
+        .tab-btn { padding: var(--spacing-md) var(--spacing-lg); color: var(--text-secondary); text-decoration: none; border-bottom: 2px solid transparent; margin-bottom: -2px; cursor: pointer; transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none; font-size: 14px; }
+        .tab-btn:hover { color: var(--developer-color); }
+        .tab-btn.active { color: var(--developer-color); border-bottom-color: var(--developer-color); font-weight: 500; }
+        
+        /* 复选框样式 */
+        .checkbox-col { width: 40px; }
+        .checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: var(--developer-color); }
+        
+        /* 选择操作栏 */
+        .selection-bar { background: var(--developer-light); border-radius: var(--radius-md); padding: var(--spacing-md); margin-bottom: var(--spacing-md); display: none; align-items: center; justify-content: space-between; }
+        .selection-bar.active { display: flex; }
+        .selection-info { display: flex; align-items: center; gap: var(--spacing-md); }
+        .selection-count { font-weight: 600; color: var(--developer-color); }
+        
+        /* 开票状态 */
+        .badge-pending { background: var(--admin-light); color: var(--admin-color); }
+        .badge-processing { background: var(--user-light); color: var(--user-color); }
+        .badge-withdrawn { background: var(--developer-light); color: var(--developer-color); }
+    </style>
+
+<style id="identity-switcher-css">
+.id-switcher{position:relative;display:inline-flex;align-items:center;}
+.id-trigger{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 6px;border-radius:8px;cursor:pointer;transition:background 0.15s;user-select:none;}
+.id-trigger:hover{background:rgba(0,0,0,0.05);}
+.id-avatar{width:32px;height:32px;border-radius:50%;background:#EFF4FF;color:#2563EB;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.id-info{display:flex;flex-direction:column;align-items:flex-start;line-height:1.3;}
+.id-org{font-size:13px;font-weight:500;color:#1e293b;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.id-type-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;background:#EFF4FF;color:#2563EB;}
+.id-chevron{font-size:10px;color:#94a3b8;margin-left:2px;transition:transform 0.2s;}
+.id-switcher.open .id-chevron{transform:rotate(180deg);}
+.id-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:white;border:1px solid #dfe4ee;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:240px;z-index:999;overflow:hidden;}
+.id-switcher.open .id-menu{display:block;}
+.id-menu-hd{padding:10px 14px 8px;font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:1px;border-bottom:1px solid #ecf0f6;}
+.id-menu-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background 0.15s;text-decoration:none;color:inherit;}
+.id-menu-item:hover{background:#F8FAFC;}
+.id-menu-item.current{background:#F8FAFF;}
+.id-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.id-dot.active{background:#2563EB;}
+.id-dot.idle{background:#dfe4ee;}
+.id-item-body{flex:1;}
+.id-item-org{font-size:13px;font-weight:500;color:#1e293b;}
+.id-item-type{font-size:11px;color:#94a3b8;margin-top:1px;}
+.id-item-tag{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;margin-left:auto;flex-shrink:0;}
+.id-item-tag.current-tag{background:#EFF4FF;color:#2563EB;}
+.id-menu-sep{height:1px;background:#ecf0f6;margin:4px 0;}
+.id-menu-action{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:12px;color:#64748b;cursor:pointer;transition:background 0.15s;text-decoration:none;}
+.id-menu-action:hover{background:#F8FAFC;color:#2563EB;}
+</style>
+</head>
+<body>
+<header class="top-bar developer">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="id-switcher" id="idSwitcher">
+<div class="id-trigger" onclick="toggleIdMenu()">
+<div class="id-avatar">张</div>
+<div class="id-info">
+<span class="id-org">广州某某科技有限公司</span>
+<span class="id-type-badge" style="background:#D1FAE5;color:#059669;">开发者</span>
+</div>
+<span class="id-chevron">▾</span>
+</div>
+<div class="id-menu">
+<div class="id-menu-hd">切换工作台身份</div>
+<div class="id-menu-item current">
+<div class="id-dot active" style="background:#059669;"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">开发者</div>
+</div>
+<span class="id-item-tag current-tag" style="background:#D1FAE5;color:#059669;">当前</span>
+</div>
+<div class="id-menu-item" onclick="location.href='../user/index.html'">
+<div class="id-dot idle"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">采购单位</div>
+</div>
+</div>
+<div class="id-menu-sep"></div>
+<a class="id-menu-action" href="../user/register-select.html">＋ 注册新机构类型</a>
+<a class="id-menu-action" href="#" onclick="alert('已退出登录');return false;">退出登录</a>
+</div>
+</div>
+<script>
+function toggleIdMenu(){
+  var el=document.getElementById('idSwitcher');
+  el.classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  var sw=document.getElementById('idSwitcher');
+  if(sw && !sw.contains(e.target)) sw.classList.remove('open');
+});
+</script>
+</div>
+</header>
+<aside class="sidebar developer">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="agent-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="member-list.html"><span class="icon">👥</span><span>成员管理</span></a>
+<a class="sidebar-link" href="revenue-list.html"><span class="icon">📈</span><span>收入看板</span></a>
+<a class="sidebar-link active" href="settlement-list.html"><span class="icon">📄</span><span>结算单</span></a>
+<a class="sidebar-link" href="withdrawal-list.html"><span class="icon">💸</span><span>提现管理</span></a><a class="sidebar-link" href="bank-card.html"><span class="icon">🏦</span><span>收款账户</span></a>
+<a class="sidebar-link" href="dev-invoice-list.html"><span class="icon">🧾</span><span>发票管理</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+<div>
+<h2>结算单</h2>
+<p>查看和管理您的结算记录</p>
+</div>
+</div>
+<div class="stats-grid">
+<div class="stat-card">
+<div class="stat-value">¥15,285.84</div>
+<div class="stat-label">今年累计营收</div>
+</div>
+<div class="stat-card">
+<div class="stat-value" style="color: var(--warning-color);">¥0.00</div>
+<div class="stat-label">待结算金额</div>
+</div>
+<div class="stat-card">
+<div class="stat-value" style="color: var(--warning-color);">¥3,584.00</div>
+<div class="stat-label">待确认金额</div>
+</div>
+<div class="stat-card">
+<div class="stat-value" style="color: var(--developer-color);">¥4,302.76</div>
+<div class="stat-label">已提现金额</div>
+</div>
+</div>
+<!-- 标签页导航 -->
+<div class="tab-nav">
+<button class="tab-btn active" onclick="filterStatus('all', this)" type="button">全部 (6)</button>
+<button class="tab-btn" onclick="filterStatus('待我确认', this)" type="button">待我确认 (1)</button>
+<button class="tab-btn" onclick="filterStatus('已确认', this)" type="button">已确认 (4)</button>
+<button class="tab-btn" onclick="filterStatus('逾期并入下月', this)" type="button">逾期并入下月 (1)</button>
+</div>
+<!-- 选择操作栏 - 待结算页面 -->
+
+<!-- 选择操作栏 -->
+
+<!-- 全部记录表格 -->
+<div class="content-card">
+<div class="table-wrapper">
+<table class="table table-wide">
+<thead>
+<tr>
+<th>结算单号</th>
+<th>结算周期</th>
+<th>营收总额</th>
+<th>平台分成（20%）</th>
+<th>算力成本费</th>
+<th>应收金额</th>
+<th>确认状态</th>
+<th>提现状态</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr data-status="待我确认">
+<td>ST20260601</td>
+<td>2026年6月</td>
+<td>¥5,120.00</td>
+<td>−¥1,024.00</td>
+<td style="color:var(--danger-color);">−¥512.00</td>
+<td class="amount positive">¥3,584.00</td>
+<td><span class="badge badge-warning">待我确认</span></td>
+<td>—</td>
+<td>
+<a class="btn btn-sm btn-outline" href="settlement-view.html">详情</a>
+<a class="btn btn-sm btn-primary" href="settlement-view.html">确认结算单</a>
+</td>
+</tr>
+<tr data-status="已确认">
+<td>ST20260501</td>
+<td>2026年5月</td>
+<td>¥4,260.50</td>
+<td>−¥852.10</td>
+<td style="color:var(--danger-color);">−¥426.05</td>
+<td class="amount positive">¥2,982.35</td>
+<td><span class="badge badge-success">已确认</span></td>
+<td><span class="badge badge-info">提现中</span></td>
+<td>
+<a class="btn btn-sm btn-outline" href="settlement-view.html">详情</a>
+</td>
+</tr>
+<tr data-status="已确认">
+<td>ST20260401</td>
+<td>2026年4月</td>
+<td>¥3,256.80</td>
+<td>−¥651.36</td>
+<td style="color:var(--danger-color);">−¥325.68</td>
+<td class="amount positive">¥2,279.76</td>
+<td><span class="badge badge-success">已确认</span></td>
+<td><span class="badge badge-withdrawn">已提现</span></td>
+<td><a class="btn btn-sm btn-outline" href="settlement-view.html">详情</a></td>
+</tr>
+<tr data-status="已确认">
+<td>ST20260301</td>
+<td>2026年3月</td>
+<td>¥2,890.00</td>
+<td>−¥578.00</td>
+<td style="color:var(--danger-color);">−¥289.00</td>
+<td class="amount positive">¥2,023.00</td>
+<td><span class="badge badge-success">已确认</span></td>
+<td><span class="badge badge-withdrawn">已提现</span></td>
+<td><a class="btn btn-sm btn-outline" href="settlement-view.html">详情</a></td>
+</tr>
+<tr data-status="已确认">
+<td>ST20260201</td>
+<td>2026年2月</td>
+<td>¥1,500.00</td>
+<td>−¥300.00</td>
+<td style="color:var(--danger-color);">−¥150.00</td>
+<td class="amount positive">¥1,050.00</td>
+<td><span class="badge badge-success">已确认</span></td>
+<td><span class="badge badge-info">提现中</span></td>
+<td><a class="btn btn-sm btn-outline" href="settlement-view.html">详情</a></td>
+</tr>
+<tr data-status="逾期并入下月">
+<td>ST20260101</td>
+<td>2026年1月</td>
+<td>¥800.00</td>
+<td>−¥160.00</td>
+<td style="color:var(--danger-color);">−¥80.00</td>
+<td class="amount positive">¥560.00</td>
+<td><span class="badge" style="background:#ffedd5; color:#c2410c;">逾期并入下月</span></td>
+<td>—</td>
+<td><a class="btn btn-sm btn-outline" href="settlement-view.html">详情</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+
+</body>
+</html>

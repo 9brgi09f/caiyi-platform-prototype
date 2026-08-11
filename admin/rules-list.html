@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>规则设置 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .rule-card {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-md); display: flex; align-items: center; gap: var(--spacing-lg);
+        }
+        .rule-icon { width: 48px; height: 48px; background: var(--admin-light); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .rule-info { flex: 1; }
+        .rule-name { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+        .rule-desc { font-size: 13px; color: var(--text-muted); }
+        .rule-status { display: flex; align-items: center; gap: var(--spacing-sm); }
+        .rule-switch { position: relative; width: 44px; height: 24px; }
+        .rule-switch input { opacity: 0; width: 0; height: 0; }
+        .rule-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border-color); transition: 0.2s; border-radius: 24px; }
+        .rule-slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: 0.2s; border-radius: 50%; }
+        .rule-switch input:checked + .rule-slider { background-color: var(--admin-color); }
+        .rule-switch input:checked + .rule-slider:before { transform: translateX(20px); }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link active" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+<!-- 数据统计菜单暂隐藏 <a class="sidebar-link" href="statistics.html"><span class="icon">📉</span><span>数据统计</span></a> -->
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+<div>
+<h2>规则设置</h2>
+<p>配置平台各项业务规则和参数</p>
+</div>
+</div>
+<div class="rule-card">
+<div class="rule-icon" style="color:var(--klein);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg></div>
+<div class="rule-info">
+<div class="rule-name">提现规则</div>
+<div class="rule-desc">按月结算（每月1日生成结算单）；提现须上传增值税专用发票（发票金额与提现金额一致），1%/3% 税率专票在申请时按结算金额 5.29%/3.11% 扣减分成款</div>
+</div>
+<div class="rule-status">
+<label class="rule-switch">
+<input checked="" type="checkbox"/>
+<span class="rule-slider"></span>
+</label>
+</div>
+<a class="btn btn-sm btn-outline" href="rules-edit.html">编辑</a>
+</div>
+<div class="rule-card">
+<div class="rule-icon" style="color:var(--klein);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg></div>
+<div class="rule-info">
+<div class="rule-name">计费规则</div>
+<div class="rule-desc">配置平台算力成本单价、用户免费使用次数及调用计费参数，修改留痕、次月 1 日生效</div>
+</div>
+<div class="rule-status">
+<label class="rule-switch">
+<input checked="" type="checkbox"/>
+<span class="rule-slider"></span>
+</label>
+</div>
+<a class="btn btn-sm btn-outline" href="rules-token-edit.html">编辑</a>
+</div>
+<div class="rule-card">
+<div class="rule-icon" style="color:var(--klein);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+<div class="rule-info">
+<div class="rule-name">分佣规则</div>
+<div class="rule-desc">平台统一设定分佣比例（可配置），随智能体上架自动执行；平台算力计费下算力成本由平台承担，分佣比例相应下调；调整次月1日生效</div>
+</div>
+<div class="rule-status">
+<label class="rule-switch">
+<input checked="" type="checkbox"/>
+<span class="rule-slider"></span>
+</label>
+</div>
+<a class="btn btn-sm btn-outline" href="rules-commission-edit.html">编辑</a>
+</div>
+<div class="rule-card">
+<div class="rule-icon" style="color:var(--klein);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 8l3 4 3-4"/><path d="M12 12v5"/><path d="M9.5 13.5h5"/></svg></div>
+<div class="rule-info">
+<div class="rule-name">彩豆规则</div>
+<div class="rule-desc">1元=100彩豆，充值阶梯赠送（如满30送5%、满100送10%），比例修改完整留痕</div>
+</div>
+<div class="rule-status">
+<label class="rule-switch">
+<input checked="" type="checkbox"/>
+<span class="rule-slider"></span>
+</label>
+</div>
+<a class="btn btn-sm btn-outline" href="rules-bean-edit.html">编辑</a>
+</div>
+<!-- 消费规则卡片暂隐藏
+<div class="rule-card">
+<div class="rule-icon" style="color:var(--klein);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+<div class="rule-info">
+<div class="rule-name">消费规则</div>
+<div class="rule-desc">预扣费模式，低余额提醒阈值10元</div>
+</div>
+<div class="rule-status">
+<label class="rule-switch">
+<input checked="" type="checkbox"/>
+<span class="rule-slider"></span>
+</label>
+</div>
+<a class="btn btn-sm btn-outline" href="rules-consumption-edit.html">编辑</a>
+</div>
+-->
+
+<!-- 入驻规则：按需求暂时隐藏（恢复时移除下方 rule-card 的 display:none 即可） -->
+<div class="rule-card" style="display:none;">
+<div class="rule-icon" style="color:var(--klein);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg></div>
+<div class="rule-info">
+<div class="rule-name">入驻规则</div>
+<div class="rule-desc">入驻需人工审核，3个工作日内完成，需签署入驻协议</div>
+</div>
+<div class="rule-status">
+<label class="rule-switch">
+<input checked="" type="checkbox"/>
+<span class="rule-slider"></span>
+</label>
+</div>
+<a class="btn btn-sm btn-outline" href="rules-agent-edit.html">编辑</a>
+</div>
+<div class="rule-card">
+<div class="rule-icon" style="color:var(--klein);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></div>
+<div class="rule-info">
+<div class="rule-name">渠道规则</div>
+<div class="rule-desc">新客户阶梯 20%/25%/30%、存续客户 10%/15%/20%（按年度累计基数分段）；生态共建上限 80%；超上限须主任办公会特批</div>
+</div>
+<div class="rule-status">
+<label class="rule-switch">
+<input checked="" type="checkbox"/>
+<span class="rule-slider"></span>
+</label>
+</div>
+<a class="btn btn-sm btn-outline" href="rules-channel-edit.html">编辑</a>
+</div>
+<!-- 奖励规则卡片暂隐藏
+<div class="rule-card">
+<div class="rule-icon" style="color:var(--klein);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></div>
+<div class="rule-info">
+<div class="rule-name">奖励规则</div>
+<div class="rule-desc">邀请新用户奖励10%，消费返利1%</div>
+</div>
+<div class="rule-status">
+<label class="rule-switch">
+<input checked="" type="checkbox"/>
+<span class="rule-slider"></span>
+</label>
+</div>
+<a class="btn btn-sm btn-outline" href="rules-reward-edit.html">编辑</a>
+</div>
+-->
+
+</main>
+</body>
+</html>

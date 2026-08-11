@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>渠道商入驻申请 - 渠道端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; }
+        .stat-value { font-size: 24px; font-weight: 700; color: var(--klein); }
+        .stat-label { font-size: 13px; color: var(--text-muted); margin-top: var(--spacing-xs); }
+        #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+        .form-wrap { max-width: 720px; margin: 0 auto; }
+        .form-item { margin-bottom: var(--spacing-lg); }
+        .form-label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+        .form-label i { color: var(--danger-color); font-style: normal; }
+        .form-hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; display: block; }
+        .upload-box { border: 1px dashed var(--border-color); border-radius: var(--radius-md); padding: var(--spacing-lg); text-align: center; color: var(--text-muted); font-size: 13px; cursor: pointer; }
+    </style>
+</head>
+<body>
+<header class="top-bar channel">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+</header>
+<main class="main-content" style="margin-left: 0;">
+<div class="form-wrap">
+<a class="back-link" href="../index.html">← 返回首页</a>
+<div class="page-header">
+<h2>渠道商入驻申请</h2>
+<p>审核通过后开通渠道端并生成专属邀请码</p>
+</div>
+<div class="content-card">
+<div class="form-item"><label class="form-label">机构名称 <i>*</i></label><input class="input" placeholder="与营业执照一致" style="width:100%;" type="text"/></div>
+<div class="form-item"><label class="form-label">统一社会信用代码 <i>*</i></label><input class="input" maxlength="18" placeholder="18位统一社会信用代码" style="width:100%;" type="text"/></div>
+<div class="form-item"><label class="form-label">法定代表人 <i>*</i></label><input class="input" style="width:100%;" type="text"/></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-md);">
+<div class="form-item"><label class="form-label">联系人 <i>*</i></label><input class="input" style="width:100%;" type="text"/></div>
+<div class="form-item"><label class="form-label">联系电话 <i>*</i></label><input class="input" maxlength="11" style="width:100%;" type="tel"/></div>
+</div>
+<div class="form-item"><label class="form-label">营业执照 <i>*</i></label><div class="upload-box">点击上传营业执照扫描件（png/jpg/pdf，不超过 10MB）</div></div>
+<div class="form-item"><label class="form-label">专业能力与资源渠道说明 <i>*</i></label><textarea class="input" placeholder="请说明与推荐业务相匹配的专业能力、资源网络或市场渠道" rows="4" style="width:100%;"></textarea></div>
+<div class="form-item"><label class="form-label">拟合作模式 <i>*</i></label>
+<select class="select" style="width: 240px;">
+<option>客户推荐模式</option>
+<option>联合共创模式</option>
+<option>生态共建模式</option>
+</select>
+</div>
+<div class="form-item"><label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;"><input type="checkbox"/> 有意向签订长期合作协议（特定领域/区域资源优势机构）</label></div>
+<div style="display:flex;gap:var(--spacing-md);justify-content:center;margin-top:var(--spacing-lg);">
+<button class="btn btn-primary" onclick="submitApply()" type="button">提交申请</button>
+</div>
+</div>
+</div>
+</main>
+<!-- 提交成功弹窗 -->
+<div class="modal-overlay" id="okModal" onclick="if(event.target===this)this.classList.remove('active')">
+<div class="modal" style="max-width: 420px;">
+<div class="modal-header"><span class="modal-title">申请已提交</span><button class="modal-close" onclick="document.getElementById('okModal').classList.remove('active')">×</button></div>
+<div class="modal-body"><p style="font-size:14px;line-height:1.8;">您的入驻申请已提交，当前状态为「<strong style="color:var(--warning-color);">待审核</strong>」。平台运营将核验主体资质与准入条件，审核结果将以短信通知；审核通过后开通渠道端全部功能并生成专属邀请码。</p></div>
+<div class="modal-footer"><button class="btn btn-primary" onclick="document.getElementById('okModal').classList.remove('active')">我知道了</button></div>
+</div>
+</div>
+<script>
+function submitApply(){ document.getElementById('okModal').classList.add('active'); }
+</script>
+</body>
+</html>

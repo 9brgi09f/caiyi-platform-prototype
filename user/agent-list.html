@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>智能体市场 - 用户端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+  .page-header{background:linear-gradient(135deg,#2563EB,#1D4ED8);color:#fff;padding:var(--spacing-lg) var(--spacing-xl);border-radius:var(--radius-lg);margin-bottom:var(--spacing-lg);}
+  .page-header h2{color:#fff;margin-bottom:var(--spacing-xs);}
+  .page-header p{opacity:.9;font-size:14px;}
+  /* 筛选区 */
+  .flt{background:var(--card-bg);border:1px solid var(--border-light);border-radius:14px;padding:16px 18px;margin-bottom:16px;box-shadow:0 1px 6px rgba(0,0,0,.04);}
+  .flt-top{display:flex;gap:12px;align-items:center;margin-bottom:12px;flex-wrap:wrap;}
+  .flt-top .spacer{flex:1;}
+  .flt-sort{padding:8px 12px;border:1px solid #d9d9d9;border-radius:9px;font-size:13px;background:#fff;cursor:pointer;}
+  .flt-collapse{width:34px;height:34px;border-radius:50%;border:1px solid #c7d9fb;background:#EFF4FF;color:#2563EB;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .flt-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-top:1px dashed var(--border-light);}
+  .flt-row:first-of-type{border-top:none;}
+  .flt-name{flex-shrink:0;width:84px;font-size:13px;font-weight:600;color:#2563EB;border:1px solid #c7d9fb;background:#EFF4FF;border-radius:8px;padding:4px 8px;text-align:center;}
+  .flt-opts{display:flex;flex-wrap:wrap;gap:6px 8px;flex:1;padding-top:1px;}
+  .pill{font-size:13px;color:var(--text-muted);padding:4px 12px;border-radius:16px;cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .pill:hover{color:#2563EB;background:#EFF4FF;}
+  .pill.all{color:#2563EB;border:1px solid #c7d9fb;background:#EFF4FF;}
+  .pill.on{background:#2563EB;color:#fff;}
+  #moreFilters{display:none;}
+  #moreFilters.show{display:block;}
+  .more-toggle{margin-top:10px;text-align:center;}
+  .more-toggle button{background:none;border:none;color:#2563EB;font-size:13px;cursor:pointer;padding:4px 10px;}
+  .flt-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;padding-top:12px;border-top:1px dashed var(--border-light);align-items:center;min-height:20px;}
+  .flt-chips .lbl{font-size:12px;color:var(--text-muted);}
+  .chip{font-size:12px;background:#EFF4FF;color:#2563EB;border:1px solid #c7d9fb;border-radius:14px;padding:3px 10px;cursor:pointer;}
+  .chip .x{margin-left:4px;opacity:.7;}
+  .chip-clear{font-size:12px;color:var(--text-muted);cursor:pointer;text-decoration:underline;}
+  /* 卡片网格 */
+  .mkt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;}
+  .mkt-card{background:var(--card-bg);border:1px solid var(--border-light);border-radius:14px;padding:16px 18px 14px;position:relative;transition:all .2s;display:flex;flex-direction:column;}
+  .mkt-card:hover{border-color:#2563EB;box-shadow:0 6px 22px rgba(37,99,235,.12);transform:translateY(-2px);}
+  .mkt-3rd{position:absolute;top:14px;right:14px;font-size:11px;font-weight:600;border-radius:8px;padding:2px 9px;}
+  .mkt-3rd.official{color:#2563EB;background:#EFF4FF;border:1px solid #c7d9fb;}
+  .mkt-3rd.third{color:#EA580C;background:#FFF1E9;border:1px solid #fdba74;}
+  .mkt-top{display:flex;gap:12px;align-items:flex-start;margin-bottom:6px;}
+  .mkt-icon{width:52px;height:52px;border-radius:12px;overflow:hidden;flex-shrink:0;}
+  .mkt-head{flex:1;min-width:0;}
+  .mkt-3rd + .mkt-top .mkt-head{padding-right:80px;}
+  .mkt-name{font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px;}
+  .mkt-name .nm{flex:1;min-width:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3;}
+  .vbtn{width:22px;height:22px;border-radius:50%;background:#2563EB;color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:9px;}
+  .vbtn:hover{background:#1D4ED8;}
+  .mkt-new{font-size:11px;font-weight:500;color:#059669;background:#E7F7F0;border:1px solid #a7f3d0;border-radius:8px;padding:1px 7px;flex-shrink:0;}
+  .mkt-desc{font-size:13px;color:var(--text-secondary);margin:8px 0 10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .mkt-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
+  .who{font-size:11.5px;padding:2px 9px;border-radius:10px;font-weight:500;}
+  .who.buyer{background:#EFF4FF;color:#2563EB;}
+  .who.supplier{background:#E7F7F0;color:#059669;}
+  .who.agency{background:#F3EEFF;color:#7C3AED;}
+  .who.regulator{background:#FFF1E9;color:#EA580C;}
+  .mkt-meta{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;color:var(--text-muted);margin-bottom:8px;flex-wrap:wrap;}
+  .mkt-price{font-weight:600;color:#2563EB;}
+  .free-use{display:inline-flex;align-items:center;gap:5px;align-self:flex-start;margin-bottom:10px;padding:3px 8px;border:1px solid #A7F3D0;border-radius:7px;background:#ECFDF5;color:#047857;font-size:11.5px;font-weight:600;}
+  .free-use.warn{border-color:#FDE68A;background:#FFFBEB;color:#A16207;}
+  .free-use.done{border-color:#E2E8F0;background:#F8FAFC;color:#64748B;font-weight:500;}
+  .mkt-price small{font-weight:400;color:var(--text-muted);}
+  .mkt-ops{display:flex;justify-content:space-between;align-items:center;gap:8px;padding-top:12px;border-top:1px solid var(--border-light);margin-top:auto;}
+  .ops-l{display:flex;gap:8px;}
+  .ops-r{display:flex;gap:8px;}
+  .mbtn{font-size:13px;padding:6px 14px;border-radius:8px;cursor:pointer;border:1px solid transparent;white-space:nowrap;text-decoration:none;display:inline-block;}
+  .mbtn-primary{background:#2563EB;color:#fff;}
+  .mbtn-primary:hover{background:#1D4ED8;}
+  .mbtn-icon{background:#fff;color:var(--text-muted);border-color:#e2e8f0;font-size:12px;padding:6px 10px;}
+  .mbtn-icon:hover{border-color:#2563EB;color:#2563EB;}
+  .mbtn-match{background:#f8fafc;color:#94a3b8;border-color:#e2e8f0;font-size:12px;padding:6px 10px;cursor:pointer;}
+  .no-result{display:none;text-align:center;color:var(--text-muted);padding:40px;font-size:14px;}
+  @media(max-width:520px){.mkt-grid{grid-template-columns:1fr;}.flt-name{width:72px;}}
+</style>
+
+<style id="identity-switcher-css">
+.id-switcher{position:relative;display:inline-flex;align-items:center;}
+.id-trigger{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 6px;border-radius:8px;cursor:pointer;transition:background 0.15s;user-select:none;}
+.id-trigger:hover{background:rgba(0,0,0,0.05);}
+.id-avatar{width:32px;height:32px;border-radius:50%;background:#EFF4FF;color:#2563EB;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.id-info{display:flex;flex-direction:column;align-items:flex-start;line-height:1.3;}
+.id-org{font-size:13px;font-weight:500;color:#1e293b;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.id-type-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;background:#EFF4FF;color:#2563EB;}
+.id-chevron{font-size:10px;color:#94a3b8;margin-left:2px;transition:transform 0.2s;}
+.id-switcher.open .id-chevron{transform:rotate(180deg);}
+.id-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:white;border:1px solid #dfe4ee;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:240px;z-index:999;overflow:hidden;}
+.id-switcher.open .id-menu{display:block;}
+.id-menu-hd{padding:10px 14px 8px;font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:1px;border-bottom:1px solid #ecf0f6;}
+.id-menu-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background 0.15s;text-decoration:none;color:inherit;}
+.id-menu-item:hover{background:#F8FAFC;}
+.id-menu-item.current{background:#F8FAFF;}
+.id-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.id-dot.active{background:#2563EB;}
+.id-dot.idle{background:#dfe4ee;}
+.id-item-body{flex:1;}
+.id-item-org{font-size:13px;font-weight:500;color:#1e293b;}
+.id-item-type{font-size:11px;color:#94a3b8;margin-top:1px;}
+.id-item-tag{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;margin-left:auto;flex-shrink:0;}
+.id-item-tag.current-tag{background:#EFF4FF;color:#2563EB;}
+.id-menu-sep{height:1px;background:#ecf0f6;margin:4px 0;}
+.id-menu-action{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:12px;color:#64748b;cursor:pointer;transition:background 0.15s;text-decoration:none;}
+.id-menu-action:hover{background:#F8FAFC;color:#2563EB;}
+</style>
+</head>
+<body>
+<header class="top-bar user">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div style="position: relative;">
+<input class="form-input" id="searchInput" oninput="filterCards()" placeholder="搜索智能体..." style="width: 200px; padding-left: 36px;" type="text"/>
+<span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); display: flex;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+</div>
+<div class="id-switcher" id="idSwitcher">
+<div class="id-trigger" onclick="toggleIdMenu()">
+<div class="id-avatar">李</div>
+<div class="id-info">
+<span class="id-org">广州某某科技有限公司</span>
+<span class="id-type-badge">采购单位</span>
+</div>
+<span class="id-chevron">▾</span>
+</div>
+<div class="id-menu">
+<div class="id-menu-hd">切换工作台身份</div>
+<div class="id-menu-item current">
+<div class="id-dot active"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">采购单位</div>
+</div>
+<span class="id-item-tag current-tag">当前</span>
+</div>
+<div class="id-menu-item" onclick="location.href='../developer/index.html'">
+<div class="id-dot idle"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">开发者</div>
+</div>
+</div>
+<div class="id-menu-sep"></div>
+<a class="id-menu-action" href="../user/register-select.html">＋ 注册新机构类型</a>
+<a class="id-menu-action" href="#" onclick="alert('已退出登录');return false;">退出登录</a>
+</div>
+</div>
+<script>
+function toggleIdMenu(){
+  var el=document.getElementById('idSwitcher');
+  el.classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  var sw=document.getElementById('idSwitcher');
+  if(sw && !sw.contains(e.target)) sw.classList.remove('open');
+});
+</script>
+</div>
+</header>
+<aside class="sidebar user">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">🏪</span><span>概览</span></a>
+<a class="sidebar-link active" href="agent-list.html"><span class="icon">🤖</span><span>智能体市场</span></a>
+<a class="sidebar-link" href="recharge-list.html"><span class="icon">💰</span><span>账户充值</span></a>
+<a class="sidebar-link" href="balance.html"><span class="icon">💳</span><span>余额管理</span></a>
+<a class="sidebar-link" href="payment-accounts.html"><span class="icon">🏦</span><span>付款账户</span></a>
+<a class="sidebar-link" href="consumption-list.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<h2>智能体市场</h2>
+<p>发现和使用优质智能体服务</p>
+</div>
+
+<!-- 筛选区 -->
+<div class="flt">
+<div class="flt-top">
+<span style="font-size:13px;color:var(--text-muted);">共 <strong id="cnt">6</strong> 个智能体</span>
+<span class="spacer"></span>
+<select class="flt-sort"><option>综合排序</option><option>最多使用</option><option>价格从低到高</option><option>价格从高到低</option></select>
+<button class="flt-collapse" id="collapseBtn" onclick="toggleFilter()" title="收起/展开筛选">∧</button>
+</div>
+<div id="filterBody">
+<div class="flt-row"><span class="flt-name">用户群体</span><div class="flt-opts" data-dim="who"><span class="pill all on" onclick="pick(this,'who')">全部</span><span class="pill" onclick="pick(this,'who')">采购人</span><span class="pill" onclick="pick(this,'who')">供应商</span><span class="pill" onclick="pick(this,'who')">代理机构</span><span class="pill" onclick="pick(this,'who')">监管单位</span></div></div>
+<div class="flt-row"><span class="flt-name">应用场景</span><div class="flt-opts" data-dim="scene"><span class="pill all on" onclick="pick(this,'scene')">全部</span><span class="pill" onclick="pick(this,'scene')">招标策划</span><span class="pill" onclick="pick(this,'scene')">投标辅助</span><span class="pill" onclick="pick(this,'scene')">合规审查</span><span class="pill" onclick="pick(this,'scene')">合同管理</span><span class="pill" onclick="pick(this,'scene')">质疑处理</span><span class="pill" onclick="pick(this,'scene')">智能客服</span><span class="pill" onclick="pick(this,'scene')">档案管理</span><span class="pill" onclick="pick(this,'scene')">围串标识别</span><span class="pill" onclick="pick(this,'scene')">投诉处理</span></div></div>
+<div class="flt-row"><span class="flt-name">功能类型</span><div class="flt-opts" data-dim="func"><span class="pill all on" onclick="pick(this,'func')">全部</span><span class="pill" onclick="pick(this,'func')">文本创造</span><span class="pill" onclick="pick(this,'func')">工作助手</span><span class="pill" onclick="pick(this,'func')">数据分析</span><span class="pill" onclick="pick(this,'func')">图像识别</span><span class="pill" onclick="pick(this,'func')">语音合成</span><span class="pill" onclick="pick(this,'func')">知识检索</span></div></div>
+<div id="moreFilters">
+<div class="flt-row"><span class="flt-name">行业领域</span><div class="flt-opts" data-dim="industry"><span class="pill all on" onclick="pick(this,'industry')">全部</span><span class="pill" onclick="pick(this,'industry')">教育</span><span class="pill" onclick="pick(this,'industry')">科研</span><span class="pill" onclick="pick(this,'industry')">医疗健康</span><span class="pill" onclick="pick(this,'industry')">法律</span><span class="pill" onclick="pick(this,'industry')">金融</span><span class="pill" onclick="pick(this,'industry')">制造业</span><span class="pill" onclick="pick(this,'industry')">商业助手</span></div></div>
+<div class="flt-row"><span class="flt-name">采购阶段</span><div class="flt-opts" data-dim="stage"><span class="pill all on" onclick="pick(this,'stage')">全部</span><span class="pill" onclick="pick(this,'stage')">需求管理</span><span class="pill" onclick="pick(this,'stage')">交易管理</span><span class="pill" onclick="pick(this,'stage')">合同管理</span><span class="pill" onclick="pick(this,'stage')">履约监督</span><span class="pill" onclick="pick(this,'stage')">绩效评价</span></div></div>
+<div class="flt-row"><span class="flt-name">控制属性</span><div class="flt-opts" data-dim="ctrl"><span class="pill all on" onclick="pick(this,'ctrl')">全部</span><span class="pill" onclick="pick(this,'ctrl')">官方自研</span><span class="pill" onclick="pick(this,'ctrl')">第三方接入</span><span class="pill" onclick="pick(this,'ctrl')">开源社区</span><span class="pill" onclick="pick(this,'ctrl')">私有化部署</span></div></div>
+<div class="flt-row"><span class="flt-name">技术特性</span><div class="flt-opts" data-dim="tech"><span class="pill all on" onclick="pick(this,'tech')">全部</span><span class="pill" onclick="pick(this,'tech')">支持区块链存证</span><span class="pill" onclick="pick(this,'tech')">具备自然语言理解</span><span class="pill" onclick="pick(this,'tech')">集成大模型能力</span><span class="pill" onclick="pick(this,'tech')">支持API调用</span></div></div>
+</div>
+<div class="more-toggle"><button id="moreBtn" onclick="toggleMore()">更多筛选 ∨</button></div>
+<div class="flt-chips" id="chips"><span class="lbl">已选：</span><span class="chip-clear" id="clearBtn" onclick="clearAll()" style="display:none;">清空</span></div>
+</div>
+</div>
+
+<!-- 卡片网格 -->
+<div class="mkt-grid" id="grid">
+
+<div class="mkt-card" data-name="合规监测智能体" data-who="采购人 代理机构 监管单位" data-scene="合规审查" data-func="知识检索" data-ctrl="官方自研">
+<div class="mkt-top"><div class="mkt-icon"><svg width="52" height="52" viewBox="0 0 52 52"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0EA5E9"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs><rect width="52" height="52" fill="url(#g1)"/><g transform="translate(15,15) scale(0.92)" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 11.5 11 13.5 15 9.5"/></g></svg></div>
+<div class="mkt-head"><div class="mkt-name"><span class="nm" title="合规监测智能体">合规监测智能体</span> <span class="vbtn" onclick="openVideo('合规监测智能体')" title="播放演示视频">▶</span></div></div></div>
+<div class="mkt-desc">自动核查文档合规性，支持自定义规则库、敏感信息识别与合规报告生成，可按份批量解析采购文件。</div>
+<div class="mkt-tags"><span class="who buyer">采购人</span><span class="who agency">代理机构</span><span class="who regulator">监管单位</span></div>
+<div class="mkt-meta"><span>1,256 家在用</span><span class="mkt-price">约 10~150 彩豆/次 <small>· 按 Token</small></span></div><span class="free-use">新用户体验剩余 16 次</span>
+<div class="mkt-ops"><div class="ops-l"><span class="mbtn mbtn-icon" onclick="showToast('打开操作手册')" title="操作手册">📖 手册</span><span class="mbtn mbtn-match" onclick="matchTip()" title="撮合即将上线">🤝 撮合</span></div><div class="ops-r"><a class="mbtn mbtn-primary" href="agent-view.html?id=compliance">立即体验</a></div></div>
+</div>
+
+<div class="mkt-card" data-name="政府采购数据分析与可视化洞察决策辅助智能体" data-who="采购人 代理机构" data-scene="" data-func="数据分析" data-ctrl="官方自研">
+<div class="mkt-top"><div class="mkt-icon"><svg width="52" height="52" viewBox="0 0 52 52"><defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366F1"/><stop offset="1" stop-color="#4F46E5"/></linearGradient></defs><rect width="52" height="52" fill="url(#g2)"/><g transform="translate(15,15) scale(0.92)" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></g></svg></div>
+<div class="mkt-head"><div class="mkt-name"><span class="nm" title="政府采购数据分析与可视化洞察决策辅助智能体">政府采购数据分析与可视化洞察决策辅助智能体</span> <span class="vbtn" onclick="openVideo('政府采购数据分析与可视化洞察决策辅助智能体')" title="播放演示视频">▶</span></div></div></div>
+<div class="mkt-desc">上传数据一键生成可视化报表与洞察结论，支持多维透视、趋势预测与异常识别，辅助采购决策。</div>
+<div class="mkt-tags"><span class="who buyer">采购人</span><span class="who agency">代理机构</span></div>
+<div class="mkt-meta"><span>892 家在用</span><span class="mkt-price">30 彩豆/次 <small>· 按次</small></span></div><span class="free-use warn">新用户体验剩余 2 次</span>
+<div class="mkt-ops"><div class="ops-l"><span class="mbtn mbtn-match" onclick="matchTip()" title="撮合即将上线">🤝 撮合</span></div><div class="ops-r"><a class="mbtn mbtn-primary" href="agent-view.html?id=data">立即体验</a></div></div>
+</div>
+
+<div class="mkt-card" data-name="文案生成智能体" data-who="采购人" data-scene="" data-func="文本创造" data-ctrl="官方自研">
+<div class="mkt-top"><div class="mkt-icon"><svg width="52" height="52" viewBox="0 0 52 52"><defs><linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8B5CF6"/><stop offset="1" stop-color="#7C3AED"/></linearGradient></defs><rect width="52" height="52" fill="url(#g3)"/><g transform="translate(15,15) scale(0.92)" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/></g></svg></div>
+<div class="mkt-head"><div class="mkt-name"><span class="nm" title="文案生成智能体">文案生成智能体</span></div></div></div>
+<div class="mkt-desc">覆盖营销、公文、方案等多种场景，输入要点秒出成稿，支持多轮润色与风格切换，提升撰写效率。</div>
+<div class="mkt-tags"><span class="who buyer">采购人</span></div>
+<div class="mkt-meta"><span>2,103 家在用</span><span class="mkt-price">约 40~150 彩豆/次 <small>· 按 Token</small></span></div><span class="free-use done">免费体验已用完 · 按计费规则扣费</span>
+<div class="mkt-ops"><div class="ops-l"><span class="mbtn mbtn-icon" onclick="showToast('打开操作手册')" title="操作手册">📖 手册</span><span class="mbtn mbtn-match" onclick="matchTip()" title="撮合即将上线">🤝 撮合</span></div><div class="ops-r"><a class="mbtn mbtn-primary" href="agent-view.html?id=copy">立即体验</a></div></div>
+</div>
+
+<div class="mkt-card" data-name="图片处理智能体" data-who="供应商" data-scene="" data-func="图像识别" data-ctrl="第三方接入">
+<span class="mkt-3rd third">第三方</span>
+<div class="mkt-top"><div class="mkt-icon"><svg width="52" height="52" viewBox="0 0 52 52"><defs><linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F59E0B"/><stop offset="1" stop-color="#D97706"/></linearGradient></defs><rect width="52" height="52" fill="url(#g4)"/><g transform="translate(15,15) scale(0.92)" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></g></svg></div>
+<div class="mkt-head"><div class="mkt-name"><span class="nm" title="图片处理智能体">图片处理智能体</span> <span class="vbtn" onclick="openVideo('图片处理智能体')" title="播放演示视频">▶</span></div></div></div>
+<div class="mkt-desc">智能抠图、老照片修复、画质增强与格式转换，支持批量处理，输出高清可商用素材。</div>
+<div class="mkt-tags"><span class="who supplier">供应商</span></div>
+<div class="mkt-meta"><span>1,567 家在用</span><span class="mkt-price">约 5~200 彩豆/次 <small>· 按量</small></span></div>
+<div class="mkt-ops"><div class="ops-l"><span class="mbtn mbtn-icon" onclick="showToast('打开操作手册')" title="操作手册">📖 手册</span><span class="mbtn mbtn-match" onclick="matchTip()" title="撮合即将上线">🤝 撮合</span></div><div class="ops-r"><a class="mbtn mbtn-primary" href="agent-view.html?id=image">立即体验</a></div></div>
+</div>
+
+<div class="mkt-card" data-name="智能翻译智能体" data-who="供应商 代理机构" data-scene="" data-func="工作助手" data-ctrl="官方自研">
+<div class="mkt-top"><div class="mkt-icon"><svg width="52" height="52" viewBox="0 0 52 52"><defs><linearGradient id="g5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#10B981"/><stop offset="1" stop-color="#059669"/></linearGradient></defs><rect width="52" height="52" fill="url(#g5)"/><g transform="translate(15,15) scale(0.92)" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/></g></svg></div>
+<div class="mkt-head"><div class="mkt-name"><span class="nm" title="智能翻译智能体">智能翻译智能体</span></div></div></div>
+<div class="mkt-desc">中英日等多语种互译，专业术语库加持，保留排版格式，按实际使用量计费，适合各类翻译场景。</div>
+<div class="mkt-tags"><span class="who supplier">供应商</span><span class="who agency">代理机构</span></div>
+<div class="mkt-meta"><span>328 家在用</span><span class="mkt-price">约 2~50 彩豆/次 <small>· 按量</small></span></div>
+<div class="mkt-ops"><div class="ops-l"><span class="mbtn mbtn-match" onclick="matchTip()" title="撮合即将上线">🤝 撮合</span></div><div class="ops-r"><a class="mbtn mbtn-primary" href="agent-view.html?id=translate">立即体验</a></div></div>
+</div>
+
+<div class="mkt-card" data-name="会议纪要智能体" data-who="采购人 代理机构" data-scene="" data-func="工作助手" data-ctrl="官方自研">
+<div class="mkt-top"><div class="mkt-icon"><svg width="52" height="52" viewBox="0 0 52 52"><defs><linearGradient id="g6" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EC4899"/><stop offset="1" stop-color="#DB2777"/></linearGradient></defs><rect width="52" height="52" fill="url(#g6)"/><g transform="translate(15,15) scale(0.92)" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2"/><rect x="8" y="2" width="8" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></g></svg></div>
+<div class="mkt-head"><div class="mkt-name"><span class="nm" title="会议纪要智能体">会议纪要智能体</span></div></div></div>
+<div class="mkt-desc">上传录音或文字，自动区分发言人、提炼要点，生成结构化会议纪要与待办清单，会后整理更省心。</div>
+<div class="mkt-tags"><span class="who buyer">采购人</span><span class="who agency">代理机构</span></div>
+<div class="mkt-meta"><span>456 家在用</span><span class="mkt-price">约 30~120 彩豆/次 <small>· 按量</small></span></div>
+<div class="mkt-ops"><div class="ops-l"><span class="mbtn mbtn-match" onclick="matchTip()" title="撮合即将上线">🤝 撮合</span></div><div class="ops-r"><a class="mbtn mbtn-primary" href="agent-view.html?id=meeting">立即体验</a></div></div>
+</div>
+
+</div>
+<div class="no-result" id="noResult">没有匹配的智能体，试试减少筛选条件～</div>
+</main>
+
+<!-- 视频弹层 -->
+<div class="modal-overlay" id="videoModal" onclick="if(event.target===this)closeVideo()">
+<div class="modal" style="max-width:520px;">
+<div class="modal-header"><span class="modal-title" id="videoTitle">演示视频</span><button class="modal-close" onclick="closeVideo()">×</button></div>
+<div class="modal-body"><div style="aspect-ratio:16/9;background:#0f172a;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:14px;gap:8px;"><span style="font-size:32px;">▶</span> 演示视频（原型占位）</div></div>
+<div class="modal-footer"><button class="btn btn-outline" onclick="closeVideo()">关闭</button></div>
+</div>
+</div>
+<div id="toast" style="position:fixed;top:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:10px 20px;border-radius:8px;font-size:14px;display:none;z-index:1200;box-shadow:0 4px 16px rgba(0,0,0,.25);"></div>
+
+<script>
+var active = {};
+function pick(el, dim){
+  var row = el.closest('.flt-opts');
+  row.querySelectorAll('.pill').forEach(function(p){ p.classList.remove('on'); });
+  el.classList.add('on');
+  var val = el.textContent.trim();
+  if(val === '全部') delete active[dim]; else active[dim] = val;
+  filterCards();
+  renderChips();
+}
+function filterCards(){
+  var kw = (document.getElementById('searchInput').value || '').trim();
+  var shown = 0;
+  document.querySelectorAll('.mkt-card').forEach(function(c){
+    var ok = true;
+    for(var dim in active){
+      var data = c.getAttribute('data-' + dim) || '';
+      if(!data || data.indexOf(active[dim]) < 0){ ok = false; break; }
+    }
+    if(ok && kw && (c.getAttribute('data-name') || '').indexOf(kw) < 0) ok = false;
+    c.style.display = ok ? '' : 'none';
+    if(ok) shown++;
+  });
+  document.getElementById('cnt').textContent = shown;
+  document.getElementById('noResult').style.display = shown ? 'none' : 'block';
+}
+function renderChips(){
+  var box = document.getElementById('chips');
+  box.querySelectorAll('.chip').forEach(function(c){ c.remove(); });
+  var clear = document.getElementById('clearBtn');
+  var keys = Object.keys(active);
+  keys.forEach(function(dim){
+    var chip = document.createElement('span');
+    chip.className = 'chip';
+    chip.innerHTML = active[dim] + ' <span class="x">×</span>';
+    chip.onclick = function(){ removeDim(dim); };
+    box.insertBefore(chip, clear);
+  });
+  clear.style.display = keys.length ? '' : 'none';
+}
+function removeDim(dim){
+  delete active[dim];
+  document.querySelectorAll('.flt-opts[data-dim="' + dim + '"] .pill').forEach(function(p){ p.classList.remove('on'); });
+  var allPill = document.querySelector('.flt-opts[data-dim="' + dim + '"] .pill.all');
+  if(allPill) allPill.classList.add('on');
+  filterCards(); renderChips();
+}
+function clearAll(){
+  active = {};
+  document.querySelectorAll('.flt-opts').forEach(function(r){
+    r.querySelectorAll('.pill').forEach(function(p){ p.classList.remove('on'); });
+    var a = r.querySelector('.pill.all'); if(a) a.classList.add('on');
+  });
+  filterCards(); renderChips();
+}
+function toggleMore(){
+  var m = document.getElementById('moreFilters');
+  var b = document.getElementById('moreBtn');
+  m.classList.toggle('show');
+  b.innerHTML = m.classList.contains('show') ? '收起更多筛选 ∧' : '更多筛选 ∨';
+}
+function toggleFilter(){
+  var body = document.getElementById('filterBody');
+  var btn = document.getElementById('collapseBtn');
+  var hidden = body.style.display === 'none';
+  body.style.display = hidden ? '' : 'none';
+  btn.textContent = hidden ? '∧' : '∨';
+}
+function openVideo(name){
+  document.getElementById('videoTitle').textContent = name + ' · 演示视频';
+  document.getElementById('videoModal').classList.add('active');
+}
+function closeVideo(){ document.getElementById('videoModal').classList.remove('active'); }
+function matchTip(){ showToast('撮合功能即将上线，敬请期待', '🤝'); }
+function showToast(msg, icon){
+  var t = document.getElementById('toast');
+  t.textContent = (icon || '✓') + ' ' + msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.display = 'none'; }, 2400);
+}
+</script>
+</body>
+</html>

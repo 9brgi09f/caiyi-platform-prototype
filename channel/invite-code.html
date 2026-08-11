@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>我的邀请码 - 渠道端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; }
+        .stat-value { font-size: 24px; font-weight: 700; color: var(--klein); }
+        .stat-label { font-size: 13px; color: var(--text-muted); margin-top: var(--spacing-xs); }
+        #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+    </style>
+</head>
+<body>
+<header class="top-bar channel">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">渠</div>
+<span>智采科技</span>
+</div>
+</div>
+</header>
+<aside class="sidebar channel">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon"></span><span>概览</span></a>
+<a class="sidebar-link active" href="invite-code.html"><span class="icon"></span><span>我的邀请码</span></a>
+<a class="sidebar-link" href="customer-list.html"><span class="icon"></span><span>客户管理</span></a>
+<a class="sidebar-link" href="referral-list.html"><span class="icon"></span><span>推荐确认单</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon"></span><span>分成结算</span></a>
+<a class="sidebar-link" href="withdrawal-list.html"><span class="icon"></span><span>提现管理</span></a>
+<a class="sidebar-link" href="bank-card.html"><span class="icon"></span><span>收款账户</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon"></span><span>发票管理</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<h2>我的邀请码</h2>
+<p>被推荐企业注册时填报邀请码，即确认推荐关系</p>
+</div>
+<div class="content-card" style="text-align: center; padding: var(--spacing-xl);">
+<div style="font-size: 13px; color: var(--text-muted); margin-bottom: var(--spacing-sm);">专属邀请码</div>
+<div style="font-size: 44px; font-weight: 800; color: var(--klein); letter-spacing: 6px; margin-bottom: var(--spacing-lg);">CY-ZC2026</div>
+<div style="display: flex; gap: var(--spacing-md); justify-content: center;">
+<button class="btn btn-primary" onclick="copyText('CY-ZC2026','邀请码已复制')" type="button">复制邀请码</button>
+<button class="btn btn-outline" onclick="copyText('https://www.caiyigaoke.cn/register?invite_code=CY-ZC2026','推广链接已复制')" type="button">复制推广链接</button>
+</div>
+<p style="font-size: 13px; color: var(--text-muted); margin-top: var(--spacing-lg);">推广链接：https://www.caiyigaoke.cn/register?invite_code=CY-ZC2026</p>
+</div>
+<div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
+<div class="stat-card"><div class="stat-value">2</div><div class="stat-label">通过邀请码绑定客户</div></div>
+<div class="stat-card"><div class="stat-value">2</div><div class="stat-label">通过确认单绑定客户</div></div>
+<div class="stat-card"><div class="stat-value">¥46,200</div><div class="stat-label">绑定客户年度贡献（不含税）</div></div>
+</div>
+<div class="content-card">
+<h3 style="font-size: 15px; font-weight: 600; margin-bottom: var(--spacing-md);">使用说明</h3>
+<p style="font-size: 14px; line-height: 2; color: var(--text-secondary);">1. 被推荐企业在平台注册时填报您的邀请码，系统自动确认推荐关系并绑定客户归属；<br/>2. 无法通过邀请码绑定的客户，可在「推荐确认单」提交《推荐确认单》及证明材料；<br/>3. 绑定客户产生的收入（不含税）计入您的年度累计分成基数，按阶梯规则计算分成。</p>
+</div>
+</main>
+<div id="toast"></div>
+<script>
+function showToast(msg, icon){
+  var t = document.getElementById('toast');
+  t.textContent = (icon || '\u2713') + ' ' + msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.display = 'none'; }, 2400);
+}
+function copyText(text, msg){
+  if (navigator.clipboard) { navigator.clipboard.writeText(text); }
+  showToast(msg);
+}
+</script>
+</body>
+</html>

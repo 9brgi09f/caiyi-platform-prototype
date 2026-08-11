@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>提现审核 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .form-section {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+        }
+        .form-section-title {
+            font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md); border-bottom: 1px solid var(--border-light);
+        }
+        .detail-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-lg); }
+        .detail-item { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+        .detail-item.full-width { grid-column: 1 / -1; }
+        .detail-label { font-size: 13px; color: var(--text-muted); }
+        .detail-value { font-size: 15px; color: var(--text-primary); font-weight: 500; }
+        
+        .invoice-preview {
+            border: 1px solid var(--border-color); border-radius: var(--radius-md);
+            padding: var(--spacing-lg); background: var(--border-light);
+            margin-bottom: var(--spacing-lg);
+        }
+        .invoice-header { display: flex; align-items: center; gap: var(--spacing-md); margin-bottom: var(--spacing-md); }
+        .invoice-icon { font-size: 40px; }
+        .invoice-info { flex: 1; }
+        .invoice-name { font-weight: 600; color: var(--text-primary); font-size: 15px; }
+        .invoice-meta { font-size: 12px; color: var(--text-muted); }
+        
+        .verify-result {
+            background: #d1fae5; border: 1px solid #059669;
+            border-radius: var(--radius-md); padding: var(--spacing-lg);
+            margin-top: var(--spacing-md);
+        }
+        .verify-row { display: flex; justify-content: space-between; margin-bottom: var(--spacing-sm); }
+        .verify-row:last-child { margin-bottom: 0; }
+        .verify-label { color: #065f46; }
+        .verify-value { font-weight: 600; color: #065f46; }
+        
+        .process-tips {
+            background: #fef3c7; border-radius: var(--radius-md);
+            padding: var(--spacing-md); margin-bottom: var(--spacing-lg);
+        }
+        .process-tips h4 { color: #d97706; margin-bottom: var(--spacing-sm); font-size: 14px; }
+        .process-tips ul { margin: 0; padding-left: var(--spacing-lg); color: #92400e; font-size: 13px; }
+        .process-tips li { margin-bottom: var(--spacing-xs); }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+
+<a class="sidebar-link active" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+<!-- 数据统计菜单暂隐藏 <a class="sidebar-link" href="statistics.html"><span class="icon">📉</span><span>数据统计</span></a> -->
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a href="withdrawal-audit-view.html" style="color: white; margin-bottom: var(--spacing-sm); display: inline-block;">← 返回详情</a>
+<h2>提现审核</h2>
+<p>提现单号：WD20260602001 | 申请人：张开发者</p>
+</div>
+<!-- 审核说明 -->
+<div class="process-tips">
+<h4>审核要点</h4>
+<ul>
+<li>核对提现金额与关联结算单金额是否一致</li>
+<li>核对发票金额与提现金额是否一致</li>
+<li>验证发票真实性及发票抬头是否为"广州市政府采购中心"</li>
+<li>核对票种与税率：应为增值税专用发票，且与申请时所选税率一致；1%/3% 专票的分成款扣减已在申请时按结算金额 5.29%/3.11% 扣除，发票金额须与提现金额完全一致</li>
+<li>确认提现方（开发者/渠道商）银行账户信息是否有效</li>
+<li>金蝶财务事前审批已于提现申请提交时完成（申请提交事件同步金蝶）；本审核为发票与信息复核，审核通过后系统自动推送资金支付审批单（含发票+收款账户）至金蝶，由财务发起付款（银企直联）</li>
+</ul>
+</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-lg);">
+<div>
+<!-- 提现信息 -->
+<div class="form-section">
+<h3 class="form-section-title">提现信息</h3>
+<div class="detail-grid">
+<div class="detail-item">
+<span class="detail-label">提现单号</span>
+<span class="detail-value">WD20260602001</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">申请时间</span>
+<span class="detail-value">2026-06-02 10:00</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">开发者</span>
+<span class="detail-value">张开发者</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">提现金额</span>
+<span class="detail-value" style="color: var(--admin-color); font-size: 18px; font-weight: 700;">¥2,982.35</span>
+</div>
+<div class="detail-item full-width">
+<span class="detail-label">关联结算单</span>
+<span class="detail-value">ST20260501（¥2,982.35）</span>
+</div>
+</div>
+</div>
+<!-- 发票信息 -->
+<div class="form-section">
+<h3 class="form-section-title">发票核验</h3>
+<div class="invoice-preview">
+<div class="invoice-header">
+<span class="invoice-icon" style="display:inline-flex;color:var(--klein);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+<div class="invoice-info">
+<div class="invoice-name">发票_25612000000045678901.pdf</div>
+<div class="invoice-meta">上传于 2026-06-02 10:00</div>
+</div>
+<a class="btn btn-sm btn-outline" href="#">预览</a>
+</div>
+<div class="verify-result">
+<div class="verify-row">
+<span class="verify-label">发票号码</span>
+<span class="verify-value">25612000000045678901</span>
+</div>
+<div class="verify-row">
+<span class="verify-label">发票金额</span>
+<span class="verify-value">¥2,982.35</span>
+</div>
+<div class="verify-row">
+<span class="verify-label">发票抬头</span>
+<span class="verify-value">广州市政府采购中心</span>
+</div>
+<div class="verify-row">
+<span class="verify-label">票种 / 税率</span>
+<span class="verify-value">增值税专用发票 / 6%</span>
+</div>
+<div class="verify-row">
+<span class="verify-label">分成款扣减</span>
+<span class="verify-value">¥0.00</span>
+</div>
+<div class="verify-row">
+<span class="verify-label">实付金额</span>
+<span class="verify-value" style="font-weight:700;">¥2,982.35</span>
+</div>
+<div class="verify-row">
+<span class="verify-label" style="font-size:12px;color:var(--text-muted);">扣减示例</span>
+<span class="verify-value" style="font-size:12px;color:var(--text-muted);">若为 3% 专票则扣减 ¥102.25、实付 ¥3,306.15；普票扣减 ¥204.50（示例口径，以财务为准）</span>
+</div>
+<div class="verify-row">
+<span class="verify-label">核验结果</span>
+<span class="verify-value" style="color: #059669;">✓ 金额一致 · 抬头一致 · 票种合规</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div>
+<!-- 审核操作 -->
+<div class="form-section">
+<h3 class="form-section-title">审核操作</h3>
+<div style="background: var(--border-light); border-radius: var(--radius-md); padding: var(--spacing-xl); text-align: center;">
+<div style="font-size: 48px; margin-bottom: var(--spacing-md);">✓</div>
+<div style="font-size: 18px; font-weight: 600; color: var(--success-color); margin-bottom: var(--spacing-xs);">审核通过</div>
+<div style="font-size: 13px; color: var(--text-muted); margin-bottom: var(--spacing-lg);">发票金额与提现金额一致，审核通过</div>
+<div class="detail-grid" style="text-align: left; margin-bottom: var(--spacing-lg);">
+<div class="detail-item full-width">
+<span class="detail-label">审核备注（选填）</span>
+<textarea class="input" placeholder="如有审核备注请在此填写..." rows="3">发票核验通过，金额一致</textarea>
+</div>
+<div class="detail-item">
+<span class="detail-label">审核时间</span>
+<input class="input" id="auditTime" readonly="" type="text"/>
+</div>
+<div class="detail-item">
+<span class="detail-label">审核人</span>
+<input class="input" readonly="" type="text" value="管理员"/>
+</div>
+</div>
+<div style="display: flex; gap: var(--spacing-md);">
+<a class="btn btn-outline" href="withdrawal-audit-view.html" style="flex: 1;">取消</a>
+<button class="btn btn-primary" onclick="approveApplication()" style="flex: 1;">确认审核通过</button>
+</div>
+</div>
+</div>
+<div style="background: #fee2e2; border: 1px solid #dc2626; border-radius: var(--radius-md); padding: var(--spacing-lg);">
+<div style="font-weight: 600; color: #dc2626; margin-bottom: var(--spacing-md);">如需退回</div>
+<div style="margin-bottom: var(--spacing-md);">
+<label style="font-size: 13px; color: var(--text-muted);">退回原因</label>
+<textarea class="input" id="rejectReason" placeholder="请输入退回原因..." rows="2"></textarea>
+</div>
+<button class="btn" onclick="rejectApplication()" style="background: #dc2626; color: white; width: 100%;">退回申请</button>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // 设置默认审核时间
+        document.getElementById('auditTime').value = new Date().toLocaleString('zh-CN');
+
+        function approveApplication() {
+            if (confirm('确认审核通过？金蝶财务事前审批已于提现申请提交时完成，通过后提现单转「待付款」，系统将自动推送资金支付审批单（含发票+收款账户）至金蝶，由财务发起付款（银企直联）。')) {
+                alert('审核已通过，已自动推送资金支付审批单（含发票+收款账户）至金蝶，待财务发起付款（银企直联）');
+                window.location.href = 'withdrawal-audit-list.html';
+            }
+        }
+
+        function rejectApplication() {
+            const reason = document.getElementById('rejectReason').value;
+            if (!reason) {
+                alert('请输入退回原因');
+                return;
+            }
+            if (confirm('确认退回该申请？退回后开发者可重新上传发票。')) {
+                alert('已退回申请，已通知开发者');
+                window.location.href = 'withdrawal-audit-list.html';
+            }
+        }
+    </script>
+<script>
+/* 渠道商提现单参数化覆写 */
+(function(){
+  var id = new URLSearchParams(location.search).get('id');
+  if (id !== 'CWD20260610001') return;
+  document.querySelector('.page-header p').textContent = '提现单号：CWD20260610001 | 申请人：广州智采科技有限公司（渠道商）';
+  document.querySelector('.page-header a').setAttribute('href', 'withdrawal-audit-view.html?id=CWD20260610001');
+  var vals = document.querySelectorAll('.form-section .detail-value');
+  var labs = document.querySelectorAll('.form-section .detail-label');
+  vals[0].textContent = 'CWD20260610001'; vals[1].textContent = '2026-06-10 10:20';
+  labs[2].textContent = '提现方（渠道商）'; vals[2].textContent = '广州智采科技有限公司';
+  vals[3].textContent = '¥1,680.00'; vals[4].textContent = 'CST20260401（¥1,680.00，2026年4月渠道分成）';
+  document.querySelector('.invoice-name').textContent = '发票_25612000000112233445.pdf';
+  document.querySelector('.invoice-meta').textContent = '上传于 2026-06-10 11:00';
+  var vv = document.querySelectorAll('.verify-result .verify-value');
+  vv[0].textContent = '25612000000112233445';
+  vv[1].textContent = '¥1,680.00';
+  vv[5].textContent = '¥1,680.00';
+  vv[6].textContent = '若为 3% 专票则扣减 ¥50.40、实付 ¥1,629.60；普票扣减 ¥100.80（示例口径，以财务为准）';
+  document.querySelector('a.btn-outline[href="withdrawal-audit-view.html"]').setAttribute('href', 'withdrawal-audit-view.html?id=CWD20260610001');
+  window.approveApplication = function(){
+    if (confirm('确认审核通过？金蝶财务事前审批已于提现申请提交时完成，通过后提现单转「待付款」，系统将自动推送资金支付审批单（含发票+收款账户）至金蝶，由财务发起付款（银企直联）。')) {
+      alert('审核已通过，已自动推送资金支付审批单（含发票+收款账户）至金蝶，待财务发起付款（银企直联），并通知渠道商');
+      window.location.href = 'withdrawal-audit-list.html';
+    }
+  };
+  window.rejectApplication = function(){
+    var reason = document.getElementById('rejectReason').value;
+    if (!reason) { alert('请输入退回原因'); return; }
+    if (confirm('确认退回该申请？退回后渠道商可重新上传发票。')) {
+      alert('已退回申请，已通知渠道商');
+      window.location.href = 'withdrawal-audit-list.html';
+    }
+  };
+})();
+</script>
+</body>
+</html>

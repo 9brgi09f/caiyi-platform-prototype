@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>智能体详情 - 开发者端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .info-section {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+        }
+        .info-header { display: flex; align-items: flex-start; gap: var(--spacing-lg); margin-bottom: var(--spacing-lg); }
+        .info-avatar {
+            width: 80px; height: 80px;
+            background: var(--developer-light);
+            border-radius: var(--radius-lg);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 40px;
+        }
+        .info-title { flex: 1; }
+        .info-title h3 { font-size: 20px; margin-bottom: var(--spacing-xs); }
+        .info-tags { display: flex; gap: var(--spacing-xs); flex-wrap: wrap; }
+        .info-tag { padding: 4px 8px; background: var(--developer-light); color: var(--developer-color); border-radius: var(--radius-sm); font-size: 12px; }
+        .info-status { display: inline-flex; align-items: center; gap: var(--spacing-xs); padding: var(--spacing-xs) var(--spacing-md); border-radius: var(--radius-md); font-size: 13px; font-weight: 500; }
+        .status-online { background: var(--success-light); color: var(--success-color); }
+        .status-audit { background: var(--admin-light); color: var(--admin-color); }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-lg); }
+        .info-item { }
+        .info-label { font-size: 13px; color: var(--text-muted); margin-bottom: var(--spacing-xs); }
+        .info-value { font-size: 15px; font-weight: 500; color: var(--text-primary); }
+        .stats-section { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; }
+        .stat-value { font-size: 28px; font-weight: 700; color: var(--developer-color); }
+        .stat-label { font-size: 13px; color: var(--text-muted); margin-top: var(--spacing-xs); }
+        .timeline { }
+        .timeline-item { display: flex; gap: var(--spacing-md); padding: var(--spacing-md) 0; border-bottom: 1px solid var(--border-light); }
+        .timeline-item:last-child { border-bottom: none; }
+        .timeline-time { width: 140px; font-size: 13px; color: var(--text-muted); }
+        .timeline-content { flex: 1; font-size: 14px; }
+    </style>
+
+<style id="identity-switcher-css">
+.id-switcher{position:relative;display:inline-flex;align-items:center;}
+.id-trigger{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 6px;border-radius:8px;cursor:pointer;transition:background 0.15s;user-select:none;}
+.id-trigger:hover{background:rgba(0,0,0,0.05);}
+.id-avatar{width:32px;height:32px;border-radius:50%;background:#EFF4FF;color:#2563EB;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.id-info{display:flex;flex-direction:column;align-items:flex-start;line-height:1.3;}
+.id-org{font-size:13px;font-weight:500;color:#1e293b;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.id-type-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;background:#EFF4FF;color:#2563EB;}
+.id-chevron{font-size:10px;color:#94a3b8;margin-left:2px;transition:transform 0.2s;}
+.id-switcher.open .id-chevron{transform:rotate(180deg);}
+.id-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:white;border:1px solid #dfe4ee;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:240px;z-index:999;overflow:hidden;}
+.id-switcher.open .id-menu{display:block;}
+.id-menu-hd{padding:10px 14px 8px;font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:1px;border-bottom:1px solid #ecf0f6;}
+.id-menu-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background 0.15s;text-decoration:none;color:inherit;}
+.id-menu-item:hover{background:#F8FAFC;}
+.id-menu-item.current{background:#F8FAFF;}
+.id-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.id-dot.active{background:#2563EB;}
+.id-dot.idle{background:#dfe4ee;}
+.id-item-body{flex:1;}
+.id-item-org{font-size:13px;font-weight:500;color:#1e293b;}
+.id-item-type{font-size:11px;color:#94a3b8;margin-top:1px;}
+.id-item-tag{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;margin-left:auto;flex-shrink:0;}
+.id-item-tag.current-tag{background:#EFF4FF;color:#2563EB;}
+.id-menu-sep{height:1px;background:#ecf0f6;margin:4px 0;}
+.id-menu-action{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:12px;color:#64748b;cursor:pointer;transition:background 0.15s;text-decoration:none;}
+.id-menu-action:hover{background:#F8FAFC;color:#2563EB;}
+</style>
+</head>
+<body>
+<header class="top-bar developer">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="id-switcher" id="idSwitcher">
+<div class="id-trigger" onclick="toggleIdMenu()">
+<div class="id-avatar">张</div>
+<div class="id-info">
+<span class="id-org">广州某某科技有限公司</span>
+<span class="id-type-badge" style="background:#D1FAE5;color:#059669;">开发者</span>
+</div>
+<span class="id-chevron">▾</span>
+</div>
+<div class="id-menu">
+<div class="id-menu-hd">切换工作台身份</div>
+<div class="id-menu-item current">
+<div class="id-dot active" style="background:#059669;"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">开发者</div>
+</div>
+<span class="id-item-tag current-tag" style="background:#D1FAE5;color:#059669;">当前</span>
+</div>
+<div class="id-menu-item" onclick="location.href='../user/index.html'">
+<div class="id-dot idle"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">采购单位</div>
+</div>
+</div>
+<div class="id-menu-sep"></div>
+<a class="id-menu-action" href="../user/register-select.html">＋ 注册新机构类型</a>
+<a class="id-menu-action" href="#" onclick="alert('已退出登录');return false;">退出登录</a>
+</div>
+</div>
+<script>
+function toggleIdMenu(){
+  var el=document.getElementById('idSwitcher');
+  el.classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  var sw=document.getElementById('idSwitcher');
+  if(sw && !sw.contains(e.target)) sw.classList.remove('open');
+});
+</script>
+</div>
+</header>
+<aside class="sidebar developer">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link active" href="agent-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="member-list.html"><span class="icon">👥</span><span>成员管理</span></a>
+<a class="sidebar-link" href="revenue-list.html"><span class="icon">📈</span><span>收入看板</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📄</span><span>结算单</span></a>
+<a class="sidebar-link" href="withdrawal-list.html"><span class="icon">💸</span><span>提现管理</span></a><a class="sidebar-link" href="bank-card.html"><span class="icon">🏦</span><span>收款账户</span></a>
+<a class="sidebar-link" href="dev-invoice-list.html"><span class="icon">🧾</span><span>发票管理</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a class="back-link" href="agent-list.html" style="color: white; margin-bottom: var(--spacing-sm);">
+                ← 返回列表
+            </a>
+<div style="display: flex; justify-content: space-between; align-items: center;">
+<div>
+<h2>智能体详情</h2>
+<p>查看智能体完整信息和运营数据</p>
+</div>
+<div style="display: flex; gap: var(--spacing-sm);">
+<a class="btn btn-primary" href="agent-edit.html">编辑</a>
+</div>
+</div>
+</div>
+<div class="stats-section">
+<div class="stat-card">
+<div class="stat-value">1,256</div>
+<div class="stat-label">使用用户</div>
+</div>
+<div class="stat-card">
+<div class="stat-value">8,520</div>
+<div class="stat-label">本月调用</div>
+</div>
+<div class="stat-card">
+<div class="stat-value">¥4,260</div>
+<div class="stat-label">本月收入</div>
+</div>
+</div>
+<div class="info-section">
+<h3 style="font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);">基本信息</h3>
+<div class="info-header">
+<div class="info-avatar" style="overflow:hidden;"><svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cv1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0EA5E9"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs><rect width="80" height="80" fill="url(#cv1)"/><circle cx="68" cy="12" r="36" fill="#ffffff" opacity="0.10"/><circle cx="10" cy="74" r="26" fill="#ffffff" opacity="0.08"/><g transform="translate(22.4,22.4) scale(1.467)" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 11.5 11 13.5 15 9.5"/></g></svg></div>
+<div class="info-title">
+<h3>合规监测智能体</h3>
+<div class="info-tags">
+<span class="info-tag">智能</span>
+<span class="info-tag">高效</span>
+<span class="info-tag">合规</span>
+</div>
+</div>
+<span class="info-status status-online">● 在线</span>
+</div>
+<div class="info-grid">
+<div class="info-item">
+<div class="info-label">应用类型</div>
+<div class="info-value">自研智能体</div>
+</div>
+<div class="info-item">
+<div class="info-label">产品名称</div>
+<div class="info-value">合规监测智能体</div>
+</div>
+<div class="info-item">
+<div class="info-label">产品分类</div>
+<div class="info-value">合规风控</div>
+</div>
+<div class="info-item">
+<div class="info-label">智能体属性</div>
+<div class="info-value">智能辅助审查</div>
+</div>
+<div class="info-item">
+<div class="info-label">区域</div>
+<div class="info-value">全国</div>
+</div>
+<div class="info-item">
+<div class="info-label">版本号</div>
+<div class="info-value">v1.0.0</div>
+</div>
+<div class="info-item">
+<div class="info-label">智能体ID</div>
+<div class="info-value">AG20260501001</div>
+</div>
+<div class="info-item">
+<div class="info-label">创建时间</div>
+<div class="info-value">2026-05-01</div>
+</div>
+<div class="info-item">
+<div class="info-label">最后更新</div>
+<div class="info-value">2026-05-10</div>
+</div>
+<div class="info-item">
+<div class="info-label">封面图片</div>
+<div class="info-value"><a href="#" style="color: var(--developer-color);">封面图.png</a></div>
+</div>
+<div class="info-item">
+<div class="info-label">演示视频</div>
+<div class="info-value"><a href="#" style="color: var(--developer-color);">demo.mp4</a></div>
+</div>
+<div class="info-item">
+<div class="info-label">操作手册</div>
+<div class="info-value"><a href="#" style="color: var(--developer-color);">操作手册.pdf</a></div>
+</div>
+<div class="info-item">
+<div class="info-label">设置地址</div>
+<div class="info-value" style="font-size: 13px;">https://api.example.com/v1/compliance</div>
+</div>
+</div>
+<div style="margin-top: var(--spacing-lg);">
+<div class="info-label">产品描述</div>
+<p style="font-size: 14px; color: var(--text-secondary); margin-top: var(--spacing-xs);">专业的合规监测智能体，帮助企业自动化检查文档合规性，支持合同审查、风险识别、合规报告生成等功能。</p>
+</div>
+<div style="margin-top: var(--spacing-lg);">
+<div class="info-label">详细描述</div>
+<p style="font-size: 14px; color: var(--text-secondary); margin-top: var(--spacing-xs); white-space: pre-line;">## 功能亮点
+- 合同智能审查与风险识别
+- 合规报告一键生成
+- 支持 PDF / Word / OFD 多种文档格式</p>
+</div>
+</div>
+<div class="info-section">
+<h3 style="font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);">能力与接入</h3>
+<div class="info-grid">
+<div class="info-item">
+<div class="info-label">是否支持 API</div>
+<div class="info-value" style="color: var(--success-color);">是</div>
+</div>
+<div class="info-item">
+<div class="info-label">是否支持 MCP</div>
+<div class="info-value" style="color: var(--text-muted);">否</div>
+</div>
+<div class="info-item">
+<div class="info-label">是否在线运行</div>
+<div class="info-value" style="color: var(--success-color);">是</div>
+</div>
+</div>
+</div>
+<div class="info-section">
+<h3 style="font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);" id="billTitleDev">计费信息（开发者自主定价）</h3><div id="billGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--spacing-lg);"><div><div style="font-size:12px;color:var(--text-muted);">计费方式</div><div style="margin-top:3px;font-weight:600;color:var(--developer-color);">按 token 计费</div></div><div><div style="font-size:12px;color:var(--text-muted);">token → 彩豆 换算率（我的定价）</div><div style="margin-top:3px;font-weight:600;color:var(--developer-color);">每 1,000 token = 1 彩豆</div></div><div><div style="font-size:12px;color:var(--text-muted);">单次预估 token 区间</div><div style="margin-top:3px;font-weight:500;">10,000 ~ 150,000</div></div><div><div style="font-size:12px;color:var(--text-muted);">换算后彩豆区间（市场展示）</div><div style="margin-top:3px;font-weight:600;color:var(--klein,#2563EB);">约 10 ~ 150 彩豆/次</div></div><div><div style="font-size:12px;color:var(--text-muted);">单次熔断上限</div><div style="margin-top:3px;font-weight:500;">300,000 token</div></div></div><p id="billNote" style="font-size:12px;color:var(--text-muted);margin-top:var(--spacing-md);">换算率由您自行定价（下限 = 平台算力成本单价 0.1 彩豆/千token，调价随变更审核生效）；实际扣费按用户本次真实消耗 token 结算；最终收入 =用户消耗彩豆 × 80% − 算力成本彩豆。</p>
+</div>
+<div class="info-section">
+<h3 style="font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);">操作记录</h3>
+<div class="timeline">
+<div class="timeline-item">
+<div class="timeline-time">2026-05-14 10:00</div>
+<div class="timeline-content">变更审核通过，已切换为平台算力（token）计费</div>
+</div>
+<div class="timeline-item">
+<div class="timeline-time">2026-05-10 15:30</div>
+<div class="timeline-content">修改智能体配置，等待审核</div>
+</div>
+<div class="timeline-item">
+<div class="timeline-time">2026-05-01 09:00</div>
+<div class="timeline-content">智能体创建成功，正式上线</div>
+</div>
+</div>
+</div>
+<script>
+(function(){
+  var bill = new URLSearchParams(location.search).get('bill');
+  if (bill !== 'perCall') return;
+  document.title = '数据分析智能体 - 开发者端';
+  document.querySelectorAll('.info-title h3').forEach(function(h){ h.textContent = '数据分析智能体'; });
+  document.querySelectorAll('.info-value').forEach(function(v){ if (v.textContent.trim() === '合规监测智能体') v.textContent = '数据分析智能体'; });
+  var t = document.getElementById('billTitleDev'); if (t) t.textContent = '计费信息（开发者自主定价 · 按次计费）';
+  var g = document.getElementById('billGrid');
+  if (g) g.innerHTML = '<div><div style="font-size:12px;color:var(--text-muted);">计费方式</div><div style="margin-top:3px;font-weight:600;color:var(--developer-color);">按次计费</div></div>'
+    + '<div><div style="font-size:12px;color:var(--text-muted);">每次价格（我的定价）</div><div style="margin-top:3px;font-weight:600;color:var(--developer-color);">30 彩豆/次（固定）</div></div>'
+    + '<div><div style="font-size:12px;color:var(--text-muted);">单次预估 token（估算力成本）</div><div style="margin-top:3px;font-weight:500;">100,000</div></div>'
+    + '<div><div style="font-size:12px;color:var(--text-muted);">单次熔断上限</div><div style="margin-top:3px;font-weight:500;">300,000 token</div></div>';
+  var n = document.getElementById('billNote');
+  if (n) n.textContent = '按次计费：用户每次调用固定扣除 30 彩豆，与实际 token 消耗无关；算力成本仍按实际消耗 token 计（0.1 彩豆/千token），从收入中扣除。最终收入 = 每次价格 × 80% − 算力成本彩豆。';
+})();
+</script>
+</main>
+</body>
+</html>

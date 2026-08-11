@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>渠道规则 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .form-section { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); margin-bottom: var(--spacing-lg); }
+        .form-section-title { font-size: 15px; font-weight: 600; margin-bottom: var(--spacing-md); }
+        .tier-input { width: 80px; text-align: center; }
+        #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon"></span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon"></span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon"></span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon"></span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon"></span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon"></span><span>结算管理</span></a>
+
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon"></span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link active" href="rules-list.html"><span class="icon"></span><span>规则设置</span></a>
+</div>
+</aside>
+<main class="main-content">
+<a class="back-link" href="rules-list.html">← 返回规则设置</a>
+<div class="page-header">
+<h2>渠道规则</h2>
+<p>新老客户差异化阶梯分成，按年度累计分成基数（扣除增值税后）分段计算</p>
+</div>
+<form class="form-section">
+<h3 class="form-section-title">客户推荐模式 · 新客户阶梯（比例上限）</h3>
+<div class="table-wrapper">
+<table class="table">
+<thead><tr><th>年度累计分成基数（扣除增值税后）</th><th>分成比例上限</th></tr></thead>
+<tbody>
+<tr><td>3万元（含）以下部分</td><td><input class="input tier-input tierpct" onchange="checkStack()" type="number" value="20"/> %</td></tr>
+<tr><td>超过3万元至10万元（含）部分</td><td><input class="input tier-input tierpct" onchange="checkStack()" type="number" value="25"/> %</td></tr>
+<tr><td>超过10万元的部分</td><td><input class="input tier-input tierpct" onchange="checkStack()" type="number" value="30"/> %</td></tr>
+</tbody>
+</table>
+</div>
+</form>
+<form class="form-section">
+<h3 class="form-section-title">客户推荐模式 · 存续客户阶梯（比例上限）</h3>
+<div class="table-wrapper">
+<table class="table">
+<thead><tr><th>年度累计分成基数（扣除增值税后）</th><th>分成比例上限</th></tr></thead>
+<tbody>
+<tr><td>3万元（含）以下部分</td><td><input class="input tier-input tierpct" onchange="checkStack()" type="number" value="10"/> %</td></tr>
+<tr><td>超过3万元至10万元（含）部分</td><td><input class="input tier-input tierpct" onchange="checkStack()" type="number" value="15"/> %</td></tr>
+<tr><td>超过10万元的部分</td><td><input class="input tier-input tierpct" onchange="checkStack()" type="number" value="20"/> %</td></tr>
+</tbody>
+</table>
+</div>
+</form>
+<div id="stackWarn" style="display:none;background:#FFFBEB;border:1px solid #fde68a;border-radius:var(--radius-md);padding:var(--spacing-md);font-size:13px;color:#92400e;line-height:1.8;margin-bottom:var(--spacing-lg);"></div>
+<form class="form-section">
+<h3 class="form-section-title">协议比例登记 · 联合共创 / 生态共建（逐户登记，结算按协议比例执行）</h3>
+<p style="font-size:13px;color:var(--text-muted);margin-bottom:var(--spacing-md);">联合共创：比例基于双方实际贡献（技术/市场/资金）协议协商确定，无统一阶梯；生态共建：协议比例上限 <strong>80%</strong>（分成基数＝实际收入（不含税）－退款－渠道分成）。超上限须主任办公会特批并留痕。</p>
+<div class="table-wrapper">
+<table class="table" id="agrTable">
+<thead><tr><th>渠道商</th><th>合作模式</th><th>协议比例</th><th>结算周期</th><th>协议起止</th><th>特批</th><th>操作</th></tr></thead>
+<tbody>
+<tr>
+<td>华南数智生态有限公司</td>
+<td><span class="badge" style="background:#d1fae5;color:#059669;">生态共建</span></td>
+<td><input class="input tier-input eco" onchange="checkEco(this)" type="number" value="24"/> %</td>
+<td>按季度</td>
+<td>2026-01-01 ~ 2028-12-31</td>
+<td>—</td>
+<td><button class="btn btn-sm btn-outline" onclick="showToast('协议附件：华南区数据服务生态合作协议（演示）')" type="button">协议</button></td>
+</tr>
+<tr>
+<td>深圳慧标科技有限公司 <span style="font-size:11px;color:var(--text-muted);">（已终止）</span></td>
+<td><span class="badge" style="background:#ede9fe;color:#7c3aed;">联合共创</span></td>
+<td><input class="input tier-input" disabled="" type="number" value="20"/> %</td>
+<td>按月</td>
+<td>2026-02-01 ~ 2026-04-12（终止）</td>
+<td>—</td>
+<td><button class="btn btn-sm btn-outline" onclick="showToast('合作已终止，比例登记停用，历史结算留痕')" type="button">协议</button></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p style="font-size:12px;color:var(--text-muted);margin-top:var(--spacing-sm);">说明：客户推荐模式按上方全局阶梯逐段计算；联合共创 / 生态共建不走阶梯，结算时直接按本表登记的协议比例 × 分成基数计算。</p>
+<a class="btn btn-outline" href="rules-channel-agreement-add.html" style="margin-top:var(--spacing-sm);display:inline-block;">+ 新增协议比例登记</a>
+</form>
+<form class="form-section">
+<h3 class="form-section-title">通用规则</h3>
+<div style="display:grid;gap:var(--spacing-md);font-size:14px;">
+<div>年度累计：分成基数自首次推荐确认之日起累计，每满一个自然年度清零</div>
+<div style="color:var(--text-muted);font-size:13px;">超出上限的特批分成须提请中心主任办公会审批，并在渠道商协议中登记留痕；规则调整于次月1日生效并留存修改记录。</div>
+</div>
+</form>
+<form class="form-section">
+<h3 class="form-section-title">规则修改记录</h3>
+<div class="table-wrapper">
+<table class="table">
+<thead><tr><th>修改时间</th><th>修改内容</th><th>操作人</th></tr></thead>
+<tbody>
+<tr><td>2026-07-17 09:00</td><td>登记华南数智生态共建协议比例 24%（上限 80% 内）、慧标联合共创协议比例 20%（已随终止停用）</td><td>管理员</td></tr>
+<tr><td>2026-07-01 10:00</td><td>依据〔2026〕72号《办法》初始化阶梯比例（新客 20/25/30，存续 10/15/20，生态共建上限 80%）</td><td>管理员</td></tr>
+</tbody>
+</table>
+</div>
+</form>
+<div style="display: flex; gap: var(--spacing-md); justify-content: center;">
+<a class="btn btn-outline" href="rules-list.html">取消</a>
+<button class="btn btn-primary" onclick="showToast('规则已保存，次月1日生效（已生成修改记录）')" type="button">保存配置（次月生效）</button>
+</div>
+</main>
+<div id="toast"></div>
+<script>
+function checkEco(inp){
+  var v = parseFloat(inp.value) || 0;
+  if (v > 80) {
+    inp.style.borderColor = 'var(--danger-color)';
+    inp.style.color = 'var(--danger-color)';
+    showToast('生态共建协议比例超过上限 80%，须提请主任办公会特批并在“特批”栏登记', '⚠');
+  } else {
+    inp.style.borderColor = '';
+    inp.style.color = '';
+  }
+}
+document.addEventListener('DOMContentLoaded', function(){
+  var q = new URLSearchParams(location.search);
+  if (q.get('agr') !== 'hn') return;
+  var ratio = q.get('ratio'), cycle = q.get('cycle') || '按月', sp = q.get('sp');
+  var row = document.querySelector('#agrTable tbody tr');
+  var inp = row.querySelector('.eco');
+  var oldV = inp.value;
+  inp.value = ratio;
+  row.cells[3].textContent = cycle;
+  if (sp) {
+    row.cells[5].innerHTML = '<span class="badge badge-warning">特批</span><div style="font-size:11px;color:var(--text-muted);margin-top:2px;">' + sp + '</div>';
+    inp.style.borderColor = 'var(--warning-color)';
+  } else {
+    row.cells[5].textContent = '—';
+    inp.style.borderColor = '';
+    inp.style.color = '';
+  }
+  var recBody = document.querySelectorAll('.form-section table tbody');
+  var rec = recBody[recBody.length - 1];
+  var tr = document.createElement('tr');
+  tr.innerHTML = '<td>2026-07-17 10:30</td><td>变更华南数智生态共建协议比例 ' + oldV + '%→' + ratio + '%（' + cycle + (sp ? '，特批：' + sp : '') + '），次月1日生效</td><td>管理员</td>';
+  rec.insertBefore(tr, rec.firstChild);
+  showToast('协议比例登记已提交：华南数智 ' + ratio + '%' + (sp ? '（特批留痕）' : '') + '，次月1日生效');
+});
+var DEV_COMMISSION = 80; /* 当前开发者分佣比例（读取自分佣规则，演示值） */
+function checkStack(){
+  var max = 0;
+  document.querySelectorAll('.tierpct').forEach(function(i){ var v = parseFloat(i.value) || 0; if (v > max) max = v; });
+  var w = document.getElementById('stackWarn');
+  var sum = DEV_COMMISSION + max;
+  if (sum > 100) {
+    w.style.display = 'block';
+    w.innerHTML = '⚠ <strong>留存倒挂预警</strong>：当前开发者分佣比例 <strong>' + DEV_COMMISSION + '%</strong>（分佣规则）＋ 渠道阶梯最高上限 <strong>' + max + '%</strong> ＝ <strong>' + sum + '%</strong>，超过 100%。被推荐客户消费第三方开发者智能体时平台留存为负，请按《办法》第十四条在上限内审慎确定实批比例（渠道分成由平台留存承担，不冲减开发者分佣）。';
+  } else {
+    w.style.display = 'none';
+  }
+}
+document.addEventListener('DOMContentLoaded', checkStack);
+function showToast(msg, icon){
+  var t = document.getElementById('toast');
+  t.textContent = (icon || '\u2713') + ' ' + msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.display = 'none'; }, 2400);
+}
+</script>
+</body>
+</html>

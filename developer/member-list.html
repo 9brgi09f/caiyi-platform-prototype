@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>成员管理 - 开发者端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+.page-header{background:linear-gradient(135deg,#2563EB,#1D4ED8);color:#fff;padding:var(--spacing-lg) var(--spacing-xl);border-radius:var(--radius-lg);margin-bottom:var(--spacing-lg);display:flex;align-items:flex-end;justify-content:space-between;gap:var(--spacing-lg)}
+.page-header h2{color:#fff;margin-bottom:var(--spacing-xs)}.page-header p{font-size:14px;opacity:.9}.member-summary{display:flex;gap:18px;align-items:center;font-size:13px;color:rgba(255,255,255,.9)}.member-summary strong{color:#fff;font-size:20px;margin-right:4px}
+.tab-nav{margin-bottom:var(--spacing-lg)}.member-toolbar{display:flex;justify-content:space-between;gap:var(--spacing-md);align-items:center;margin-bottom:var(--spacing-md)}.search-input{width:280px;max-width:100%;padding:9px 12px;border:1px solid var(--border-color);border-radius:var(--radius-md);font-size:14px}.member-name{font-weight:600}.member-sub{font-size:12px;color:var(--text-muted);margin-top:2px}.role-admin{background:#DBEAFE;color:#2563EB}.role-operator{background:#EDE9FE;color:#7C3AED}.role-readonly{background:#F1F5F9;color:#64748B}.status-active{background:#D1FAE5;color:#059669}.empty-note{padding:30px;text-align:center;color:var(--text-muted);display:none}
+@media(max-width:720px){.page-header{display:block}.member-summary{margin-top:14px}.member-toolbar{align-items:stretch;flex-direction:column}.search-input{width:100%}.member-toolbar .btn{justify-content:center}.page-header .btn{margin-top:16px}.table-wrapper{overflow-x:auto}}
+</style>
+</head>
+<body>
+<header class="top-bar developer">
+<div class="top-bar-left"><a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a><span class="top-bar-title">彩翼公共采购智能体协同管理平台</span></div>
+<div class="top-bar-right"><div class="top-bar-user"><div class="top-bar-avatar">张</div><span>广州某某科技有限公司</span></div></div>
+</header>
+<aside class="sidebar developer"><div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="agent-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link active" href="member-list.html"><span class="icon">👥</span><span>成员管理</span></a>
+<a class="sidebar-link" href="revenue-list.html"><span class="icon">📈</span><span>收入看板</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📄</span><span>结算单</span></a>
+<a class="sidebar-link" href="withdrawal-list.html"><span class="icon">💸</span><span>提现管理</span></a>
+<a class="sidebar-link" href="bank-card.html"><span class="icon">🏦</span><span>收款账户</span></a>
+<a class="sidebar-link" href="dev-invoice-list.html"><span class="icon">🧾</span><span>发票管理</span></a>
+</div></aside>
+<main class="main-content">
+<div class="page-header"><div><h2>成员管理</h2><p>管理开发者机构成员及其智能体协作权限</p></div><div class="member-summary"><span><strong>3</strong>位成员</span></div></div>
+<div class="content-card"><div class="member-toolbar"><input class="search-input" id="memberSearch" type="search" placeholder="按姓名或手机号搜索" oninput="searchMembers()"/><button class="btn btn-outline" type="button" onclick="searchMembers()">搜索</button></div>
+<div class="table-wrapper"><table class="table table-wide"><thead><tr><th>成员</th><th>手机号</th><th>机构角色</th><th>加入状态</th><th>加入/邀请时间</th><th>操作</th></tr></thead>
+<tbody id="memberTable">
+<tr data-status="active"><td><div class="member-name">张开发者</div><div class="member-sub">机构主账号</div></td><td>136****3456</td><td><span class="badge role-admin">主账号</span></td><td><span class="badge status-active">已加入</span></td><td>2026-07-05</td><td><span class="text-muted">不可操作</span></td></tr>
+<tr data-status="active"><td><div class="member-name">孙月</div></td><td>135****2222</td><td><span class="badge role-operator">操作员</span></td><td><span class="badge status-active">已加入</span></td><td>2026-08-01</td><td><button class="btn btn-sm btn-outline" type="button" onclick="showNotice('角色调整为原型预留操作')">调整角色</button><button class="btn btn-sm btn-outline" type="button" onclick="showNotice('成员已停用（原型演示）')" style="margin-left:6px">停用</button></td></tr>
+<tr data-status="active"><td><div class="member-name">李雷</div></td><td>135****3333</td><td><span class="badge role-readonly">只读</span></td><td><span class="badge status-active">已加入</span></td><td>2026-07-25</td><td><button class="btn btn-sm btn-outline" type="button" onclick="showNotice('角色调整为原型预留操作')">调整角色</button><button class="btn btn-sm btn-outline" type="button" onclick="showNotice('成员已停用（原型演示）')" style="margin-left:6px">停用</button></td></tr>
+</tbody></table></div><div class="empty-note" id="emptyNote">未找到匹配的成员</div></div>
+</main><script>
+function searchMembers(){var keyword=document.getElementById('memberSearch').value.trim().replace(/\s/g,'');var visible=0;document.querySelectorAll('#memberTable tr').forEach(function(row){var isVisible=!keyword||row.textContent.replace(/\s/g,'').includes(keyword);row.style.display=isVisible?'':'none';if(isVisible)visible++});document.getElementById('emptyNote').style.display=visible?'none':'block'}
+function showNotice(message){alert(message)}
+</script>
+</body>
+</html>

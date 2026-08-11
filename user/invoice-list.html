@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>发票管理 - 用户端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+    </style>
+
+<style id="identity-switcher-css">
+.id-switcher{position:relative;display:inline-flex;align-items:center;}
+.id-trigger{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 6px;border-radius:8px;cursor:pointer;transition:background 0.15s;user-select:none;}
+.id-trigger:hover{background:rgba(0,0,0,0.05);}
+.id-avatar{width:32px;height:32px;border-radius:50%;background:#EFF4FF;color:#2563EB;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.id-info{display:flex;flex-direction:column;align-items:flex-start;line-height:1.3;}
+.id-org{font-size:13px;font-weight:500;color:#1e293b;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.id-type-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;background:#EFF4FF;color:#2563EB;}
+.id-chevron{font-size:10px;color:#94a3b8;margin-left:2px;transition:transform 0.2s;}
+.id-switcher.open .id-chevron{transform:rotate(180deg);}
+.id-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:white;border:1px solid #dfe4ee;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:240px;z-index:999;overflow:hidden;}
+.id-switcher.open .id-menu{display:block;}
+.id-menu-hd{padding:10px 14px 8px;font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:1px;border-bottom:1px solid #ecf0f6;}
+.id-menu-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background 0.15s;text-decoration:none;color:inherit;}
+.id-menu-item:hover{background:#F8FAFC;}
+.id-menu-item.current{background:#F8FAFF;}
+.id-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.id-dot.active{background:#2563EB;}
+.id-dot.idle{background:#dfe4ee;}
+.id-item-body{flex:1;}
+.id-item-org{font-size:13px;font-weight:500;color:#1e293b;}
+.id-item-type{font-size:11px;color:#94a3b8;margin-top:1px;}
+.id-item-tag{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;margin-left:auto;flex-shrink:0;}
+.id-item-tag.current-tag{background:#EFF4FF;color:#2563EB;}
+.id-menu-sep{height:1px;background:#ecf0f6;margin:4px 0;}
+.id-menu-action{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:12px;color:#64748b;cursor:pointer;transition:background 0.15s;text-decoration:none;}
+.id-menu-action:hover{background:#F8FAFC;color:#2563EB;}
+</style>
+</head>
+<body>
+<header class="top-bar user">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="id-switcher" id="idSwitcher">
+<div class="id-trigger" onclick="toggleIdMenu()">
+<div class="id-avatar">李</div>
+<div class="id-info">
+<span class="id-org">广州某某科技有限公司</span>
+<span class="id-type-badge">采购单位</span>
+</div>
+<span class="id-chevron">▾</span>
+</div>
+<div class="id-menu">
+<div class="id-menu-hd">切换工作台身份</div>
+<div class="id-menu-item current">
+<div class="id-dot active"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">采购单位</div>
+</div>
+<span class="id-item-tag current-tag">当前</span>
+</div>
+<div class="id-menu-item" onclick="location.href='../developer/index.html'">
+<div class="id-dot idle"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">开发者</div>
+</div>
+</div>
+<div class="id-menu-sep"></div>
+<a class="id-menu-action" href="../user/register-select.html">＋ 注册新机构类型</a>
+<a class="id-menu-action" href="#" onclick="alert('已退出登录');return false;">退出登录</a>
+</div>
+</div>
+<script>
+function toggleIdMenu(){
+  var el=document.getElementById('idSwitcher');
+  el.classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  var sw=document.getElementById('idSwitcher');
+  if(sw && !sw.contains(e.target)) sw.classList.remove('open');
+});
+</script>
+</div>
+</header>
+<aside class="sidebar user">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">🏪</span><span>概览</span></a>
+<a class="sidebar-link" href="agent-list.html"><span class="icon">🤖</span><span>智能体市场</span></a>
+<a class="sidebar-link" href="recharge-list.html"><span class="icon">💰</span><span>账户充值</span></a>
+<a class="sidebar-link" href="balance.html"><span class="icon">💳</span><span>余额管理</span></a>
+<a class="sidebar-link" href="payment-accounts.html"><span class="icon">🏦</span><span>付款账户</span></a>
+<a class="sidebar-link" href="consumption-list.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link active" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+</div>
+<div class="sidebar-section">
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+<div>
+<h2>发票管理</h2>
+<p>充值发票（预付卡·税率0%）与消费发票独立申请、互不影响，可同时持有</p>
+</div>
+
+</div>
+<div style="display:flex;gap:var(--spacing-sm);margin-bottom:var(--spacing-lg);justify-content:space-between;align-items:center;">
+<div class="tab-nav" style="margin-bottom:0;flex:1;">
+<button class="tab-btn active" onclick="filterStatus('all', this)" type="button">全部 (5)</button>
+<button class="tab-btn" onclick="filterStatus('待审核', this)" type="button">待审核 (1)</button>
+<button class="tab-btn" onclick="filterStatus('开票中', this)" type="button">开票中 (1)</button>
+<button class="tab-btn" onclick="filterStatus('已开票', this)" type="button">已开票 (2)</button>
+<button class="tab-btn" onclick="filterStatus('已驳回', this)" type="button">已驳回 (1)</button>
+</div>
+<div style="display:flex;gap:8px;"><a class="btn btn-primary" href="invoice-add.html">充值开票</a><a class="btn btn-secondary" href="invoice-add-from-consumption.html">消费开票</a></div></div>
+<div class="content-card">
+<div class="table-wrapper">
+<table class="table">
+<thead>
+<tr>
+<th>发票号</th>
+<th style="white-space:nowrap;">发票类别</th>
+<th style="white-space:nowrap;">发票金额</th>
+<th>申请时间</th>
+<th>状态</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr data-status="待审核">
+<td>INV20260514002</td>
+<td>充值发票</td>
+<td class="amount">¥50.00</td>
+<td>2026-05-14 16:00</td>
+<td><span class="badge badge-warning">待审核</span></td>
+<td><a class="btn btn-sm btn-outline" href="invoice-view.html">详情</a></td>
+</tr>
+<tr data-status="开票中">
+<td>INV20260514001</td>
+<td>消费发票</td>
+<td class="amount">¥4.50</td>
+<td>2026-05-14 16:30</td>
+<td><span class="badge badge-info">开票中</span></td>
+<td><a class="btn btn-sm btn-outline" href="invoice-view.html">详情</a></td>
+</tr>
+<tr data-status="已开票">
+<td>INV20260512001</td>
+<td>消费发票</td>
+<td class="amount">¥3.50</td>
+<td>2026-05-12 16:00</td>
+<td><span class="badge badge-success">已开票</span></td>
+<td><a class="btn btn-sm btn-outline" href="invoice-view.html">详情</a></td>
+</tr>
+<tr data-status="已开票">
+<td>INV20260510001</td>
+<td>充值发票</td>
+<td class="amount">¥100.00</td>
+<td>2026-05-10 15:00</td>
+<td><span class="badge badge-success">已开票</span></td>
+<td><a class="btn btn-sm btn-outline" href="invoice-view.html">详情</a></td>
+</tr>
+<tr data-status="已驳回">
+<td>INV20260426001</td>
+<td>充值发票</td>
+<td class="amount">¥50.00</td>
+<td>2026-04-26 09:30</td>
+<td><span class="badge badge-danger">已驳回</span></td>
+<td><a class="btn btn-sm btn-outline" href="invoice-view.html">详情</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+</body>
+</html>

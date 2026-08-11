@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>新增协议比例登记 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .form-section { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-xl); margin-bottom: var(--spacing-lg); }
+        .form-section-title { font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg); padding-bottom: var(--spacing-md); border-bottom: 1px solid var(--border-light); }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); }
+        .form-item { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+        .form-item.full-width { grid-column: 1 / -1; }
+        .form-label { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+        .form-hint { font-size: 12px; color: var(--text-muted); }
+        .notice { background: #FFFBEB; border: 1px solid #fde68a; border-radius: var(--radius-md); padding: var(--spacing-md); font-size: 13px; color: #92400e; line-height: 1.8; }
+        #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon"></span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon"></span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon"></span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon"></span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon"></span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon"></span><span>结算管理</span></a>
+
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon"></span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link active" href="rules-list.html"><span class="icon"></span><span>规则设置</span></a>
+</div>
+</aside>
+<main class="main-content">
+<a class="back-link" href="rules-channel-edit.html">← 返回渠道规则</a>
+<div class="page-header">
+<h2 id="pgTitle">新增协议比例登记</h2>
+<p>为联合共创 / 生态共建模式渠道商登记合作协议约定的分成比例；结算按登记比例执行</p>
+</div>
+<div class="notice" style="margin-bottom:var(--spacing-lg);">
+仅限已完成入驻、合作模式为<strong>联合共创 / 生态共建</strong>且状态正常的渠道商；客户推荐模式按全局阶梯执行，无需登记。已有登记的渠道商再次提交视为<strong>比例变更</strong>，次月 1 日生效并留存修改记录。
+</div>
+<form class="form-section">
+<h3 class="form-section-title">选择渠道商</h3>
+<div class="form-grid">
+<div class="form-item">
+<label class="form-label">渠道商</label>
+<select class="input" id="fPartner" onchange="onPartner()">
+<option value="">请选择渠道商</option>
+<option value="hn">华南数智生态有限公司（生态共建 · 已登记 24%）</option>
+<option disabled="">深圳慧标科技有限公司（联合共创 · 已终止，不可登记）</option>
+<option disabled="">广州智采科技有限公司（客户推荐 · 走全局阶梯，不适用）</option>
+<option disabled="">珠三角采购服务联盟（客户推荐 · 走全局阶梯，不适用）</option>
+</select>
+<span class="form-hint">新入驻的联合共创 / 生态共建渠道商审核通过后自动出现在此列表</span>
+</div>
+<div class="form-item">
+<label class="form-label">合作模式</label>
+<input class="input" id="fMode" readonly="" type="text" value="—"/>
+</div>
+</div>
+</form>
+<form class="form-section">
+<h3 class="form-section-title">协议信息</h3>
+<div class="form-grid">
+<div class="form-item">
+<label class="form-label">协议名称 / 编号</label>
+<input class="input" id="fAgrNo" placeholder="如：华南区数据服务生态合作协议（2026-2028）" type="text"/>
+</div>
+<div class="form-item">
+<label class="form-label">协议比例（%）</label>
+<input class="input" id="fRatio" max="100" min="0" onchange="checkRatio()" placeholder="按协议约定填写" style="width:140px;" type="number"/>
+<span class="form-hint" id="ratioHint">生态共建上限 80%，超出须主任办公会特批；联合共创按双方实际贡献协商确定</span>
+</div>
+<div class="form-item">
+<label class="form-label">结算周期</label>
+<select class="input" id="fCycle" style="width:160px;">
+<option>按月</option>
+<option>按季度</option>
+</select>
+</div>
+<div class="form-item">
+<label class="form-label">协议起止</label>
+<div style="display:flex;align-items:center;gap:8px;">
+<input class="input" id="fFrom" style="width:160px;" type="date" value="2026-01-01"/> ~
+<input class="input" id="fTo" style="width:160px;" type="date" value="2028-12-31"/>
+</div>
+</div>
+<div class="form-item full-width">
+<label class="form-label">贡献 / 投入说明（联合共创必填，用于比例合理性审慎评估）</label>
+<textarea class="input" id="fDesc" placeholder="说明双方投入的技术、市场、资金等资源及占比依据..." rows="2"></textarea>
+</div>
+<div class="form-item full-width">
+<label class="form-label">合作协议附件（必传，含比例与结算周期条款）</label>
+<div id="fFile" onclick="pickFile()" style="border:1px dashed var(--border-color);border-radius:var(--radius-md);padding:var(--spacing-md);text-align:center;color:var(--text-muted);font-size:13px;cursor:pointer;">点击上传协议盖章件（PDF）</div>
+</div>
+</div>
+</form>
+<form class="form-section" id="spSection" style="display:none;border-left:4px solid var(--danger-color);">
+<h3 class="form-section-title">特批信息（比例超过生态共建上限 80%，必填）</h3>
+<div class="form-grid">
+<div class="form-item">
+<label class="form-label">主任办公会纪要编号</label>
+<input class="input" id="fSpNo" placeholder="如：主任办公会〔2026〕15号" type="text"/>
+</div>
+<div class="form-item full-width">
+<label class="form-label">会议纪要附件（必传）</label>
+<div id="fSpFile" onclick="pickSpFile()" style="border:1px dashed var(--border-color);border-radius:var(--radius-md);padding:var(--spacing-md);text-align:center;color:var(--text-muted);font-size:13px;cursor:pointer;">点击上传签字纪要（PDF）</div>
+</div>
+</div>
+</form>
+<div style="display:flex;gap:var(--spacing-md);justify-content:center;">
+<a class="btn btn-outline" href="rules-channel-edit.html">取消</a>
+<button class="btn btn-primary" onclick="submitAgr()" type="button">提交登记（次月生效）</button>
+</div>
+</main>
+<div id="toast"></div>
+<script>
+var fileOk = false, spFileOk = false;
+function onPartner(){
+  var v = document.getElementById('fPartner').value;
+  if (v === 'hn') {
+    document.getElementById('fMode').value = '生态共建';
+    document.getElementById('fAgrNo').value = '华南区数据服务生态合作协议（2026-2028）';
+    document.getElementById('pgTitle').textContent = '协议比例变更登记';
+    showToast('该渠道商已有登记（24%），本次提交将作为比例变更，次月生效', 'ℹ');
+  } else {
+    document.getElementById('fMode').value = '—';
+    document.getElementById('pgTitle').textContent = '新增协议比例登记';
+  }
+  checkRatio();
+}
+function checkRatio(){
+  var mode = document.getElementById('fMode').value;
+  var v = parseFloat(document.getElementById('fRatio').value) || 0;
+  var over = (mode === '生态共建' && v > 80);
+  document.getElementById('spSection').style.display = over ? 'block' : 'none';
+  var inp = document.getElementById('fRatio');
+  inp.style.borderColor = over ? 'var(--danger-color)' : '';
+  inp.style.color = over ? 'var(--danger-color)' : '';
+  if (over) showToast('超过生态共建上限 80%，须填写主任办公会特批信息', '⚠');
+}
+function pickFile(){
+  fileOk = true;
+  var el = document.getElementById('fFile');
+  el.style.color = '#059669'; el.style.borderColor = '#059669';
+  el.textContent = '✓ 已选择：合作协议盖章件_20260717.pdf（演示）';
+}
+function pickSpFile(){
+  spFileOk = true;
+  var el = document.getElementById('fSpFile');
+  el.style.color = '#059669'; el.style.borderColor = '#059669';
+  el.textContent = '✓ 已选择：主任办公会纪要_签字版.pdf（演示）';
+}
+function submitAgr(){
+  var p = document.getElementById('fPartner').value;
+  if (!p) { showToast('请选择渠道商', '⚠'); return; }
+  var ratio = parseFloat(document.getElementById('fRatio').value) || 0;
+  if (ratio <= 0 || ratio > 100) { showToast('请填写有效的协议比例', '⚠'); return; }
+  if (!document.getElementById('fAgrNo').value.trim()) { showToast('请填写协议名称/编号', '⚠'); return; }
+  if (!fileOk) { showToast('请上传合作协议附件', '⚠'); return; }
+  var mode = document.getElementById('fMode').value;
+  var sp = '';
+  if (mode === '生态共建' && ratio > 80) {
+    sp = document.getElementById('fSpNo').value.trim();
+    if (!sp) { showToast('比例超上限，请填写主任办公会纪要编号', '⚠'); return; }
+    if (!spFileOk) { showToast('请上传主任办公会纪要附件', '⚠'); return; }
+  }
+  var cycle = document.getElementById('fCycle').value;
+  location.href = 'rules-channel-edit.html?agr=' + p + '&ratio=' + ratio + '&cycle=' + encodeURIComponent(cycle) + (sp ? '&sp=' + encodeURIComponent(sp) : '');
+}
+function showToast(msg, icon){
+  var t = document.getElementById('toast');
+  t.textContent = (icon || '✓') + ' ' + msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.display = 'none'; }, 2400);
+}
+</script>
+</body>
+</html>

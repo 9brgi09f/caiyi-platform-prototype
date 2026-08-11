@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>计费规则 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .form-section { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); margin-bottom: var(--spacing-lg); }
+        .form-section-title { font-size: 15px; font-weight: 600; margin-bottom: var(--spacing-md); }
+        .rate-input { width: 120px; text-align: center; }
+        #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon"></span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon"></span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon"></span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon"></span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon"></span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon"></span><span>结算管理</span></a>
+
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon"></span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link active" href="rules-list.html"><span class="icon"></span><span>规则设置</span></a>
+</div>
+</aside>
+<main class="main-content">
+<a class="back-link" href="rules-list.html">← 返回规则设置</a>
+<div class="page-header">
+<h2>计费规则</h2>
+<p>配置平台算力成本单价和免费使用次数；智能体的按 Token 或按次定价由开发者设定，平台按规则核验并结算。</p>
+</div>
+<!-- 「token → 彩豆 换算率（开发者自主定价）」说明块已按需求删除：定价由开发者在创建/编辑智能体处设定，本页只保留「算力成本单价」配置 -->
+<!-- 算力成本单价：平台成本口径，用于开发者结算时扣除「算力成本费」 -->
+<form class="form-section">
+<h3 class="form-section-title">算力成本单价（结算扣除口径 · 兼开发者定价下限）</h3>
+<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:15px;">
+<span>每</span>
+<input class="input rate-input" type="number" value="1000"/>
+<span>token 算力成本 =</span>
+<input class="input rate-input" type="number" value="0.1"/>
+<span>彩豆</span>
+</div>
+<p style="font-size:13px;color:var(--text-muted);margin-top:var(--spacing-sm);">说明：平台算力成本价，<strong>不影响用户扣费</strong>，承担两个职责：① 开发者月度结算时按智能体实际消耗 token 计「算力成本费」，<strong>先按 开发者80%/平台20% 分成、再从开发者分成中全额扣除</strong>（最终收入 =用户消耗彩豆 × 80% − 算力成本彩豆）；② 作为开发者定价下限（换算率不得低于此值）。次月 1 日生效并留存修改记录。</p>
+<div style="background:var(--bg-light);border-radius:var(--radius-md);padding:var(--spacing-md);margin-top:var(--spacing-md);font-size:14px;">
+<div style="margin-bottom:6px;font-weight:600;">成本测算示意</div>
+<div>智能体本月消耗 5,000,000 token → 算力成本 ≈ 500 彩豆 ≈ ¥5.00，结算时先按 80/20 分成、再从开发者分成中全额扣除</div>
+</div>
+</form>
+<form class="form-section">
+<h3 class="form-section-title">免费使用次数</h3>
+<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:15px;">
+<span>每位新注册用户对每个智能体免费使用</span>
+<input class="input rate-input" id="freeUsageCount" min="0" style="width:80px;" type="number" value="20"/>
+<span>次</span>
+</div>
+<p style="font-size:13px;color:var(--text-muted);margin-top:var(--spacing-sm);">新注册用户获得一次性免费权益；每个智能体的免费次数用完后，按该智能体已生效的计费方式扣费，不再重置。填 0 表示不提供免费次数。免费调用期间的算力成本由平台承担，适用于按 Token 与按次计费智能体。</p>
+<div style="background:var(--bg-light);border-radius:var(--radius-md);padding:var(--spacing-md);margin-top:var(--spacing-md);font-size:13px;color:var(--text-secondary);">统计口径：按“平台个人账号 × 智能体”独立累计，用户注册时初始化免费次数；规则调整仅适用于调整后新注册用户，已注册用户保留注册时获得的免费次数，并保留修改记录。</div>
+</form>
+<form class="form-section">
+<h3 class="form-section-title">修改记录</h3>
+<div class="table-wrapper">
+<table class="table">
+<thead><tr><th>修改时间</th><th>修改内容</th><th>操作人</th></tr></thead>
+<tbody>
+<tr><td>2026-07-21 10:00</td><td>定价权移交开发者：换算率由开发者按智能体自定；平台仅配置算力成本单价（0.1 彩豆/千token，兼定价下限）</td><td>管理员</td></tr>
+<tr><td>2026-07-18 10:00</td><td>初始化算力换算率：每 1,000 token = 1 彩豆</td><td>管理员</td></tr>
+</tbody>
+</table>
+</div>
+</form>
+<div style="display: flex; gap: var(--spacing-md); justify-content: center;">
+<a class="btn btn-outline" href="rules-list.html">取消</a>
+<button class="btn btn-primary" onclick="showToast('计费规则已保存，将应用于后续新注册用户（已生成修改记录）')" type="button">保存配置</button>
+</div>
+</main>
+<div id="toast"></div>
+<script>
+function showToast(msg, icon){
+  var t = document.getElementById('toast');
+  t.textContent = (icon || '✓') + ' ' + msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.display = 'none'; }, 2400);
+}
+</script>
+</body>
+</html>

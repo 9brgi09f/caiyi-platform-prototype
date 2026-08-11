@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>发票管理 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link active" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+<!-- 数据统计菜单暂隐藏 <a class="sidebar-link" href="statistics.html"><span class="icon">📉</span><span>数据统计</span></a> -->
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+<div>
+<h2>发票管理</h2>
+<p>审核和管理用户发票申请</p>
+</div>
+<span style="font-size: 14px;">待处理：<strong style="color: var(--warning-color);">2 笔</strong></span>
+</div>
+<div class="tab-nav">
+<button class="tab-btn active" onclick="filterStatus('all', this)" type="button">全部 (10)</button>
+<button class="tab-btn" onclick="filterStatus('待审核', this)" type="button">待审核 (2)</button>
+<button class="tab-btn" onclick="filterStatus('开票中', this)" type="button">开票中 (2)</button>
+<button class="tab-btn" onclick="filterStatus('已开票', this)" type="button">已开票 (4)</button>
+<button class="tab-btn" onclick="filterStatus('已驳回', this)" type="button">已驳回 (2)</button>
+</div>
+<div class="content-card">
+<div class="table-wrapper">
+<table class="table table-wide">
+<thead>
+<tr>
+<th>发票号</th>
+<th>用户</th>
+<th>发票抬头</th>
+<th>金额</th>
+<th>类型</th>
+<th>申请时间</th>
+<th>状态</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr data-status="待审核">
+<td>INV20260514002</td>
+<td>李用户</td>
+<td>北京科技有限公司</td>
+<td class="amount">¥50.00</td>
+<td>充值发票</td>
+<td>2026-05-14 16:00</td>
+<td><span class="badge badge-warning">待审核</span></td>
+<td>
+<a class="btn btn-sm btn-outline" href="invoice-view.html">详情</a>
+<a class="btn btn-sm btn-primary" href="invoice-review.html">审核</a>
+</td>
+</tr>
+<tr data-status="开票中">
+<td>INV20260514001</td>
+<td>李用户</td>
+<td>北京科技有限公司</td>
+<td class="amount">¥4.50</td>
+<td>消费发票</td>
+<td>2026-05-14 16:30</td>
+<td><span class="badge badge-info">开票中</span></td>
+<td>
+<a class="btn btn-sm btn-outline" href="invoice-view.html">详情</a>
+</td>
+</tr>
+<tr data-status="待审核">
+<td>-</td>
+<td>李四</td>
+<td>上海云帆网络科技有限公司</td>
+<td class="amount">¥68.00</td>
+<td>消费发票</td>
+<td>2026-05-13 15:30</td>
+<td><span class="badge badge-warning">待审核</span></td>
+<td>
+<a class="btn btn-sm btn-outline" href="invoice-view.html">详情</a>
+<a class="btn btn-sm btn-primary" href="invoice-review.html">审核</a>
+</td>
+</tr>
+<tr data-status="开票中">
+<td>-</td>
+<td>王五</td>
+<td>深圳市数睿信息技术有限公司</td>
+<td class="amount">¥52.00</td>
+<td>消费发票</td>
+<td>2026-05-12 09:15</td>
+<td><span class="badge badge-info">开票中</span></td>
+<td><a class="btn btn-sm btn-outline" href="invoice-view.html">详情</a></td>
+</tr>
+<tr data-status="已开票">
+<td>INV20260512001</td>
+<td>李用户</td>
+<td>北京科技有限公司</td>
+<td class="amount">¥3.50</td>
+<td>消费发票</td>
+<td>2026-05-12 16:00</td>
+<td><span class="badge badge-success">已开票</span></td>
+<td><a class="btn btn-sm btn-outline" href="invoice-view.html">详情</a></td>
+</tr>
+<tr data-status="已开票">
+<td>INV20260510001</td>
+<td>李用户</td>
+<td>北京科技有限公司</td>
+<td class="amount">¥100.00</td>
+<td>充值发票</td>
+<td>2026-05-10 15:00</td>
+<td><span class="badge badge-success">已开票</span></td>
+<td><a class="btn btn-sm btn-outline" href="invoice-view.html">详情</a></td>
+</tr>
+<tr data-status="已驳回">
+<td>INV20260426001</td>
+<td>李用户</td>
+<td>北京科技有限公司</td>
+<td class="amount">¥50.00</td>
+<td>充值发票</td>
+<td>2026-04-26 09:30</td>
+<td><span class="badge badge-danger">已驳回</span></td>
+<td><a class="btn btn-sm btn-outline" href="invoice-view.html">详情</a></td>
+</tr>
+<tr data-status="已开票">
+<td>26442000000018273645</td>
+<td>赵六</td>
+<td>广州明睿数据服务有限公司</td>
+<td class="amount">¥100.00</td>
+<td>消费发票</td>
+<td>2026-05-08 11:40</td>
+<td><span class="badge badge-success">已开票</span></td>
+<td><a class="btn btn-sm btn-outline" href="invoice-view.html">详情</a></td>
+</tr>
+<tr data-status="已开票">
+<td>26442000000016082941</td>
+<td>孙七</td>
+<td>杭州启航电子商务有限公司</td>
+<td class="amount">¥83.50</td>
+<td>消费发票</td>
+<td>2026-04-28 14:05</td>
+<td><span class="badge badge-success">已开票</span></td>
+<td><a class="btn btn-sm btn-outline" href="invoice-view.html">详情</a></td>
+</tr>
+<tr data-status="已驳回">
+<td>-</td>
+<td>周八</td>
+<td>成都锐见软件有限公司</td>
+<td class="amount">¥35.00</td>
+<td>消费发票</td>
+<td>2026-04-26 10:10</td>
+<td><span class="badge badge-danger">已驳回</span></td>
+<td><a class="btn btn-sm btn-outline" href="invoice-view.html">详情</a></td>
+</tr>
+</tbody>
+</table>
+</div></div>
+</main>
+</body>
+</html>

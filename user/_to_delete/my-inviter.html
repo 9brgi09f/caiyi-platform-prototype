@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>我的邀请人 - 用户端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<style>
+        /* 我的邀请人页面样式 */
+        .inviter-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+        }
+        
+        .inviter-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--spacing-md);
+            font-size: 36px;
+        }
+        
+        .inviter-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .inviter-id {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .inviter-time {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        
+        .bind-notice {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-md);
+            background: #FFFBE6;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            color: var(--warning-color);
+        }
+        
+        /* 未绑定表单 */
+        .bind-form {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+        }
+        
+        .bind-form-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--user-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--spacing-md);
+            font-size: 36px;
+            color: var(--user-color);
+        }
+        
+        .bind-tip {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .bind-input {
+            width: 100%;
+            height: 48px;
+            padding: 0 var(--spacing-md);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .bind-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        /* 绑定记录 */
+        .record-section {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .record-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .record-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+        
+        .record-item {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--spacing-sm) 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .record-item:last-child {
+            border-bottom: none;
+        }
+        
+        .record-label {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        
+        .record-value {
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        
+        /* FAQ */
+        .faq-section {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .faq-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .faq-item {
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md) 0;
+            font-size: 14px;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+        
+        .faq-question svg {
+            transition: transform 0.2s;
+            color: var(--text-muted);
+        }
+        
+        .faq-answer {
+            display: none;
+            padding-bottom: var(--spacing-md);
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .faq-answer.show {
+            display: block;
+        }
+        
+        /* 弹窗 */
+        .modal-content-center {
+            background: var(--card-bg);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            text-align: center;
+            width: 300px;
+        }
+        
+        .modal-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--spacing-md);
+            font-size: 32px;
+        }
+        
+        .modal-icon.success {
+            background: var(--developer-light);
+            color: var(--success-color);
+        }
+        
+        .modal-icon.error {
+            background: #fee2e2;
+            color: var(--danger-color);
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .modal-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.75);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+<header class="top-bar user">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><span>🏠</span><span>订阅智能体</span></a>
+<span style="color: var(--border-color);">|</span>
+<span style="color: var(--user-color); font-weight: 600;">用户端</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">👤</div>
+<span>李用户</span>
+</div>
+</div>
+</header>
+<aside class="sidebar user">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">🏪</span><span>智能体市场</span></a>
+<a class="sidebar-link" href="recharge-list.html"><span class="icon">💰</span><span>账户充值</span></a>
+<a class="sidebar-link" href="balance.html"><span class="icon">💳</span><span>余额管理</span></a>
+<a class="sidebar-link" href="payment-accounts.html"><span class="icon">🏦</span><span>付款账户</span></a>
+<a class="sidebar-link" href="consumption-list.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+</div>
+<div class="sidebar-section">
+</div>
+</aside>
+<main class="main-content">
+<!-- 已绑定状态 -->
+<div class="inviter-card" id="boundState">
+<div class="inviter-avatar">👤</div>
+<div class="inviter-name">张***</div>
+<div class="inviter-id">邀请人ID: 10001</div>
+<div class="inviter-time">绑定时间: 2024-01-15 14:30</div>
+<div class="bind-notice">
+<svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+<circle cx="12" cy="12" r="10"></circle>
+<line x1="12" x2="12" y1="8" y2="12"></line>
+<line x1="12" x2="12.01" y1="16" y2="16"></line>
+</svg>
+<span>邀请关系一经绑定，无法更改</span>
+</div>
+</div>
+<!-- 未绑定状态（隐藏） -->
+<div class="bind-form" id="unboundState" style="display: none;">
+<div class="bind-form-icon">
+<svg fill="none" height="36" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="36">
+<path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path>
+<circle cx="8.5" cy="7" r="4"></circle>
+<line x1="20" x2="20" y1="8" y2="14"></line>
+<line x1="23" x2="17" y1="11" y2="11"></line>
+</svg>
+</div>
+<p class="bind-tip">输入好友的邀请码，建立绑定关系</p>
+<input class="bind-input" id="inviteCodeInput" maxlength="10" placeholder="请输入邀请码" type="text"/>
+<button class="btn btn-primary btn-lg" onclick="bindInviter()" style="width: 100%;">确认绑定</button>
+<div class="bind-notice" style="margin-top: var(--spacing-md); justify-content: center;">
+<svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+<circle cx="12" cy="12" r="10"></circle>
+<line x1="12" x2="12" y1="8" y2="12"></line>
+<line x1="12" x2="12.01" y1="16" y2="16"></line>
+</svg>
+<span>绑定后不可更改，请仔细核对</span>
+</div>
+</div>
+<!-- 绑定记录 -->
+<div class="record-section">
+<div class="record-title">绑定记录</div>
+<div class="record-list">
+<div class="record-item">
+<span class="record-label">绑定方式</span>
+<span class="record-value">链接绑定</span>
+</div>
+<div class="record-item">
+<span class="record-label">绑定时间</span>
+<span class="record-value">2024-01-15 14:30:25</span>
+</div>
+<div class="record-item">
+<span class="record-label">注册渠道</span>
+<span class="record-value">微信小程序</span>
+</div>
+</div>
+</div>
+<!-- 常见问题 -->
+<div class="faq-section">
+<div class="faq-title">常见问题</div>
+<div class="faq-list">
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+<span>什么是邀请绑定？</span>
+<svg fill="none" height="20" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="20">
+<polyline points="6 9 12 15 18 9"></polyline>
+</svg>
+</div>
+<div class="faq-answer">
+                        邀请绑定是您与邀请人建立的永久关联关系。通过邀请链接注册或输入邀请码，您将与邀请人建立绑定关系。
+                    </div>
+</div>
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+<span>绑定后可以更改吗？</span>
+<svg fill="none" height="20" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="20">
+<polyline points="6 9 12 15 18 9"></polyline>
+</svg>
+</div>
+<div class="faq-answer">
+                        不可以。邀请关系一旦建立，将终身有效且不可更改。
+                    </div>
+</div>
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+<span>如何获取邀请码？</span>
+<svg fill="none" height="20" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="20">
+<polyline points="6 9 12 15 18 9"></polyline>
+</svg>
+</div>
+<div class="faq-answer">
+                        您可以在"邀请好友"页面查看您的专属邀请码。
+                    </div>
+</div>
+</div>
+</div>
+</main>
+<!-- 绑定成功弹窗 -->
+<div class="modal-overlay" id="successModal">
+<div class="modal-content-center">
+<div class="modal-icon success">
+<svg fill="none" height="32" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="32">
+<polyline points="20 6 9 17 4 12"></polyline>
+</svg>
+</div>
+<div class="modal-title">绑定成功</div>
+<div class="modal-desc">您已成功绑定邀请人</div>
+<button class="btn btn-primary" onclick="closeSuccessModal()" style="width: 100%;">我知道了</button>
+</div>
+</div>
+<!-- 绑定失败弹窗 -->
+<div class="modal-overlay" id="errorModal">
+<div class="modal-content-center">
+<div class="modal-icon error">
+<svg fill="none" height="32" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="32">
+<circle cx="12" cy="12" r="10"></circle>
+<line x1="15" x2="9" y1="9" y2="15"></line>
+<line x1="9" x2="15" y1="9" y2="15"></line>
+</svg>
+</div>
+<div class="modal-title">绑定失败</div>
+<div class="modal-desc" id="errorMsg">邀请码无效或已过期</div>
+<button class="btn btn-secondary" onclick="closeErrorModal()" style="width: 100%;">重新输入</button>
+</div>
+</div>
+<!-- Toast提示 -->
+<div class="toast" id="toast"></div>
+<script>
+        // 绑定邀请人
+        function bindInviter() {
+            const inviteCode = document.getElementById('inviteCodeInput').value;
+            
+            if (!inviteCode) {
+                showToast('请输入邀请码');
+                return;
+            }
+            
+            if (inviteCode.length < 6) {
+                showToast('邀请码长度不足');
+                return;
+            }
+            
+            // 模拟校验
+            if (inviteCode.toUpperCase() === 'ABC123XY') {
+                document.getElementById('successModal').classList.add('active');
+            } else {
+                document.getElementById('errorModal').classList.add('active');
+            }
+        }
+
+        // 关闭成功弹窗
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.remove('active');
+            location.reload();
+        }
+
+        // 关闭失败弹窗
+        function closeErrorModal() {
+            document.getElementById('errorModal').classList.remove('active');
+            document.getElementById('inviteCodeInput').value = '';
+        }
+
+        // FAQ展开/收起
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('svg');
+            
+            if (answer.classList.contains('show')) {
+                answer.classList.remove('show');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                // 关闭其他展开项
+                document.querySelectorAll('.faq-answer.show').forEach(item => {
+                    item.classList.remove('show');
+                });
+                document.querySelectorAll('.faq-question svg').forEach(item => {
+                    item.style.transform = 'rotate(0deg)';
+                });
+                
+                answer.classList.add('show');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // Toast提示
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        // 点击背景关闭弹窗
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

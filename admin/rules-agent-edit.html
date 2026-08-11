@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>入驻规则 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .form-section {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+        }
+        .form-section-title {
+            font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md); border-bottom: 1px solid var(--border-light);
+        }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); }
+        .form-item { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+        .form-item.full-width { grid-column: 1 / -1; }
+        .form-label { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+        .form-hint { font-size: 12px; color: var(--text-muted); }
+        .tier-card { display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-light); border-radius: var(--radius-md); margin-bottom: var(--spacing-md); }
+        .tier-badge { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 600; color: white; }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link active" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+<!-- 数据统计菜单暂隐藏 <a class="sidebar-link" href="statistics.html"><span class="icon">📉</span><span>数据统计</span></a> -->
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a class="back-link" href="rules-list.html" style="color: white; margin-bottom: var(--spacing-sm);">← 返回列表</a>
+<h2>入驻规则</h2>
+<p>配置智能体入驻审核规则</p>
+</div>
+<form class="form-section">
+<h3 class="form-section-title">入驻规则</h3>
+<div class="form-grid">
+<div class="form-item">
+<label class="form-label">入驻审核方式</label>
+<select class="select">
+<option selected="" value="manual">人工审核</option>
+<option value="auto">自动审核</option>
+<option value="none">无需审核</option>
+</select>
+</div>
+<div class="form-item">
+<label class="form-label">审核期限</label>
+<div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+<input class="input" style="width: 80px;" type="number" value="3"/>
+<span>工作日内完成</span>
+</div>
+</div>
+<div class="form-item">
+<label class="form-label">最低保证金</label>
+<div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+<input class="input" style="width: 100px;" type="number" value="0"/>
+<span>元</span>
+</div>
+<span class="form-hint">入驻时需缴纳的保证金（0表示免保证金）</span>
+</div>
+<div class="form-item">
+<label class="form-label">开发者资质要求</label>
+<select class="select">
+<option selected="" value="personal">个人开发者</option>
+<option value="enterprise">企业开发者</option>
+<option value="both">个人/企业均可</option>
+</select>
+</div>
+</div>
+<div class="form-item full-width" style="margin-top: var(--spacing-md);">
+<label style="display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-light); border-radius: var(--radius-md);">
+<input checked="" type="checkbox"/>
+<div>
+<div style="font-weight: 500;">需要签署入驻协议</div>
+<div style="font-size: 12px; color: var(--text-muted);">开发者入驻前需签署平台服务协议</div>
+</div>
+</label>
+</div>
+</form>
+<!-- 智能体等级配置暂隐藏
+<form class="form-section">
+<h3 class="form-section-title">智能体等级配置</h3>
+<div class="tier-card">
+<div class="tier-badge" style="background: #10B981;">L1</div>
+<div style="flex: 1;">
+<div style="font-weight: 600;">入门级</div>
+<div style="font-size: 12px; color: var(--text-muted);">月调用量 0-1,000，分佣比例按开发者＋智能体维度在上架审核时逐一设定（无统一默认比例）</div>
+</div>
+<button class="btn btn-sm btn-outline" type="button">编辑</button>
+</div>
+<div class="tier-card">
+<div class="tier-badge" style="background: #0EA5E9;">L2</div>
+<div style="flex: 1;">
+<div style="font-weight: 600;">成长级</div>
+<div style="font-size: 12px; color: var(--text-muted);">月调用量 1,001-10,000，分佣比例按开发者＋智能体维度在上架审核时逐一设定（无统一默认比例）</div>
+</div>
+<button class="btn btn-sm btn-outline" type="button">编辑</button>
+</div>
+<div class="tier-card">
+<div class="tier-badge" style="background: #8B5CF6;">L3</div>
+<div style="flex: 1;">
+<div style="font-weight: 600;">成熟级</div>
+<div style="font-size: 12px; color: var(--text-muted);">月调用量 10,001-50,000，分佣比例按开发者＋智能体维度在上架审核时逐一设定（无统一默认比例）</div>
+</div>
+<button class="btn btn-sm btn-outline" type="button">编辑</button>
+</div>
+<div class="tier-card">
+<div class="tier-badge" style="background: #F59E0B;">L4</div>
+<div style="flex: 1;">
+<div style="font-weight: 600;">精英级</div>
+<div style="font-size: 12px; color: var(--text-muted);">月调用量 50,001+，分佣比例按开发者＋智能体维度在上架审核时逐一设定（无统一默认比例）</div>
+</div>
+<button class="btn btn-sm btn-outline" type="button">编辑</button>
+</div>
+<div class="form-item full-width" style="margin-top: var(--spacing-md);">
+<label style="display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-light); border-radius: var(--radius-md);">
+<input checked="" type="checkbox"/>
+<div>
+<div style="font-weight: 500;">等级按月自动评定</div>
+<div style="font-size: 12px; color: var(--text-muted);">每月1日根据上月调用量重新评定等级</div>
+</div>
+</label>
+</div>
+</form>
+-->
+<!-- 质量管理规则暂隐藏
+<form class="form-section">
+<h3 class="form-section-title">质量管理规则</h3>
+<div class="form-grid">
+<div class="form-item">
+<label class="form-label">最低服务质量评分</label>
+<input class="input" step="0.1" style="width: 100px;" type="number" value="3.5"/>
+<span class="form-hint">低于此评分将被警告</span>
+</div>
+<div class="form-item">
+<label class="form-label">强制下线评分</label>
+<input class="input" step="0.1" style="width: 100px;" type="number" value="2.5"/>
+<span class="form-hint">低于此评分自动下线</span>
+</div>
+<div class="form-item">
+<label class="form-label">服务可用性要求</label>
+<div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+<input class="input" style="width: 80px;" type="number" value="99"/>
+<span>%</span>
+</div>
+<span class="form-hint">月度服务可用性要求</span>
+</div>
+</div>
+<div class="form-item full-width" style="margin-top: var(--spacing-md);">
+<label style="display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-light); border-radius: var(--radius-md);">
+<input checked="" type="checkbox"/>
+<div>
+<div style="font-weight: 500;">启用智能体下架机制</div>
+<div style="font-size: 12px; color: var(--text-muted);">连续3个月评分低于要求自动下架</div>
+</div>
+</label>
+</div>
+</form>
+-->
+<div style="display: flex; gap: var(--spacing-md); justify-content: center;">
+<a class="btn btn-outline" href="rules-list.html">取消</a>
+<button class="btn btn-primary" type="submit">保存配置</button>
+</div>
+</main>
+</body>
+</html>

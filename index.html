@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>彩翼平台原型总控台</title>
+<link href="styles.css" rel="stylesheet"/>
+<script src="app.js"></script>
+<style>
+  .hub-header{padding:32px 0 26px;border-bottom:1px solid var(--border-light);margin-bottom:28px}.hub-kicker{display:inline-flex;align-items:center;gap:7px;color:#2563EB;font-size:12px;font-weight:650;letter-spacing:.8px}.hub-kicker:before{content:'';width:20px;height:3px;border-radius:3px;background:#5B8DEF}.hub-title{margin:10px 0 8px;font-size:28px;color:var(--text-primary);letter-spacing:-.03em}.hub-subtitle{margin:0;color:var(--text-secondary);font-size:14px;line-height:1.7}.hub-section{margin:34px 0}.hub-heading{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:14px}.hub-heading h2{margin:0;padding-left:10px;border-left:3px solid #5B8DEF;font-size:18px}.hub-heading p{margin:0;color:var(--text-muted);font-size:12px}.experience-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.experience-card{position:relative;display:flex;flex-direction:column;min-height:176px;padding:19px 20px;border:1px solid var(--border-light);border-radius:12px;background:#fff;color:inherit;text-decoration:none;transition:border-color .2s,box-shadow .2s,transform .2s}.experience-card:hover{border-color:#8CB1F5;box-shadow:0 8px 20px rgba(37,99,235,.09);transform:translateY(-2px)}.experience-card.featured{border-color:#C7D9FB;background:linear-gradient(135deg,#F8FBFF,#EFF5FF)}.experience-index{color:#5B8DEF;font-size:12px;font-weight:700;letter-spacing:.8px}.experience-card h3{margin:11px 0 6px;font-size:17px}.experience-card p{margin:0;color:var(--text-secondary);font-size:13px;line-height:1.7}.experience-go{margin-top:auto;padding-top:13px;color:#2563EB;font-size:13px;font-weight:600}.experience-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:13px}.experience-actions a{padding:6px 9px;border-radius:6px;background:#2563EB;color:#fff;font-size:12px;font-weight:600;text-decoration:none}.experience-actions a.secondary{border:1px solid #C7D9FB;background:#fff;color:#2563EB}.topic-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.topic-card{padding:19px 20px;border:1px solid var(--border-light);border-radius:12px;background:#fff}.topic-card h3{margin:0 0 7px;font-size:16px}.topic-card p{margin:0 0 13px;color:var(--text-secondary);font-size:13px;line-height:1.7}.topic-links{display:flex;flex-wrap:wrap;gap:8px}.topic-links a{padding:5px 9px;border-radius:6px;background:#EFF4FF;color:#2563EB;font-size:12px;text-decoration:none}.journey{display:grid;grid-template-columns:repeat(6,1fr);gap:0;padding:18px 20px;border:1px solid var(--border-light);border-radius:12px;background:#fff;overflow-x:auto}.journey-step{position:relative;min-width:126px;padding:5px 16px 5px 0;color:#334155;font-size:13px;font-weight:600}.journey-step:not(:last-child):after{content:'→';position:absolute;right:4px;color:#94A3B8;font-size:17px;font-weight:400}.journey-step small{display:block;margin-top:4px;color:#94A3B8;font-size:11px;font-weight:400}.docs-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.doc-group{padding:17px 18px;border:1px solid var(--border-light);border-radius:12px;background:#fff}.doc-group h3{margin:0 0 9px;font-size:15px}.doc-group a{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-top:1px solid var(--border-light);color:#475569;font-size:13px;text-decoration:none}.doc-group a:first-of-type{border-top:0}.doc-group a span:last-child{color:#2563EB}.update-table-wrap{overflow-x:auto;border:1px solid var(--border-light);border-radius:12px;background:#fff}.update-table{width:100%;border-collapse:collapse;min-width:680px;font-size:13px}.update-table th{padding:11px 14px;background:#F8FAFC;color:#64748B;font-size:12px;font-weight:650;text-align:left}.update-table td{padding:12px 14px;border-top:1px solid var(--border-light);color:#475569;line-height:1.7;vertical-align:top}.update-table .update-date{width:120px;color:#64748B;white-space:nowrap}.update-table .update-module{width:190px;color:#1E293B;font-weight:600}.hub-footer{margin:36px 0 24px;color:var(--text-muted);font-size:12px;text-align:center}@media(max-width:900px){.experience-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.journey{grid-template-columns:repeat(3,minmax(150px,1fr));gap:12px}.journey-step:after{display:none}.docs-grid{grid-template-columns:1fr}}@media(max-width:620px){.container{padding-left:16px;padding-right:16px}.hub-header{padding-top:24px}.hub-title{font-size:23px}.experience-grid,.topic-grid,.scope-grid{grid-template-columns:1fr}.hub-heading{align-items:flex-start;flex-direction:column}.journey{grid-template-columns:repeat(2,minmax(135px,1fr))}}
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+<main class="container">
+  <header class="hub-header">
+    <div class="hub-kicker">PROTOTYPE HUB</div>
+    <h1 class="hub-title">彩翼公共采购智能体协同管理平台</h1>
+    <p class="hub-subtitle">原型体验、关键业务专题与配套方案的统一入口</p>
+  </header>
+
+  <section class="hub-section">
+    <div class="hub-heading"><h2>快速体验原型</h2><p>从一个角色或任务直接进入对应页面</p></div>
+    <div class="experience-grid">
+      <article class="experience-card featured"><span class="experience-index">START HERE</span><h3>新用户注册与体验权益</h3><p>个人账号注册、机构申请审核、新用户免费体验与独立登录交互。</p><div class="experience-actions"><a href="user/register-select.html" target="_blank">体验注册流程 →</a><a class="secondary" href="user/login.html" target="_blank">体验登录界面</a></div></article>
+      <a class="experience-card" href="user/index.html"><span class="experience-index">USER</span><h3>企业用户端</h3><p>浏览智能体、免费体验、充值消费与发票管理。</p><span class="experience-go">进入用户端 →</span></a>
+      <a class="experience-card" href="developer/index.html"><span class="experience-index">DEVELOPER</span><h3>开发者端</h3><p>创建智能体，配置按 Token 或按次计费，管理收入与结算。</p><span class="experience-go">进入开发者端 →</span></a>
+      <a class="experience-card" href="admin/index.html"><span class="experience-index">OPERATIONS</span><h3>平台运营端</h3><p>机构管理、审核、计费规则与业务运营管理。</p><span class="experience-go">进入运营端 →</span></a>
+      <a class="experience-card" href="finance/index.html"><span class="experience-index">FINANCE</span><h3>财务端</h3><p>结算、提现打款、开票管理与账户对账。</p><span class="experience-go">进入财务端 →</span></a>
+      <a class="experience-card" href="channel/index.html"><span class="experience-index">CHANNEL</span><h3>渠道商端</h3><p>推广客户、确认推荐关系、查看分成与提现。</p><span class="experience-go">进入渠道端 →</span></a>
+    </div>
+  </section>
+
+  <section class="hub-section">
+    <div class="hub-heading"><h2>关键业务专题</h2><p>按业务主题快速查看原型与规则</p></div>
+    <div class="topic-grid">
+      <article class="topic-card"><h3>用户注册与机构管理</h3><p>手机号唯一的个人账号、企业/机构审核、成员关系与角色管理。</p><div class="topic-links"><a href="user/register-select.html" target="_blank">注册原型</a><a href="admin/register-audit-list.html" target="_blank">运营审核</a><a href="admin/org-type-list.html" target="_blank">机构管理</a></div></article>
+      <article class="topic-card"><h3>智能体发布与计费</h3><p>开发者可配置按 Token 或按次计费；新用户享有每个智能体的一次性免费体验次数。</p><div class="topic-links"><a href="developer/agent-add.html" target="_blank">创建智能体</a><a href="developer/agent-list.html" target="_blank">智能体管理</a><a href="admin/rules-token-edit.html" target="_blank">计费规则</a></div></article>
+      <article class="topic-card"><h3>调用、结算与提现</h3><p>免费体验、消费扣费、开发者分佣、结算、开票、提现与财务对账。</p><div class="topic-links"><a href="user/consumption-list.html" target="_blank">消费记录</a><a href="developer/settlement-list.html" target="_blank">开发者结算</a><a href="finance/reconciliation-list.html" target="_blank">财务对账</a></div></article>
+      <article class="topic-card"><h3>渠道推广与分成</h3><p>渠道入驻、推荐关系确认、阶梯或协议分成、结算与提现。</p><div class="topic-links"><a href="channel/onboard.html" target="_blank">渠道入驻</a><a href="channel/referral-list.html" target="_blank">推荐关系</a><a href="admin/channel-list.html" target="_blank">运营管理</a></div></article>
+    </div>
+  </section>
+
+  <section class="hub-section">
+    <div class="hub-heading"><h2>业务主链路</h2><p>详细分支请查看流程图</p></div>
+    <div class="journey"><div class="journey-step">注册开户<small>个人账号与机构身份</small></div><div class="journey-step">免费体验 / 充值<small>新用户权益与彩豆账户</small></div><div class="journey-step">调用消费<small>免费、按 Token 或按次</small></div><div class="journey-step">分佣结算<small>开发者与渠道分成</small></div><div class="journey-step">开票提现<small>审核与付款处理</small></div><div class="journey-step">财务对账<small>流水、金蝶与银行核对</small></div></div>
+  </section>
+
+  <section class="hub-section">
+    <div class="hub-heading"><h2>方案与流程资料</h2><p>查看完整规则、状态和建设边界</p></div>
+    <div class="docs-grid">
+      <div class="doc-group"><h3>产品与注册方案</h3><a href="用户注册与机构类型设计方案.html" target="_blank">用户注册与机构类型设计方案 <span>查看 →</span></a><a href="彩翼平台原型设计补充说明.html" target="_blank">原型设计补充说明 <span>查看 →</span></a></div>
+      <div class="doc-group"><h3>业务流程图</h3><a href="用户注册流程图.html" target="_blank">用户注册流程图 <span>查看 →</span></a><a href="彩翼平台整体业务流程图.html" target="_blank">整体业务流程图 <span>查看 →</span></a></div>
+      <div class="doc-group"><h3>建设与系统对接</h3><a href="彩翼平台财务对接_流程与架构图.html" target="_blank">流程与架构图（建设范围） <span>查看 →</span></a></div>
+    </div>
+  </section>
+
+  <section class="hub-section">
+    <div class="hub-heading"><h2>更新说明</h2><p>后续每次新增或调整功能时，在此追加一行记录</p></div>
+    <div class="update-table-wrap"><table class="update-table"><thead><tr><th>日期</th><th>更新模块</th><th>功能说明</th></tr></thead><tbody>
+      <tr><td class="update-date">2026-08-11</td><td class="update-module">用户注册与账号体系</td><td>新增个人用户与企业/机构注册；个人用户免审开通；统一手机号对应平台个人账号，并支持机构成员关系与角色管理。</td></tr>
+      <tr><td class="update-date">2026-08-11</td><td class="update-module">注册审核与通知</td><td>补充企业/机构审核、注册待办、站内消息与短信通知规则；个人用户注册成功后告知体验权益。</td></tr>
+      <tr><td class="update-date">2026-08-11</td><td class="update-module">智能体双模式计费</td><td>开发者创建和编辑智能体支持按 Token、按次两种计费方式；运营端统一配置计费规则。</td></tr>
+      <tr><td class="update-date">2026-08-11</td><td class="update-module">新用户免费体验</td><td>运营端可配置新注册用户每个智能体的免费次数；用户端新增剩余次数展示、调用扣减、免费体验记录和运营权益查询。</td></tr>
+    </tbody></table></div>
+  </section>
+  <p class="hub-footer">彩翼平台原型 · 更新记录持续维护</p>
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>分佣规则 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .form-section {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+        }
+        .form-section-title {
+            font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md); border-bottom: 1px solid var(--border-light);
+        }
+        .form-hint { font-size: 12px; color: var(--text-muted); }
+        .default-rule { display: flex; align-items: center; gap: var(--spacing-xl); flex-wrap: wrap; }
+        .ratio-preview { display: flex; gap: var(--spacing-md); align-items: center; }
+        .ratio-bar {
+            width: 260px; height: 14px; border-radius: 7px; overflow: hidden;
+            display: flex; background: var(--bg-light);
+        }
+        .ratio-bar .dev { background: var(--success-color); height: 100%; }
+        .ratio-bar .plat { background: var(--admin-color); height: 100%; }
+        /* 弹窗 */
+        .modal-mask {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+            align-items: center; justify-content: center; z-index: 100;
+        }
+        .modal-mask.show { display: flex; }
+        .modal {
+            background: var(--card-bg); border-radius: var(--radius-lg);
+            width: 480px; max-width: 92vw; max-height: 85vh; overflow: auto;
+            padding: var(--spacing-xl); box-shadow: var(--shadow-lg);
+        }
+        .modal h3 { margin-bottom: var(--spacing-lg); }
+        .modal .form-item { margin-bottom: var(--spacing-lg); display: flex; flex-direction: column; gap: var(--spacing-xs); }
+        .modal .form-label { font-size: 14px; font-weight: 500; }
+        .modal-footer { display: flex; gap: var(--spacing-md); justify-content: flex-end; margin-top: var(--spacing-lg); }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link active" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+<!-- 数据统计菜单暂隐藏 <a class="sidebar-link" href="statistics.html"><span class="icon">📉</span><span>数据统计</span></a> -->
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a class="back-link" href="rules-list.html" style="color: white; margin-bottom: var(--spacing-sm);">← 返回列表</a>
+<h2>分佣规则（全平台统一）</h2>
+<p>全平台统一分佣比例，对所有开发者和智能体一致；分佣金额 = 分佣基数 × 分佣比例 − 算力成本（先按 80/20 分成、再扣全额算力成本）；调整于次月1日生效</p>
+</div>
+<!-- 当前分佣比例 -->
+<div class="form-section">
+<h3 class="form-section-title">当前分佣比例</h3>
+<div class="default-rule">
+<div class="ratio-preview">
+<span style="font-size: 24px; font-weight: 700;">开发者 80% / 平台 20%</span>
+<div class="ratio-bar"><div class="dev" style="width: 80%;"></div><div class="plat" style="width: 20%;"></div></div>
+</div>
+<button class="btn btn-primary" onclick="openModal('editModal')">调整比例</button>
+</div>
+<span class="form-hint" style="display: block; margin-top: var(--spacing-md);">全平台统一分佣比例，新上架智能体自动适用；分佣金额 = 分佣基数 × 分佣比例 − 算力成本；用户消耗彩豆先按 开发者 80% / 平台 20% 分成，再从开发者分成中扣除全额算力成本（单价见算力计费规则），即开发者最终收入 =用户消耗彩豆 × 80% − 算力成本彩豆；调整后次月1日生效，保证月度结算单比例唯一。</span>
+</div>
+<!-- 修改记录 -->
+<div class="form-section">
+<h3 class="form-section-title">修改记录</h3>
+<div class="table-wrapper">
+<table class="table">
+<thead>
+<tr>
+<th>操作时间</th>
+<th>操作人</th>
+<th>变更内容</th>
+<th>生效时间</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-07-21 15:00</td>
+<td>管理员</td>
+<td>分佣公式改为 分佣金额 = 分佣基数 × 分佣比例 − 算力成本（算力成本全额、分成后扣除）</td>
+<td>2026-08-01</td>
+<td>算力成本由开发者全额承担、先分成后扣</td>
+</tr>
+<tr>
+<td>2026-07-21 10:00</td>
+<td>管理员</td>
+<td>分成基数调整为净额口径：（用户消耗彩豆 − 算力成本彩豆）× 开发者80%/平台20%</td>
+<td>2026-08-01</td>
+<td>配合开发者自主定价，先扣算力成本再分成</td>
+</tr>
+<tr>
+<td>2026-07-20 10:00</td>
+<td>管理员</td>
+<td>开发者 80% / 平台 20%（算力成本改由结算时单独扣除）</td>
+<td>2026-08-01</td>
+<td>分佣回归 80/20，算力成本单列结算</td>
+</tr>
+<tr>
+<td>2026-05-01 09:00</td>
+<td>管理员</td>
+<td>开发者 30% / 平台 70%（算力计费口径）</td>
+<td>2026-05-01</td>
+<td>平台统一分佣比例配置</td>
+</tr>
+<tr>
+<td>2026-01-01 00:00</td>
+<td>系统</td>
+<td>初始设置 开发者 80% / 平台 20%</td>
+<td>2026-01-01</td>
+<td>系统初始配置</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<!-- 调整弹窗 -->
+<div class="modal-mask" id="editModal">
+<div class="modal">
+<h3>调整分佣比例（全平台统一）</h3>
+<div class="form-item">
+<label class="form-label">开发者分成比例</label>
+<div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+<input class="input" id="devRatio" max="100" min="0" oninput="updateModalPreview()" style="width: 100px;" type="number" value="80"/>
+<span>%</span>
+<span id="modalPreview" style="font-size: 13px; color: var(--text-muted);">开发者 80% / 平台 20%</span>
+</div>
+</div>
+<div class="form-item">
+<label class="form-label">生效时间</label>
+<input class="input" readonly="" type="text" value="次月1日（2026-08-01）"/>
+<span class="form-hint">统一次月1日生效，全平台一致，保证月度结算单比例唯一</span>
+</div>
+<div class="form-item">
+<label class="form-label">备注</label>
+<textarea class="input" placeholder="本次调整原因..." rows="2"></textarea>
+</div>
+<div class="modal-footer">
+<button class="btn btn-outline" onclick="closeModal('editModal')" type="button">取消</button>
+<button class="btn btn-primary" onclick="closeModal('editModal')" type="button">保存</button>
+</div>
+</div>
+</div>
+<script>
+function openModal(id){ document.getElementById(id).classList.add('show'); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+function updateModalPreview(){
+  var v = Math.min(100, Math.max(0, Number(document.getElementById('devRatio').value) || 0));
+  document.getElementById('modalPreview').textContent = '开发者 ' + v + '% / 平台 ' + (100 - v) + '%';
+}
+document.querySelectorAll('.modal-mask').forEach(function(m){
+  m.addEventListener('click', function(e){ if(e.target === m) m.classList.remove('show'); });
+});
+</script>
+</body>
+</html>

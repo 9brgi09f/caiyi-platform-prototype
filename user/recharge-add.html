@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>充值支付 - 用户端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .order-card {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+        }
+        .order-item { display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-md) 0; border-bottom: 1px solid var(--border-light); }
+        .order-item:last-child { border-bottom: none; }
+        .order-total { display: flex; justify-content: space-between; align-items: center; padding-top: var(--spacing-lg); margin-top: var(--spacing-md); }
+        .payment-method {
+            display: flex; align-items: center; gap: var(--spacing-md);
+            padding: var(--spacing-md); border: 2px solid var(--border-light);
+            border-radius: var(--radius-lg); cursor: pointer; margin-bottom: var(--spacing-sm);
+        }
+        .payment-method:hover { border-color: var(--user-color); }
+        .payment-method.selected { border-color: var(--user-color); background: var(--user-light); }
+        .payment-icon { width: 40px; height: 40px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    </style>
+
+<style id="identity-switcher-css">
+.id-switcher{position:relative;display:inline-flex;align-items:center;}
+.id-trigger{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 6px;border-radius:8px;cursor:pointer;transition:background 0.15s;user-select:none;}
+.id-trigger:hover{background:rgba(0,0,0,0.05);}
+.id-avatar{width:32px;height:32px;border-radius:50%;background:#EFF4FF;color:#2563EB;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.id-info{display:flex;flex-direction:column;align-items:flex-start;line-height:1.3;}
+.id-org{font-size:13px;font-weight:500;color:#1e293b;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.id-type-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;background:#EFF4FF;color:#2563EB;}
+.id-chevron{font-size:10px;color:#94a3b8;margin-left:2px;transition:transform 0.2s;}
+.id-switcher.open .id-chevron{transform:rotate(180deg);}
+.id-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:white;border:1px solid #dfe4ee;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:240px;z-index:999;overflow:hidden;}
+.id-switcher.open .id-menu{display:block;}
+.id-menu-hd{padding:10px 14px 8px;font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:1px;border-bottom:1px solid #ecf0f6;}
+.id-menu-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background 0.15s;text-decoration:none;color:inherit;}
+.id-menu-item:hover{background:#F8FAFC;}
+.id-menu-item.current{background:#F8FAFF;}
+.id-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.id-dot.active{background:#2563EB;}
+.id-dot.idle{background:#dfe4ee;}
+.id-item-body{flex:1;}
+.id-item-org{font-size:13px;font-weight:500;color:#1e293b;}
+.id-item-type{font-size:11px;color:#94a3b8;margin-top:1px;}
+.id-item-tag{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;margin-left:auto;flex-shrink:0;}
+.id-item-tag.current-tag{background:#EFF4FF;color:#2563EB;}
+.id-menu-sep{height:1px;background:#ecf0f6;margin:4px 0;}
+.id-menu-action{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:12px;color:#64748b;cursor:pointer;transition:background 0.15s;text-decoration:none;}
+.id-menu-action:hover{background:#F8FAFC;color:#2563EB;}
+</style>
+</head>
+<body>
+<header class="top-bar user">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="id-switcher" id="idSwitcher">
+<div class="id-trigger" onclick="toggleIdMenu()">
+<div class="id-avatar">李</div>
+<div class="id-info">
+<span class="id-org">广州某某科技有限公司</span>
+<span class="id-type-badge">采购单位</span>
+</div>
+<span class="id-chevron">▾</span>
+</div>
+<div class="id-menu">
+<div class="id-menu-hd">切换工作台身份</div>
+<div class="id-menu-item current">
+<div class="id-dot active"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">采购单位</div>
+</div>
+<span class="id-item-tag current-tag">当前</span>
+</div>
+<div class="id-menu-item" onclick="location.href='../developer/index.html'">
+<div class="id-dot idle"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">开发者</div>
+</div>
+</div>
+<div class="id-menu-sep"></div>
+<a class="id-menu-action" href="../user/register-select.html">＋ 注册新机构类型</a>
+<a class="id-menu-action" href="#" onclick="alert('已退出登录');return false;">退出登录</a>
+</div>
+</div>
+<script>
+function toggleIdMenu(){
+  var el=document.getElementById('idSwitcher');
+  el.classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  var sw=document.getElementById('idSwitcher');
+  if(sw && !sw.contains(e.target)) sw.classList.remove('open');
+});
+</script>
+</div>
+</header>
+<aside class="sidebar user">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">🏪</span><span>概览</span></a>
+<a class="sidebar-link" href="agent-list.html"><span class="icon">🤖</span><span>智能体市场</span></a>
+<a class="sidebar-link active" href="recharge-list.html"><span class="icon">💰</span><span>账户充值</span></a>
+<a class="sidebar-link" href="balance.html"><span class="icon">💳</span><span>余额管理</span></a>
+<a class="sidebar-link" href="payment-accounts.html"><span class="icon">🏦</span><span>付款账户</span></a>
+<a class="sidebar-link" href="consumption-list.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+</div>
+<div class="sidebar-section">
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a class="back-link" href="recharge-list.html" style="color: white; margin-bottom: var(--spacing-sm);">← 返回</a>
+<h2>确认订单</h2>
+<p>选择支付方式完成充值</p>
+</div>
+<div class="order-card">
+<h3 style="font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);">订单信息</h3>
+<div class="order-item">
+<span>充值档位</span>
+<span style="font-weight: 600;" id="rcTier">¥10 档</span>
+</div>
+<div class="order-item">
+<span>到账彩豆</span>
+<span style="color: var(--user-color); font-weight: 600;" id="rcBeans">1,000 彩豆</span>
+</div>
+<!-- 赠送彩豆：本期暂不支持充值赠送，隐藏此行（恢复时移除 display:none） -->
+<div class="order-item" style="display:none;">
+<span>赠送彩豆</span>
+<span style="color: var(--success-color);" id="rcBonus">0 彩豆</span>
+</div>
+
+<div class="order-item">
+<span>充值前彩豆数量</span>
+<span style="font-weight: 500;" id="rcBefore">16,850 彩豆</span>
+</div>
+
+<div class="order-item">
+<span>充值后总彩豆数量</span>
+<span style="color: var(--user-color); font-weight: 600;" id="rcAfter">17,850 彩豆</span>
+</div>
+
+<div class="order-total">
+<span style="font-size: 16px; font-weight: 600;">应付金额</span>
+<span style="font-size: 24px; font-weight: 700; color: var(--user-color);" id="rcPay">¥10.00</span>
+</div>
+</div>
+<div class="order-card"><h3 style="font-size:16px;font-weight:600;margin-bottom:var(--spacing-lg);">付款账户类型</h3><div style="display:flex;gap:24px;margin-bottom:var(--spacing-lg);"><label style="cursor:pointer;"><input checked="" name="acctType" onchange="updatePay()" type="radio" value="personal"/> 个人账户</label><label style="cursor:pointer;"><input name="acctType" onchange="updatePay()" type="radio" value="company"/> 企业账户</label></div><div id="payPersonal"><h3 style="font-size:16px;font-weight:600;margin-bottom:var(--spacing-lg);">选择支付方式</h3><div class="payment-method selected" onclick="selectPay(this)"><div class="payment-icon" style="background:#07c160;color:white;">微</div><div style="flex:1;"><div style="font-weight:500;">微信支付</div><div style="font-size:12px;color:var(--text-muted);">推荐</div></div></div><div class="payment-method" onclick="selectPay(this)"><div class="payment-icon" style="background:#1677ff;color:white;">支</div><div style="flex:1;"><div style="font-weight:500;">支付宝</div></div></div><div class="payment-method" onclick="selectPay(this)"><div class="payment-icon" style="background:#c0392b;color:white;">银</div><div style="flex:1;"><div style="font-weight:500;">招商银行 尾号 3333</div><div style="font-size:12px;color:var(--text-muted);">个人储蓄卡</div></div></div><div style="text-align:right;margin-top:8px;"><a href="#" style="font-size:13px;color:var(--user-color);">＋ 使用新卡</a></div></div><div id="payCompany" style="display:none;"><h3 style="font-size:16px;font-weight:600;margin-bottom:var(--spacing-lg);">选择付款银行卡</h3><div class="payment-method selected" onclick="selectPay(this)"><div class="payment-icon" style="background:#c0392b;color:white;">银</div><div style="flex:1;"><div style="font-weight:500;">招商银行 尾号 8888</div><div style="font-size:12px;color:var(--text-muted);">主账户 · 默认</div></div></div><div class="payment-method" onclick="selectPay(this)"><div class="payment-icon" style="background:#e67e22;color:white;">银</div><div style="flex:1;"><div style="font-weight:500;">工商银行 尾号 6666</div><div style="font-size:12px;color:var(--text-muted);">子账户</div></div></div><div style="text-align:right;margin-top:8px;"><a href="payment-accounts.html" style="font-size:13px;color:var(--user-color);">管理对公账户</a></div></div></div>
+<div style="text-align: center;">
+<button class="btn btn-primary" style="min-width: 200px;" onclick="confirmPay()">确认支付</button>
+</div>
+<script>function selectPay(el){document.querySelectorAll(".payment-method").forEach(function(m){m.classList.remove("selected");});el.classList.add("selected");}function updatePay(){var v=document.querySelector('input[name="acctType"]:checked').value;var per=document.getElementById("payPersonal"),com=document.getElementById("payCompany");if(v==="company"){per.style.display="none";com.style.display="";selectPay(com.querySelector(".payment-method"));}else{per.style.display="";com.style.display="none";selectPay(per.querySelector(".payment-method"));}}document.addEventListener("DOMContentLoaded",updatePay);
+function getParam(k){var m=new RegExp('[?&]'+k+'=([^&]*)').exec(location.search);return m?decodeURIComponent(m[1]):null;}
+function initOrder(){var amount=parseFloat(getParam('amount')||'10');var beans=parseInt(getParam('beans')||'1000',10);var bonus=parseInt(getParam('bonus')||'0',10);var before=16850;document.getElementById('rcTier').textContent='¥'+amount+' 档';document.getElementById('rcBeans').textContent=beans.toLocaleString()+' 彩豆';document.getElementById('rcBonus').textContent=bonus.toLocaleString()+' 彩豆';document.getElementById('rcBefore').textContent=before.toLocaleString()+' 彩豆';document.getElementById('rcAfter').textContent=(before+beans+bonus).toLocaleString()+' 彩豆';document.getElementById('rcPay').textContent='¥'+amount.toFixed(2);}
+function confirmPay(){alert('支付成功！本次充值 '+document.getElementById('rcPay').textContent+'，彩豆已到账。');window.location.href='recharge-list.html';}
+document.addEventListener("DOMContentLoaded",initOrder);</script></main>
+</body>
+</html>

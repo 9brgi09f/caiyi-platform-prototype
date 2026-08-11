@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>提现审核详情 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .detail-section {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+        }
+        .detail-section-title {
+            font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md); border-bottom: 1px solid var(--border-light);
+        }
+        .detail-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-lg); }
+        .detail-item { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+        .detail-item.full-width { grid-column: 1 / -1; }
+        .detail-label { font-size: 13px; color: var(--text-muted); }
+        .detail-value { font-size: 15px; color: var(--text-primary); font-weight: 500; }
+        
+        .invoice-preview {
+            border: 1px solid var(--border-color); border-radius: var(--radius-md);
+            padding: var(--spacing-lg); background: var(--border-light);
+        }
+        .invoice-header { display: flex; align-items: center; gap: var(--spacing-md); margin-bottom: var(--spacing-md); }
+        .invoice-icon { font-size: 40px; }
+        .invoice-info { flex: 1; }
+        .invoice-name { font-weight: 600; color: var(--text-primary); font-size: 15px; }
+        .invoice-meta { font-size: 12px; color: var(--text-muted); }
+        
+        .timeline { display: flex; flex-direction: column; gap: var(--spacing-md); }
+        .timeline-item { display: flex; gap: var(--spacing-md); position: relative; }
+        .timeline-item:not(:last-child)::after { content: ''; position: absolute; left: 11px; top: 24px; width: 2px; height: calc(100% + var(--spacing-md)); background: var(--border-light); }
+        .timeline-dot { width: 24px; height: 24px; border-radius: 50%; background: var(--border-light); display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+        .timeline-dot.active { background: var(--admin-color); color: white; }
+        .timeline-dot.completed { background: var(--success-color); color: white; }
+        .timeline-content { flex: 1; }
+        .timeline-title { font-weight: 500; color: var(--text-primary); }
+        .timeline-time { font-size: 12px; color: var(--text-muted); }
+        
+        .badge-pending { background: #fef3c7; color: #d97706; }
+        .badge-success { background: #d1fae5; color: #059669; }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+
+<a class="sidebar-link active" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+<!-- 数据统计菜单暂隐藏 <a class="sidebar-link" href="statistics.html"><span class="icon">📉</span><span>数据统计</span></a> -->
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a href="withdrawal-audit-list.html" style="color: white; margin-bottom: var(--spacing-sm); display: inline-block;">← 返回审核列表</a>
+<h2>提现审核详情</h2>
+<p>提现单号：WD20260515002 | 状态：待审核</p>
+</div>
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--spacing-lg);">
+<div>
+<!-- 提现信息 -->
+<div class="detail-section">
+<h3 class="detail-section-title">提现信息</h3>
+<div class="detail-grid">
+<div class="detail-item">
+<span class="detail-label">提现单号</span>
+<span class="detail-value">WD20260515002</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">申请时间</span>
+<span class="detail-value">2026-05-15 09:30</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">开发者名称</span>
+<span class="detail-value">张开发者</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">联系电话</span>
+<span class="detail-value">138****5678</span>
+</div>
+<div class="detail-item full-width">
+<span class="detail-label">开户银行</span>
+<span class="detail-value">中国工商银行股份有限公司北京中关村支行</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">银行账号</span>
+<span class="detail-value">6222 **** **** 5678</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">户名</span>
+<span class="detail-value">张开发者</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">提现金额</span>
+<span class="detail-value" style="color: var(--admin-color); font-size: 20px; font-weight: 700;">¥1,050.00</span>
+</div>
+<div class="detail-item" id="auditPaidItem" style="display:none;">
+<span class="detail-label">实付金额</span>
+<span class="detail-value" id="auditPaidValue" style="color: var(--admin-color); font-size: 20px; font-weight: 700;">—</span>
+</div>
+</div>
+</div>
+<!-- 关联结算单 -->
+<div class="detail-section">
+<h3 class="detail-section-title">关联结算单</h3>
+<div class="table-wrapper">
+<table class="table">
+<thead>
+<tr>
+<th>结算单号</th>
+<th>结算周期</th>
+<th>结算金额</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ST20260201</td>
+<td>2026年2月</td>
+<td class="amount positive">¥1,050.00</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td colspan="2" style="text-align: right; font-weight: 600;">合计</td>
+<td class="amount positive" style="font-weight: 700;">¥1,050.00</td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+<!-- 发票信息 -->
+<div class="detail-section">
+<h3 class="detail-section-title">发票信息</h3>
+<div class="invoice-preview">
+<div class="invoice-header">
+<span class="invoice-icon" style="display:inline-flex;color:var(--klein);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+<div class="invoice-info">
+<div class="invoice-name">发票_25612000000078901234.pdf</div>
+<div class="invoice-meta">上传于 2026-05-15 09:30 · 2.4 MB</div>
+</div>
+<a class="btn btn-sm btn-outline" href="#">预览</a>
+<a class="btn btn-sm btn-outline" href="#">下载</a>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-md); margin-top: var(--spacing-md); padding-top: var(--spacing-md); border-top: 1px solid var(--border-color);">
+<div>
+<div style="font-size: 12px; color: var(--text-muted);">发票号码</div>
+<div style="font-weight: 500;">25612000000078901234</div>
+</div>
+<div>
+<div style="font-size: 12px; color: var(--text-muted);">发票金额</div>
+<div style="font-weight: 600; color: var(--success-color);">¥1,050.00</div>
+</div>
+<div>
+<div style="font-size: 12px; color: var(--text-muted);">金额核对</div>
+<div style="font-weight: 600; color: var(--success-color);">✓ 一致</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div>
+<!-- 处理进度 -->
+<div class="detail-section">
+<h3 class="detail-section-title">处理进度</h3>
+<div class="timeline">
+<div class="timeline-item">
+<div class="timeline-dot completed">✓</div>
+<div class="timeline-content">
+<div class="timeline-title">提现申请</div>
+<div class="timeline-time">2026-05-15 09:30</div>
+</div>
+</div>
+<div class="timeline-item">
+<div class="timeline-dot active">2</div>
+<div class="timeline-content">
+<div class="timeline-title">平台审核</div>
+<div class="timeline-time">等待审核</div>
+</div>
+</div>
+<div class="timeline-item">
+<div class="timeline-dot">3</div>
+<div class="timeline-content">
+<div class="timeline-title">付款处理</div>
+<div class="timeline-time">-</div>
+</div>
+</div>
+<div class="timeline-item">
+<div class="timeline-dot">4</div>
+<div class="timeline-content">
+<div class="timeline-title">已付款</div>
+<div class="timeline-time">-</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 操作 -->
+<div class="detail-section">
+<h3 class="detail-section-title">操作</h3>
+<div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+<a class="btn btn-primary" href="withdrawal-audit-process.html" style="text-align: center;">审核通过</a>
+<button class="btn btn-outline" onclick="rejectApplication()">退回申请</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        function rejectApplication() {
+            const reason = prompt('请输入退回原因：');
+            if (reason) {
+                alert('已退回申请，已通知开发者');
+                window.location.href = 'withdrawal-audit-list.html';
+            }
+        }
+    </script>
+<script>
+/* 渠道商提现单参数化覆写 */
+(function(){
+  var CH = {
+    'CWD20260610001': { st: '待审核', time: '2026-06-10 10:20', name: '广州智采科技有限公司', tel: '138****6688',
+      bank: '招商银行广州分行营业部', acct: '7559 **** **** 8899', holder: '广州智采科技有限公司', amt: '¥1,680.00',
+      stNo: 'CST20260401', stPeriod: '2026年4月（渠道分成）', stAmt: '¥1,680.00',
+      invNo: '25612000000112233445', invFile: '发票_25612000000112233445.pdf', invMeta: '上传于 2026-06-10 11:00 · 1.8 MB',
+      tl: [['done','提现申请','2026-06-10 10:20'],['done','上传发票（转待审核）','2026-06-10 11:00'],['active','平台审核','等待审核'],['','付款处理','-'],['','已付款','-']], pending: true },
+    'CWD20260415001': { st: '已付款', time: '2026-04-15 09:00', name: '广州智采科技有限公司', tel: '138****6688',
+      bank: '招商银行广州分行营业部', acct: '7559 **** **** 8899', holder: '广州智采科技有限公司', amt: '¥1,240.00',
+      stNo: 'CST20260301', stPeriod: '2026年3月（渠道分成）', stAmt: '¥1,240.00',
+      invNo: '25612000000166778899', invFile: '发票_25612000000166778899.pdf', invMeta: '上传于 2026-04-15 10:30 · 2.1 MB',
+      tl: [['done','提现申请','2026-04-15 09:00'],['done','平台审核通过','2026-04-16 14:00'],['done','财务事前审批','2026-04-17'],['done','银企直联付款完成','2026-04-18 15:20']], pending: false, note: '付款流水号 SPDB20260418090012，发票已核销' },
+    'CWD20260620002': { st: '审核退回', time: '2026-06-20 09:00', name: '广东联采信息技术有限公司', tel: '135****9911',
+      bank: '广发银行广州东城支行', acct: '6225 **** **** 4410', holder: '广东联采信息技术有限公司', amt: '¥3,720.00',
+      stNo: 'CST20260502', stPeriod: '2026年4月（渠道分成）', stAmt: '¥3,720.00',
+      invNo: '25612000000188990011', invFile: '发票_25612000000188990011.pdf', invMeta: '上传于 2026-06-20 10:00 · 1.6 MB',
+      tl: [['done','提现申请','2026-06-20 09:00'],['done','上传发票（转待审核）','2026-06-20 10:00'],['done','审核退回','2026-06-21 15:00']], pending: false, note: '退回原因：发票抬头与要求不符（需红冲后重新开具）；已通知渠道商重新上传发票，提现单保留' },
+    'CWD20260605003': { st: '已取消', time: '2026-06-05 15:30', name: '广州智采科技有限公司', tel: '138****6688',
+      bank: '招商银行广州分行营业部', acct: '7559 **** **** 8899', holder: '广州智采科技有限公司', amt: '¥2,520.00',
+      stNo: 'CST20260501', stPeriod: '2026年5月（渠道分成）', stAmt: '¥2,520.00',
+      invNo: '25612000000199001122', invFile: '发票_25612000000199001122.pdf', invMeta: '上传于 2026-06-05 16:00 · 2.0 MB',
+      tl: [['done','提现申请','2026-06-05 15:30'],['done','上传发票（转待审核）','2026-06-05 16:00'],['done','渠道商主动撤回（已取消）','2026-06-08 09:00']], pending: false, note: '发票已作废（需红冲），关联结算单退回「未提现」' }
+  };
+  var id = new URLSearchParams(location.search).get('id');
+  var d = CH[id];
+  if (!d) return;
+  document.querySelector('.page-header p').textContent = '提现单号：' + id + ' | 提现方：' + d.name + '（渠道商） | 状态：' + d.st;
+  var vals = document.querySelectorAll('.detail-grid .detail-value');
+  var labs = document.querySelectorAll('.detail-grid .detail-label');
+  vals[0].textContent = id; vals[1].textContent = d.time;
+  labs[2].textContent = '提现方（渠道商）'; vals[2].textContent = d.name;
+  vals[3].textContent = d.tel; vals[4].textContent = d.bank; vals[5].textContent = d.acct; vals[6].textContent = d.holder; vals[7].textContent = d.amt;
+  // 实付金额：仅已付款/已到账记录展示，实付 = 提现金额 − 分成款扣减（渠道端样例无扣减，数值等于提现金额）
+  var auditPaidItem = document.getElementById('auditPaidItem');
+  if (d.st === '已付款' || d.st === '已到账') {
+    document.getElementById('auditPaidValue').textContent = d.paid || d.amt;
+    auditPaidItem.style.display = '';
+  } else {
+    auditPaidItem.style.display = 'none';
+  }
+  var stCells = document.querySelectorAll('.detail-section:nth-of-type(2) tbody td');
+  stCells[0].textContent = d.stNo; stCells[1].textContent = d.stPeriod; stCells[2].textContent = d.stAmt;
+  document.querySelector('.detail-section:nth-of-type(2) tfoot .amount').textContent = d.stAmt;
+  document.querySelector('.invoice-name').textContent = d.invFile;
+  document.querySelector('.invoice-meta').textContent = d.invMeta;
+  var invCols = document.querySelectorAll('.invoice-preview > div:last-child > div > div:last-child');
+  invCols[0].textContent = d.invNo; invCols[1].textContent = d.amt;
+  var tlBox = document.querySelector('.timeline');
+  tlBox.innerHTML = d.tl.map(function(t, i){
+    var dot = t[0] === 'done' ? '<div class="timeline-dot completed">✓</div>' : (t[0] === 'active' ? '<div class="timeline-dot active">' + (i+1) + '</div>' : '<div class="timeline-dot">' + (i+1) + '</div>');
+    return '<div class="timeline-item">' + dot + '<div class="timeline-content"><div class="timeline-title">' + t[1] + '</div><div class="timeline-time">' + t[2] + '</div></div></div>';
+  }).join('');
+  var opBox = document.querySelectorAll('.detail-section');
+  var op = opBox[opBox.length - 1];
+  if (d.pending) {
+    op.querySelector('a.btn-primary').setAttribute('href', 'withdrawal-audit-process.html?id=' + id);
+  } else {
+    op.querySelector('div').innerHTML = '<p style="font-size:13px;color:var(--text-muted);line-height:1.8;">' + (d.note || '记录已归档') + '</p>';
+  }
+})();
+</script>
+</body>
+</html>

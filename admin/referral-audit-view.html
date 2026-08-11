@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>推荐关系审核详情 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--spacing-lg); }
+        .info-item .k { font-size: 12px; color: var(--text-muted); }
+        .info-item .v { font-size: 14px; margin-top: 3px; font-weight: 500; }
+        .mat-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-light); font-size: 14px; }
+        .mat-row:last-child { border-bottom: none; }
+        .mat-ok { color: #059669; font-weight: 600; margin-right: 8px; }
+        .mat-na { color: var(--warning-color); font-weight: 600; margin-right: 8px; }
+        .notice { background: #FFFBEB; border: 1px solid #fde68a; border-radius: var(--radius-md); padding: var(--spacing-md); font-size: 13px; color: #92400e; line-height: 1.8; }
+        .btn-danger-outline { color: var(--danger-color); border-color: var(--danger-color); }
+        #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon"></span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon"></span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon"></span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon"></span><span>智能体管理</span></a>
+<a class="sidebar-link active" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon"></span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon"></span><span>结算管理</span></a>
+
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon"></span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon"></span><span>规则设置</span></a>
+</div>
+</aside>
+<main class="main-content">
+<a class="back-link" href="channel-list.html">← 返回渠道管理</a>
+<div class="page-header" style="display:flex;justify-content:space-between;align-items:center;">
+<div>
+<h2>推荐关系审核 · RT20260628001</h2>
+<p>确认渠道商与被推荐客户之间的推荐关系；确认后客户消费计入渠道商分成基数</p>
+</div>
+<span class="badge badge-warning" style="font-size:13px;">待审核</span>
+</div>
+<div class="content-card">
+<h3 style="font-size:16px;margin-bottom:var(--spacing-lg);">推荐关系信息</h3>
+<div class="info-grid">
+<div class="info-item"><div class="k">确认单编号</div><div class="v">RT20260628001</div></div>
+<div class="info-item"><div class="k">被推荐客户</div><div class="v">珠海智慧城市运营公司</div></div>
+<div class="info-item"><div class="k">渠道商</div><div class="v">广州智采科技有限公司</div></div>
+<div class="info-item"><div class="k">确认方式</div><div class="v">双方盖章 + 证明材料（例外路径）</div></div>
+<div class="info-item"><div class="k">提交时间</div><div class="v">2026-06-28 14:20</div></div>
+<div class="info-item"><div class="k">推荐内容</div><div class="v">智慧城市数据治理智能体采购意向</div></div>
+</div>
+</div>
+<div class="content-card">
+<h3 style="font-size:16px;margin-bottom:var(--spacing-md);">材料清单</h3>
+<div class="mat-row"><span><span class="mat-ok">✓</span>《推荐确认单》双方盖章件（渠道商、政采中心）</span><button class="btn btn-sm btn-outline" onclick="showToast('演示环境：材料影像预览略')" type="button">查看</button></div>
+<div class="mat-row"><span><span class="mat-ok">✓</span>被推荐方授权委托文件</span><button class="btn btn-sm btn-outline" onclick="showToast('演示环境：材料影像预览略')" type="button">查看</button></div>
+<div class="mat-row"><span><span class="mat-na">○</span>被推荐方盖章（缺）</span><span style="font-size:12px;color:var(--text-muted);">适用例外路径</span></div>
+</div>
+<div class="notice" style="margin-bottom:var(--spacing-lg);">
+被推荐方未在确认单上盖章，渠道商已提供被推荐方出具的授权委托文件作为证明材料。请核验证明材料的真实性与授权范围后认定推荐关系；必要时可提请审批小组（≥3 人）集体审议并留存签字纪要。
+</div>
+<div class="content-card">
+<h3 style="font-size:16px;margin-bottom:var(--spacing-md);">审核意见</h3>
+<textarea class="input" id="refReason" placeholder="驳回时必填；确认时选填" rows="3" style="width:100%;"></textarea>
+<p style="font-size:12px;color:var(--text-muted);margin-top:var(--spacing-sm);">确认后：推荐关系成立，该客户消费计入渠道商年度分成基数；驳回后：通知渠道商补充材料重新提交。</p>
+<div style="display:flex;gap:var(--spacing-md);justify-content:flex-end;margin-top:var(--spacing-md);">
+<button class="btn btn-outline btn-danger-outline" onclick="doReject()" type="button">驳回</button>
+<button class="btn btn-primary" onclick="doPass()" type="button">确认推荐关系</button>
+</div>
+</div>
+</main>
+<div id="toast"></div>
+<script>
+function doPass(){ location.href = 'channel-list.html?ref=pass'; }
+function doReject(){
+  var r = document.getElementById('refReason').value.trim();
+  if(!r){ showToast('驳回须填写审核意见', '⚠'); return; }
+  location.href = 'channel-list.html?ref=reject&reason=' + encodeURIComponent(r);
+}
+function showToast(msg, icon){
+  var t = document.getElementById('toast');
+  t.textContent = (icon || '✓') + ' ' + msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.display = 'none'; }, 2400);
+}
+</script>
+</body>
+</html>

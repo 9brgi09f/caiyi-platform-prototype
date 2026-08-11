@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>登录 · 彩翼平台</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#3b72e8;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif}.home-bg{position:relative;min-height:100vh;overflow:hidden;background:radial-gradient(circle at 80% 16%,rgba(146,188,255,.35),transparent 20rem),linear-gradient(145deg,#3975e8,#6d9ff3)}.home-bg:before{content:'';position:absolute;width:560px;height:560px;right:-180px;top:60px;border:1px solid rgba(255,255,255,.24);border-radius:50%;box-shadow:0 0 0 56px rgba(255,255,255,.045),0 0 0 112px rgba(255,255,255,.03)}.home-bg:after{content:'';position:absolute;left:-20%;right:-20%;bottom:15%;height:150px;transform:rotate(-11deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.16),transparent);filter:blur(10px)}.home-topbar{position:relative;z-index:10;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(24px,4vw,48px);background:#fff;border-bottom:1px solid #e5edf7}.home-brand{display:flex;align-items:center;gap:16px}.home-brand img{height:38px}.home-brand span{padding-left:16px;border-left:1px solid #d9e4f2;font-size:17px;font-weight:650;color:#253756}.home-nav{position:relative;z-index:10;display:flex;justify-content:center;padding:28px 0}.nav-pills{display:inline-flex;padding:5px;border:1px solid rgba(255,255,255,.32);border-radius:999px;background:rgba(255,255,255,.18);backdrop-filter:blur(8px);gap:3px}.nav-pills a{padding:10px 22px;border-radius:999px;color:#fff;font-size:14px;font-weight:600;text-decoration:none;white-space:nowrap;transition:background .2s}.nav-pills a:hover,.nav-pills a.active{background:rgba(255,255,255,.28)}.home-hero{position:relative;z-index:10;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,0.9fr);gap:clamp(30px,5vw,70px);max-width:1280px;margin:0 auto;padding:clamp(50px,8vh,110px) clamp(24px,4vw,48px) 60px}.home-copy{color:#fff}.home-kicker{display:inline-flex;padding:8px 14px;border:1px solid rgba(255,255,255,.3);border-radius:20px;background:rgba(255,255,255,.15);font-size:13px;font-weight:600}.home-copy h1{margin:28px 0 18px;font-size:clamp(38px,5vw,52px);line-height:1.22;letter-spacing:-.045em}.home-copy p{margin:0;font-size:16px;line-height:1.8;color:rgba(255,255,255,.9)}.home-tags{display:flex;flex-wrap:wrap;gap:11px;margin-top:28px}.home-tags span{padding:9px 15px;border-radius:20px;background:rgba(255,255,255,.92);color:#3973dc;font-size:13px;font-weight:650}.home-board{padding:26px 24px;border:1px solid rgba(255,255,255,.28);border-radius:16px;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);box-shadow:0 12px 28px rgba(31,65,128,.14)}.board-title{margin:0 0 6px;font-size:15px;font-weight:700;color:#3b72e8}.board-list{margin:15px 0 0;padding:0;list-style:none}.board-list li{padding:11px 0;border-bottom:1px solid #e8eff8;color:#3a4d68;font-size:13px;line-height:1.6}.board-list li:last-child{border:0}.board-list b{font-weight:650;color:#2e5ab6}@media(max-width:860px){.home-hero{grid-template-columns:1fr;gap:35px}.home-board{order:-1}}@media(max-width:600px){.home-brand span{display:none}.nav-pills{flex-wrap:wrap;border-radius:18px}.nav-pills a{font-size:13px;padding:9px 16px}}
+</style>
+<script src="login-modal.js" defer></script>
+</head>
+<body data-login-page="standalone">
+<div class="home-bg">
+  <header class="home-topbar">
+    <div class="home-brand">
+      <img alt="彩翼高科" src="../logo.dc57457c.png"/>
+      <span>彩翼公共采购智能体协同管理平台</span>
+    </div>
+  </header>
+  <nav class="home-nav">
+    <div class="nav-pills">
+      <a class="active" href="#">智能体广场</a>
+      <a href="#">智慧解决方案</a>
+      <a href="#">SaaS服务</a>
+      <a href="#">模型广场</a>
+      <a href="#">算力广场</a>
+      <a href="#">可信数据空间</a>
+    </div>
+  </nav>
+  <section class="home-hero">
+    <div class="home-copy">
+      <div class="home-kicker">彩翼智能体协同服务</div>
+      <h1>让 AI 替你完成<br/>采购中最耗时的工作</h1>
+      <p>覆盖合规检测、参数提取、响应资料整理、自动比价等采购高频场景，把重复劳动交给智能体。</p>
+      <div class="home-tags">
+        <span>合规风险识别</span>
+        <span>技术参数提取</span>
+        <span>响应资料整理</span>
+        <span>多源比价决策</span>
+      </div>
+    </div>
+    <div class="home-board">
+      <h2 class="board-title">平台能力一览</h2>
+      <ul class="board-list">
+        <li><b>智能体广场</b> · 即开即用的采购场景智能体</li>
+        <li><b>智慧解决方案</b> · 端到端采购数字化方案</li>
+        <li><b>SaaS服务</b> · 云端协同管理工具</li>
+        <li><b>算力 & 数据</b> · 高性能计算与可信数据空间</li>
+      </ul>
+    </div>
+  </section>
+</div>
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>结算管理 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; }
+        .stat-value { font-size: 24px; font-weight: 700; color: var(--admin-color); }
+        .stat-label { font-size: 13px; color: var(--text-muted); margin-top: var(--spacing-xs); }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link active" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+<!-- 数据统计菜单暂隐藏 <a class="sidebar-link" href="statistics.html"><span class="icon">📉</span><span>数据统计</span></a> -->
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<h2>结算管理</h2>
+<p>核对并确认开发者结算单，确认后计入可提现金额；付款统一走提现流程</p>
+</div>
+<div class="stats-grid">
+<div class="stat-card">
+<div class="stat-value">¥45,680</div>
+<div class="stat-label">本月待结算</div>
+</div>
+<div class="stat-card">
+<div class="stat-value">¥144,760</div>
+<div class="stat-label">累计已结算</div>
+</div>
+<div class="stat-card">
+<div class="stat-value">12</div>
+<div class="stat-label">本月结算单</div>
+</div>
+<div class="stat-card">
+<div class="stat-value">1</div>
+<div class="stat-label">待确认结算单</div>
+</div>
+</div>
+<div class="content-card">
+<div class="content-card-header">
+<h3 class="content-card-title">结算单列表（开发者 / 渠道商）</h3>
+<div style="display: flex; gap: var(--spacing-sm);">
+<select class="select" style="width: 120px;">
+<option>全部类型</option>
+<option>开发者</option>
+<option>渠道商</option>
+</select>
+<select class="select" style="width: 130px;">
+<option>全部提现状态</option>
+<option>未提现</option>
+<option>提现中</option>
+<option>已提现</option>
+</select>
+</div>
+</div>
+<div class="tab-nav">
+<button class="tab-btn active" onclick="filterStatus('all', this)" type="button">全部 (14)</button>
+<button class="tab-btn" onclick="filterStatus('待运营确认', this)" type="button">待运营确认 (1)</button>
+<button class="tab-btn" onclick="filterStatus('待对方确认', this)" type="button">待对方确认 (3)</button>
+<button class="tab-btn" onclick="filterStatus('已确认', this)" type="button">已确认 (9)</button>
+<button class="tab-btn" onclick="filterStatus('逾期并入下月', this)" type="button">逾期并入下月 (1)</button>
+</div>
+<div class="table-wrapper">
+<table class="table table-wide">
+<thead>
+<tr>
+<th>结算单号</th>
+<th>结算对象</th>
+<th>类型</th>
+<th>结算周期</th>
+<th>总收入</th>
+<th>应付金额</th>
+<th>确认状态</th>
+<th>提现状态</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr data-status="待对方确认">
+<td>ST20260601</td>
+<td>张开发者</td>
+<td><span class="badge" style="background:#dbeafe;color:#2563eb;">开发者</span></td>
+<td>2026年6月</td>
+<td>¥5,120.00</td>
+<td class="amount">¥3,584.00</td>
+<td><span class="badge badge-info">待开发者确认</span></td>
+<td>—</td>
+<td>
+<a class="btn btn-sm btn-outline" href="settlement-view.html">详情</a>
+</td>
+</tr>
+<tr data-status="待对方确认">
+<td>CST20260601</td>
+<td>广州智采科技有限公司</td>
+<td><span class="badge" style="background:#ede9fe;color:#7c3aed;">渠道商</span></td>
+<td>2026年6月</td>
+<td>¥19,000.00</td>
+<td class="amount">¥4,610.00</td>
+<td><span class="badge badge-info">待渠道商确认</span></td>
+<td>—</td>
+<td><button class="btn btn-sm btn-outline" onclick="openCh('CST20260601')" type="button">详情</button></td>
+</tr>
+<tr data-status="待对方确认">
+<td>CST20260702</td>
+<td>华南数智生态有限公司</td>
+<td><span class="badge" style="background:#ede9fe;color:#7c3aed;">渠道商</span></td>
+<td>2026年Q2</td>
+<td>¥76,000.00</td>
+<td class="amount">¥18,240.00</td>
+<td><span class="badge badge-info">待渠道商确认</span></td>
+<td>—</td>
+<td><button class="btn btn-sm btn-outline" onclick="openCh('CST20260702')" type="button">详情</button></td>
+</tr>
+<tr data-status="待运营确认">
+<td>ST20260502</td>
+<td>AI工作室</td>
+<td><span class="badge" style="background:#dbeafe;color:#2563eb;">开发者</span></td>
+<td>2026年5月</td>
+<td>¥2,890.00</td>
+<td class="amount">¥2,023.00</td>
+<td><span class="badge badge-warning">待运营确认</span></td>
+<td>—</td>
+<td>
+<a class="btn btn-sm btn-outline" href="settlement-view.html">详情</a>
+<a class="btn btn-sm btn-primary" href="settlement-view.html">确认</a>
+</td>
+</tr>
+<tr data-status="已确认">
+<td>ST20260501</td>
+<td>张开发者</td>
+<td><span class="badge" style="background:#dbeafe;color:#2563eb;">开发者</span></td>
+<td>2026年5月</td>
+<td>¥4,260.50</td>
+<td class="amount">¥2,982.35</td>
+<td><span class="badge badge-success">已确认</span></td>
+<td><span class="badge badge-info">提现中</span></td>
+<td>
+<a class="btn btn-sm btn-outline" href="settlement-view.html">详情</a>
+</td>
+</tr>
+<tr data-status="已确认">
+<td>CST20260501</td>
+<td>广州智采科技有限公司</td>
+<td><span class="badge" style="background:#ede9fe;color:#7c3aed;">渠道商</span></td>
+<td>2026年5月</td>
+<td>¥12,600.00</td>
+<td class="amount">¥2,520.00</td>
+<td><span class="badge badge-success">已确认</span></td>
+<td><span class="badge badge-info">提现中</span></td>
+<td><button class="btn btn-sm btn-outline" onclick="openCh('CST20260501')" type="button">详情</button></td>
+</tr>
+<tr data-status="已确认">
+<td>ST20260401</td>
+<td>张开发者</td>
+<td><span class="badge" style="background:#dbeafe;color:#2563eb;">开发者</span></td>
+<td>2026年4月</td>
+<td>¥3,256.80</td>
+<td class="amount">¥2,279.76</td>
+<td><span class="badge badge-success">已确认</span></td>
+<td><span class="badge badge-success">已提现</span></td>
+<td><a class="btn btn-sm btn-outline" href="settlement-view.html">详情</a></td>
+</tr>
+<tr data-status="已确认">
+<td>CST20260401</td>
+<td>广州智采科技有限公司</td>
+<td><span class="badge" style="background:#ede9fe;color:#7c3aed;">渠道商</span></td>
+<td>2026年4月</td>
+<td>¥8,400.00</td>
+<td class="amount">¥1,680.00</td>
+<td><span class="badge badge-success">已确认</span></td>
+<td><span class="badge badge-info">提现中</span></td>
+<td><button class="btn btn-sm btn-outline" onclick="openCh('CST20260401')" type="button">详情</button></td>
+</tr>
+<tr data-status="已确认">
+<td>CST20260502</td>
+<td>广东联采信息技术有限公司</td>
+<td><span class="badge" style="background:#ede9fe;color:#7c3aed;">渠道商</span></td>
+<td>2026年4月</td>
+<td>¥18,600.00</td>
+<td class="amount">¥3,720.00</td>
+<td><span class="badge badge-success">已确认</span></td>
+<td><span class="badge badge-info">提现中</span></td>
+<td><button class="btn btn-sm btn-outline" onclick="openCh('CST20260502')" type="button">详情</button></td>
+</tr>
+<tr data-status="已确认">
+<td>ST20260301</td>
+<td>张开发者</td>
+<td><span class="badge" style="background:#dbeafe;color:#2563eb;">开发者</span></td>
+<td>2026年3月</td>
+<td>¥2,890.00</td>
+<td class="amount">¥2,023.00</td>
+<td><span class="badge badge-success">已确认</span></td>
+<td><span class="badge badge-success">已提现</span></td>
+<td><a class="btn btn-sm btn-outline" href="settlement-view.html">详情</a></td>
+</tr>
+<tr data-status="已确认">
+<td>CST20260301</td>
+<td>广州智采科技有限公司</td>
+<td><span class="badge" style="background:#ede9fe;color:#7c3aed;">渠道商</span></td>
+<td>2026年3月</td>
+<td>¥6,200.00</td>
+<td class="amount">¥1,240.00</td>
+<td><span class="badge badge-success">已确认</span></td>
+<td><span class="badge badge-success">已提现</span></td>
+<td><button class="btn btn-sm btn-outline" onclick="openCh('CST20260301')" type="button">详情</button></td>
+</tr>
+<tr data-status="已确认">
+<td>CST20260404</td>
+<td>华南数智生态有限公司</td>
+<td><span class="badge" style="background:#ede9fe;color:#7c3aed;">渠道商</span></td>
+<td>2026年Q1</td>
+<td>¥52,000.00</td>
+<td class="amount">¥12,480.00</td>
+<td><span class="badge badge-success">已确认</span></td>
+<td><span class="badge" style="background:#f1f5f9;color:#64748b;">未提现</span></td>
+<td><button class="btn btn-sm btn-outline" onclick="openCh('CST20260404')" type="button">详情</button></td>
+</tr>
+<tr data-status="已确认">
+<td>ST20260201</td>
+<td>张开发者</td>
+<td><span class="badge" style="background:#dbeafe;color:#2563eb;">开发者</span></td>
+<td>2026年2月</td>
+<td>¥1,500.00</td>
+<td class="amount">¥1,050.00</td>
+<td><span class="badge badge-success">已确认</span></td>
+<td><span class="badge badge-info">提现中</span></td>
+<td><a class="btn btn-sm btn-outline" href="settlement-view.html">详情</a></td>
+</tr>
+<tr data-status="逾期并入下月">
+<td>ST20260101</td>
+<td>张开发者</td>
+<td><span class="badge" style="background:#dbeafe;color:#2563eb;">开发者</span></td>
+<td>2026年1月</td>
+<td>¥800.00</td>
+<td class="amount">¥560.00</td>
+<td><span class="badge badge-offline" style="background:#f1f5f9;color:#64748b;">逾期并入下月</span></td>
+<td>—</td>
+<td><a class="btn btn-sm btn-outline" href="settlement-view.html">详情</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- 渠道结算单详情弹窗 -->
+<div class="modal-overlay" id="chModal" onclick="if(event.target===this)this.classList.remove('active')">
+<div class="modal" style="max-width: 680px;">
+<div class="modal-header"><span class="modal-title" id="chTitle">渠道结算单</span><button class="modal-close" onclick="document.getElementById('chModal').classList.remove('active')">×</button></div>
+<div class="modal-body">
+<p style="font-size:13px;color:var(--text-secondary);margin-bottom:var(--spacing-md);" id="chMeta"></p>
+<div class="table-wrapper">
+<table class="table">
+<thead><tr><th>计算段</th><th>本月基数分段</th><th>年度累计（分段后）</th><th>比例</th><th>分成</th></tr></thead>
+<tbody id="chTierBody"></tbody>
+</table>
+</div>
+<p style="font-size:12px;color:var(--text-muted);margin-top:var(--spacing-sm);">按年度累计档位对当月基数分段计费（超额累进）；新客户口径 20%/25%/30%。</p>
+</div>
+<div class="modal-footer"><button class="btn btn-outline" onclick="document.getElementById('chModal').classList.remove('active')">关闭</button></div>
+</div>
+</div>
+</main>
+<script>
+var CH_DATA = {
+  'CST20260601': { meta: '渠道商：广州智采科技有限公司 · 周期 2026年6月 · 待渠道商确认（运营已确认）· 未提现',
+    tiers: [['累计 ≤3万 部分','¥2,800.00','¥27,200 → ¥30,000','20%','¥560.00'],['累计 3万-10万 部分','¥16,200.00','¥30,000 → ¥46,200','25%','¥4,050.00'],['合计','¥19,000.00','年度累计 ¥46,200','—','¥4,610.00']] },
+  'CST20260501': { meta: '渠道商：广州智采科技有限公司 · 周期 2026年5月 · 已确认 · 提现中（CWD20260715001 待开票）',
+    tiers: [['累计 ≤3万 部分','¥12,600.00','¥14,600 → ¥27,200','20%','¥2,520.00'],['合计','¥12,600.00','年度累计 ¥27,200','—','¥2,520.00']] },
+  'CST20260401': { meta: '渠道商：广州智采科技有限公司 · 周期 2026年4月 · 已确认 · 提现中（CWD20260610001 待审核）',
+    tiers: [['累计 ≤3万 部分','¥8,400.00','¥6,200 → ¥14,600','20%','¥1,680.00'],['合计','¥8,400.00','年度累计 ¥14,600','—','¥1,680.00']] },
+  'CST20260702': { meta: '渠道商：华南数智生态有限公司 · 周期 2026年Q2（按季度） · 待渠道商确认（运营 2026-07-01 已确认）· 未提现',
+    tiers: [['生态共建协议比例','¥76,000.00','协议登记 24%（≤80% 上限内）','24%','¥18,240.00'],['合计','¥76,000.00','年度累计 ¥128,000','—','¥18,240.00']] },
+  'CST20260502': { meta: '渠道商：广东联采信息技术有限公司 · 周期 2026年4月 · 已确认 · 提现中（CWD20260620002 审核退回，待重新上传发票）',
+    tiers: [['累计 ≤3万 部分','¥18,600.00','¥0 → ¥18,600','20%','¥3,720.00'],['合计','¥18,600.00','年度累计 ¥18,600','—','¥3,720.00']] },
+  'CST20260404': { meta: '渠道商：华南数智生态有限公司 · 周期 2026年Q1（按季度） · 已确认 · 未提现',
+    tiers: [['生态共建协议比例','¥52,000.00','协议登记 24%（≤80% 上限内）','24%','¥12,480.00'],['合计','¥52,000.00','年度累计 ¥52,000','—','¥12,480.00']] },
+  'CST20260301': { meta: '渠道商：广州智采科技有限公司 · 周期 2026年3月 · 已确认 · 已提现（CWD20260415001 已付款 2026-04-18）',
+    tiers: [['累计 ≤3万 部分','¥6,200.00','¥0 → ¥6,200','20%','¥1,240.00'],['合计','¥6,200.00','年度累计 ¥6,200','—','¥1,240.00']] }
+};
+function openCh(id){
+  var d = CH_DATA[id];
+  document.getElementById('chTitle').textContent = '渠道结算单 ' + id;
+  document.getElementById('chMeta').textContent = d.meta;
+  document.getElementById('chTierBody').innerHTML = d.tiers.map(function(t, i){
+    var last = i === d.tiers.length - 1;
+    return '<tr>' + t.map(function(c){ return '<td>' + (last ? '<strong>' + c + '</strong>' : c) + '</td>'; }).join('') + '</tr>';
+  }).join('');
+  document.getElementById('chModal').classList.add('active');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>收款账户 - 渠道端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; }
+        .stat-value { font-size: 24px; font-weight: 700; color: var(--klein); }
+        .stat-label { font-size: 13px; color: var(--text-muted); margin-top: var(--spacing-xs); }
+        #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+    </style>
+</head>
+<body>
+<header class="top-bar channel">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">渠</div>
+<span>智采科技</span>
+</div>
+</div>
+</header>
+<aside class="sidebar channel">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon"></span><span>概览</span></a>
+<a class="sidebar-link" href="invite-code.html"><span class="icon"></span><span>我的邀请码</span></a>
+<a class="sidebar-link" href="customer-list.html"><span class="icon"></span><span>客户管理</span></a>
+<a class="sidebar-link" href="referral-list.html"><span class="icon"></span><span>推荐确认单</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon"></span><span>分成结算</span></a>
+<a class="sidebar-link" href="withdrawal-list.html"><span class="icon"></span><span>提现管理</span></a>
+<a class="sidebar-link active" href="bank-card.html"><span class="icon"></span><span>收款账户</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon"></span><span>发票管理</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+<div>
+<h2>收款账户</h2>
+<p>提现付款将转入默认收款账户（对公）</p>
+</div>
+<a class="btn btn-primary" href="bank-card-add.html" style="background:#fff;color:var(--klein);border-color:#fff;">+ 添加账户</a>
+</div>
+<div class="content-card">
+<div class="table-wrapper">
+<table class="table">
+<thead><tr><th>开户银行</th><th>账户名称</th><th>账号</th><th>账户类型</th><th>状态</th><th>操作</th></tr></thead>
+<tbody>
+<tr>
+<td>招商银行广州分行</td><td>广州智采科技有限公司</td><td>7559 **** **** 8899</td><td>对公账户</td>
+<td><span class="badge badge-primary">默认</span> <span class="badge badge-success">已启用</span></td>
+<td><button class="btn btn-sm btn-outline" onclick="document.getElementById('acctModal').classList.add('active')" type="button">详情</button></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<!-- 账户详情弹窗 -->
+<div class="modal-overlay" id="acctModal" onclick="if(event.target===this)this.classList.remove('active')">
+<div class="modal" style="max-width: 480px;">
+<div class="modal-header"><span class="modal-title">收款账户详情</span><button class="modal-close" onclick="document.getElementById('acctModal').classList.remove('active')">×</button></div>
+<div class="modal-body">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-md);font-size:14px;">
+<div><div style="font-size:12px;color:var(--text-muted);">账户名称</div><div style="margin-top:2px;">广州智采科技有限公司</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">账户类型</div><div style="margin-top:2px;">对公账户</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">开户银行</div><div style="margin-top:2px;">招商银行广州分行营业部</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">银行账号</div><div style="margin-top:2px;">7559 0188 2026 8899</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">状态</div><div style="margin-top:2px;"><span class="badge badge-primary">默认</span> <span class="badge badge-success">已启用</span></div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">添加时间</div><div style="margin-top:2px;">2026-01-12 10:00</div></div>
+</div>
+</div>
+<div class="modal-footer"><button class="btn btn-outline" onclick="document.getElementById('acctModal').classList.remove('active')">关闭</button></div>
+</div>
+</div>
+<div id="toast"></div>
+<script>
+function showToast(msg, icon){
+  var t = document.getElementById('toast');
+  t.textContent = (icon || '\u2713') + ' ' + msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.display = 'none'; }, 2400);
+}
+
+if (new URLSearchParams(location.search).get('added') === '1') {
+  document.addEventListener('DOMContentLoaded', function(){
+    var tb = document.querySelector('tbody');
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td>中国银行广州珠江支行</td><td>广州智采科技有限公司</td><td>6217 **** **** 3021</td><td>对公账户</td>'
+      + '<td><span class="badge badge-success">已启用</span></td>'
+      + '<td><button class="btn btn-sm btn-outline" onclick="showToast(\'演示数据：详情略\', \'ℹ\')" type="button">详情</button> <button class="btn btn-sm btn-outline" onclick="showToast(\'已设为默认收款账户（演示）\')" type="button">设为默认</button></td>';
+    tb.appendChild(tr);
+    showToast('收款账户已添加（已启用，未设为默认）');
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>编辑定价 - 开发者端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, var(--developer-color), #34d399);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .form-section {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+        }
+        .form-section-title {
+            font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md); border-bottom: 1px solid var(--border-light);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); }
+        .form-item { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+        .form-item.full-width { grid-column: 1 / -1; }
+        .form-label { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+        .form-hint { font-size: 12px; color: var(--text-muted); }
+        .pricing-config-item {
+            background: var(--bg-light); border: 1px solid var(--border-color);
+            border-radius: var(--radius-md); padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+        }
+        .pricing-config-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: var(--spacing-md);
+        }
+        .pricing-config-title { font-weight: 600; font-size: 15px; }
+        .pricing-config-fields { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: var(--spacing-md); align-items: end; }
+        .bean-price-tag {
+            background: var(--developer-light); color: var(--developer-color);
+            padding: 2px 8px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600;
+        }
+        .code-display {
+            font-family: 'Courier New', monospace; background: #f1f5f9;
+            padding: 2px 8px; border-radius: 4px; font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+<header class="top-bar developer">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><span>🏠</span><span>订阅智能体</span></a>
+<span style="color: var(--border-color);">|</span>
+<span style="color: var(--developer-color); font-weight: 600;">开发者端</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">👨‍💻</div>
+<span>张开发者</span>
+</div>
+</div>
+</header>
+<aside class="sidebar developer">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="agent-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="revenue-list.html"><span class="icon">📈</span><span>收入看板</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📄</span><span>结算单</span></a>
+<a class="sidebar-link" href="withdrawal-list.html"><span class="icon">💸</span><span>提现管理</span></a><a class="sidebar-link" href="bank-card.html"><span class="icon">🏦</span><span>收款账户</span></a>
+<a class="sidebar-link" href="dev-invoice-list.html"><span class="icon">🧾</span><span>发票管理</span></a>
+<a class="sidebar-link" href="notification-list.html"><span class="icon">🔔</span><span>通知</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a class="back-link" href="pricing-list.html" style="color: white; margin-bottom: var(--spacing-sm);">← 返回列表</a>
+<h2>定价配置 - 合规监测智能体</h2>
+<p>配置按次使用的彩豆定价方案，可为同一智能体设置多个计费点</p>
+</div>
+<!-- 已有定价配置列表 -->
+<div class="form-section">
+<div class="form-section-title">
+<span>当前定价配置（按次计费 · 彩豆/次）</span>
+<button class="btn btn-sm btn-primary" onclick="addPricingConfig()">+ 新增定价配置</button>
+</div>
+<div id="pricingConfigList">
+<!-- 配置1 -->
+<div class="pricing-config-item" id="config-1">
+<div class="pricing-config-header">
+<div style="display: flex; align-items: center; gap: var(--spacing-md);">
+<span class="pricing-config-title">📌 定价配置 #1</span>
+<span class="bean-price-tag">已通过</span>
+</div>
+<button class="btn btn-sm btn-danger" onclick="removeConfig(1)">删除</button>
+</div>
+<div class="pricing-config-fields">
+<div class="form-item">
+<label class="form-label">配置名称</label>
+<input class="input" placeholder="如：标准调用、高级分析" type="text" value="标准调用"/>
+<span class="form-hint">用于区分不同计费场景</span>
+</div>
+<div class="form-item">
+<label class="form-label">配置编码</label>
+<input class="input" placeholder="如：STD_CALL_001" type="text" value="STD_CALL_001"/>
+<span class="form-hint">程序中通过编码引用此定价</span>
+</div>
+<div class="form-item">
+<label class="form-label">每次调用消耗彩豆</label>
+<div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+<input class="input" min="1" style="width: 100px;" type="number" value="50"/>
+<span>彩豆/次</span>
+</div>
+<span class="form-hint">约 ¥0.50/次（1彩豆=¥0.01）</span>
+</div>
+<div style="display: flex; align-items: flex-end; padding-bottom: var(--spacing-xs);">
+<span class="code-display">显示为：合规监测智能体-标准调用 | 编码: STD_CALL_001（程序使用）</span>
+</div>
+</div>
+</div>
+<!-- 配置2 -->
+<div class="pricing-config-item" id="config-2">
+<div class="pricing-config-header">
+<div style="display: flex; align-items: center; gap: var(--spacing-md);">
+<span class="pricing-config-title">📌 定价配置 #2</span>
+<span class="bean-price-tag">已通过</span>
+</div>
+<button class="btn btn-sm btn-danger" onclick="removeConfig(2)">删除</button>
+</div>
+<div class="pricing-config-fields">
+<div class="form-item">
+<label class="form-label">配置名称</label>
+<input class="input" placeholder="如：标准调用、高级分析" type="text" value="高级分析"/>
+<span class="form-hint">用于区分不同计费场景</span>
+</div>
+<div class="form-item">
+<label class="form-label">配置编码</label>
+<input class="input" placeholder="如：ADV_ANALYSIS_001" type="text" value="ADV_ANALYSIS_001"/>
+<span class="form-hint">程序中通过编码引用此定价</span>
+</div>
+<div class="form-item">
+<label class="form-label">每次调用消耗彩豆</label>
+<div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+<input class="input" min="1" style="width: 100px;" type="number" value="100"/>
+<span>彩豆/次</span>
+</div>
+<span class="form-hint">约 ¥1.00/次（1彩豆=¥0.01）</span>
+</div>
+<div style="display: flex; align-items: flex-end; padding-bottom: var(--spacing-xs);">
+<span class="code-display">显示为：合规监测智能体-高级分析 | 编码: ADV_ANALYSIS_001（程序使用）</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 使用说明 -->
+<div class="form-section" style="background: var(--developer-light); border-color: var(--developer-color);">
+<h3 class="form-section-title" style="color: var(--developer-color);">💡 定价配置说明</h3>
+<div style="display: grid; gap: var(--spacing-sm); font-size: 13px;">
+<div style="display: flex; gap: var(--spacing-sm);">
+<span style="color: var(--developer-color);">1.</span>
+<span><strong>按次计费</strong>：每次调用该智能体计费点消耗指定数量的彩豆</span>
+</div>
+<div style="display: flex; gap: var(--spacing-sm);">
+<span style="color: var(--developer-color);">2.</span>
+<span><strong>多定价配置</strong>：通过配置名称和编码区分，同一智能体不同计费点可使用不同编码</span>
+</div>
+<div style="display: flex; gap: var(--spacing-sm);">
+<span style="color: var(--developer-color);">3.</span>
+<span><strong>编码使用</strong>：在智能体收费点或程序代码中通过编码（如 STD_CALL_001）引用对应定价</span>
+</div>
+<div style="display: flex; gap: var(--spacing-sm);">
+<span style="color: var(--developer-color);">4.</span>
+<span><strong>仅设置1次调用</strong>：每次定价配置只设置该计费点的1次调用收取的彩豆数</span>
+</div>
+</div>
+</div>
+<div style="display: flex; gap: var(--spacing-md); justify-content: center;">
+<a class="btn btn-outline" href="pricing-list.html">取消</a>
+<button class="btn btn-primary" type="submit">提交审核</button>
+</div>
+</main>
+<script>
+        let configCounter = 2;
+        function addPricingConfig() {
+            configCounter++;
+            const configList = document.getElementById('pricingConfigList');
+            const newConfig = document.createElement('div');
+            newConfig.className = 'pricing-config-item';
+            newConfig.id = 'config-' + configCounter;
+            newConfig.innerHTML = `
+                <div class="pricing-config-header">
+                    <div style="display: flex; align-items: center; gap: var(--spacing-md);">
+                        <span class="pricing-config-title">📌 定价配置 #${configCounter}</span>
+                        <span class="bean-price-tag" style="background: var(--admin-light); color: var(--admin-color);">新配置</span>
+                    </div>
+                    <button class="btn btn-sm btn-danger" onclick="removeConfig(${configCounter})">删除</button>
+                </div>
+                <div class="pricing-config-fields">
+                    <div class="form-item">
+                        <label class="form-label">配置名称</label>
+                        <input type="text" class="input" value="" placeholder="如：批量处理">
+                        <span class="form-hint">用于区分不同计费场景</span>
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label">配置编码</label>
+                        <input type="text" class="input" value="" placeholder="如：BATCH_PROC_001">
+                        <span class="form-hint">程序中通过编码引用此定价</span>
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label">每次调用消耗彩豆</label>
+                        <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+                            <input type="number" class="input" value="30" min="1" style="width: 100px;">
+                            <span>彩豆/次</span>
+                        </div>
+                        <span class="form-hint">约 ¥0.30/次（1彩豆=¥0.01）</span>
+                    </div>
+                    <div style="display: flex; align-items: flex-end; padding-bottom: var(--spacing-xs);">
+                        <span class="code-display" style="color: var(--text-muted);">显示为：合规监测智能体-配置名称 | 编码: 待填写（程序使用）</span>
+                    </div>
+                </div>
+            `;
+            configList.appendChild(newConfig);
+        }
+        function removeConfig(id) {
+            const config = document.getElementById('config-' + id);
+            if (config && confirm('确定要删除该定价配置吗？')) {
+                config.remove();
+            }
+        }
+    </script>
+</body>
+</html>

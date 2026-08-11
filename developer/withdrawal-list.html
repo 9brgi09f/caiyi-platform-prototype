@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>提现管理 - 开发者端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; }
+        .stat-value { font-size: 24px; font-weight: 700; color: var(--developer-color); }
+        .stat-label { font-size: 13px; color: var(--text-muted); margin-top: var(--spacing-xs); }
+
+        /* 工具栏：标签 + 状态筛选 */
+        .list-toolbar { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: var(--spacing-lg); border-bottom: 2px solid var(--border-light); }
+        .tab-nav { display: flex; gap: var(--spacing-xs); }
+        .tab-btn { padding: var(--spacing-md) var(--spacing-lg); color: var(--text-secondary); text-decoration: none; border-bottom: 2px solid transparent; margin-bottom: -2px; cursor: pointer; transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none; font-size: 14px; }
+        .tab-btn:hover { color: var(--developer-color); }
+        .tab-btn.active { color: var(--developer-color); border-bottom-color: var(--developer-color); font-weight: 500; }
+
+        /* 提现状态徽标 */
+        .badge-preapproval { background: #fef9c3; color: #a16207; }  /* 事前审批中 */
+        .badge-appr-returned { background: #ffedd5; color: #c2410c; }  /* 审批退回（金蝶事前审批） */
+        .badge-waitinvoice { background: #fef3c7; color: #d97706; }  /* 待开票 */
+        .badge-review { background: #dbeafe; color: #2563eb; }        /* 待审核 */
+        .badge-topay { background: #e0e7ff; color: #4f46e5; }         /* 待付款 */
+        .badge-returned { background: #fee2e2; color: #dc2626; }      /* 审核退回 */
+        .badge-paid { background: #d1fae5; color: #059669; }          /* 已付款 */
+        .badge-cancelled { background: #f1f5f9; color: #64748b; }     /* 已取消 */
+
+        .row-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+        .empty-hint { padding: var(--spacing-xl); text-align: center; color: var(--text-muted); font-size: 14px; }
+
+        /* 轻提示 toast */
+        #toast { display:none; position:fixed; bottom:32px; left:50%; transform:translateX(-50%); background:var(--developer-color); color:#fff; padding:12px 20px; border-radius:8px; font-size:14px; z-index:2000; box-shadow:0 4px 12px rgba(0,0,0,0.15); }
+    </style>
+
+<style id="identity-switcher-css">
+.id-switcher{position:relative;display:inline-flex;align-items:center;}
+.id-trigger{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 6px;border-radius:8px;cursor:pointer;transition:background 0.15s;user-select:none;}
+.id-trigger:hover{background:rgba(0,0,0,0.05);}
+.id-avatar{width:32px;height:32px;border-radius:50%;background:#EFF4FF;color:#2563EB;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.id-info{display:flex;flex-direction:column;align-items:flex-start;line-height:1.3;}
+.id-org{font-size:13px;font-weight:500;color:#1e293b;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.id-type-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;background:#EFF4FF;color:#2563EB;}
+.id-chevron{font-size:10px;color:#94a3b8;margin-left:2px;transition:transform 0.2s;}
+.id-switcher.open .id-chevron{transform:rotate(180deg);}
+.id-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:white;border:1px solid #dfe4ee;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:240px;z-index:999;overflow:hidden;}
+.id-switcher.open .id-menu{display:block;}
+.id-menu-hd{padding:10px 14px 8px;font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:1px;border-bottom:1px solid #ecf0f6;}
+.id-menu-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background 0.15s;text-decoration:none;color:inherit;}
+.id-menu-item:hover{background:#F8FAFC;}
+.id-menu-item.current{background:#F8FAFF;}
+.id-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.id-dot.active{background:#2563EB;}
+.id-dot.idle{background:#dfe4ee;}
+.id-item-body{flex:1;}
+.id-item-org{font-size:13px;font-weight:500;color:#1e293b;}
+.id-item-type{font-size:11px;color:#94a3b8;margin-top:1px;}
+.id-item-tag{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;margin-left:auto;flex-shrink:0;}
+.id-item-tag.current-tag{background:#EFF4FF;color:#2563EB;}
+.id-menu-sep{height:1px;background:#ecf0f6;margin:4px 0;}
+.id-menu-action{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:12px;color:#64748b;cursor:pointer;transition:background 0.15s;text-decoration:none;}
+.id-menu-action:hover{background:#F8FAFC;color:#2563EB;}
+</style>
+</head>
+<body>
+<header class="top-bar developer">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="id-switcher" id="idSwitcher">
+<div class="id-trigger" onclick="toggleIdMenu()">
+<div class="id-avatar">张</div>
+<div class="id-info">
+<span class="id-org">广州某某科技有限公司</span>
+<span class="id-type-badge" style="background:#D1FAE5;color:#059669;">开发者</span>
+</div>
+<span class="id-chevron">▾</span>
+</div>
+<div class="id-menu">
+<div class="id-menu-hd">切换工作台身份</div>
+<div class="id-menu-item current">
+<div class="id-dot active" style="background:#059669;"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">开发者</div>
+</div>
+<span class="id-item-tag current-tag" style="background:#D1FAE5;color:#059669;">当前</span>
+</div>
+<div class="id-menu-item" onclick="location.href='../user/index.html'">
+<div class="id-dot idle"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">采购单位</div>
+</div>
+</div>
+<div class="id-menu-sep"></div>
+<a class="id-menu-action" href="../user/register-select.html">＋ 注册新机构类型</a>
+<a class="id-menu-action" href="#" onclick="alert('已退出登录');return false;">退出登录</a>
+</div>
+</div>
+<script>
+function toggleIdMenu(){
+  var el=document.getElementById('idSwitcher');
+  el.classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  var sw=document.getElementById('idSwitcher');
+  if(sw && !sw.contains(e.target)) sw.classList.remove('open');
+});
+</script>
+</div>
+</header>
+<aside class="sidebar developer">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="agent-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="member-list.html"><span class="icon">👥</span><span>成员管理</span></a>
+<a class="sidebar-link" href="revenue-list.html"><span class="icon">📈</span><span>收入看板</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📄</span><span>结算单</span></a>
+<a class="sidebar-link active" href="withdrawal-list.html"><span class="icon">💸</span><span>提现管理</span></a><a class="sidebar-link" href="bank-card.html"><span class="icon">🏦</span><span>收款账户</span></a>
+<a class="sidebar-link" href="dev-invoice-list.html"><span class="icon">🧾</span><span>发票管理</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+<div>
+<h2>提现管理</h2>
+<p>查看和管理您的提现记录</p>
+</div>
+<a class="btn btn-primary" href="withdrawal-apply.html">+ 发起提现</a>
+</div>
+<div class="stats-grid">
+<div class="stat-card">
+<div class="stat-value">¥0.00</div>
+<div class="stat-label">待提现金额</div>
+</div>
+<div class="stat-card">
+<div class="stat-value" style="color: var(--info-color);">¥8,752.85</div>
+<div class="stat-label">处理中金额</div>
+</div>
+<div class="stat-card">
+<div class="stat-value" style="color: var(--developer-color);">¥7,482.76</div>
+<div class="stat-label">已提现金额</div>
+</div>
+</div>
+<p style="font-size:12px; color:var(--text-muted); margin:-8px 0 16px;">状态流转：事前审批中 →（金蝶财务审批通过）待开票 →（上传发票）待审核 →（平台审核通过）待付款 → 已付款。金蝶事前审批退回转「审批退回」，可修改后重新提交；平台发票审核退回转「审核退回」。未开票前（事前审批中 / 待开票）可「取消申请」；已上传发票（待审核 / 审核退回）可「撤回申请」，发票需自行红冲或留存；取消/撤回后关联结算单退回「待提现」。</p>
+<!-- 工具栏：标签 + 状态筛选 -->
+<div class="list-toolbar">
+<div class="tab-nav">
+<button class="tab-btn active" id="processingTabBtn" onclick="switchTab('processing')">处理中 (<span id="procCount">6</span>)</button>
+<button class="tab-btn" id="processedTabBtn" onclick="switchTab('processed')">已处理 (4)</button>
+</div>
+<select class="select" id="statusFilter" onchange="filterByStatus()" style="width: 150px; margin-bottom: var(--spacing-sm);">
+<option value="all">全部状态</option>
+<option value="事前审批中">事前审批中</option>
+<option value="待开票">待开票</option>
+<option value="待审核">待审核</option>
+<option value="待付款">待付款</option>
+<option value="审批退回">审批退回</option>
+<option value="审核退回">审核退回</option>
+<option value="已付款">已付款</option>
+<option value="已取消">已取消</option>
+</select>
+</div>
+<!-- 处理中表格 -->
+<div class="tab-content" id="processingTab">
+<div class="content-card">
+<div class="table-wrapper">
+<table class="table">
+<thead>
+<tr>
+<th>提现单号</th>
+<th>关联结算单</th>
+<th>提现金额</th>
+<th>发票金额</th>
+<th>申请时间</th>
+<th>状态</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr data-status="事前审批中">
+<td>WD20260604001</td>
+<td>ST20260503</td>
+<td class="amount positive">¥1,120.00</td>
+<td>—<br/><span style="font-size:11px;color:var(--text-muted);">应开 ¥1,120.00</span></td>
+<td>2026-06-04 09:00</td>
+<td><span class="badge badge-preapproval">事前审批中</span></td>
+<td><div class="row-actions">
+<a class="btn btn-sm btn-outline" href="withdrawal-view.html?id=WD20260604001">详情</a>
+<button class="btn btn-sm btn-outline" onclick="openExit('cancel', this)" type="button">取消申请</button>
+</div></td>
+</tr>
+<tr data-status="审批退回">
+<td>WD20260605002</td>
+<td>ST20260504</td>
+<td class="amount positive">¥860.00</td>
+<td>—<br/><span style="font-size:11px;color:var(--text-muted);">应开 ¥860.00</span></td>
+<td>2026-06-05 11:20</td>
+<td><span class="badge badge-appr-returned">审批退回</span></td>
+<td><div class="row-actions">
+<a class="btn btn-sm btn-outline" href="withdrawal-view.html?id=WD20260605002">详情</a>
+<a class="btn btn-sm btn-primary" href="withdrawal-apply.html">修改重提</a>
+<button class="btn btn-sm btn-outline" onclick="openExit('cancel', this)" type="button">取消申请</button>
+</div></td>
+</tr>
+<tr data-status="待开票">
+<td>WD20260602001</td>
+<td>ST20260501</td>
+<td class="amount positive">¥2,982.35</td>
+<td>—</td>
+<td>2026-06-02 10:00</td>
+<td><span class="badge badge-waitinvoice">待开票</span></td>
+<td><div class="row-actions">
+<a class="btn btn-sm btn-outline" href="withdrawal-view.html?id=WD20260602001">详情</a>
+<a class="btn btn-sm btn-primary" href="dev-invoice-upload.html">上传发票</a>
+<button class="btn btn-sm btn-outline" onclick="openExit('cancel', this)" type="button">取消申请</button>
+</div></td>
+</tr>
+<tr data-status="待审核">
+<td>WD20260515002</td>
+<td>ST20260201</td>
+<td class="amount positive">¥1,050.00</td>
+<td>¥1,050.00</td>
+<td>2026-05-15 09:30</td>
+<td><span class="badge badge-review">待审核</span></td>
+<td><div class="row-actions">
+<a class="btn btn-sm btn-outline" href="withdrawal-view.html?id=WD20260515002">详情</a>
+<button class="btn btn-sm btn-outline" onclick="openExit('withdraw', this)" type="button">撤回申请</button>
+</div></td>
+</tr>
+<tr data-status="待付款">
+<td>WD20260514001</td>
+<td>ST20251201</td>
+<td class="amount positive">¥1,780.50</td>
+<td>¥1,780.50</td>
+<td>2026-05-14 14:20</td>
+<td><span class="badge badge-topay">待付款</span></td>
+<td><div class="row-actions">
+<a class="btn btn-sm btn-outline" href="withdrawal-view.html?id=WD20260514001">详情</a>
+</div></td>
+</tr>
+<tr data-status="审核退回">
+<td>WD20260513004</td>
+<td>ST20251101</td>
+<td class="amount positive">¥960.00</td>
+<td>¥960.00</td>
+<td>2026-05-13 16:00</td>
+<td><span class="badge badge-returned">审核退回</span></td>
+<td><div class="row-actions">
+<a class="btn btn-sm btn-outline" href="withdrawal-view.html?id=WD20260513004">详情</a>
+<a class="btn btn-sm btn-primary" href="dev-invoice-upload.html">重新上传</a>
+<button class="btn btn-sm btn-outline" onclick="openExit('withdraw', this)" type="button">撤回申请</button>
+</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="empty-hint" id="processingEmpty" style="display:none;">当前无匹配「<span class="fstatus"></span>」的记录</div>
+</div>
+</div>
+<!-- 已处理表格 -->
+<div class="tab-content" id="processedTab" style="display: none;">
+<div class="content-card">
+<div class="table-wrapper">
+<table class="table">
+<thead>
+<tr>
+<th>提现单号</th>
+<th>关联结算单</th>
+<th>提现金额</th>
+<th>发票金额</th>
+<th>实收金额</th>
+<th>申请时间</th>
+<th>付款时间</th>
+<th>银行流水号</th>
+<th>状态</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr data-status="已付款">
+<td>WD20260515001</td>
+<td>ST20260301、ST20260401</td>
+<td class="amount positive">¥4,302.76</td>
+<td>¥4,302.76</td>
+<td class="amount positive">¥4,302.76</td>
+<td>2026-05-15 10:30</td>
+<td>2026-05-16</td>
+<td>SPDB20260516090001</td>
+<td><span class="badge badge-paid">已付款</span></td>
+<td><a class="btn btn-sm btn-outline" href="withdrawal-view.html?id=WD20260515001">详情</a></td>
+</tr>
+<tr data-status="已付款">
+<td>WD20260420003</td>
+<td>ST20251001</td>
+<td class="amount positive">¥1,240.00</td>
+<td>¥1,240.00</td>
+<td class="amount positive">¥1,240.00</td>
+<td>2026-04-20 11:00</td>
+<td>2026-04-22</td>
+<td>SPDB20260422090001</td>
+<td><span class="badge badge-paid">已付款</span></td>
+<td><a class="btn btn-sm btn-outline" href="withdrawal-view.html?id=WD20260420003">详情</a></td>
+</tr>
+<tr data-status="已付款">
+<td>WD20260320002</td>
+<td>ST20250901</td>
+<td class="amount positive">¥1,937.80<br/><span style="font-size:11px;color:var(--text-muted);font-weight:400;">结算¥2,000 · 扣减¥62.20</span></td>
+<td>¥1,937.80<br/><span style="font-size:11px;color:var(--text-muted);">3%专票</span></td>
+<td class="amount positive">¥1,937.80</td>
+<td>2026-03-20 10:00</td>
+<td>2026-03-22</td>
+<td>SPDB20260322090003</td>
+<td><span class="badge badge-paid">已付款</span></td>
+<td><a class="btn btn-sm btn-outline" href="withdrawal-view.html?id=WD20260320002">详情</a></td>
+</tr>
+<tr data-status="已取消">
+<td>WD20260510006</td>
+<td>ST20251101</td>
+<td class="amount positive">¥960.00</td>
+<td>—</td>
+<td>—</td>
+<td>2026-05-10 15:00</td>
+<td>—</td>
+<td>—</td>
+<td><span class="badge badge-cancelled">已取消</span></td>
+<td><a class="btn btn-sm btn-outline" href="withdrawal-view.html?id=WD20260510006">详情</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="empty-hint" id="processedEmpty" style="display:none;">当前无匹配「<span class="fstatus"></span>」的记录</div>
+</div>
+</div>
+</main>
+<!-- 取消/撤回 确认弹窗 -->
+<div class="modal-overlay" id="exitModal" onclick="if(event.target===this)closeExit()">
+<div class="modal" style="max-width: 420px;">
+<div class="modal-header">
+<span class="modal-title" id="exitTitle">取消申请</span>
+<button class="modal-close" onclick="closeExit()">×</button>
+</div>
+<div class="modal-body">
+<p id="exitBody" style="font-size:14px; color:var(--text-secondary); line-height:1.7;"></p>
+</div>
+<div class="modal-footer">
+<button class="btn btn-outline" onclick="closeExit()">再想想</button>
+<button class="btn btn-primary" id="exitConfirmBtn" onclick="confirmExit()">确认取消</button>
+</div>
+</div>
+</div>
+<div id="toast"></div>
+<script>
+        const STATUS_TAB = { '事前审批中':'processing','审批退回':'processing','待开票':'processing','待审核':'processing','待付款':'processing','审核退回':'processing','已付款':'processed','已取消':'processed' };
+        let currentTab = 'processing';
+        let exitRow = null, exitType = null;
+
+        function showTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+            document.getElementById(tab + 'Tab').style.display = 'block';
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tab + 'TabBtn').classList.add('active');
+        }
+        function switchTab(tab) {
+            document.getElementById('statusFilter').value = 'all';
+            showTab(tab);
+            applyFilter();
+        }
+        function filterByStatus() {
+            const val = document.getElementById('statusFilter').value;
+            if (val !== 'all' && STATUS_TAB[val]) showTab(STATUS_TAB[val]);
+            applyFilter();
+        }
+        function applyFilter() {
+            const val = document.getElementById('statusFilter').value;
+            const rows = document.querySelectorAll('#' + currentTab + 'Tab tbody tr');
+            let shown = 0;
+            rows.forEach(r => {
+                const match = (val === 'all' || r.dataset.status === val);
+                r.style.display = match ? '' : 'none';
+                if (match) shown++;
+            });
+            const empty = document.getElementById(currentTab + 'Empty');
+            if (empty) {
+                empty.style.display = (shown === 0) ? 'block' : 'none';
+                const fs = empty.querySelector('.fstatus');
+                if (fs) fs.textContent = val === 'all' ? '' : val;
+            }
+        }
+
+        function openExit(type, btn) {
+            exitRow = btn.closest('tr');
+            exitType = type;
+            const title = document.getElementById('exitTitle');
+            const body = document.getElementById('exitBody');
+            const cbtn = document.getElementById('exitConfirmBtn');
+            if (type === 'cancel') {
+                title.textContent = '取消申请';
+                body.innerHTML = '取消后本提现单作废，关联结算单将退回「待提现」，可重新发起提现。';
+                cbtn.textContent = '确认取消';
+            } else {
+                title.textContent = '撤回申请';
+                body.innerHTML = '撤回后本提现单作废，关联结算单将退回「待提现」，可重新发起提现。<br/><strong style="color:var(--warning-color);">已开具的增值税专用发票请自行红冲或留存。</strong>';
+                cbtn.textContent = '确认撤回';
+            }
+            document.getElementById('exitModal').classList.add('active');
+        }
+        function closeExit() {
+            document.getElementById('exitModal').classList.remove('active');
+            exitRow = null;
+        }
+        function confirmExit() {
+            if (exitRow) exitRow.remove();
+            document.getElementById('procCount').textContent = document.querySelectorAll('#processingTab tbody tr').length;
+            document.getElementById('exitModal').classList.remove('active');
+            showToast(exitType === 'cancel' ? '已取消申请，关联结算单已退回待提现' : '已撤回申请，关联结算单已退回待提现');
+            exitRow = null;
+            applyFilter();
+        }
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.display = 'block';
+            setTimeout(function(){ t.style.display = 'none'; }, 2500);
+        }
+    </script>
+</body>
+</html>

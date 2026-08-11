@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>审核发票 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .form-section {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+        }
+        .form-section-title {
+            font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md); border-bottom: 1px solid var(--border-light);
+        }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-lg); margin-bottom: var(--spacing-lg); }
+        .info-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); }
+        .info-label { font-size: 13px; color: var(--text-muted); margin-bottom: var(--spacing-xs); }
+        .info-value { font-size: 16px; font-weight: 500; }
+        .form-item { margin-bottom: var(--spacing-lg); }
+        .form-label { font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: var(--spacing-xs); display: block; }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link active" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+<!-- 数据统计菜单暂隐藏 <a class="sidebar-link" href="statistics.html"><span class="icon">📉</span><span>数据统计</span></a> -->
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a class="back-link" href="invoice-list.html" style="color: white; margin-bottom: var(--spacing-sm);">← 返回列表</a>
+<h2>审核发票</h2>
+<p>审核用户发票申请</p>
+</div>
+<div class="info-grid">
+<div class="info-card">
+<div class="info-label">用户</div>
+<div class="info-value">北京科技有限公司</div>
+</div>
+<div class="info-card">
+<div class="info-label">发票金额</div>
+<div class="info-value" style="color: var(--admin-color);">¥50.00</div>
+</div>
+<div class="info-card">
+<div class="info-label">发票抬头</div>
+<div class="info-value">北京科技有限公司</div>
+</div>
+<div class="info-card">
+<div class="info-label">发票类别</div>
+<div class="info-value">充值发票</div>
+</div>
+<div class="info-card">
+<div class="info-label">发票类型</div>
+<div class="info-value">预付卡发票（0税率）</div>
+</div>
+</div>
+<form class="form-section">
+<h3 class="form-section-title">审核操作</h3>
+<div class="form-item">
+<label class="form-label">审核结果</label>
+<div style="display: flex; gap: var(--spacing-md);">
+<label style="display: flex; align-items: center; gap: var(--spacing-sm); padding: var(--spacing-md); border: 2px solid var(--success-color); border-radius: var(--radius-lg); cursor: pointer; flex: 1; background: var(--success-light);">
+<input checked="" name="result" type="radio" value="approve"/>
+<span>通过审核</span>
+</label>
+<label style="display: flex; align-items: center; gap: var(--spacing-sm); padding: var(--spacing-md); border: 2px solid var(--border-light); border-radius: var(--radius-lg); cursor: pointer; flex: 1;">
+<input name="result" type="radio" value="reject"/>
+<span>驳回申请</span>
+</label>
+</div>
+</div>
+<div class="form-item">
+<label class="form-label">审核备注</label>
+<textarea class="input" id="reviewRemark" placeholder="请输入审核备注..." rows="3"></textarea>
+</div>
+</form>
+<div style="display: flex; gap: var(--spacing-md); justify-content: center;">
+<a class="btn btn-outline" href="invoice-list.html">取消</a>
+<button class="btn btn-primary" onclick="submitReview()">确认审核</button>
+</div></main>
+<script>
+        function submitReview() {
+            const approved = document.querySelector('input[name="result"]:checked').value === 'approve';
+            if (approved) {
+                if (confirm('确认审核通过？通过后系统将自动提交开票。')) {
+                    alert('审核已通过，已自动提交开票');
+                    window.location.href = 'invoice-list.html';
+                }
+            } else {
+                const remark = document.getElementById('reviewRemark').value;
+                if (!remark) {
+                    alert('驳回申请需填写审核备注（驳回原因）');
+                    return;
+                }
+                if (confirm('确认驳回该申请？')) {
+                    alert('已驳回申请，已通知用户');
+                    window.location.href = 'invoice-list.html';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

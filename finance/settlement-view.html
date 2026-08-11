@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>结算详情 - 财务端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-lg); margin-bottom: var(--spacing-lg); }
+        .info-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); }
+        .info-label { font-size: 13px; color: var(--text-muted); margin-bottom: var(--spacing-xs); }
+        .info-value { font-size: 16px; font-weight: 500; }
+    </style>
+</head>
+<body>
+<header class="top-bar finance">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">财</div>
+<span>财务人员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar finance">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link active" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+<a class="sidebar-link" href="withdrawal-pay-list.html"><span class="icon">💸</span><span>提现打款</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">🧾</span><span>发票管理</span></a>
+<a class="sidebar-link" href="reconciliation-list.html"><span class="icon">📋</span><span>对账报表</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a class="back-link" href="settlement-list.html" style="color: white; margin-bottom: var(--spacing-sm);">← 返回列表</a>
+<div style="display: flex; justify-content: space-between; align-items: center;">
+<div>
+<h2>结算详情</h2>
+<p>结算单号：ST20260501</p>
+</div>
+<span class="badge badge-success" style="font-size: 14px; padding: 8px 16px;">已确认</span> <span class="badge badge-info" style="font-size: 14px; padding: 8px 16px;">提现中</span>
+</div>
+</div>
+<div class="info-grid">
+<div class="info-card">
+<div class="info-label">开发者</div>
+<div class="info-value">张开发者</div>
+</div>
+<div class="info-card">
+<div class="info-label">应付金额</div>
+<div class="info-value" style="color: var(--finance-color); font-size: 20px;">¥2,982.35</div>
+</div>
+<div class="info-card">
+<div class="info-label">结算周期</div>
+<div class="info-value">2026年5月</div>
+</div>
+<div class="info-card">
+<div class="info-label">生成时间</div>
+<div class="info-value">2026-06-01</div>
+</div>
+</div>
+<div class="content-card">
+<h3 style="font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);">结算明细</h3>
+<div class="table-wrapper">
+<table class="table">
+<thead>
+<tr>
+<th>智能体</th>
+<th>总收入</th>
+<th>平台分成（20%）</th>
+<th>算力成本</th>
+<th>实付金额</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>合规监测智能体</td>
+<td>¥1,680.50</td>
+<td>−¥336.10</td>
+<td style="color:var(--danger-color);">−¥168.05</td>
+<td>¥1,176.35</td>
+</tr>
+<tr>
+<td>数据分析智能体</td>
+<td>¥1,500.00</td>
+<td>−¥300.00</td>
+<td style="color:var(--danger-color);">−¥150.00</td>
+<td>¥1,050.00</td>
+</tr>
+<tr>
+<td>政策问答智能体</td>
+<td>¥1,080.00</td>
+<td>−¥216.00</td>
+<td style="color:var(--danger-color);">−¥108.00</td>
+<td>¥756.00</td>
+</tr>
+<tr style="font-weight: 600;">
+<td>合计</td>
+<td>¥4,260.50</td>
+<td>−¥852.10</td>
+<td style="color:var(--danger-color);">−¥426.05</td>
+<td>¥2,982.35</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div style="display: flex; gap: var(--spacing-md); justify-content: center; margin-top: var(--spacing-lg);">
+<a class="btn btn-outline" href="settlement-list.html">返回列表</a>
+<button class="btn btn-outline">导出结算单</button>
+</div>
+</main>
+</body>
+</html>

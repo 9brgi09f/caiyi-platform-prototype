@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>推荐确认单详情 - 渠道端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+        .info-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; }
+        .info-label { font-size: 13px; color: var(--text-muted); margin-bottom: var(--spacing-xs); }
+        .info-value { font-size: 20px; font-weight: 700; }
+        .timeline { list-style: none; padding: 0; margin: 0; }
+        .timeline li { display: flex; gap: var(--spacing-md); padding: 10px 0; border-left: 2px solid var(--border-light); margin-left: 8px; padding-left: 18px; position: relative; font-size: 14px; }
+        .timeline li::before { content: ''; position: absolute; left: -6px; top: 16px; width: 10px; height: 10px; border-radius: 50%; background: var(--border-color); }
+        .timeline li.done::before { background: var(--success-color); }
+        .timeline li.now::before { background: var(--klein); box-shadow: 0 0 0 4px var(--klein-light); }
+        .timeline li.now { font-weight: 600; }
+        .timeline .tl-time { color: var(--text-muted); font-size: 12px; min-width: 130px; }
+        #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+    </style>
+</head>
+<body>
+<header class="top-bar channel">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">渠</div>
+<span>智采科技</span>
+</div>
+</div>
+</header>
+<aside class="sidebar channel">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon"></span><span>概览</span></a>
+<a class="sidebar-link" href="invite-code.html"><span class="icon"></span><span>我的邀请码</span></a>
+<a class="sidebar-link" href="customer-list.html"><span class="icon"></span><span>客户管理</span></a>
+<a class="sidebar-link active" href="referral-list.html"><span class="icon"></span><span>推荐确认单</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon"></span><span>分成结算</span></a>
+<a class="sidebar-link" href="withdrawal-list.html"><span class="icon"></span><span>提现管理</span></a>
+<a class="sidebar-link" href="bank-card.html"><span class="icon"></span><span>收款账户</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon"></span><span>发票管理</span></a>
+</div>
+</aside>
+<main class="main-content">
+<a class="back-link" href="referral-list.html">← 返回列表</a>
+<div class="page-header">
+<h2 id="pgTitle">推荐确认单详情</h2>
+<p id="pgSub"></p>
+</div>
+<div class="info-grid">
+<div class="info-card"><div class="info-label">被推荐方</div><div class="info-value" id="vTarget" style="font-size:16px;">-</div></div>
+<div class="info-card"><div class="info-label">确认方式</div><div class="info-value" id="vWay" style="font-size:15px;">-</div></div>
+<div class="info-card"><div class="info-label">提交时间</div><div class="info-value" id="vTime" style="font-size:16px;">-</div></div>
+<div class="info-card"><div class="info-label">状态</div><div class="info-value" id="vStatus">-</div></div>
+</div>
+<div class="content-card">
+<h3 style="font-size:15px;font-weight:600;margin-bottom:var(--spacing-md);">材料清单</h3>
+<ul style="list-style:none;padding:0;margin:0;font-size:14px;line-height:2.2;" id="matList"></ul>
+</div>
+<div class="content-card">
+<h3 style="font-size:15px;font-weight:600;margin-bottom:var(--spacing-md);">处理进度</h3>
+<ul class="timeline" id="tl"></ul>
+</div>
+<div style="display:flex;gap:var(--spacing-md);" id="opBar"></div>
+</main>
+<div id="toast"></div>
+<script>
+function showToast(msg, icon){
+  var t = document.getElementById('toast');
+  t.textContent = (icon || '\u2713') + ' ' + msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.display = 'none'; }, 2400);
+}
+var DATA = {
+  'RT20260628001': { target: '珠海智慧城市运营公司', way: '双方盖章+授权委托文件', time: '2026-06-28 14:20', status: '待确认',
+    mats: [['✓','《推荐确认单》双方盖章扫描件'],['✓','被推荐方授权委托文件'],['○','被推荐方盖章（本单适用例外路径，无需）']],
+    tl: [['done','2026-06-28 14:20','渠道商提交确认单及证明材料'],['now','','平台审核中'],['','','确认生效（客户收入计入分成基数）']] },
+  'RT20260322001': { target: '佛山市政数据服务中心', way: '三方盖章', time: '2026-03-22 10:00', status: '已确认',
+    mats: [['✓','《推荐确认单》三方盖章扫描件（甲乙丙）']],
+    tl: [['done','2026-03-22 10:00','渠道商提交确认单'],['done','2026-03-25 11:00','平台审核确认，推荐关系生效'],['done','2026-03-25 11:00','客户绑定完成，收入开始归集']] },
+  'RT20260510002': { target: '中山采联信息有限公司', way: '双方盖章', time: '2026-05-10 16:40', status: '已驳回',
+    mats: [['✓','《推荐确认单》双方盖章扫描件'],['✗','授权委托文件或其它合作关系证明（缺失）']],
+    tl: [['done','2026-05-10 16:40','渠道商提交确认单'],['done','2026-05-12 09:30','平台审核驳回：证明材料不足，请补充授权委托文件'],['','','补充材料后重新提交']], canResubmit: true }
+};
+var id = new URLSearchParams(location.search).get('id') || 'RT20260628001';
+var d = DATA[id] || DATA['RT20260628001'];
+document.getElementById('pgTitle').textContent = '推荐确认单 · ' + id;
+document.getElementById('pgSub').textContent = '确认方式：' + d.way;
+document.getElementById('vTarget').textContent = d.target;
+document.getElementById('vWay').textContent = d.way;
+document.getElementById('vTime').textContent = d.time;
+document.getElementById('vStatus').textContent = d.status;
+document.getElementById('matList').innerHTML = d.mats.map(function(m){
+  var color = m[0] === '✓' ? 'var(--success-color)' : m[0] === '✗' ? 'var(--danger-color)' : 'var(--text-muted)';
+  return '<li><span style="color:' + color + ';font-weight:700;margin-right:8px;">' + m[0] + '</span>' + m[1] + '</li>';
+}).join('');
+document.getElementById('tl').innerHTML = d.tl.map(function(t){
+  return '<li class="' + t[0] + '"><span class="tl-time">' + (t[1] || '—') + '</span><span>' + t[2] + '</span></li>';
+}).join('');
+if (d.canResubmit) document.getElementById('opBar').innerHTML = '<a class="btn btn-primary" href="referral-list.html">补充材料并重新提交</a>';
+</script>
+</body>
+</html>

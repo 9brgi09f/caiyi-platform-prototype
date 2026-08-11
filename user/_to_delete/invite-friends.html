@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>邀请好友 - 用户端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<style>
+        /* 邀请页面专用样式 */
+        .invite-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            padding-top: 48px;
+            color: white;
+            margin-bottom: var(--spacing-lg);
+            text-align: center;
+            position: relative;
+        }
+        
+        .invite-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--spacing-md);
+            font-size: 28px;
+        }
+        
+        .invite-greeting {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .invite-count {
+            font-size: 32px;
+            font-weight: 700;
+        }
+        
+        .invite-count-label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .register-new-user {
+            position: absolute;
+            top: var(--spacing-md);
+            right: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-xs) var(--spacing-md);
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.4);
+            border-radius: var(--radius-lg);
+            font-size: 13px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .register-new-user:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.6);
+        }
+        
+        /* 邀请码卡片 */
+        .invite-code-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .code-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .code-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--border-light);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            gap: var(--spacing-md);
+        }
+        
+        .code-value {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: var(--text-primary);
+        }
+        
+        .copy-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: var(--primary-color);
+            color: white;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        
+        .copy-btn:hover {
+            background: var(--primary-hover);
+        }
+        
+        /* 邀请链接 */
+        .link-box {
+            background: var(--border-light);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            margin-top: var(--spacing-md);
+            word-break: break-all;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        /* 分享按钮组 */
+        .share-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+        }
+        
+        .share-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .share-btn:hover {
+            border-color: var(--primary-color);
+            background: var(--primary-light);
+        }
+        
+        .share-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .share-icon.wechat { background: #07C160; color: white; }
+        .share-icon.sms { background: #1890FF; color: white; }
+        .share-icon.qrcode { background: #722ED1; color: white; }
+        
+        .share-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        /* 邀请记录 */
+        .record-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .record-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .record-count {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        
+        .record-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+        
+        .record-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            background: var(--border-light);
+            border-radius: var(--radius-md);
+        }
+        
+        .record-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .record-info {
+            flex: 1;
+        }
+        
+        .record-name {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        
+        .record-time {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        .record-tag {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .tag-link {
+            background: #E6F7FF;
+            color: #1890FF;
+        }
+        
+        .tag-code {
+            background: #FFF7E6;
+            color: #FA8C16;
+        }
+        
+        /* 二维码弹窗 */
+        .qr-modal {
+            background: var(--card-bg);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            text-align: center;
+            width: 320px;
+        }
+        
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto var(--spacing-md);
+            background: #f5f5f5;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .qr-tip {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.75);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+<header class="top-bar user">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><span>🏠</span><span>订阅智能体</span></a>
+<span style="color: var(--border-color);">|</span>
+<span style="color: var(--user-color); font-weight: 600;">用户端</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">👤</div>
+<span>李用户</span>
+</div>
+</div>
+</header>
+<aside class="sidebar user">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">🏪</span><span>智能体市场</span></a>
+<a class="sidebar-link" href="recharge-list.html"><span class="icon">💰</span><span>账户充值</span></a>
+<a class="sidebar-link" href="balance.html"><span class="icon">💳</span><span>余额管理</span></a>
+<a class="sidebar-link" href="payment-accounts.html"><span class="icon">🏦</span><span>付款账户</span></a>
+<a class="sidebar-link" href="consumption-list.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+</div>
+<div class="sidebar-section">
+</div>
+</aside>
+<main class="main-content">
+<!-- 邀请统计 -->
+<div class="invite-hero">
+<a class="register-new-user" href="register.html">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14">
+<path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+<circle cx="8.5" cy="7" r="4"></circle>
+<line x1="20" x2="20" y1="8" y2="14"></line>
+<line x1="23" x2="17" y1="11" y2="11"></line>
+</svg>
+                注册新用户
+            </a>
+<div class="invite-avatar">👤</div>
+<div class="invite-greeting">当前用户</div>
+<div class="invite-count">12</div>
+<div class="invite-count-label">已成功邀请好友</div>
+</div>
+<!-- 邀请码 -->
+<div class="invite-code-card">
+<div class="code-label">我的邀请码</div>
+<div class="code-box">
+<span class="code-value" id="inviteCode">ABC123XY</span>
+<button class="copy-btn" onclick="copyCode()">
+<svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+<rect height="13" rx="2" width="13" x="9" y="9"></rect>
+<path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
+</svg>
+                    复制
+                </button>
+</div>
+<div class="code-label" style="margin-top: var(--spacing-md);">邀请链接</div>
+<div class="link-box">
+                https://caiyi.com/register?invite_code=ABC123XY
+            </div>
+<!-- 分享按钮 -->
+<div class="share-buttons">
+<button class="share-btn" onclick="shareTo('wechat')">
+<div class="share-icon wechat">
+<svg fill="currentColor" height="20" viewbox="0 0 24 24" width="20">
+<path d="M8.5 11.5C8.5 9.015 10.015 7 12.5 7C14.985 7 16.5 9.015 16.5 11.5C16.5 13.985 14.985 16 12.5 16C10.015 16 8.5 13.985 8.5 11.5ZM12.5 8C11.12 8 10 9.12 10 10.5C10 11.88 11.12 13 12.5 13C13.88 13 15 11.88 15 10.5C15 9.12 13.88 8 12.5 8Z"></path>
+</svg>
+</div>
+<span class="share-label">微信</span>
+</button>
+<button class="share-btn" onclick="shareTo('sms')">
+<div class="share-icon sms">
+<svg fill="none" height="20" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="20">
+<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"></path>
+</svg>
+</div>
+<span class="share-label">短信</span>
+</button>
+<button class="share-btn" onclick="showQRCode()">
+<div class="share-icon qrcode">
+<svg fill="none" height="20" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="20">
+<rect height="7" width="7" x="3" y="3"></rect>
+<rect height="7" width="7" x="14" y="3"></rect>
+<rect height="7" width="7" x="3" y="14"></rect>
+<rect height="3" width="3" x="14" y="14"></rect>
+<rect height="3" width="3" x="18" y="14"></rect>
+<rect height="3" width="3" x="14" y="18"></rect>
+<rect height="3" width="3" x="18" y="18"></rect>
+</svg>
+</div>
+<span class="share-label">二维码</span>
+</button>
+</div>
+</div>
+<!-- 邀请记录 -->
+<div class="record-card">
+<div class="record-header">
+<span class="record-title">邀请记录</span>
+<span class="record-count">共 12 人</span>
+</div>
+<div class="record-list">
+<div class="record-item">
+<div class="record-avatar">👤</div>
+<div class="record-info">
+<div class="record-name">张*三 <span style="font-size:11px;color:#999;font-weight:normal;">ID:10002</span></div>
+<div class="record-time">绑定于 2024-01-15</div>
+</div>
+<span class="record-tag tag-link">链接绑定</span>
+</div>
+<div class="record-item">
+<div class="record-avatar">👤</div>
+<div class="record-info">
+<div class="record-name">李*美 <span style="font-size:11px;color:#999;font-weight:normal;">ID:10004</span></div>
+<div class="record-time">绑定于 2024-01-10</div>
+</div>
+<span class="record-tag tag-code">邀请码绑定</span>
+</div>
+<div class="record-item">
+<div class="record-avatar">👤</div>
+<div class="record-info">
+<div class="record-name">王*明 <span style="font-size:11px;color:#999;font-weight:normal;">ID:10006</span></div>
+<div class="record-time">绑定于 2024-01-08</div>
+</div>
+<span class="record-tag tag-link">链接绑定</span>
+</div>
+</div>
+<div style="margin-top: var(--spacing-md); padding-top: var(--spacing-md); border-top: 1px solid var(--border-light); text-align: center;">
+<span style="font-size: 12px; color: var(--text-muted);">
+                    注册渠道说明：<span class="record-tag tag-link">链接绑定</span> = 通过邀请链接注册   <span class="record-tag tag-code">邀请码绑定</span> = 注册后手动输入邀请码
+                </span>
+</div>
+</div>
+</main>
+<!-- 二维码弹窗 -->
+<div class="modal-overlay" id="qrModal">
+<div class="qr-modal">
+<button class="modal-close" onclick="closeQRModal()" style="position:absolute;top:12px;right:12px;background:none;border:none;cursor:pointer;font-size:20px;">×</button>
+<h3 style="margin-bottom: var(--spacing-md);">扫码注册</h3>
+<div class="qr-code">
+<img alt="二维码" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&amp;data=https://caiyi.com/register?invite_code=ABC123XY" style="width:180px;height:180px;"/>
+</div>
+<p class="qr-tip">扫码即可注册并绑定邀请关系</p>
+</div>
+</div>
+<!-- Toast提示 -->
+<div class="toast" id="toast"></div>
+<script>
+        // 复制邀请码
+        function copyCode() {
+            const code = document.getElementById('inviteCode').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                showToast('邀请码已复制');
+            }).catch(() => {
+                // 降级方案
+                const textarea = document.createElement('textarea');
+                textarea.value = code;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('邀请码已复制');
+            });
+        }
+
+        // 分享
+        function shareTo(platform) {
+            const link = 'https://caiyi.com/register?invite_code=ABC123XY';
+            if (platform === 'wechat') {
+                showToast('请在微信中粘贴链接');
+            } else if (platform === 'sms') {
+                window.location.href = `sms:?body=注册送好礼！我的专属邀请链接：${link}`;
+            }
+        }
+
+        // 显示二维码
+        function showQRCode() {
+            document.getElementById('qrModal').classList.add('active');
+        }
+
+        // 关闭二维码
+        function closeQRModal() {
+            document.getElementById('qrModal').classList.remove('active');
+        }
+
+        // Toast提示
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        // 点击背景关闭弹窗
+        document.getElementById('qrModal').addEventListener('click', function(e) {
+            if (e.target === this) closeQRModal();
+        });
+    </script>
+</body>
+</html>

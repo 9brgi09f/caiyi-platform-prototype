@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>客户管理 - 渠道端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; }
+        .stat-value { font-size: 24px; font-weight: 700; color: var(--klein); }
+        .stat-label { font-size: 13px; color: var(--text-muted); margin-top: var(--spacing-xs); }
+        #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+    </style>
+</head>
+<body>
+<header class="top-bar channel">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">渠</div>
+<span>智采科技</span>
+</div>
+</div>
+</header>
+<aside class="sidebar channel">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon"></span><span>概览</span></a>
+<a class="sidebar-link" href="invite-code.html"><span class="icon"></span><span>我的邀请码</span></a>
+<a class="sidebar-link active" href="customer-list.html"><span class="icon"></span><span>客户管理</span></a>
+<a class="sidebar-link" href="referral-list.html"><span class="icon"></span><span>推荐确认单</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon"></span><span>分成结算</span></a>
+<a class="sidebar-link" href="withdrawal-list.html"><span class="icon"></span><span>提现管理</span></a>
+<a class="sidebar-link" href="bank-card.html"><span class="icon"></span><span>收款账户</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon"></span><span>发票管理</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<h2>客户管理</h2>
+<p>我推荐的客户列表及年度贡献</p>
+</div>
+<div class="content-card">
+<div class="tab-nav">
+<button class="tab-btn active" onclick="filterStatus('all', this)" type="button">全部 (4)</button>
+<button class="tab-btn" onclick="filterStatus('已确认', this)" type="button">已确认 (3)</button>
+<button class="tab-btn" onclick="filterStatus('待确认', this)" type="button">待确认 (1)</button>
+</div>
+<div class="table-wrapper">
+<table class="table">
+<thead><tr><th>客户名称</th><th>绑定时间</th><th>确认方式</th><th>确认状态</th><th>年度贡献收入（不含税）</th><th>客户类型</th></tr></thead>
+<tbody>
+<tr data-status="已确认">
+<td>广州建工集团有限公司</td><td>2026-01-15</td><td>邀请码注册</td>
+<td><span class="badge badge-success">已确认</span></td>
+<td class="amount">¥24,600.00</td><td>新客户</td>
+</tr>
+<tr data-status="已确认">
+<td>佛山市政数据服务中心</td><td>2026-03-22</td><td>推荐确认单（三方盖章）</td>
+<td><span class="badge badge-success">已确认</span></td>
+<td class="amount">¥14,800.00</td><td>新客户</td>
+</tr>
+<tr data-status="已确认">
+<td>东莞采购咨询有限公司</td><td>2026-05-10</td><td>邀请码注册</td>
+<td><span class="badge badge-success">已确认</span></td>
+<td class="amount">¥6,800.00</td><td>新客户</td>
+</tr>
+<tr data-status="待确认">
+<td>珠海智慧城市运营公司</td><td>2026-06-28</td><td>推荐确认单（双方盖章+授权文件）</td>
+<td><span class="badge badge-warning">待确认</span></td>
+<td>—</td><td>—</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p style="font-size: 12px; color: var(--text-muted); margin-top: var(--spacing-sm);">年度贡献收入自首次推荐确认之日起累计，每满一个自然年度清零；待确认客户的收入不计入分成基数。</p>
+</div>
+</main>
+<div id="toast"></div>
+<script>
+function showToast(msg, icon){
+  var t = document.getElementById('toast');
+  t.textContent = (icon || '\u2713') + ' ' + msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.display = 'none'; }, 2400);
+}
+
+</script>
+</body>
+</html>

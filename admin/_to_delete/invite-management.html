@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>邀请关系管理 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<style>
+        /* 统计卡片 */
+        .stat-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+        }
+        
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .stat-change {
+            font-size: 12px;
+            margin-top: var(--spacing-xs);
+        }
+        
+        .stat-change.up { color: var(--success-color); }
+        .stat-change.down { color: var(--danger-color); }
+        
+        /* 筛选面板 */
+        .filter-panel {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+            align-items: flex-end;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xs);
+        }
+        
+        .filter-label {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        
+        .filter-input,
+        .filter-select {
+            height: 36px;
+            padding: 0 var(--spacing-md);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            width: 160px;
+            background: var(--card-bg);
+        }
+        
+        .filter-input:focus,
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .filter-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+        
+        /* 数据表格 */
+        .table-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .table-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .user-avatar-sm {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        .user-name {
+            font-weight: 500;
+        }
+        
+        .user-id {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        .status-tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .status-tag.success {
+            background: var(--developer-light);
+            color: var(--success-color);
+        }
+        
+        .status-tag.default {
+            background: var(--border-light);
+            color: var(--text-muted);
+        }
+        
+        .action-link {
+            color: var(--primary-color);
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .action-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* 分页 */
+        .table-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-top: 1px solid var(--border-light);
+        }
+        
+        .table-info {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        .pagination {
+            display: flex;
+            gap: var(--spacing-xs);
+        }
+        
+        .page-btn {
+            min-width: 32px;
+            height: 32px;
+            padding: 0 var(--spacing-sm);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: var(--card-bg);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .page-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .page-btn.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+        
+        .page-btn:disabled {
+            color: var(--border-color);
+            cursor: not-allowed;
+        }
+        
+        /* 详情弹窗 */
+        .detail-modal {
+            background: var(--card-bg);
+            border-radius: var(--radius-xl);
+            width: 800px;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow: hidden;
+        }
+        
+        .detail-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--spacing-lg);
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .detail-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .detail-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-md);
+        }
+        
+        .detail-close:hover {
+            background: var(--border-light);
+        }
+        
+        .detail-body {
+            padding: var(--spacing-lg);
+            max-height: calc(90vh - 120px);
+            overflow-y: auto;
+        }
+        
+        .user-basic {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-lg);
+            background: var(--border-light);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .user-avatar-lg {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+        
+        .user-basic-info h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .user-basic-info p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        
+        /* 邀请统计 */
+        .invite-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .invite-stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            color: white;
+            text-align: center;
+        }
+        
+        .invite-stat-card.green {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .invite-stat-card.orange {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .invite-stat-value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .invite-stat-label {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        
+        /* 信息卡片 */
+        .info-section {
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+            padding-left: var(--spacing-sm);
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-md);
+        }
+        
+        .info-item {
+            display: flex;
+            padding: var(--spacing-md);
+            background: var(--border-light);
+            border-radius: var(--radius-md);
+        }
+        
+        .info-label {
+            width: 100px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        
+        .info-value {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .copy-value {
+            color: var(--primary-color);
+            cursor: pointer;
+            margin-left: var(--spacing-sm);
+        }
+        
+        .copy-value:hover {
+            text-decoration: underline;
+        }
+        
+        /* 被邀请用户列表 */
+        .invited-list {
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+        
+        .invited-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md);
+            background: var(--border-light);
+        }
+        
+        .invited-list-title {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .invited-list-count {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        .invited-user-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .invited-user-item:last-child {
+            border-bottom: none;
+        }
+        
+        .invited-user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .invited-user-info {
+            flex: 1;
+        }
+        
+        .invited-user-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .invited-user-time {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        .invited-list-footer {
+            padding: var(--spacing-md);
+            background: var(--border-light);
+            text-align: center;
+        }
+        
+        /* 导出弹窗 */
+        .export-modal {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            width: 360px;
+            text-align: center;
+        }
+        
+        .export-progress {
+            width: 100%;
+            height: 8px;
+            background: var(--border-light);
+            border-radius: 4px;
+            margin: var(--spacing-lg) 0;
+            overflow: hidden;
+        }
+        
+        .export-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .export-status {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.75);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><span>🏠</span><span>订阅智能体</span></a>
+<span style="color: var(--border-color);">|</span>
+<span style="color: var(--admin-color); font-weight: 600;">平台管理端</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">⚙️</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="transactions-list.html"><span class="icon">💳</span><span>交易流水</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="pricing-audit-list.html"><span class="icon">💰</span><span>定价审核</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+<!-- 数据统计菜单暂隐藏 <a class="sidebar-link" href="statistics.html"><span class="icon">📉</span><span>数据统计</span></a> -->
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header" style="background: linear-gradient(135deg, var(--admin-color), #fbbf24); margin-bottom: var(--spacing-lg);">
+<h2 style="color: white;">邀请关系管理</h2>
+<p style="color: rgba(255,255,255,0.9);">管理用户邀请关系数据，进行筛选查询和数据导出</p>
+</div>
+<!-- 统计卡片 -->
+<div class="stat-cards">
+<div class="stat-card">
+<div class="stat-label">总绑定数</div>
+<div class="stat-value">12,856</div>
+<div class="stat-change up">较上月 +15.8%</div>
+</div>
+<div class="stat-card">
+<div class="stat-label">本月新增</div>
+<div class="stat-value">1,234</div>
+<div class="stat-change up">较上月 +8.2%</div>
+</div>
+<div class="stat-card">
+<div class="stat-label">链接绑定占比</div>
+<div class="stat-value">68.5%</div>
+<div class="stat-change down">较上月 -2.1%</div>
+</div>
+<div class="stat-card">
+<div class="stat-label">人均邀请</div>
+<div class="stat-value">3.2</div>
+<div class="stat-change up">较上月 +0.3</div>
+</div>
+</div>
+<!-- 筛选面板 -->
+<div class="filter-panel">
+<div class="filter-row">
+<div class="filter-group">
+<label class="filter-label">邀请人ID</label>
+<input class="filter-input" placeholder="请输入邀请人ID" type="text"/>
+</div>
+<div class="filter-group">
+<label class="filter-label">被邀请人ID</label>
+<input class="filter-input" placeholder="请输入被邀请人ID" type="text"/>
+</div>
+<div class="filter-group">
+<label class="filter-label">绑定方式</label>
+<select class="filter-select">
+<option value="">全部</option>
+<option value="link">链接绑定</option>
+<option value="code">邀请码绑定</option>
+</select>
+</div>
+<div class="filter-group">
+<label class="filter-label">开始日期</label>
+<input class="filter-input" type="date" value="2024-01-01"/>
+</div>
+<div class="filter-group">
+<label class="filter-label">结束日期</label>
+<input class="filter-input" type="date" value="2024-01-31"/>
+</div>
+<div class="filter-actions">
+<button class="btn btn-primary" onclick="searchRecords()">查询</button>
+<button class="btn btn-secondary" onclick="resetFilters()">重置</button>
+</div>
+</div>
+</div>
+<!-- 数据表格 -->
+<div class="table-card">
+<div class="table-header">
+<span class="table-title">绑定记录列表</span>
+<div class="filter-actions">
+<button class="btn btn-secondary" onclick="exportData()">
+<svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+<path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path>
+<polyline points="7 10 12 15 17 10"></polyline>
+<line x1="12" x2="12" y1="15" y2="3"></line>
+</svg>
+                        导出
+                    </button>
+</div>
+</div>
+<div class="table-wrapper">
+<table class="table">
+<thead>
+<tr>
+<th>邀请人</th>
+<th>被邀请人</th>
+<th>绑定方式</th>
+<th>绑定时间</th>
+<th>邀请码</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<div class="user-cell">
+<div class="user-avatar-sm">👤</div>
+<div>
+<div class="user-name">张三</div>
+<div class="user-id">ID: 10001</div>
+</div>
+</div>
+</td>
+<td>
+<div class="user-cell">
+<div class="user-avatar-sm">👤</div>
+<div>
+<div class="user-name">李四</div>
+<div class="user-id">ID: 10002</div>
+</div>
+</div>
+</td>
+<td><span class="status-tag success">链接绑定</span></td>
+<td>2024-01-15 14:30:25</td>
+<td>ABC123XY</td>
+<td><a class="action-link" onclick="viewDetail(1)">查看详情</a></td>
+</tr>
+<tr>
+<td>
+<div class="user-cell">
+<div class="user-avatar-sm">👤</div>
+<div>
+<div class="user-name">王五</div>
+<div class="user-id">ID: 10003</div>
+</div>
+</div>
+</td>
+<td>
+<div class="user-cell">
+<div class="user-avatar-sm">👤</div>
+<div>
+<div class="user-name">赵六</div>
+<div class="user-id">ID: 10004</div>
+</div>
+</div>
+</td>
+<td><span class="status-tag default">邀请码绑定</span></td>
+<td>2024-01-14 10:15:30</td>
+<td>XYZ789AB</td>
+<td><a class="action-link" onclick="viewDetail(2)">查看详情</a></td>
+</tr>
+<tr>
+<td>
+<div class="user-cell">
+<div class="user-avatar-sm">👤</div>
+<div>
+<div class="user-name">钱七</div>
+<div class="user-id">ID: 10005</div>
+</div>
+</div>
+</td>
+<td>
+<div class="user-cell">
+<div class="user-avatar-sm">👤</div>
+<div>
+<div class="user-name">孙八</div>
+<div class="user-id">ID: 10006</div>
+</div>
+</div>
+</td>
+<td><span class="status-tag success">链接绑定</span></td>
+<td>2024-01-13 09:20:45</td>
+<td>QWE456CD</td>
+<td><a class="action-link" onclick="viewDetail(3)">查看详情</a></td>
+</tr>
+<tr>
+<td>
+<div class="user-cell">
+<div class="user-avatar-sm">👤</div>
+<div>
+<div class="user-name">周九</div>
+<div class="user-id">ID: 10007</div>
+</div>
+</div>
+</td>
+<td>
+<div class="user-cell">
+<div class="user-avatar-sm">👤</div>
+<div>
+<div class="user-name">吴十</div>
+<div class="user-id">ID: 10008</div>
+</div>
+</div>
+</td>
+<td><span class="status-tag success">链接绑定</span></td>
+<td>2024-01-12 16:45:00</td>
+<td>RTY123EF</td>
+<td><a class="action-link" onclick="viewDetail(4)">查看详情</a></td>
+</tr>
+<tr>
+<td>
+<div class="user-cell">
+<div class="user-avatar-sm">👤</div>
+<div>
+<div class="user-name">郑一</div>
+<div class="user-id">ID: 10009</div>
+</div>
+</div>
+</td>
+<td>
+<div class="user-cell">
+<div class="user-avatar-sm">👤</div>
+<div>
+<div class="user-name">陈二</div>
+<div class="user-id">ID: 10010</div>
+</div>
+</div>
+</td>
+<td><span class="status-tag default">邀请码绑定</span></td>
+<td>2024-01-11 11:30:15</td>
+<td>UIO789GH</td>
+<td><a class="action-link" onclick="viewDetail(5)">查看详情</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-footer">
+<span class="table-info">共 12,856 条记录，每页显示 10 条</span>
+<div class="pagination">
+<button class="page-btn" disabled="">上一页</button>
+<button class="page-btn active">1</button>
+<button class="page-btn">2</button>
+<button class="page-btn">3</button>
+<span style="line-height:32px;color:#999;">...</span>
+<button class="page-btn">1286</button>
+<button class="page-btn">下一页</button>
+</div>
+</div>
+</div>
+</main>
+<!-- 导出进度弹窗 -->
+<div class="modal-overlay" id="exportModal">
+<div class="export-modal">
+<h3>导出数据</h3>
+<div class="export-progress">
+<div class="export-progress-bar" id="exportProgressBar"></div>
+</div>
+<p class="export-status" id="exportStatus">正在导出...</p>
+</div>
+</div>
+<!-- 详情弹窗 -->
+<div class="modal-overlay" id="detailModal">
+<div class="detail-modal">
+<div class="detail-header">
+<h3 class="detail-title">用户详情</h3>
+<button class="detail-close" onclick="closeDetailModal()">×</button>
+</div>
+<div class="detail-body">
+<!-- 用户基本信息 -->
+<div class="user-basic">
+<div class="user-avatar-lg">👤</div>
+<div class="user-basic-info">
+<h4 id="detailUserName">张三</h4>
+<p>用户ID: <span id="detailUserId">10001</span></p>
+<p>注册时间: <span id="detailRegTime">2023-06-15 10:30:00</span></p>
+</div>
+</div>
+<!-- 邀请统计 -->
+<div class="invite-stats">
+<div class="invite-stat-card">
+<div class="invite-stat-value" id="detailInviteCount">12</div>
+<div class="invite-stat-label">累计邀请人数</div>
+</div>
+<div class="invite-stat-card green">
+<div class="invite-stat-value" id="detailLinkCount">8</div>
+<div class="invite-stat-label">链接绑定</div>
+</div>
+<div class="invite-stat-card orange">
+<div class="invite-stat-value" id="detailCodeCount">4</div>
+<div class="invite-stat-label">邀请码绑定</div>
+</div>
+</div>
+<!-- 邀请信息 -->
+<div class="info-section">
+<h4 class="section-title">邀请信息</h4>
+<div class="info-grid">
+<div class="info-item">
+<span class="info-label">邀请码</span>
+<span class="info-value" id="detailInviteCode">ABC123XY <span class="copy-value" onclick="copyValue('ABC123XY')">复制</span></span>
+</div>
+<div class="info-item">
+<span class="info-label">我的邀请人</span>
+<span class="info-value" id="detailMyInviter">无（作为邀请人）</span>
+</div>
+<div class="info-item" style="grid-column: span 2;">
+<span class="info-label">邀请链接</span>
+<span class="info-value" id="detailInviteLink" style="font-size:12px;word-break:break-all;">
+                                https://caiyi.com/register?invite_code=ABC123XY
+                                <span class="copy-value" onclick="copyValue('https://caiyi.com/register?invite_code=ABC123XY')">复制</span>
+</span>
+</div>
+</div>
+</div>
+<!-- 被邀请用户列表 -->
+<div class="info-section">
+<h4 class="section-title">被邀请用户列表</h4>
+<div class="invited-list">
+<div class="invited-list-header">
+<span class="invited-list-title">邀请记录</span>
+<span class="invited-list-count">共 <span id="invitedCount">12</span> 人</span>
+</div>
+<div id="invitedUserList">
+<div class="invited-user-item">
+<div class="invited-user-avatar">👤</div>
+<div class="invited-user-info">
+<div class="invited-user-name">李四 <span style="font-size:11px;color:#999;font-weight:normal;">ID:10002</span></div>
+<div class="invited-user-time">绑定时间: 2024-01-15 14:30:25</div>
+</div>
+<span class="status-tag success">链接绑定</span>
+</div>
+<div class="invited-user-item">
+<div class="invited-user-avatar">👤</div>
+<div class="invited-user-info">
+<div class="invited-user-name">赵六 <span style="font-size:11px;color:#999;font-weight:normal;">ID:10004</span></div>
+<div class="invited-user-time">绑定时间: 2024-01-14 10:15:30</div>
+</div>
+<span class="status-tag default">邀请码绑定</span>
+</div>
+<div class="invited-user-item">
+<div class="invited-user-avatar">👤</div>
+<div class="invited-user-info">
+<div class="invited-user-name">孙八 <span style="font-size:11px;color:#999;font-weight:normal;">ID:10006</span></div>
+<div class="invited-user-time">绑定时间: 2024-01-13 09:20:45</div>
+</div>
+<span class="status-tag success">链接绑定</span>
+</div>
+</div>
+<div class="invited-list-footer">
+<button class="page-btn" onclick="loadMoreInvited()">加载更多</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Toast提示 -->
+<div class="toast" id="toast"></div>
+<script>
+        // 查询记录
+        function searchRecords() {
+            showToast('查询成功');
+        }
+
+        // 重置筛选
+        function resetFilters() {
+            showToast('已重置');
+        }
+
+        // 查看详情
+        function viewDetail(id) {
+            const userData = {
+                1: { name: '张三', id: '10001', regTime: '2023-06-15 10:30:00', inviteCode: 'ABC123XY', inviteCount: 12, linkCount: 8, codeCount: 4, myInviter: '无（作为邀请人）' },
+                2: { name: '王五', id: '10003', regTime: '2023-07-20 14:20:00', inviteCode: 'XYZ789AB', inviteCount: 5, linkCount: 3, codeCount: 2, myInviter: '张三（ID: 10001）' },
+                3: { name: '钱七', id: '10005', regTime: '2023-08-10 09:15:00', inviteCode: 'QWE456CD', inviteCount: 8, linkCount: 6, codeCount: 2, myInviter: '无（作为邀请人）' },
+                4: { name: '周九', id: '10007', regTime: '2023-09-05 16:40:00', inviteCode: 'RTY123EF', inviteCount: 3, linkCount: 2, codeCount: 1, myInviter: '王五（ID: 10003）' },
+                5: { name: '郑一', id: '10009', regTime: '2023-10-18 11:25:00', inviteCode: 'UIO789GH', inviteCount: 6, linkCount: 4, codeCount: 2, myInviter: '无（作为邀请人）' },
+            };
+
+            const user = userData[id] || userData[1];
+
+            document.getElementById('detailUserName').textContent = user.name;
+            document.getElementById('detailUserId').textContent = user.id;
+            document.getElementById('detailRegTime').textContent = user.regTime;
+            document.getElementById('detailInviteCode').innerHTML = user.inviteCode + ' <span class="copy-value" onclick="copyValue(\'' + user.inviteCode + '\')">复制</span>';
+            document.getElementById('detailMyInviter').textContent = user.myInviter;
+            document.getElementById('detailInviteLink').innerHTML = 'https://caiyi.com/register?invite_code=' + user.inviteCode + ' <span class="copy-value" onclick="copyValue(\'https://caiyi.com/register?invite_code=' + user.inviteCode + '\')">复制</span>';
+            document.getElementById('detailInviteCount').textContent = user.inviteCount;
+            document.getElementById('detailLinkCount').textContent = user.linkCount;
+            document.getElementById('detailCodeCount').textContent = user.codeCount;
+            document.getElementById('invitedCount').textContent = user.inviteCount;
+
+            document.getElementById('detailModal').classList.add('active');
+        }
+
+        // 关闭详情弹窗
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.remove('active');
+        }
+
+        // 复制值
+        function copyValue(value) {
+            navigator.clipboard.writeText(value).then(() => {
+                showToast('已复制');
+            });
+        }
+
+        // 加载更多被邀请用户
+        function loadMoreInvited() {
+            showToast('加载更多...');
+        }
+
+        // 导出数据
+        function exportData() {
+            const modal = document.getElementById('exportModal');
+            const progressBar = document.getElementById('exportProgressBar');
+            const statusText = document.getElementById('exportStatus');
+            
+            modal.classList.add('active');
+            progressBar.style.width = '0%';
+            statusText.textContent = '正在导出...';
+
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    statusText.textContent = '导出完成！';
+                    setTimeout(() => {
+                        modal.classList.remove('active');
+                        showToast('导出成功，文件已下载');
+                    }, 500);
+                }
+                progressBar.style.width = progress + '%';
+            }, 200);
+        }
+
+        // Toast提示
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        // 点击背景关闭弹窗
+        document.getElementById('detailModal').addEventListener('click', function(e) {
+            if (e.target === this) closeDetailModal();
+        });
+
+        document.getElementById('exportModal').addEventListener('click', function(e) {
+            if (e.target === this) this.classList.remove('active');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>个人账号详情 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+.page-header{background:linear-gradient(135deg,#2563EB,#1D4ED8);color:white;padding:var(--spacing-lg) var(--spacing-xl);border-radius:var(--radius-lg);margin-bottom:var(--spacing-lg);}
+.page-header h2{color:white;margin-bottom:var(--spacing-xs);}
+.page-header p{opacity:.9;font-size:14px;margin:0;}
+.back-link{display:inline-block;margin-bottom:var(--spacing-sm);color:rgba(255,255,255,.9);font-size:14px;text-decoration:none;}
+.back-link:hover{color:white;text-decoration:underline;}
+.detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--spacing-lg);}
+.detail-item{padding:var(--spacing-md) 0;border-bottom:1px solid var(--border-light);}
+.detail-label{margin-bottom:6px;font-size:13px;color:var(--text-muted);}
+.detail-value{font-size:15px;font-weight:500;color:var(--text-primary);line-height:1.6;}
+.detail-note{margin-top:var(--spacing-lg);padding:var(--spacing-md);border-radius:var(--radius-md);background:var(--klein-light);font-size:13px;color:#1D4ED8;line-height:1.7;}
+.card-actions{display:flex;justify-content:flex-end;gap:var(--spacing-sm);margin-top:var(--spacing-lg);padding-top:var(--spacing-lg);border-top:1px solid var(--border-light);}
+@media(max-width:720px){.detail-grid{grid-template-columns:1fr;}.card-actions{justify-content:stretch;flex-direction:column;}.card-actions .btn{justify-content:center;}}
+</style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right"><div class="top-bar-user"><div class="top-bar-avatar">管</div><span>管理员</span></div></div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon">📡</span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a>
+<a class="sidebar-link" href="reconciliation-list.html"><span class="icon">🧮</span><span>账户对账</span></a>
+<a class="sidebar-link active" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a class="back-link" href="org-type-list.html?tab=account">← 返回账号管理</a>
+<h2>个人账号详情</h2>
+<p>查看个人用户的注册与账号信息</p>
+</div>
+<div class="content-card">
+<div class="content-card-header"><h3 class="content-card-title">基本信息</h3></div>
+<div class="detail-grid">
+<div class="detail-item"><div class="detail-label">姓名</div><div class="detail-value" id="userName">张三</div></div>
+<div class="detail-item"><div class="detail-label">手机号</div><div class="detail-value" id="userPhone">138****5678</div></div>
+<div class="detail-item"><div class="detail-label">身份证号</div><div class="detail-value" id="userIdCard">3301****1990****12</div></div>
+<div class="detail-item"><div class="detail-label">账号状态</div><div class="detail-value"><span class="badge badge-active">已激活</span></div></div>
+<div class="detail-item"><div class="detail-label">注册时间</div><div class="detail-value" id="registerTime">2026-08-08 10:36</div></div>
+<div class="detail-item"><div class="detail-label">注册方式</div><div class="detail-value">公开注册</div></div>
+</div>
+<div class="detail-note">个人用户提交注册信息后自动开通试用，无需进入机构注册审核流程。加入机构后保留个人账号，仅新增机构成员身份。</div>
+<div class="content-card-header" style="margin-top:var(--spacing-xl);"><h3 class="content-card-title">新用户免费体验权益</h3></div>
+<p style="margin:0 0 var(--spacing-sm);font-size:13px;color:var(--text-secondary);">按“平台个人账号 × 智能体”独立累计；次数在用户注册时初始化，用完后不重置。</p>
+<div class="detail-grid" id="freeBenefits"></div>
+<div class="content-card-header" style="margin-top:var(--spacing-xl);"><h3 class="content-card-title">关联机构身份</h3></div>
+<div class="detail-grid" id="orgMemberships"></div>
+<div class="card-actions">
+<a class="btn btn-outline" href="org-type-list.html?tab=account">返回账号管理</a>
+</div>
+</div>
+</main>
+<script>
+const personalAccounts={
+  '1':{name:'张三',phone:'138****5678',idCard:'3301****1990****12',time:'2026-08-08 10:36',freeBenefits:[{agent:'合规监测智能体',total:20,used:4,lastUsed:'2026-08-15 10:20'},{agent:'数据分析智能体',total:20,used:18,lastUsed:'2026-08-15 11:05'}],memberships:[{org:'广州采购科技集团',type:'采购单位',role:'主账号',joinedAt:'2026-08-10'}]},
+  '2':{name:'李四',phone:'139****8765',idCard:'4401****1988****25',time:'2026-08-07 15:22',freeBenefits:[{agent:'文案生成智能体',total:20,used:20,lastUsed:'2026-08-14 16:40'}],memberships:[]},
+  '3':{name:'王五',phone:'137****4321',idCard:'3101****1992****08',time:'2026-08-05 09:48',freeBenefits:[],memberships:[{org:'彩翼科技有限公司',type:'开发者',role:'子账号 · 操作员',joinedAt:'2026-08-09'}]}
+};
+const accountId=new URLSearchParams(window.location.search).get('id')||'1';
+const account=personalAccounts[accountId]||personalAccounts['1'];
+document.getElementById('userName').textContent=account.name;
+document.getElementById('userPhone').textContent=account.phone;
+document.getElementById('userIdCard').textContent=account.idCard;
+document.getElementById('registerTime').textContent=account.time;
+const freeBenefits=account.freeBenefits.length
+  ? account.freeBenefits.map(item=>{
+      const left=item.total-item.used;
+      const statusColor=left>2?'#059669':left>0?'#D97706':'#64748B';
+      const statusText=left>0?`剩余 ${left} 次`:'已用完';
+      return `<div class="detail-item"><div class="detail-label">${item.agent}</div><div class="detail-value">初始 ${item.total} 次 · 已使用 ${item.used} 次 · <span style="color:${statusColor};font-weight:600;">${statusText}</span> <span style="margin-left:8px;font-size:13px;font-weight:400;color:var(--text-muted);">最近使用 ${item.lastUsed}</span></div></div>`;
+    }).join('')
+  : '<div class="detail-item full-width"><div class="detail-value" style="color:var(--text-secondary);font-weight:400;">暂无免费体验记录</div></div>';
+document.getElementById('freeBenefits').innerHTML=freeBenefits;
+const memberships=account.memberships.length
+  ? account.memberships.map(item=>`<div class="detail-item"><div class="detail-label">${item.org} · ${item.type}</div><div class="detail-value">${item.role} <span style="margin-left:8px;font-size:13px;font-weight:400;color:var(--text-muted);">加入时间 ${item.joinedAt}</span></div></div>`).join('')
+  : '<div class="detail-item full-width"><div class="detail-value" style="color:var(--text-secondary);font-weight:400;">暂未关联机构身份</div></div>';
+document.getElementById('orgMemberships').innerHTML=memberships;
+</script>
+</body>
+</html>

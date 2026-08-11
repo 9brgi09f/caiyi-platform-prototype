@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>上传发票 - 渠道端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .form-section {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+        }
+        .form-section-title {
+            font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md); border-bottom: 1px solid var(--border-light);
+        }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg); }
+        .form-item { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+        .form-item.full-width { grid-column: 1 / -1; }
+        .form-label { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+        .form-hint { font-size: 12px; color: var(--text-muted); }
+
+        /* 发票上传 */
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-xl);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .upload-area:hover {
+            border-color: var(--klein);
+            background: var(--klein-light);
+        }
+        .upload-icon { font-size: 48px; color: var(--text-muted); margin-bottom: var(--spacing-md); }
+        .upload-text { color: var(--text-secondary); margin-bottom: var(--spacing-sm); }
+        .upload-hint { font-size: 12px; color: var(--text-muted); }
+
+        /* 流程提示 */
+        .process-tips {
+            background: var(--klein-light); border-radius: var(--radius-md);
+            padding: var(--spacing-md); margin-bottom: var(--spacing-lg);
+        }
+        .process-tips h4 { color: var(--klein); margin-bottom: var(--spacing-sm); font-size: 14px; }
+        .process-tips ul { margin: 0; padding-left: var(--spacing-lg); color: var(--text-secondary); font-size: 13px; }
+        .process-tips li { margin-bottom: var(--spacing-xs); }
+    </style>
+</head>
+<body>
+<header class="top-bar channel">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">渠</div>
+<span>智采科技</span>
+</div>
+</div>
+</header>
+<aside class="sidebar channel">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon"></span><span>概览</span></a>
+<a class="sidebar-link" href="invite-code.html"><span class="icon"></span><span>我的邀请码</span></a>
+<a class="sidebar-link" href="customer-list.html"><span class="icon"></span><span>客户管理</span></a>
+<a class="sidebar-link" href="referral-list.html"><span class="icon"></span><span>推荐确认单</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon"></span><span>分成结算</span></a>
+<a class="sidebar-link active" href="withdrawal-list.html"><span class="icon"></span><span>提现管理</span></a>
+<a class="sidebar-link" href="bank-card.html"><span class="icon"></span><span>收款账户</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon"></span><span>发票管理</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a href="withdrawal-list.html" style="color: white; margin-bottom: var(--spacing-sm); display: inline-block;">← 返回提现管理</a>
+<h2>上传发票</h2>
+<p>为提现单 CWD20260715001 上传等额增值税专用发票</p>
+</div>
+<!-- 流程提示 -->
+<div class="process-tips">
+<h4>发票上传说明</h4>
+<ul>
+<li>本次为提现单 <strong>CWD20260715001</strong> 开具发票，应开金额 <strong>¥2,520.00</strong>（＝提现金额）；该提现单<strong>金蝶财务事前审批已通过</strong>（转「待开票」），现可上传发票</li>
+<li>须开具<strong>增值税专用发票</strong>，抬头：<strong>广州市政府采购中心</strong>；价税合计须与提现金额一致</li>
+<li>开票税率在发起提现时已选定（1%/3% 税率的分成款扣减已在申请时按结算金额 5.29%/3.11% 扣除），发票金额须与提现金额完全一致</li>
+<li>该结算单曾发起提现（CWD20260605003）后撤回，原发票已作废（红冲），本次须重新开具发票</li>
+<li>上传发票后提现单转“待审核”，进入平台审核（发票与信息复核），审核通过后转“待付款”，由财务在金蝶发起付款；支持 JPG、PNG、PDF 格式，大小不超过 10MB</li>
+</ul>
+</div>
+<div class="form-section" style="border-left: 4px solid var(--klein);">
+<h3 class="form-section-title">关联提现单</h3>
+<div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: var(--spacing-lg);">
+<div><div style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">提现单号</div><div style="font-size:16px;font-weight:600;"><a href="withdrawal-view.html?id=CWD20260715001" style="color:var(--klein);">CWD20260715001</a></div></div>
+<div><div style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">关联结算单</div><div style="font-size:16px;font-weight:600;">CST20260501</div></div>
+<div><div style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">应开发票金额</div><div style="font-size:16px;font-weight:700;color:var(--klein);">¥2,520.00</div></div>
+</div>
+</div>
+<form class="form-section">
+<h3 class="form-section-title">发票信息</h3>
+<div class="form-grid">
+<div class="form-item">
+<label class="form-label">发票类型</label>
+<select class="input" id="invoiceType" onchange="calcDeduction()">
+<option value="special">增值税专用发票</option>
+<option value="normal">增值税普通发票</option>
+</select>
+</div>
+<div class="form-item">
+<label class="form-label">发票抬头</label>
+<input class="input" readonly="" type="text" value="广州市政府采购中心"/>
+</div>
+<div class="form-item">
+<label class="form-label">发票代码</label>
+<input class="input" placeholder="请输入发票代码" type="text"/>
+</div>
+<div class="form-item">
+<label class="form-label">发票号码</label>
+<input class="input" placeholder="请输入发票号码" type="text" value="25612000000155667788"/>
+</div>
+<div class="form-item">
+<label class="form-label">开票日期</label>
+<input class="input" style="width: 180px;" type="date" value="2026-07-16"/>
+</div>
+<div class="form-item">
+<label class="form-label">税率</label>
+<select class="input" id="taxRate" onchange="calcDeduction()" style="width: 150px;">
+<option value="0.06">6%</option>
+<option value="0.03">3%</option>
+<option value="0.01">1%</option>
+</select>
+<span class="form-hint" id="taxRateHint" style="display:none;">增值税普通发票无进项抵扣，按 6% 全额扣减</span>
+</div>
+<div class="form-item">
+<label class="form-label">金额（不含税）</label>
+<input class="input" placeholder="请输入不含税金额" style="width: 180px;" type="number"/>
+</div>
+<div class="form-item">
+<label class="form-label">税额</label>
+<input class="input" placeholder="请输入税额" style="width: 150px;" type="number"/>
+</div>
+<div class="form-item">
+<label class="form-label">价税合计</label>
+<input class="input" id="totalAmount" readonly="" style="width: 180px;" type="number" value="2520.00"/>
+<span class="form-hint">＝提现单 CWD20260715001 金额 ¥2,520.00（只读）</span>
+</div>
+<div class="form-item full-width">
+<label class="form-label">备注（选填）</label>
+<textarea class="input" placeholder="如有补充说明请在此填写..." rows="2"></textarea>
+</div>
+</div>
+</form>
+<div class="form-section" style="border-left: 4px solid var(--klein);">
+<h3 class="form-section-title">分成结算影响</h3>
+<div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); gap: var(--spacing-lg); margin-bottom: var(--spacing-md);">
+<div><div style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">提现金额（价税合计）</div><div id="showTotal" style="font-size:18px;font-weight:600;">¥2,520.00</div></div>
+<div><div style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">分成款扣减</div><div id="showDeduction" style="font-size:18px;font-weight:600;color:var(--text-muted);">¥0.00</div></div>
+<div><div style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">实收金额</div><div id="showNet" style="font-size:18px;font-weight:700;">¥2,520.00</div></div>
+</div>
+<div class="process-tips" style="background:var(--klein-light);margin-bottom:0;">
+<ul style="margin:0;padding-left:var(--spacing-lg);font-size:13px;color:var(--text-secondary);">
+<li>增值税专用发票 <strong>6%</strong>：不扣减分成款；<strong>1% / 3%</strong> 税率专票分别按<strong>结算金额的 5.29% / 3.11%</strong> 扣减分成款（申请提现时已扣除）</li>
+<li>提现金额 = 结算金额 − 分成款扣减，发票金额须与提现金额完全一致；最终以财务/税务实际执行为准</li>
+</ul>
+</div>
+</div>
+<form class="form-section">
+<h3 class="form-section-title">上传发票文件 <span style="color: red;">*</span></h3>
+<div class="form-item">
+<div class="upload-area" onclick="document.getElementById('invoiceFile').click()">
+<div class="upload-icon" style="color:var(--klein);display:flex;justify-content:center;"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+<div class="upload-text">点击或拖拽文件到此处上传</div>
+<div class="upload-hint">支持 JPG、PNG、PDF 格式，大小不超过 10MB</div>
+<input accept=".jpg,.jpeg,.png,.pdf" id="invoiceFile" style="display: none;" type="file"/>
+</div>
+</div>
+</form>
+<div style="display: flex; gap: var(--spacing-md); justify-content: center;">
+<a class="btn btn-outline" href="withdrawal-list.html">取消</a>
+<a class="btn btn-primary" href="withdrawal-list.html?uploaded=CWD20260715001">提交发票</a>
+</div>
+</main>
+<script>
+function fmt(n){ return '¥' + Number(n).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function calcDeduction(){
+  var total = parseFloat(document.getElementById('totalAmount').value) || 0;
+  var type = document.getElementById('invoiceType').value;
+  var taxSel = document.getElementById('taxRate');
+  var rate = parseFloat(taxSel.value) || 0;
+  var isNormal = (type === 'normal');
+  // 普通发票无进项抵扣，有效税率为 0；税率选择置灰
+  taxSel.disabled = isNormal;
+  document.getElementById('taxRateHint').style.display = isNormal ? 'block' : 'none';
+  var effRate = isNormal ? 0 : rate;
+  var deduction = total * (0.06 - effRate);
+  if (deduction < 0) deduction = 0;
+  var net = total - deduction;
+  document.getElementById('showTotal').textContent = fmt(total);
+  var dEl = document.getElementById('showDeduction');
+  dEl.textContent = fmt(deduction);
+  dEl.style.color = deduction > 0 ? 'var(--error-color)' : 'var(--text-muted)';
+  document.getElementById('showNet').textContent = fmt(net);
+}
+calcDeduction();
+</script>
+</body>
+</html>

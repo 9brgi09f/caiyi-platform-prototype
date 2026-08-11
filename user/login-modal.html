@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>登录弹窗演示 · 彩翼平台</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+*{box-sizing:border-box;}
+body{margin:0;min-height:100vh;background:#F8FAFC;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;color:#1e293b;display:flex;align-items:center;justify-content:center;}
+.demo-trigger{height:46px;padding:0 28px;background:#2563EB;color:white;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;}
+.demo-trigger:hover{background:#1D4ED8;}
+
+/* 弹窗遮罩 */
+.modal-mask{display:none;position:fixed;inset:0;background:rgba(15,23,42,0.5);z-index:1000;align-items:center;justify-content:center;animation:fadeIn 0.2s;}
+.modal-mask.show{display:flex;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+/* 弹窗主体 */
+.modal{background:white;border-radius:16px;width:90%;max-width:460px;padding:36px 40px 32px;box-shadow:0 12px 48px rgba(0,0,0,0.15);position:relative;animation:slideUp 0.25s;}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border:0;background:none;color:#94a3b8;font-size:20px;cursor:pointer;border-radius:6px;display:flex;align-items:center;justify-content:center;}
+.modal-close:hover{background:#F1F5F9;color:#64748b;}
+
+/* 标题 */
+.modal-title{font-size:22px;font-weight:700;color:#1e293b;text-align:center;margin:0 0 6px;}
+.modal-subtitle{font-size:13px;color:#64748b;text-align:center;margin:0 0 28px;}
+
+/* 表单视图 */
+.view{display:none;}
+.view.active{display:block;}
+
+/* 表单组 */
+.fg{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.fg label{font-size:13px;font-weight:600;color:#374151;}
+.fg input{height:44px;border:1px solid #dfe4ee;border-radius:8px;padding:0 14px;font-size:14px;outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+.fg input:focus{border-color:#2563EB;box-shadow:0 0 0 3px #EFF4FF;}
+.fg input.field-error{border-color:#ef4444;box-shadow:0 0 0 3px #FEE2E2;}
+.input-group{display:flex;gap:8px;}
+.input-group input{flex:1;min-width:0;}
+.code-btn{min-width:100px;padding:0 12px;background:#EFF4FF;border:1px solid #BFDBFE;color:#2563EB;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;}
+.code-btn:hover{background:#DBEAFE;}
+.code-btn:disabled{background:#F1F5F9;color:#94a3b8;border-color:#dfe4ee;cursor:not-allowed;}
+
+/* 主按钮 */
+.primary-btn{width:100%;height:46px;background:#2563EB;border:0;border-radius:8px;color:white;font-size:15px;font-weight:600;cursor:pointer;margin:4px 0 16px;}
+.primary-btn:hover{background:#1D4ED8;}
+.primary-btn:disabled{background:#cbd5e1;cursor:not-allowed;}
+
+/* 文字链接行 */
+.text-links{display:flex;align-items:center;justify-content:space-between;font-size:13px;margin-bottom:18px;}
+.text-links a,.text-links button{color:#2563EB;text-decoration:none;background:none;border:0;padding:0;font-size:13px;cursor:pointer;font-weight:500;}
+.text-links a:hover,.text-links button:hover{text-decoration:underline;}
+
+/* 辅助入口 */
+.helper{text-align:center;font-size:12px;color:#64748b;line-height:1.7;margin-bottom:18px;}
+.helper a,.helper button{color:#2563EB;text-decoration:none;background:none;border:0;padding:0;font-size:12px;cursor:pointer;font-weight:600;}
+.helper a:hover,.helper button:hover{text-decoration:underline;}
+
+/* 协议 */
+.agreement{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;background:#F8FAFC;border:1px solid #e2e8f0;border-radius:8px;}
+.agreement input[type=checkbox]{width:16px;height:16px;margin-top:1px;cursor:pointer;}
+.agreement label{font-size:12px;color:#475569;line-height:1.6;cursor:pointer;}
+.agreement a{color:#2563EB;text-decoration:none;font-weight:500;}
+.agreement a:hover{text-decoration:underline;}
+
+/* 提示 */
+.note-box{background:#EFF4FF;border:1px solid #BFDBFE;border-radius:8px;padding:10px 14px;font-size:12px;color:#1e40af;line-height:1.6;margin-bottom:16px;}
+
+/* Toast */
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-12px);background:#1e293b;color:white;font-size:13px;padding:10px 18px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,0.2);opacity:0;pointer-events:none;transition:all 0.25s;z-index:1100;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast-icon{color:#FBBF24;}
+</style>
+</head>
+<body>
+<button class="demo-trigger" onclick="openModal()">点击演示登录弹窗</button>
+
+<!-- 登录弹窗 -->
+<div class="modal-mask" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()" aria-label="关闭">×</button>
+    <h2 class="modal-title">欢迎登录 · 彩翼平台</h2>
+    <p class="modal-subtitle">彩翼公共采购智能体协同管理平台</p>
+
+    <!-- 密码登录视图（默认） -->
+    <div class="view active" id="passwordView">
+      <div class="fg">
+        <label for="passwordPhone">手机号</label>
+        <input id="passwordPhone" maxlength="11" placeholder="请输入注册手机号" type="tel"/>
+      </div>
+      <div class="fg">
+        <label for="loginPassword">登录密码</label>
+        <input id="loginPassword" placeholder="请输入登录密码" type="password"/>
+      </div>
+      <button class="primary-btn" onclick="loginByPassword()">登录</button>
+      <div class="text-links">
+        <button onclick="switchView('code')">短信验证码登录</button>
+        <a href="#" onclick="showToast('密码找回功能将在下一版原型补充');return false;">忘记密码？</a>
+      </div>
+      <p class="helper">尚未注册？<a href="register-select.html">创建彩翼账号</a> | <button onclick="switchView('status')">查看审核状态</button></p>
+      <div class="agreement">
+        <input type="checkbox" id="agreementCheck" onchange="toggleLoginBtn()"/>
+        <label for="agreementCheck">阅读并接受<a href="#" onclick="showToast('协议内容将在下一版原型补充');return false;">《用户协议》</a>与<a href="#" onclick="showToast('隐私政策将在下一版原型补充');return false;">《隐私政策》</a></label>
+      </div>
+    </div>
+
+    <!-- 短信验证码登录视图 -->
+    <div class="view" id="codeView">
+      <div class="fg">
+        <label for="codePhone">手机号</label>
+        <input id="codePhone" maxlength="11" placeholder="请输入注册手机号" type="tel"/>
+      </div>
+      <div class="fg">
+        <label for="loginCode">短信验证码</label>
+        <div class="input-group">
+          <input id="loginCode" maxlength="6" placeholder="请输入6位验证码" type="text"/>
+          <button class="code-btn" id="loginCodeBtn" onclick="sendCode('login')">获取验证码</button>
+        </div>
+        <span style="font-size:11px;color:#94a3b8;">验证码有效期为 5 分钟</span>
+      </div>
+      <button class="primary-btn" onclick="loginByCode()">登录</button>
+      <div class="text-links">
+        <button onclick="switchView('password')">密码登录</button>
+      </div>
+      <p class="helper">尚未注册？<a href="register-select.html">创建彩翼账号</a> | <button onclick="switchView('status')">查看审核状态</button></p>
+      <div class="agreement">
+        <input type="checkbox" id="agreementCheckCode" onchange="toggleLoginBtn()"/>
+        <label for="agreementCheckCode">阅读并接受<a href="#" onclick="showToast('协议内容将在下一版原型补充');return false;">《用户协议》</a>与<a href="#" onclick="showToast('隐私政策将在下一版原型补充');return false;">《隐私政策》</a></label>
+      </div>
+    </div>
+
+    <!-- 审核状态查询视图 -->
+    <div class="view" id="statusView">
+      <div class="note-box">使用注册手机号查询，无需账户已激活；完成短信验证后即可查看当前审核进度。</div>
+      <div class="fg">
+        <label for="statusPhone">注册手机号</label>
+        <input id="statusPhone" maxlength="11" placeholder="请输入注册手机号" type="tel"/>
+      </div>
+      <div class="fg">
+        <label for="statusCode">短信验证码</label>
+        <div class="input-group">
+          <input id="statusCode" maxlength="6" placeholder="请输入6位验证码" type="text"/>
+          <button class="code-btn" id="statusCodeBtn" onclick="sendCode('status')">获取验证码</button>
+        </div>
+      </div>
+      <button class="primary-btn" onclick="queryStatus()">查看审核进度</button>
+      <div class="text-links">
+        <button onclick="switchView('password')">返回登录</button>
+      </div>
+      <p class="helper" style="font-size:11px;margin-top:8px;">审核结果也会通过短信通知，请留意注册手机号。</p>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span class="toast-icon">⚠</span><span id="toastMsg"></span></div>
+
+<script>
+function openModal(){
+  document.getElementById('loginModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(){
+  document.getElementById('loginModal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+function switchView(name){
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  if(name === 'password') document.getElementById('passwordView').classList.add('active');
+  if(name === 'code') document.getElementById('codeView').classList.add('active');
+  if(name === 'status') document.getElementById('statusView').classList.add('active');
+}
+function isPhoneValid(input){
+  return input && /^1\d{10}$/.test(input.value.trim());
+}
+function sendCode(scene){
+  const config = scene === 'login' ? {phone:'codePhone',button:'loginCodeBtn'} : {phone:'statusPhone',button:'statusCodeBtn'};
+  const phone = document.getElementById(config.phone);
+  if(!isPhoneValid(phone)){showToast('请先填写11位注册手机号',phone);return;}
+  const btn = document.getElementById(config.button);
+  let sec = 60;
+  btn.disabled = true;
+  btn.textContent = sec+'s后重发';
+  showToast('验证码已发送，请注意查收');
+  const timer = setInterval(function(){
+    sec--;
+    btn.textContent = sec+'s后重发';
+    if(sec<=0){clearInterval(timer);btn.disabled=false;btn.textContent='获取验证码';}
+  },1000);
+}
+function loginByPassword(){
+  const phone = document.getElementById('passwordPhone');
+  const password = document.getElementById('loginPassword');
+  const check = document.getElementById('agreementCheck');
+  if(!isPhoneValid(phone)){showToast('请填写11位手机号',phone);return;}
+  if(!password.value.trim()){showToast('请填写登录密码',password);return;}
+  if(!check.checked){showToast('请先阅读并接受用户协议与隐私政策');return;}
+  showToast('登录成功，正在进入工作台…');
+  setTimeout(function(){location.href='index.html?entry=last-identity';},450);
+}
+function loginByCode(){
+  const phone = document.getElementById('codePhone');
+  const code = document.getElementById('loginCode');
+  const check = document.getElementById('agreementCheckCode');
+  if(!isPhoneValid(phone)){showToast('请填写11位手机号',phone);return;}
+  if(!/^\d{6}$/.test(code.value.trim())){showToast('请填写6位短信验证码',code);return;}
+  if(!check.checked){showToast('请先阅读并接受用户协议与隐私政策');return;}
+  showToast('登录成功，正在进入工作台…');
+  setTimeout(function(){location.href='index.html?entry=last-identity';},450);
+}
+function queryStatus(){
+  const phone = document.getElementById('statusPhone');
+  const code = document.getElementById('statusCode');
+  if(!isPhoneValid(phone)){showToast('请填写11位注册手机号',phone);return;}
+  if(!/^\d{6}$/.test(code.value.trim())){showToast('请填写6位短信验证码',code);return;}
+  location.href='register-result.html?status=pending';
+}
+function toggleLoginBtn(){
+  const pwdCheck = document.getElementById('agreementCheck');
+  const codeCheck = document.getElementById('agreementCheckCode');
+  document.querySelectorAll('.primary-btn').forEach(btn => {
+    const activeView = document.querySelector('.view.active');
+    if(activeView && activeView.id === 'passwordView') btn.disabled = !pwdCheck.checked;
+    if(activeView && activeView.id === 'codeView') btn.disabled = !codeCheck.checked;
+  });
+}
+let toastTimer = null;
+function showToast(msg,inputEl){
+  const toast = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  toast.classList.add('show');
+  if(inputEl){
+    inputEl.classList.add('field-error');
+    inputEl.focus();
+    inputEl.addEventListener('input',function clearError(){inputEl.classList.remove('field-error');inputEl.removeEventListener('input',clearError);});
+  }
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){toast.classList.remove('show');},2400);
+}
+document.getElementById('loginModal').addEventListener('click',function(e){
+  if(e.target === this) closeModal();
+});
+document.addEventListener('DOMContentLoaded', function(){
+  toggleLoginBtn();
+});
+</script>
+</body>
+</html>

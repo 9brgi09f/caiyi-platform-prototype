@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>定价审核 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, var(--admin-color), #fbbf24);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; }
+        .stat-value { font-size: 24px; font-weight: 700; color: var(--admin-color); }
+        .stat-label { font-size: 13px; color: var(--text-muted); margin-top: var(--spacing-xs); }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><span>🏠</span><span>订阅智能体</span></a>
+<span style="color: var(--border-color);">|</span>
+<span style="color: var(--admin-color); font-weight: 600;">平台管理端</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">⚙️</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="transactions-list.html"><span class="icon">💳</span><span>交易流水</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+<!-- 数据统计菜单暂隐藏 <a class="sidebar-link" href="statistics.html"><span class="icon">📉</span><span>数据统计</span></a> -->
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<h2>定价审核</h2>
+<p>审核开发者的智能体定价申请</p>
+</div>
+<div class="stats-grid">
+<div class="stat-card">
+<div class="stat-value">3</div>
+<div class="stat-label">待审核</div>
+</div>
+<div class="stat-card">
+<div class="stat-value">12</div>
+<div class="stat-label">本月已审核</div>
+</div>
+<div class="stat-card">
+<div class="stat-value">9</div>
+<div class="stat-label">通过</div>
+</div>
+<div class="stat-card">
+<div class="stat-value">3</div>
+<div class="stat-label">驳回</div>
+</div>
+</div>
+<div class="content-card">
+<div class="content-card-header">
+<h3 class="content-card-title">待审核申请</h3>
+<div style="display: flex; gap: var(--spacing-sm);">
+<select class="select" style="width: 120px;">
+<option>全部状态</option>
+<option>待审核</option>
+<option>已通过</option>
+<option>已驳回</option>
+</select>
+</div>
+</div>
+<div class="table-wrapper">
+<table class="table">
+<thead>
+<tr>
+<th>申请编号</th>
+<th>开发者</th>
+<th>智能体</th>
+<th>变更类型</th>
+<th>原价格</th>
+<th>新价格</th>
+<th>申请时间</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PA20260514001</td>
+<td>张开发者</td>
+<td>合规监测智能体</td>
+<td><span class="badge badge-warning">价格调整</span></td>
+<td>50 彩豆/次</td>
+<td>60 彩豆/次</td>
+<td>2026-05-14 10:30</td>
+<td>
+<a class="btn btn-sm btn-primary" href="pricing-audit-view.html">审核</a>
+</td>
+</tr>
+<tr>
+<td>PA20260513005</td>
+<td>李开发者</td>
+<td>数据分析智能体</td>
+<td><span class="badge badge-info">新增定价</span></td>
+<td>-</td>
+<td>300 彩豆/次</td>
+<td>2026-05-13 16:45</td>
+<td>
+<a class="btn btn-sm btn-primary" href="pricing-audit-view.html">审核</a>
+</td>
+</tr>
+<tr>
+<td>PA20260512003</td>
+<td>王开发者</td>
+<td>图片处理智能体</td>
+<td><span class="badge badge-warning">阶梯调整</span></td>
+<td>100 彩豆/次</td>
+<td>90 彩豆/次</td>
+<td>2026-05-12 09:15</td>
+<td>
+<a class="btn btn-sm btn-primary" href="pricing-audit-view.html">审核</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="content-card">
+<div class="content-card-header">
+<h3 class="content-card-title">审核历史</h3>
+</div>
+<div class="table-wrapper">
+<table class="table">
+<thead>
+<tr>
+<th>申请编号</th>
+<th>开发者</th>
+<th>智能体</th>
+<th>变更类型</th>
+<th>价格</th>
+<th>审核时间</th>
+<th>审核结果</th>
+<th>审核人</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PA20260511002</td>
+<td>张开发者</td>
+<td>文案生成智能体</td>
+<td><span class="badge badge-warning">价格调整</span></td>
+<td>80 彩豆/次</td>
+<td>2026-05-11 14:20</td>
+<td><span class="badge badge-success">通过</span></td>
+<td>管理员</td>
+</tr>
+<tr>
+<td>PA20260510001</td>
+<td>赵开发者</td>
+<td>智能客服助手</td>
+<td><span class="badge badge-info">新增定价</span></td>
+<td>200 彩豆/次</td>
+<td>2026-05-10 11:30</td>
+<td><span class="badge badge-danger">驳回</span></td>
+<td>管理员</td>
+</tr>
+<tr>
+<td>PA20260509004</td>
+<td>孙开发者</td>
+<td>营销文案生成器</td>
+<td><span class="badge badge-info">订阅定价</span></td>
+<td>¥99/月</td>
+<td>2026-05-09 16:00</td>
+<td><span class="badge badge-success">通过</span></td>
+<td>管理员</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+</body>
+</html>

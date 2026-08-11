@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>通知 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .notification-card {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-md); display: flex; gap: var(--spacing-md);
+            cursor: pointer; transition: all 0.2s;
+        }
+        .notification-card:hover { border-color: var(--primary-color); box-shadow: var(--shadow-md); }
+        .notification-card.unread { border-left: 3px solid var(--primary-color); }
+        .notification-icon {
+            width: 40px; height: 40px; border-radius: var(--radius-md);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; flex-shrink: 0;
+        }
+        .icon-info { background: var(--primary-light); color: var(--primary-color); }
+        .icon-success { background: var(--success-light); color: var(--success-color); }
+        .icon-warning { background: var(--warning-light); color: var(--warning-color); }
+        .icon-danger { background: var(--danger-light); color: var(--danger-color); }
+        .notification-content { flex: 1; }
+        .notification-title { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+        .notification-desc { font-size: 13px; color: var(--text-secondary); margin-bottom: 4px; }
+        .notification-time { font-size: 12px; color: var(--text-muted); }
+        .notification-tag { margin-left: auto; flex-shrink: 0; }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">管</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon"></span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+<div>
+<h2>通知</h2>
+<p>查看系统通知和消息</p>
+</div>
+<button class="btn btn-primary btn-sm">全部已读</button>
+</div>
+<div class="tab-nav">
+<button class="tab-btn active" onclick="notifFilter('all', this)" type="button">全部 (8)</button>
+<button class="tab-btn" onclick="notifFilter('unread', this)" type="button">未读 (7)</button>
+</div>
+<div class="notification-card unread">
+<div class="notification-icon icon-warning"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+<div class="notification-content">
+<div class="notification-title">渠道商入驻审核申请</div>
+<div class="notification-desc">"华南数智科技有限公司"提交渠道商入驻申请，合作模式：客户推荐，请核验资质材料后审核建档。</div>
+<div class="notification-time">2026-07-06 10:30</div>
+</div>
+<div class="notification-tag">
+<a class="btn btn-sm btn-primary" href="#">去审核</a>
+</div>
+</div>
+<div class="notification-card unread">
+<div class="notification-icon icon-warning"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
+<div class="notification-content">
+<div class="notification-title">推荐关系确认待审核</div>
+<div class="notification-desc">渠道商"智采科技"提交推荐关系确认单（RT20260705），关联客户及确认材料已上传，请核验后审核，通过后该客户消费计入分成基数。</div>
+<div class="notification-time">2026-07-05 16:00</div>
+</div>
+<div class="notification-tag">
+<a class="btn btn-sm btn-primary" href="#">去审核</a>
+</div>
+</div>
+<div class="notification-card unread">
+<div class="notification-icon icon-warning"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+<div class="notification-content">
+<div class="notification-title">结算单待确认</div>
+<div class="notification-desc">AI工作室 2026年5月结算单（ST20260502）已生成，应付 ¥2,023.00，请核对并确认后推送开发者。</div>
+<div class="notification-time">2026-06-01 09:00</div>
+</div>
+<div class="notification-tag">
+<a class="btn btn-sm btn-primary" href="settlement-list.html">去确认</a>
+</div>
+</div>
+<div class="notification-card">
+<div class="notification-icon icon-success">✓</div>
+<div class="notification-content">
+<div class="notification-title">提现付款完成</div>
+<div class="notification-desc">提现单 WD20260515001（张开发者，¥4,302.76）金蝶已回写付款完成，发票已自动核销。</div>
+<div class="notification-time">2026-05-16 14:30</div>
+</div>
+<div class="notification-tag">
+<a class="btn btn-sm btn-outline" href="withdrawal-audit-list.html">查看</a>
+</div>
+</div>
+<div class="notification-card unread">
+<div class="notification-icon icon-warning"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg></div>
+<div class="notification-content">
+<div class="notification-title">变更审核申请</div>
+<div class="notification-desc">张开发者提交"数据分析智能体"变更审核（token 区间调整：单次预估 100k~300k → 120k~350k token），审核期间线上版本继续服务。</div>
+<div class="notification-time">2026-05-16 10:20</div>
+</div>
+<div class="notification-tag">
+<a class="btn btn-sm btn-primary" href="agent-audit-view.html?type=change">去审核</a>
+</div>
+</div>
+<div class="notification-card unread">
+<div class="notification-icon icon-warning"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+<div class="notification-content">
+<div class="notification-title">提现申请待审核</div>
+<div class="notification-desc">张开发者提交提现申请 WD20260515002（¥1,050.00，关联 ST20260201），发票已上传，请审核。</div>
+<div class="notification-time">2026-05-15 09:30</div>
+</div>
+<div class="notification-tag">
+<a class="btn btn-sm btn-primary" href="withdrawal-audit-list.html">去审核</a>
+</div>
+</div>
+<div class="notification-card unread">
+<div class="notification-icon icon-warning"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+<div class="notification-content">
+<div class="notification-title">发票申请待审核</div>
+<div class="notification-desc">李用户（北京科技有限公司）申请充值发票 ¥50.00（预付卡·0税率），请审核。</div>
+<div class="notification-time">2026-05-14 16:00</div>
+</div>
+<div class="notification-tag">
+<a class="btn btn-sm btn-primary" href="invoice-review.html">去审核</a>
+</div>
+</div>
+<div class="notification-card unread">
+<div class="notification-icon icon-warning"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg></div>
+<div class="notification-content">
+<div class="notification-title">智能体上架申请</div>
+<div class="notification-desc">张开发者提交"家具比价智能体"上架申请（申报 token 区间：单次预估约 40k~80k token），请审核。</div>
+<div class="notification-time">2026-05-14 09:30</div>
+</div>
+<div class="notification-tag">
+<a class="btn btn-sm btn-primary" href="agent-audit-view.html">去审核</a>
+</div>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>财务端 - 彩翼智能体平台原型</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; }
+        .stat-value { font-size: 28px; font-weight: 700; color: var(--finance-color); }
+        .stat-label { font-size: 13px; color: var(--text-muted); margin-top: var(--spacing-xs); }
+    </style>
+</head>
+<body>
+<header class="top-bar finance">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">财</div>
+<span>财务人员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar finance">
+<div class="sidebar-section">
+<a class="sidebar-link active" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+<a class="sidebar-link" href="withdrawal-pay-list.html"><span class="icon">💸</span><span>提现打款</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">🧾</span><span>发票管理</span></a>
+<a class="sidebar-link" href="reconciliation-list.html"><span class="icon">📋</span><span>对账报表</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<h2>财务概览</h2>
+<p>查看收支汇总和待办任务</p>
+</div>
+<div class="stats-grid">
+<div class="stat-card">
+<div class="stat-value">¥356,800</div>
+<div class="stat-label">本月收入</div>
+</div>
+<div class="stat-card">
+<div class="stat-value">¥7,380.50</div>
+<div class="stat-label">待付款</div>
+</div>
+<div class="stat-card">
+<div class="stat-value">1</div>
+<div class="stat-label">待确认结算</div>
+</div>
+<div class="stat-card">
+<div class="stat-value">¥128,560</div>
+<div class="stat-label">累计已打款</div>
+</div>
+</div>
+<div class="content-card">
+<div class="content-card-header">
+<h3 class="content-card-title">快捷操作</h3>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--spacing-md);">
+<a class="btn btn-outline" href="recharge-records.html" style="padding: var(--spacing-lg); text-align: center; text-decoration: none;">充值记录</a>
+<a class="btn btn-outline" href="consumption-records.html" style="padding: var(--spacing-lg); text-align: center; text-decoration: none;">消费记录</a>
+<a class="btn btn-outline" href="settlement-list.html" style="padding: var(--spacing-lg); text-align: center; text-decoration: none;">结算管理</a>
+<a class="btn btn-outline" href="withdrawal-pay-list.html" style="padding: var(--spacing-lg); text-align: center; text-decoration: none;">提现打款</a>
+<a class="btn btn-outline" href="invoice-list.html" style="padding: var(--spacing-lg); text-align: center; text-decoration: none;">发票管理</a>
+<a class="btn btn-outline" href="reconciliation-list.html" style="padding: var(--spacing-lg); text-align: center; text-decoration: none;">对账报表</a>
+</div>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>结算单详情 - 开发者端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-lg); margin-bottom: var(--spacing-lg); }
+        .info-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); }
+        .info-label { font-size: 13px; color: var(--text-muted); margin-bottom: var(--spacing-xs); }
+        .info-value { font-size: 24px; font-weight: 700; }
+        .amount-card { text-align: center; border-color: var(--developer-color); }
+        .amount-card .info-value { color: var(--developer-color); }
+        /* 打印/另存为PDF：只保留结算单正文 */
+        @media print {
+            .top-bar, .sidebar, .no-print, .modal-overlay { display: none !important; }
+            .main-content { margin: 0 !important; padding: 0 !important; }
+            body { background: #fff !important; }
+            .page-header { background: none !important; color: #000 !important; padding: 0 0 12px !important; box-shadow: none !important; }
+            .page-header h2 { color: #000 !important; }
+            .page-header p { color: #333 !important; opacity: 1 !important; }
+            .page-header .back-link, .page-header .badge { display: none !important; }
+            .info-card, .content-card { box-shadow: none !important; break-inside: avoid; }
+        }
+    </style>
+
+<style id="identity-switcher-css">
+.id-switcher{position:relative;display:inline-flex;align-items:center;}
+.id-trigger{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 6px;border-radius:8px;cursor:pointer;transition:background 0.15s;user-select:none;}
+.id-trigger:hover{background:rgba(0,0,0,0.05);}
+.id-avatar{width:32px;height:32px;border-radius:50%;background:#EFF4FF;color:#2563EB;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.id-info{display:flex;flex-direction:column;align-items:flex-start;line-height:1.3;}
+.id-org{font-size:13px;font-weight:500;color:#1e293b;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.id-type-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;background:#EFF4FF;color:#2563EB;}
+.id-chevron{font-size:10px;color:#94a3b8;margin-left:2px;transition:transform 0.2s;}
+.id-switcher.open .id-chevron{transform:rotate(180deg);}
+.id-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:white;border:1px solid #dfe4ee;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:240px;z-index:999;overflow:hidden;}
+.id-switcher.open .id-menu{display:block;}
+.id-menu-hd{padding:10px 14px 8px;font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:1px;border-bottom:1px solid #ecf0f6;}
+.id-menu-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background 0.15s;text-decoration:none;color:inherit;}
+.id-menu-item:hover{background:#F8FAFC;}
+.id-menu-item.current{background:#F8FAFF;}
+.id-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.id-dot.active{background:#2563EB;}
+.id-dot.idle{background:#dfe4ee;}
+.id-item-body{flex:1;}
+.id-item-org{font-size:13px;font-weight:500;color:#1e293b;}
+.id-item-type{font-size:11px;color:#94a3b8;margin-top:1px;}
+.id-item-tag{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;margin-left:auto;flex-shrink:0;}
+.id-item-tag.current-tag{background:#EFF4FF;color:#2563EB;}
+.id-menu-sep{height:1px;background:#ecf0f6;margin:4px 0;}
+.id-menu-action{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:12px;color:#64748b;cursor:pointer;transition:background 0.15s;text-decoration:none;}
+.id-menu-action:hover{background:#F8FAFC;color:#2563EB;}
+</style>
+</head>
+<body>
+<header class="top-bar developer">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="id-switcher" id="idSwitcher">
+<div class="id-trigger" onclick="toggleIdMenu()">
+<div class="id-avatar">张</div>
+<div class="id-info">
+<span class="id-org">广州某某科技有限公司</span>
+<span class="id-type-badge" style="background:#D1FAE5;color:#059669;">开发者</span>
+</div>
+<span class="id-chevron">▾</span>
+</div>
+<div class="id-menu">
+<div class="id-menu-hd">切换工作台身份</div>
+<div class="id-menu-item current">
+<div class="id-dot active" style="background:#059669;"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">开发者</div>
+</div>
+<span class="id-item-tag current-tag" style="background:#D1FAE5;color:#059669;">当前</span>
+</div>
+<div class="id-menu-item" onclick="location.href='../user/index.html'">
+<div class="id-dot idle"></div>
+<div class="id-item-body">
+<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-type">采购单位</div>
+</div>
+</div>
+<div class="id-menu-sep"></div>
+<a class="id-menu-action" href="../user/register-select.html">＋ 注册新机构类型</a>
+<a class="id-menu-action" href="#" onclick="alert('已退出登录');return false;">退出登录</a>
+</div>
+</div>
+<script>
+function toggleIdMenu(){
+  var el=document.getElementById('idSwitcher');
+  el.classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  var sw=document.getElementById('idSwitcher');
+  if(sw && !sw.contains(e.target)) sw.classList.remove('open');
+});
+</script>
+</div>
+</header>
+<aside class="sidebar developer">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="agent-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="member-list.html"><span class="icon">👥</span><span>成员管理</span></a>
+<a class="sidebar-link" href="revenue-list.html"><span class="icon">📈</span><span>收入看板</span></a>
+<a class="sidebar-link active" href="settlement-list.html"><span class="icon">📄</span><span>结算单</span></a>
+<a class="sidebar-link" href="withdrawal-list.html"><span class="icon">💸</span><span>提现管理</span></a><a class="sidebar-link" href="bank-card.html"><span class="icon">🏦</span><span>收款账户</span></a>
+<a class="sidebar-link" href="dev-invoice-list.html"><span class="icon">🧾</span><span>发票管理</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a class="back-link" href="settlement-list.html" style="color: white; margin-bottom: var(--spacing-sm);">← 返回列表</a>
+<div style="display: flex; justify-content: space-between; align-items: center;">
+<div>
+<h2>结算单详情</h2>
+<p>ST20260601 - 2026年6月结算</p>
+</div>
+<span class="badge badge-warning" style="font-size: 14px; padding: 8px 16px;">● 待我确认</span>
+</div>
+</div>
+<div class="info-grid">
+<div class="info-card amount-card">
+<div class="info-label">应收金额</div>
+<div class="info-value">¥3,584.00</div>
+</div>
+<div class="info-card">
+<div class="info-label">结算周期</div>
+<div class="info-value" style="font-size: 18px;">2026-06-01 ~ 2026-06-30</div>
+</div>
+<div class="info-card">
+<div class="info-label">结算确认时间</div>
+<div class="info-value" style="font-size: 18px;">2026-07-01</div>
+</div>
+<div class="info-card">
+<div class="info-label">确认状态</div>
+<div class="info-value" style="font-size: 16px; color: var(--warning-color);">待开发者确认</div>
+</div>
+</div>
+<div class="content-card">
+<h3 style="font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);">结算明细</h3>
+<div class="table-wrapper">
+<table class="table">
+<thead>
+<tr>
+<th>智能体</th>
+<th>调用次数</th>
+<th>营收总额</th>
+<th>平台分成（20%）</th>
+<th>算力成本费</th>
+<th>应收金额</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>合规监测智能体</td>
+<td>6,040</td>
+<td>¥3,020.00</td>
+<td>−¥604.00</td>
+<td style="color:var(--danger-color);">−¥302.00</td>
+<td class="amount positive">¥2,114.00</td>
+</tr>
+<tr>
+<td>数据分析智能体</td>
+<td>4,200</td>
+<td>¥2,100.00</td>
+<td>−¥420.00</td>
+<td style="color:var(--danger-color);">−¥210.00</td>
+<td class="amount positive">¥1,470.00</td>
+</tr>
+<tr style="font-weight: 600;">
+<td>合计</td>
+<td>10,240</td>
+<td>¥5,120.00</td>
+<td>−¥1,024.00</td>
+<td style="color:var(--danger-color);">−¥512.00</td>
+<td class="amount positive">¥3,584.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p style="margin-top: var(--spacing-md); font-size: 12px; color: var(--text-muted);">说明：结算收入按实付现金基数计算（用户消耗彩豆 × 本金分摊系数），赠送彩豆额度不参与分账。平台分成 = 营收总额 × 20%；算力成本费 = 该智能体本期实际消耗 token × 算力成本单价（见算力计费规则）全额扣除；应收金额 = 营收总额 × 80% − 算力成本费（即 分佣基数 × 分佣比例 − 算力成本）。</p>
+</div>
+<div class="no-print" style="background: #fef3c7; border: 1px solid #fbbf24; border-radius: var(--radius-md); padding: var(--spacing-lg); margin-top: var(--spacing-lg);">
+<strong style="color: #d97706;">⏳ 待您确认</strong>
+<p style="font-size: 13px; color: #92400e; margin-top: 6px;">平台已确认本月结算单，请核对结算明细后确认结算单；确认后应收金额 ¥3,584.00 将计入可提现金额。若 5 个工作日内未确认，系统将自动延后至下月一并结算。</p>
+</div>
+<div class="no-print" style="display: flex; gap: var(--spacing-md); justify-content: center; margin-top: var(--spacing-lg);">
+<button class="btn btn-primary" onclick="confirmSettlement()">确认结算单</button>
+<button class="btn btn-outline" onclick="downloadPDF()">下载结算单PDF</button>
+<button class="btn btn-outline" onclick="window.print()">打印</button>
+</div>
+<!-- 确认结算单弹窗 -->
+<div class="modal-overlay" id="confirmModal" onclick="if(event.target===this)closeConfirm()">
+<div class="modal" style="max-width: 440px;">
+<div class="modal-header">
+<span class="modal-title">确认结算单</span>
+<button class="modal-close" onclick="closeConfirm()">×</button>
+</div>
+<div class="modal-body">
+<div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: var(--spacing-md);">
+<span>结算单号 ST20260601</span>
+<span>结算周期 2026年6月</span>
+</div>
+<div style="background: var(--developer-light); border-radius: var(--radius-md); padding: var(--spacing-lg);">
+<div style="display: flex; justify-content: space-between; padding: 4px 0; font-size: 14px;"><span style="color: var(--text-secondary);">营收总额</span><span>¥5,120.00</span></div>
+<div style="display: flex; justify-content: space-between; padding: 4px 0; font-size: 14px;"><span style="color: var(--text-secondary);">平台分成（营收 × 20%）</span><span>− ¥1,024.00</span></div>
+<div style="display: flex; justify-content: space-between; padding: 4px 0; font-size: 14px;"><span style="color: var(--text-secondary);">算力成本费（全额）</span><span>− ¥512.00</span></div>
+<div style="display: flex; justify-content: space-between; padding-top: 10px; margin-top: 6px; border-top: 1px dashed var(--border-color); font-weight: 700;"><span>应收金额</span><span style="color: var(--developer-color); font-size: 20px;">¥3,584.00</span></div>
+</div>
+<p style="font-size: 13px; color: var(--text-muted); margin-top: var(--spacing-md); line-height: 1.6;">确认后 <strong style="color: var(--developer-color);">¥3,584.00</strong> 将计入可提现金额，<strong>操作不可撤销</strong>。若 5 个工作日内未确认，系统将自动延后至下月一并结算。</p>
+</div>
+<div class="modal-footer">
+<button class="btn btn-outline" onclick="closeConfirm()">取消</button>
+<button class="btn btn-primary" onclick="doConfirm()">确认结算单</button>
+</div>
+</div>
+</div>
+<!-- 确认成功弹窗 -->
+<div class="modal-overlay" id="successModal">
+<div class="modal" style="max-width: 380px;">
+<div class="modal-body" style="text-align: center; padding: var(--spacing-xl);">
+<div style="width: 64px; height: 64px; border-radius: 50%; background: var(--developer-light); color: var(--developer-color); display: flex; align-items: center; justify-content: center; font-size: 36px; margin: 0 auto var(--spacing-md);">✓</div>
+<div style="font-size: 18px; font-weight: 600; margin-bottom: var(--spacing-xs);">已确认结算单</div>
+<div style="font-size: 14px; color: var(--text-muted); line-height: 1.7;">应收金额 ¥3,584.00 已计入可提现金额<br/>即将返回结算单列表…</div>
+</div>
+</div>
+</div>
+<script>
+    function downloadPDF(){
+        var t = document.title;
+        document.title = '结算单_ST20260601';
+        window.print();
+        setTimeout(function(){ document.title = t; }, 800);
+    }
+    function confirmSettlement(){ document.getElementById('confirmModal').classList.add('active'); }
+    function closeConfirm(){ document.getElementById('confirmModal').classList.remove('active'); }
+    function doConfirm(){
+        document.getElementById('confirmModal').classList.remove('active');
+        document.getElementById('successModal').classList.add('active');
+        setTimeout(function(){ window.location.href = 'settlement-list.html'; }, 1500);
+    }
+</script>
+</main>
+</body>
+</html>

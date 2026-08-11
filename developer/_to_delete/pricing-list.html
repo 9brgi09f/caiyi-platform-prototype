@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>定价配置 - 开发者端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, var(--developer-color), #34d399);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .pricing-card {
+            background: var(--card-bg); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+        }
+        .pricing-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md); }
+        .pricing-agent { display: flex; align-items: center; gap: var(--spacing-md); }
+        .pricing-avatar { width: 48px; height: 48px; background: var(--developer-light); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .pricing-info h4 { font-size: 15px; margin-bottom: 2px; }
+        .pricing-info span { font-size: 12px; color: var(--text-muted); }
+        .pricing-status { padding: 4px 12px; border-radius: var(--radius-md); font-size: 12px; font-weight: 500; }
+        .status-approved { background: var(--success-light); color: var(--success-color); }
+        .status-pending { background: var(--admin-light); color: var(--admin-color); }
+        .status-rejected { background: #fee2e2; color: var(--danger-color); }
+        .pricing-table { width: 100%; }
+        .pricing-table th, .pricing-table td { padding: var(--spacing-sm) var(--spacing-md); text-align: left; border-bottom: 1px solid var(--border-light); }
+        .pricing-table th { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+        .pricing-table td { font-size: 14px; }
+    </style>
+</head>
+<body>
+<header class="top-bar developer">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><span>🏠</span><span>订阅智能体</span></a>
+<span style="color: var(--border-color);">|</span>
+<span style="color: var(--developer-color); font-weight: 600;">开发者端</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">👨‍💻</div>
+<span>张开发者</span>
+</div>
+</div>
+</header>
+<aside class="sidebar developer">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="agent-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="revenue-list.html"><span class="icon">📈</span><span>收入看板</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📄</span><span>结算单</span></a>
+<a class="sidebar-link" href="withdrawal-list.html"><span class="icon">💸</span><span>提现管理</span></a><a class="sidebar-link" href="bank-card.html"><span class="icon">🏦</span><span>收款账户</span></a>
+<a class="sidebar-link" href="dev-invoice-list.html"><span class="icon">🧾</span><span>发票管理</span></a>
+<a class="sidebar-link" href="notification-list.html"><span class="icon">🔔</span><span>通知</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<h2>定价配置</h2>
+<p>管理智能体的按次计费定价方案（彩豆/次），支持多定价配置</p>
+</div>
+<div class="pricing-card">
+<div class="pricing-header">
+<div class="pricing-agent">
+<div class="pricing-avatar">🤖</div>
+<div class="pricing-info">
+<h4>合规监测智能体</h4>
+<span>AG20260501001</span>
+</div>
+</div>
+<div style="display: flex; align-items: center; gap: var(--spacing-md);">
+<span class="pricing-status status-approved">● 已通过</span>
+<a class="btn btn-sm btn-primary" href="pricing-edit.html">编辑</a>
+</div>
+</div>
+<table class="pricing-table">
+<thead>
+<tr>
+<th>定价名称</th>
+<th>计费模式</th>
+<th>彩豆/次</th>
+<th>约合金额</th>
+<th>审核状态</th>
+<th>生效时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>合规监测智能体-标准调用</strong> <br/><code style="font-size:11px;">编码: STD_CALL_001</code></td>
+<td><span class="badge badge-info">按次计费</span></td>
+<td>50 彩豆</td>
+<td>≈¥0.50</td>
+<td><span class="pricing-status status-approved">● 已通过</span></td>
+<td>2026-05-14</td>
+</tr>
+<tr>
+<td><strong>合规监测智能体-高级分析</strong> <br/><code style="font-size:11px;">编码: ADV_ANALYSIS_001</code></td>
+<td><span class="badge badge-info">按次计费</span></td>
+<td>100 彩豆</td>
+<td>≈¥1.00</td>
+<td><span class="pricing-status status-approved">● 已通过</span></td>
+<td>2026-05-14</td>
+</tr>
+<tr>
+<td><strong>合规监测智能体-批量处理</strong> <br/><code style="font-size:11px;">编码: BATCH_PROC_001</code></td>
+<td><span class="badge badge-info">按次计费</span></td>
+<td>30 彩豆</td>
+<td>≈¥0.30</td>
+<td><span class="pricing-status status-pending">◐ 待审核</span></td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>合规监测智能体-极速调用</strong> <br/><code style="font-size:11px;">编码: FAST_CALL_001</code><br/><span style="font-size:11px; color:var(--danger-color);">驳回原因：单价高于同类上限，请下调后重提</span></td>
+<td><span class="badge badge-info">按次计费</span></td>
+<td>200 彩豆</td>
+<td>≈¥2.00</td>
+<td><span class="pricing-status status-rejected">● 已驳回</span></td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pricing-card">
+<div class="pricing-header">
+<div class="pricing-agent">
+<div class="pricing-avatar">📊</div>
+<div class="pricing-info">
+<h4>数据分析智能体</h4>
+<span>AG20260501002</span>
+</div>
+</div>
+<div style="display: flex; align-items: center; gap: var(--spacing-md);">
+<span class="pricing-status status-approved">● 已通过</span>
+<a class="btn btn-sm btn-primary" href="pricing-edit.html">编辑</a>
+</div>
+</div>
+<table class="pricing-table">
+<thead>
+<tr>
+<th>定价名称</th>
+<th>计费模式</th>
+<th>彩豆/次</th>
+<th>约合金额</th>
+<th>审核状态</th>
+<th>生效时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>数据分析智能体-标准调用</strong> <br/><code style="font-size:11px;">编码: STD_CALL_002</code></td>
+<td><span class="badge badge-info">按次计费</span></td>
+<td>300 彩豆</td>
+<td>≈¥3.00</td>
+<td><span class="pricing-status status-approved">● 已通过</span></td>
+<td>2026-05-01</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pricing-card">
+<div class="pricing-header">
+<div class="pricing-agent">
+<div class="pricing-avatar">🪑</div>
+<div class="pricing-info">
+<h4>家具比价智能体</h4>
+<span>AG20260501003</span>
+</div>
+</div>
+<div style="display: flex; align-items: center; gap: var(--spacing-md);">
+<span class="pricing-status status-pending">◐ 待审核</span>
+<a class="btn btn-sm btn-outline" href="pricing-edit.html">编辑</a>
+</div>
+</div>
+<table class="pricing-table">
+<thead>
+<tr>
+<th>定价名称</th>
+<th>计费模式</th>
+<th>彩豆/次</th>
+<th>约合金额</th>
+<th>审核状态</th>
+<th>生效时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="6" style="text-align: center; color: var(--text-muted);">待配置定价方案</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+</body>
+</html>

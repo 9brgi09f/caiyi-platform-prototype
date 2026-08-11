@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>注册审核详情 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+.page-header{background:linear-gradient(135deg,#2563EB,#1D4ED8);color:white;padding:var(--spacing-lg) var(--spacing-xl);border-radius:var(--radius-lg);margin-bottom:var(--spacing-lg);}
+.page-header h2{color:white;margin:0 0 var(--spacing-xs);}
+.page-header p{opacity:.9;font-size:14px;margin:0;}
+.back-link{display:inline-block;margin-bottom:var(--spacing-sm);color:rgba(255,255,255,.9);font-size:14px;text-decoration:none;}
+.back-link:hover{color:white;text-decoration:underline;}
+.audit-layout{display:grid;grid-template-columns:2fr 1fr;gap:var(--spacing-lg);align-items:start;}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-md);}
+.info-item{padding:var(--spacing-sm) 0;}
+.info-label{font-size:12px;color:var(--text-muted);margin-bottom:4px;}
+.info-value{font-size:14px;font-weight:500;color:var(--text-primary);}
+.badge-buyer{background:#dbeafe;color:#2563eb;}
+.badge-supplier{background:#d1fae5;color:#059669;}
+.badge-agency{background:#ede9fe;color:#7c3aed;}
+.badge-developer{background:#fef3c7;color:#d97706;}
+.license-row{display:flex;align-items:center;justify-content:space-between;gap:var(--spacing-md);padding:var(--spacing-md);border:1px solid var(--border-light);border-radius:var(--radius-md);}
+.license-name{font-size:14px;font-weight:500;color:var(--text-primary);}
+.license-meta{margin-top:4px;font-size:12px;color:var(--text-muted);}
+.audit-status{padding:var(--spacing-md) 0;text-align:center;border-bottom:1px solid var(--border-light);margin-bottom:var(--spacing-md);}
+.audit-status-text{font-size:20px;font-weight:700;color:#D97706;margin-bottom:4px;}
+.audit-status-time{font-size:12px;color:var(--text-muted);}
+.audit-actions .btn{width:100%;justify-content:center;}
+.audit-actions .btn + .btn{margin-top:var(--spacing-sm);}
+.reject-label{display:block;margin-bottom:6px;font-size:13px;font-weight:500;}
+.reject-label .required{color:var(--danger-color);}
+.modal-mask{display:none;position:fixed;inset:0;z-index:300;align-items:center;justify-content:center;background:rgba(15,23,42,.42);}
+.modal-mask.show{display:flex;}
+.confirm-modal{width:400px;max-width:calc(100% - 40px);padding:28px;background:white;border-radius:14px;box-shadow:0 18px 48px rgba(15,23,42,.2);}
+.confirm-modal-icon{width:44px;height:44px;margin-bottom:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#D1FAE5;color:#059669;font-size:22px;font-weight:700;}
+.confirm-modal h3{font-size:18px;color:var(--text-primary);margin:0 0 8px;}
+.confirm-modal p{font-size:13px;color:var(--text-secondary);line-height:1.7;margin:0 0 22px;}
+.confirm-modal-actions{display:flex;justify-content:flex-end;gap:var(--spacing-sm);}
+@media(max-width:900px){.audit-layout{grid-template-columns:1fr;}.info-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user"><div class="top-bar-avatar">管</div><span>管理员</span></div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon">📡</span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a>
+<a class="sidebar-link" href="reconciliation-list.html"><span class="icon">🧮</span><span>账户对账</span></a>
+<a class="sidebar-link active" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a class="back-link" href="org-type-list.html?tab=audit">← 返回注册审核</a>
+<h2>注册审核详情</h2>
+<p>核对机构注册信息与营业执照，决定是否开通账号</p>
+</div>
+<div class="audit-layout">
+<div>
+<div class="content-card">
+<div class="content-card-header"><h3 class="content-card-title">机构信息</h3></div>
+<div class="info-grid">
+<div class="info-item"><div class="info-label">组织名称</div><div class="info-value" id="dOrgName">广州采购科技集团</div></div>
+<div class="info-item"><div class="info-label">统一社会信用代码</div><div class="info-value" id="dCode">91440101MA1234XX00</div></div>
+<div class="info-item"><div class="info-label">机构类型</div><div class="info-value"><span class="badge badge-buyer" id="dType">采购单位</span></div></div>
+<div class="info-item"><div class="info-label">申请时间</div><div class="info-value" id="dTime">2026-08-07 09:12</div></div>
+</div>
+</div>
+<div class="content-card">
+<div class="content-card-header"><h3 class="content-card-title">经办人信息</h3></div>
+<div class="info-grid">
+<div class="info-item"><div class="info-label">真实姓名</div><div class="info-value" id="dPerson">李明</div></div>
+<div class="info-item"><div class="info-label">手机号</div><div class="info-value" id="dPhone">13812341234</div></div>
+</div>
+</div>
+<div class="content-card">
+<div class="content-card-header"><h3 class="content-card-title">营业执照</h3></div>
+<div class="license-row">
+<div>
+<div class="license-name" id="dLicense">营业执照.jpg</div>
+<div class="license-meta">注册必传材料，请核对与统一社会信用代码是否一致</div>
+</div>
+<a class="btn btn-sm btn-outline" href="#" onclick="return false;">查看原件</a>
+</div>
+</div>
+<div class="content-card">
+<div class="content-card-header"><h3 class="content-card-title">审核记录</h3></div>
+<div class="timeline">
+<div class="timeline-item">
+<div class="timeline-time tl-apply-time">2026-08-07 09:12</div>
+<div class="timeline-content">用户提交注册申请</div>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div class="content-card">
+<div class="content-card-header"><h3 class="content-card-title">审核操作</h3></div>
+<div class="audit-status">
+<div class="audit-status-text">待审核</div>
+<div class="audit-status-time">申请时间 <span class="tl-apply-time">2026-08-07 09:12</span></div>
+</div>
+<div class="audit-actions">
+<button class="btn btn-success" type="button" onclick="doApprove()">审核通过</button>
+<button class="btn btn-outline" type="button" onclick="toggleReject()">驳回</button>
+</div>
+<div id="rejectBox" style="display:none;margin-top:var(--spacing-md);">
+<label class="reject-label" for="rejectReason">驳回原因<span class="required">*</span></label>
+<textarea class="form-textarea" id="rejectReason" rows="4" placeholder="请填写驳回原因，将同步通知申请人"></textarea>
+<div id="rejectHint" style="display:none;margin-top:6px;font-size:12px;color:var(--danger-color);">请填写驳回原因</div>
+<button class="btn btn-danger" type="button" onclick="doReject()" style="width:100%;justify-content:center;margin-top:var(--spacing-sm);">确认驳回</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<div class="modal-mask" id="approveModal" role="dialog" aria-modal="true" aria-labelledby="approveTitle">
+<div class="confirm-modal">
+<div class="confirm-modal-icon">✓</div>
+<h3 id="approveTitle">确认审核通过？</h3>
+<p>审核通过后，将激活该机构的主账号并允许其登录使用平台服务。</p>
+<div class="confirm-modal-actions">
+<button class="btn btn-outline" type="button" onclick="closeApproveModal()">取消</button>
+<button class="btn btn-success" type="button" onclick="confirmApprove()">确认通过</button>
+</div>
+</div>
+</div>
+<div class="modal-mask" id="approveSuccessModal" role="dialog" aria-modal="true" aria-labelledby="approveSuccessTitle">
+<div class="confirm-modal">
+<div class="confirm-modal-icon">✓</div>
+<h3 id="approveSuccessTitle">审核已通过</h3>
+<p>机构主账号已激活。</p>
+<div class="confirm-modal-actions">
+<button class="btn btn-primary" type="button" onclick="returnToAuditList()">返回注册审核</button>
+</div>
+</div>
+</div>
+<div class="modal-mask" id="rejectSuccessModal" role="dialog" aria-modal="true" aria-labelledby="rejectSuccessTitle">
+<div class="confirm-modal">
+<div class="confirm-modal-icon" style="background:#FEE2E2;color:#DC2626;">!</div>
+<h3 id="rejectSuccessTitle">审核已驳回</h3>
+<p>驳回原因已记录，将通知申请人。</p>
+<div class="confirm-modal-actions">
+<button class="btn btn-primary" type="button" onclick="returnToAuditList()">返回注册审核</button>
+</div>
+</div>
+</div>
+<script>
+var demoData = {
+  "1": {org:"广州采购科技集团",code:"91440101MA1234XX00",type:"采购单位",person:"李明",phone:"13812341234",time:"2026-08-07 09:12"},
+  "2": {org:"深圳智算供应有限公司",code:"91440300MA5678XX00",type:"供应商",person:"王芳",phone:"13987654321",time:"2026-08-07 08:45"},
+  "3": {org:"广州中介代理机构",code:"91440101MA9012XX00",type:"代理机构",person:"张伟",phone:"13787654321",time:"2026-08-07 07:30"},
+  "4": {org:"彩翼科技有限公司",code:"91440101MA3456XX00",type:"开发者",person:"陈晓",phone:"13687654321",time:"2026-08-06 16:20"}
+};
+var typeBadgeMap = {采购单位:'buyer',供应商:'supplier',代理机构:'agency',开发者:'developer'};
+
+document.addEventListener('DOMContentLoaded', function(){
+  var id = new URLSearchParams(location.search).get('id') || '1';
+  var d = demoData[id] || demoData['1'];
+  var setText = function(sel, val){ var el = document.querySelector(sel); if(el) el.textContent = val; };
+  setText('#dOrgName', d.org);
+  setText('#dCode', d.code);
+  setText('#dType', d.type);
+  setText('#dPerson', d.person);
+  setText('#dPhone', d.phone);
+  setText('#dTime', d.time);
+  setText('#dLicense', d.org + '-营业执照.jpg');
+  var badge = document.getElementById('dType');
+  if(badge) badge.className = 'badge badge-' + (typeBadgeMap[d.type] || 'buyer');
+  document.querySelectorAll('.tl-apply-time').forEach(function(el){ el.textContent = d.time; });
+});
+
+function doApprove(){
+  document.getElementById('approveModal').classList.add('show');
+}
+
+function closeApproveModal(){
+  document.getElementById('approveModal').classList.remove('show');
+}
+
+function confirmApprove(){
+  closeApproveModal();
+  document.getElementById('approveSuccessModal').classList.add('show');
+}
+
+function returnToAuditList(){
+  location.href = 'org-type-list.html?tab=audit';
+}
+
+function toggleReject(){
+  var box = document.getElementById('rejectBox');
+  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+}
+
+function doReject(){
+  var input = document.getElementById('rejectReason');
+  var hint = document.getElementById('rejectHint');
+  if(!input.value.trim()){
+    hint.style.display = 'block';
+    input.focus();
+    return;
+  }
+  hint.style.display = 'none';
+  document.getElementById('rejectSuccessModal').classList.add('show');
+}
+
+document.getElementById('approveModal').addEventListener('click', function(e){
+  if(e.target === this) closeApproveModal();
+});
+</script>
+</body>
+</html>

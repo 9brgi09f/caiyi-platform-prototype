@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>机构信息 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+.page-header{background:linear-gradient(135deg,#2563EB,#1D4ED8);color:white;padding:var(--spacing-lg) var(--spacing-xl);border-radius:var(--radius-lg);margin-bottom:var(--spacing-lg);}
+.page-header h2{color:white;margin-bottom:var(--spacing-xs);}
+.page-header p{opacity:.9;font-size:14px;margin:0;}
+.back-link{display:inline-block;margin-bottom:var(--spacing-sm);color:rgba(255,255,255,.9);font-size:14px;text-decoration:none;}
+.back-link:hover{color:white;text-decoration:underline;}
+.form-section{margin-bottom:var(--spacing-xl);}
+.section-title{font-size:14px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:var(--spacing-md);padding-bottom:var(--spacing-sm);border-bottom:1px solid var(--border-light);}
+.form-row{margin-bottom:var(--spacing-md);}
+.form-label{display:block;margin-bottom:var(--spacing-xs);font-weight:500;font-size:14px;}
+.form-label .required{color:var(--danger-color);margin-left:2px;}
+.form-input,.form-textarea,.form-select{width:100%;padding:var(--spacing-sm) var(--spacing-md);border:1px solid var(--border-color);border-radius:var(--radius-md);font-size:14px;}
+.form-input:focus,.form-textarea:focus,.form-select:focus{outline:none;border-color:var(--klein);box-shadow:0 0 0 3px var(--klein-light);}
+.form-hint{font-size:12px;color:var(--text-muted);margin-top:var(--spacing-xs);}
+.form-textarea{resize:vertical;min-height:80px;}
+.form-select{cursor:pointer;}
+.radio-group{display:flex;gap:var(--spacing-lg);}
+.radio-label{display:flex;align-items:center;gap:var(--spacing-xs);cursor:pointer;font-size:14px;}
+.radio-label input[type="radio"]{width:16px;height:16px;cursor:pointer;}
+.form-actions{display:flex;gap:var(--spacing-sm);padding-top:var(--spacing-lg);border-top:1px solid var(--border-light);}
+.success-modal-mask{display:none;position:fixed;inset:0;z-index:300;background:rgba(15,23,42,.42);align-items:center;justify-content:center;}
+.success-modal-mask.show{display:flex;}
+.success-modal{width:360px;max-width:calc(100% - 40px);padding:30px 28px 26px;background:white;border-radius:14px;box-shadow:0 18px 48px rgba(15,23,42,.2);text-align:center;}
+.success-icon{width:48px;height:48px;margin:0 auto 14px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#D1FAE5;color:#059669;font-size:25px;font-weight:700;}
+.success-title{font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:8px;}
+.success-desc{font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:22px;}
+.success-modal .btn{width:100%;justify-content:center;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-md);}
+@media(max-width:720px){.form-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user"><div class="top-bar-avatar">管</div><span>管理员</span></div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="channel-list.html"><span class="icon">📡</span><span>渠道管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a>
+<a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
+
+<a class="sidebar-link active" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<a class="back-link" href="org-type-list.html">← 返回机构管理</a>
+<h2 id="pageTitle">新增机构</h2>
+<p id="pageDesc">为组织创建机构账号与主账号</p>
+</div>
+<div class="content-card">
+<form onsubmit="return handleSubmit(event);">
+<div class="form-section">
+<div class="section-title">机构信息</div>
+
+<div class="form-row">
+<label class="form-label">机构类型<span class="required">*</span></label>
+<select class="form-select" id="orgType" onchange="toggleEnterpriseFields()" required>
+<option value="">请选择机构类型</option>
+<option value="buyer">采购单位</option>
+<option value="supplier">供应商</option>
+<option value="agency">代理机构</option>
+<option value="developer">开发者</option>
+<option value="supervisor">采购监管</option>
+</select>
+<div class="form-hint">个人用户不建议使用此功能，应通过公开注册渠道进入</div>
+</div>
+
+<div class="form-row" id="orgNameRow" style="display:none;">
+<label class="form-label">机构名称<span class="required">*</span></label>
+<input class="form-input" type="text" id="orgName" placeholder="如：广东省采购中心"/>
+<div class="form-hint">请填写组织全称</div>
+</div>
+
+<div class="form-row" id="creditCodeRow" style="display:none;">
+<label class="form-label">统一社会信用代码<span class="required">*</span></label>
+<input class="form-input" type="text" id="creditCode" maxlength="18" placeholder="18位统一社会信用代码"/>
+<div class="form-hint">系统自动校验唯一性，同一组织可新增不同机构类型</div>
+</div>
+</div>
+
+<div class="form-section">
+<div class="section-title">主账号信息</div>
+
+<div class="form-grid">
+<div class="form-row">
+<label class="form-label">主账号姓名<span class="required">*</span></label>
+<input class="form-input" type="text" placeholder="请输入真实姓名" required/>
+</div>
+
+<div class="form-row">
+<label class="form-label">主账号手机号<span class="required">*</span></label>
+<input class="form-input" type="tel" maxlength="11" placeholder="11位手机号" required/>
+<div class="form-hint">将作为主账号登录凭证</div>
+</div>
+</div>
+</div>
+
+<div class="form-actions">
+<button class="btn btn-primary" type="submit" id="submitBtn">创建机构</button>
+<a class="btn btn-outline" href="org-type-list.html">取消</a>
+</div>
+</form>
+</div>
+</main>
+<div class="success-modal-mask" id="successModal">
+  <div class="success-modal" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+    <div class="success-icon">✓</div>
+    <div class="success-title" id="successTitle">创建成功</div>
+    <div class="success-desc" id="successDesc">机构已创建，主账号已开通。</div>
+    <button class="btn btn-primary" type="button" onclick="closeSuccessModal()">确认</button>
+  </div>
+</div>
+<script>
+// 检测编辑模式
+const urlParams = new URLSearchParams(window.location.search);
+const isEditMode = urlParams.get('mode') === 'edit';
+
+// 初始化页面文案
+if(isEditMode){
+  document.getElementById('pageTitle').textContent = '编辑机构信息';
+  document.getElementById('pageDesc').textContent = '修改机构与主账号信息';
+  document.getElementById('submitBtn').textContent = '保存修改';
+  document.getElementById('successTitle').textContent = '修改成功';
+}
+
+function toggleEnterpriseFields(){
+  const type = document.getElementById('orgType').value;
+  const nameRow = document.getElementById('orgNameRow');
+  const codeRow = document.getElementById('creditCodeRow');
+  const nameInput = document.getElementById('orgName');
+  const codeInput = document.getElementById('creditCode');
+
+  if(type && type !== ''){
+    nameRow.style.display = 'block';
+    codeRow.style.display = 'block';
+    nameInput.required = true;
+    codeInput.required = true;
+  } else {
+    nameRow.style.display = 'none';
+    codeRow.style.display = 'none';
+    nameInput.required = false;
+    codeInput.required = false;
+  }
+}
+
+function handleSubmit(e){
+  e.preventDefault();
+
+  const orgName = document.getElementById('orgName').value;
+  document.getElementById('successDesc').textContent = isEditMode
+    ? `机构「${orgName}」的信息已保存。`
+    : `机构「${orgName}」已创建，主账号已开通并初始化密码。`;
+  document.getElementById('successModal').classList.add('show');
+  return false;
+}
+
+function closeSuccessModal(){
+  document.getElementById('successModal').classList.remove('show');
+}
+</script>
+</body>
+</html>

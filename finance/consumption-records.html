@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>消费记录 - 财务端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .filter-bar {
+            display: flex; gap: var(--spacing-sm); align-items: center;
+            margin-bottom: var(--spacing-lg); padding: var(--spacing-md);
+            background: var(--card-bg); border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light); flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+<header class="top-bar finance">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">财</div>
+<span>财务人员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar finance">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
+<a class="sidebar-link active" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+<a class="sidebar-link" href="withdrawal-pay-list.html"><span class="icon">💸</span><span>提现打款</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">🧾</span><span>发票管理</span></a>
+<a class="sidebar-link" href="reconciliation-list.html"><span class="icon">📋</span><span>对账报表</span></a>
+</div>
+</aside>
+<main class="main-content">
+<div class="page-header">
+<h2>企业用户消费记录</h2>
+<p>查看所有企业用户的智能体调用消费订单详情</p>
+</div>
+<!-- 筛选栏 -->
+<div class="filter-bar">
+<span style="color: var(--text-secondary); font-size: 13px;">时间：</span>
+<input class="input" style="width: 140px;" type="date" value="2026-05-01"/>
+<span style="color: var(--text-muted);">至</span>
+<input class="input" style="width: 140px;" type="date" value="2026-05-15"/>
+<input class="input" placeholder="搜索用户/订单号" style="width: 180px;" type="text"/>
+<button class="btn btn-sm btn-primary">查询</button>
+<button class="btn btn-sm btn-outline">导出</button>
+</div>
+<!-- 消费记录表格 -->
+<div class="content-card">
+<div class="content-card-header">
+<h3 class="content-card-title">消费订单明细</h3>
+<span style="font-size: 13px; color: var(--text-muted);">共 7 条记录</span>
+</div>
+<div class="table-wrapper">
+<table class="table table-wide">
+<thead>
+<tr>
+<th>消费时间</th>
+<th>消费用户</th>
+<th>智能体</th>
+<th>计费方式</th>
+<th>订单号</th>
+<th>消费彩豆</th>
+<th>消费金额</th>
+<th>状态</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr data-time="2026-05-15 11:05:12" data-user="李用户" data-agent="数据分析智能体" data-price="平台算力（token）" data-order="XF20260515110512" data-type="消费" data-channel="API" data-beans="300" data-money="¥3.00" data-ratio="0.01" data-before="¥171.50 / 17,150 彩豆" data-after="¥168.50 / 16,850 彩豆" data-state="成功">
+<td>2026-05-15 11:05:12</td>
+<td>李用户</td>
+<td>数据分析智能体</td>
+<td>平台算力（token）</td>
+<td><code>XF20260515110512</code></td>
+<td class="amount">300</td>
+<td class="amount negative">¥3.00</td>
+<td><span class="badge badge-success">成功</span></td>
+<td><button class="btn btn-sm btn-outline" onclick="openConsDetail(this)" type="button">详情</button></td>
+</tr>
+<tr data-time="2026-05-15 09:20:45" data-user="李用户" data-agent="合规监测智能体" data-price="平台算力（token）" data-order="XF20260515092045" data-type="消费" data-channel="API" data-beans="50" data-money="¥0.50" data-ratio="0.01" data-before="¥172.00 / 17,200 彩豆" data-after="¥171.50 / 17,150 彩豆" data-state="成功">
+<td>2026-05-15 09:20:45</td>
+<td>李用户</td>
+<td>合规监测智能体</td>
+<td>平台算力（token）</td>
+<td><code>XF20260515092045</code></td>
+<td class="amount">50</td>
+<td class="amount negative">¥0.50</td>
+<td><span class="badge badge-success">成功</span></td>
+<td><button class="btn btn-sm btn-outline" onclick="openConsDetail(this)" type="button">详情</button></td>
+</tr>
+<tr data-time="2026-05-14 15:32:01" data-user="李用户" data-agent="合规监测智能体" data-price="平台算力（token）" data-order="XF20260514153201" data-type="消费" data-channel="API" data-beans="50" data-money="¥0.50" data-ratio="0.01" data-before="¥142.50 / 14,250 彩豆" data-after="¥142.00 / 14,200 彩豆" data-state="成功">
+<td>2026-05-14 15:32:01</td>
+<td>李用户</td>
+<td>合规监测智能体</td>
+<td>平台算力（token）</td>
+<td><code>XF20260514153201</code></td>
+<td class="amount">50</td>
+<td class="amount negative">¥0.50</td>
+<td><span class="badge badge-success">成功</span></td>
+<td><button class="btn btn-sm btn-outline" onclick="openConsDetail(this)" type="button">详情</button></td>
+</tr>
+<tr data-time="2026-05-14 14:18:30" data-user="李用户" data-agent="数据分析智能体" data-price="平台算力（token）" data-order="XF20260514141830" data-type="消费" data-channel="API" data-beans="300" data-money="¥3.00" data-ratio="0.01" data-before="¥145.50 / 14,550 彩豆" data-after="¥142.50 / 14,250 彩豆" data-state="成功">
+<td>2026-05-14 14:18:30</td>
+<td>李用户</td>
+<td>数据分析智能体</td>
+<td>平台算力（token）</td>
+<td><code>XF20260514141830</code></td>
+<td class="amount">300</td>
+<td class="amount negative">¥3.00</td>
+<td><span class="badge badge-success">成功</span></td>
+<td><button class="btn btn-sm btn-outline" onclick="openConsDetail(this)" type="button">详情</button></td>
+</tr>
+<tr data-time="2026-05-13 16:22:30" data-user="李用户" data-agent="合规监测智能体" data-price="平台算力（token）" data-order="XF20260513162230" data-type="消费" data-channel="API" data-beans="100" data-money="¥1.00" data-ratio="0.01" data-before="¥146.50 / 14,650 彩豆" data-after="¥145.50 / 14,550 彩豆" data-state="成功">
+<td>2026-05-13 16:22:30</td>
+<td>李用户</td>
+<td>合规监测智能体</td>
+<td>平台算力（token）</td>
+<td><code>XF20260513162230</code></td>
+<td class="amount">100</td>
+<td class="amount negative">¥1.00</td>
+<td><span class="badge badge-success">成功</span></td>
+<td><button class="btn btn-sm btn-outline" onclick="openConsDetail(this)" type="button">详情</button></td>
+</tr>
+<tr data-time="2026-05-12 10:30:01" data-user="李用户" data-agent="数据分析智能体" data-price="平台算力（token）" data-order="XF20260512103001" data-type="消费" data-channel="API" data-beans="300" data-money="¥3.00" data-ratio="0.01" data-before="¥149.50 / 14,950 彩豆" data-after="¥146.50 / 14,650 彩豆" data-state="成功">
+<td>2026-05-12 10:30:01</td>
+<td>李用户</td>
+<td>数据分析智能体</td>
+<td>平台算力（token）</td>
+<td><code>XF20260512103001</code></td>
+<td class="amount">300</td>
+<td class="amount negative">¥3.00</td>
+<td><span class="badge badge-success">成功</span></td>
+<td><button class="btn btn-sm btn-outline" onclick="openConsDetail(this)" type="button">详情</button></td>
+</tr>
+<tr data-time="2026-05-08 11:15:30" data-user="李用户" data-agent="合规监测智能体" data-price="平台算力（token）" data-order="XF20260508111530" data-type="消费" data-channel="API" data-beans="50" data-money="¥0.50" data-ratio="0.01" data-before="¥50.00 / 5,000 彩豆" data-after="¥49.50 / 4,950 彩豆" data-state="成功">
+<td>2026-05-08 11:15:30</td>
+<td>李用户</td>
+<td>合规监测智能体</td>
+<td>平台算力（token）</td>
+<td><code>XF20260508111530</code></td>
+<td class="amount">50</td>
+<td class="amount negative">¥0.50</td>
+<td><span class="badge badge-success">成功</span></td>
+<td><button class="btn btn-sm btn-outline" onclick="openConsDetail(this)" type="button">详情</button></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- 消费订单详情弹窗 -->
+<div class="modal-overlay" id="consDetailModal" onclick="if(event.target===this)closeConsDetail()">
+<div class="modal" style="max-width: 600px;">
+<div class="modal-header">
+<span class="modal-title">消费订单详情</span>
+<button class="modal-close" onclick="closeConsDetail()">×</button>
+</div>
+<div class="modal-body">
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md) var(--spacing-lg);">
+<div><div style="font-size:12px;color:var(--text-muted);">订单号</div><div style="font-size:14px;font-weight:500;margin-top:2px;" id="cd-order">—</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">消费时间</div><div style="font-size:14px;font-weight:500;margin-top:2px;" id="cd-time">—</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">消费用户</div><div style="font-size:14px;font-weight:500;margin-top:2px;" id="cd-user">—</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">状态</div><div style="margin-top:2px;"><span class="badge badge-success" id="cd-state">—</span></div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">智能体</div><div style="font-size:14px;font-weight:500;margin-top:2px;" id="cd-agent">—</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">计费方式</div><div style="font-size:14px;font-weight:500;margin-top:2px;" id="cd-price">—</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">订单类型</div><div style="font-size:14px;font-weight:500;margin-top:2px;" id="cd-type">—</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">渠道</div><div style="font-size:14px;font-weight:500;margin-top:2px;" id="cd-channel">—</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">消费彩豆</div><div style="font-size:14px;font-weight:500;margin-top:2px;" id="cd-beans">—</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">本次消费金额</div><div style="font-size:14px;font-weight:500;margin-top:2px;" id="cd-money">—</div></div>
+<div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">消费前余额</div><div style="font-size:14px;font-weight:500;margin-top:2px;" id="cd-before">—</div></div>
+<div><div style="font-size:12px;color:var(--text-muted);">消费后余额</div><div style="font-size:14px;font-weight:500;margin-top:2px;" id="cd-after">—</div></div>
+</div>
+</div>
+<div class="modal-footer">
+<button class="btn btn-outline" onclick="closeConsDetail()">关闭</button>
+</div>
+</div>
+</div>
+<script>
+function openConsDetail(btn){
+  var d = btn.closest('tr').dataset;
+  ['order','time','user','state','agent','price','type','channel','beans','money','before','after'].forEach(function(k){
+    var el = document.getElementById('cd-' + k);
+    if (el) el.textContent = d[k] || '—';
+  });
+  document.getElementById('consDetailModal').classList.add('active');
+}
+function closeConsDetail(){
+  document.getElementById('consDetailModal').classList.remove('active');
+}
+</script>
+</main>
+</body>
+</html>

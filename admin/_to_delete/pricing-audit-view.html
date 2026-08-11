@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>定价审核详情 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+        .page-header {
+            background: linear-gradient(135deg, var(--admin-color), #fbbf24);
+            color: white; padding: var(--spacing-lg) var(--spacing-xl);
+            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
+        }
+        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
+        .page-header p { opacity: 0.9; font-size: 14px; }
+        .comparison-table { width: 100%; border-collapse: collapse; }
+        .comparison-table th, .comparison-table td { padding: var(--spacing-md); text-align: center; border: 1px solid var(--border-light); }
+        .comparison-table th { background: var(--bg-light); font-weight: 600; }
+        .comparison-table .old { color: var(--text-muted); }
+        .comparison-table .new { color: var(--success-color); font-weight: 600; }
+        .arrow { font-size: 24px; color: var(--admin-color); }
+        .timeline { padding-left: var(--spacing-lg); border-left: 2px solid var(--border-light); }
+        .timeline-item { position: relative; padding-left: var(--spacing-lg); padding-bottom: var(--spacing-lg); }
+        .timeline-item::before { content: ''; position: absolute; left: -9px; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--border-light); border: 2px solid var(--card-bg); }
+        .timeline-item.active::before { background: var(--admin-color); }
+        .timeline-item.success::before { background: var(--success-color); }
+    </style>
+</head>
+<body>
+<header class="top-bar admin">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><span>🏠</span><span>订阅智能体</span></a>
+<span style="color: var(--border-color);">|</span>
+<span style="color: var(--admin-color); font-weight: 600;">平台管理端</span>
+</div>
+<div class="top-bar-right">
+<div class="top-bar-user">
+<div class="top-bar-avatar">⚙️</div>
+<span>管理员</span>
+</div>
+</div>
+</header>
+<aside class="sidebar admin">
+<div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
+<a class="sidebar-link" href="transactions-list.html"><span class="icon">💳</span><span>交易流水</span></a>
+<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
+<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
+<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
+<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a>
+<a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+<!-- 数据统计菜单暂隐藏 <a class="sidebar-link" href="statistics.html"><span class="icon">📉</span><span>数据统计</span></a> -->
+</div>
+</aside>
+<main class="main-content">
+<a class="back-link" href="pricing-audit-list.html" style="color: var(--admin-color); margin-bottom: var(--spacing-md); display: inline-block;">← 返回定价审核</a>
+<div class="content-card" style="margin-bottom: var(--spacing-lg);">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-lg);">
+<div>
+<h2 style="margin-bottom: var(--spacing-xs);">定价审核详情</h2>
+<div style="display: flex; gap: var(--spacing-sm); align-items: center;">
+<span class="badge badge-warning">待审核</span>
+<span style="color: var(--text-muted); font-size: 13px;">申请编号：PA20260514001</span>
+</div>
+</div>
+<div style="font-size: 13px; color: var(--text-muted);">
+                    申请时间：2026-05-14 10:30
+                </div>
+</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--spacing-lg); margin-bottom: var(--spacing-lg);">
+<div>
+<div style="font-size: 13px; color: var(--text-muted); margin-bottom: var(--spacing-xs);">开发者</div>
+<div style="font-weight: 600;">张开发者</div>
+</div>
+<div>
+<div style="font-size: 13px; color: var(--text-muted); margin-bottom: var(--spacing-xs);">智能体</div>
+<div style="font-weight: 600;">合规监测智能体</div>
+</div>
+<div>
+<div style="font-size: 13px; color: var(--text-muted); margin-bottom: var(--spacing-xs);">变更类型</div>
+<div style="font-weight: 600;"><span class="badge badge-warning">价格调整</span></div>
+</div>
+</div>
+<h3 style="margin-bottom: var(--spacing-md);">价格变更对比</h3>
+<table class="comparison-table">
+<thead>
+<tr>
+<th>计费类型</th>
+<th>原价格</th>
+<th></th>
+<th>新价格</th>
+<th>涨幅</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>按次计费（彩豆）</td>
+<td class="old">50 彩豆/次</td>
+<td class="arrow">→</td>
+<td class="new">60 彩豆/次</td>
+<td style="color: var(--error-color);">+20%</td>
+</tr>
+<tr>
+<td>月度订阅</td>
+<td class="old">¥49/月</td>
+<td class="arrow">→</td>
+<td class="new">¥59/月</td>
+<td style="color: var(--error-color);">+20%</td>
+</tr>
+<tr>
+<td>季度订阅</td>
+<td class="old">¥129/季</td>
+<td class="arrow">→</td>
+<td class="new">¥159/季</td>
+<td style="color: var(--error-color);">+23%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="content-card" style="margin-bottom: var(--spacing-lg);">
+<h3 style="margin-bottom: var(--spacing-md);">定价理由</h3>
+<p style="color: var(--text-secondary); line-height: 1.8;">
+                由于近期服务器成本上涨，以及新增了高级合规检测功能（支持自定义规则库、智能识别敏感信息等），申请调整定价。调整后价格仍低于市场同类产品平均水平。
+            </p>
+</div>
+<div class="content-card" style="margin-bottom: var(--spacing-lg);">
+<h3 style="margin-bottom: var(--spacing-md);">智能体当前数据</h3>
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md);">
+<div style="text-align: center; padding: var(--spacing-md); background: var(--bg-light); border-radius: var(--radius-md);">
+<div style="font-size: 24px; font-weight: 600; color: var(--admin-color);">1,256</div>
+<div style="font-size: 13px; color: var(--text-muted);">订阅用户</div>
+</div>
+<div style="text-align: center; padding: var(--spacing-md); background: var(--bg-light); border-radius: var(--radius-md);">
+<div style="font-size: 24px; font-weight: 600; color: var(--admin-color);">8,520</div>
+<div style="font-size: 13px; color: var(--text-muted);">本月调用</div>
+</div>
+<div style="text-align: center; padding: var(--spacing-md); background: var(--bg-light); border-radius: var(--radius-md);">
+<div style="font-size: 24px; font-weight: 600; color: var(--admin-color);">¥4,260.50</div>
+<div style="font-size: 13px; color: var(--text-muted);">本月收入</div>
+</div>
+<div style="text-align: center; padding: var(--spacing-md); background: var(--bg-light); border-radius: var(--radius-md);">
+<div style="font-size: 24px; font-weight: 600; color: var(--success-color);">¥0.50</div>
+<div style="font-size: 13px; color: var(--text-muted);">平均单价</div>
+</div>
+</div>
+</div>
+<div class="content-card" style="margin-bottom: var(--spacing-lg);">
+<h3 style="margin-bottom: var(--spacing-md);">审核操作</h3>
+<div style="margin-bottom: var(--spacing-lg);">
+<label style="display: block; margin-bottom: var(--spacing-sm); font-weight: 500;">审核意见</label>
+<textarea class="form-textarea" placeholder="请输入审核意见..." rows="4">经核实，开发者提供的调价理由充分，新功能确实具有市场价值。建议批准。</textarea>
+</div>
+<div style="display: flex; gap: var(--spacing-md);">
+<button class="btn btn-success" style="flex: 1;">批准通过</button>
+<button class="btn btn-danger" style="flex: 1;">驳回申请</button>
+<a class="btn btn-outline" href="pricing-audit-list.html" style="flex: 1;">取消</a>
+</div>
+</div>
+<div class="content-card">
+<h3 style="margin-bottom: var(--spacing-md);">审核进度</h3>
+<div class="timeline">
+<div class="timeline-item success">
+<div style="font-weight: 600;">提交审核申请</div>
+<div style="font-size: 13px; color: var(--text-muted);">2026-05-14 10:30 · 张开发者</div>
+</div>
+<div class="timeline-item active">
+<div style="font-weight: 600;">等待平台审核</div>
+<div style="font-size: 13px; color: var(--text-muted);">审核中</div>
+</div>
+<div class="timeline-item">
+<div style="font-weight: 600;">审核完成生效</div>
+<div style="font-size: 13px; color: var(--text-muted);">新价格仅对新调用生效</div>
+</div>
+</div>
+</div>
+</main>
+</body>
+</html>
