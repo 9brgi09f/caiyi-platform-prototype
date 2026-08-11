@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>创建个人账号 - 平台管理端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<style>
+.page-header{background:linear-gradient(135deg,#2563EB,#1D4ED8);color:#fff;padding:var(--spacing-lg) var(--spacing-xl);border-radius:var(--radius-lg);margin-bottom:var(--spacing-lg)}
+.page-header h2{margin-bottom:var(--spacing-xs);color:#fff}.page-header p{margin:0;opacity:.9;font-size:14px}.back-link{display:inline-block;margin-bottom:var(--spacing-sm);color:rgba(255,255,255,.9);font-size:14px;text-decoration:none}.back-link:hover{color:#fff;text-decoration:underline}
+.form-section{margin-bottom:var(--spacing-xl)}.section-title{margin-bottom:var(--spacing-md);padding-bottom:var(--spacing-sm);border-bottom:1px solid var(--border-light);color:var(--text-muted);font-size:14px;font-weight:600;letter-spacing:.5px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--spacing-md)}.form-row{margin-bottom:var(--spacing-md)}.form-label{display:block;margin-bottom:var(--spacing-xs);font-size:14px;font-weight:500}.required{margin-left:2px;color:var(--danger-color)}.form-input{width:100%;padding:var(--spacing-sm) var(--spacing-md);border:1px solid var(--border-color);border-radius:var(--radius-md);font-size:14px}.form-input:focus{outline:none;border-color:var(--klein);box-shadow:0 0 0 3px var(--klein-light)}.form-hint{margin-top:var(--spacing-xs);color:var(--text-muted);font-size:12px;line-height:1.65}.info-box{margin-bottom:var(--spacing-lg);padding:var(--spacing-md);border:1px solid #bfdbfe;border-radius:var(--radius-md);background:var(--klein-light);color:#1d4ed8;font-size:13px;line-height:1.75}.form-actions{display:flex;gap:var(--spacing-sm);padding-top:var(--spacing-lg);border-top:1px solid var(--border-light)}.success-modal-mask{display:none;position:fixed;inset:0;z-index:300;align-items:center;justify-content:center;background:rgba(15,23,42,.42)}.success-modal-mask.show{display:flex}.success-modal{width:380px;max-width:calc(100% - 40px);padding:30px 28px 26px;border-radius:14px;background:#fff;box-shadow:0 18px 48px rgba(15,23,42,.2);text-align:center}.success-icon{display:flex;align-items:center;justify-content:center;width:48px;height:48px;margin:0 auto 14px;border-radius:50%;background:#d1fae5;color:#059669;font-size:25px;font-weight:700}.success-title{margin-bottom:8px;color:var(--text-primary);font-size:18px;font-weight:700}.success-desc{margin-bottom:22px;color:var(--text-secondary);font-size:13px;line-height:1.7}.success-modal .btn{width:100%;justify-content:center}@media(max-width:720px){.form-grid{grid-template-columns:1fr}.form-actions{flex-direction:column}.form-actions .btn{justify-content:center}}
+</style>
+</head>
+<body>
+<header class="top-bar admin"><div class="top-bar-left"><a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a><span class="top-bar-title">彩翼公共采购智能体协同管理平台</span></div><div class="top-bar-right"><div class="top-bar-user"><div class="top-bar-avatar">管</div><span>管理员</span></div></div></header>
+<aside class="sidebar admin"><div class="sidebar-section"><a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a><a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a><a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a><a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a><a class="sidebar-link" href="channel-list.html"><span class="icon">📡</span><span>渠道管理</span></a><a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a><a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a><a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon">🧮</span><span>账户对账</span></a><a class="sidebar-link active" href="org-type-list.html?tab=account"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a><a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a></div></aside>
+<main class="main-content">
+  <div class="page-header"><a class="back-link" href="org-type-list.html?tab=account">← 返回账号管理</a><h2>创建个人账号</h2><p>由运营协助完成个人账号建档，创建后可用于登录并关联机构成员身份。</p></div>
+  <div class="content-card">
+    <div class="info-box"><strong>创建规则：</strong>手机号全平台唯一。后台创建仅用于运营协助开户或线下资料建档；创建完成后账号处于已激活状态，但<strong>不自动发放新用户免费体验权益</strong>。正式系统需完成实名、手机号核验和操作审计。</div>
+    <form onsubmit="return handleSubmit(event);">
+      <div class="form-section"><div class="section-title">个人实名信息</div><div class="form-grid">
+        <div class="form-row"><label class="form-label">姓名<span class="required">*</span></label><input class="form-input" id="userName" type="text" placeholder="请输入真实姓名" required/></div>
+        <div class="form-row"><label class="form-label">身份证号<span class="required">*</span></label><input class="form-input" id="idCard" type="text" maxlength="18" placeholder="18位身份证号" required/><div class="form-hint">正式系统需通过实名服务校验，并按规则脱敏展示。</div></div>
+        <div class="form-row"><label class="form-label">手机号<span class="required">*</span></label><input class="form-input" id="phone" type="tel" maxlength="11" inputmode="numeric" placeholder="11位手机号" required/><div class="form-hint">作为平台唯一登录账号；保存前校验是否已存在。</div></div>
+        <div class="form-row"><label class="form-label">初始密码<span class="required">*</span></label><input class="form-input" id="password" type="password" minlength="8" placeholder="至少 8 位" required/><div class="form-hint">正式系统不得保存明文密码，应使用安全哈希并引导用户首次登录修改。</div></div>
+      </div></div>
+      <div class="form-section"><div class="section-title">创建说明</div><div class="form-row"><label class="form-label">备注</label><input class="form-input" id="remark" type="text" placeholder="如：线下开户资料补录"/><div class="form-hint">保存操作人、创建时间、来源和备注，供后续审计追溯。</div></div></div>
+      <div class="form-actions"><button class="btn btn-primary" type="submit">创建个人账号</button><a class="btn btn-outline" href="org-type-list.html?tab=account">取消</a></div>
+    </form>
+  </div>
+</main>
+<div class="success-modal-mask" id="successModal"><div class="success-modal" role="dialog" aria-modal="true" aria-labelledby="successTitle"><div class="success-icon">✓</div><div class="success-title" id="successTitle">个人账号已创建</div><div class="success-desc" id="successDesc"></div><a class="btn btn-primary" href="personal-account-view.html?id=4">查看账号详情</a></div></div>
+<script>
+function handleSubmit(event){event.preventDefault();const name=document.getElementById('userName').value.trim()||'该用户';document.getElementById('successDesc').textContent=`已为「${name}」创建平台个人账号。账号已激活，可后续关联机构成员身份；本次后台建档未发放新用户免费体验权益。`;document.getElementById('successModal').classList.add('show');return false;}
+</script>
+</body>
+</html>

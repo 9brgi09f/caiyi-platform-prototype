@@ -58,7 +58,7 @@
 <div class="detail-item"><div class="detail-label">身份证号</div><div class="detail-value" id="userIdCard">3301****1990****12</div></div>
 <div class="detail-item"><div class="detail-label">账号状态</div><div class="detail-value"><span class="badge badge-active">已激活</span></div></div>
 <div class="detail-item"><div class="detail-label">注册时间</div><div class="detail-value" id="registerTime">2026-08-08 10:36</div></div>
-<div class="detail-item"><div class="detail-label">注册方式</div><div class="detail-value">公开注册</div></div>
+<div class="detail-item"><div class="detail-label">账号来源</div><div class="detail-value" id="accountSource">公开注册</div></div>
 </div>
 <div class="detail-note">个人用户提交注册信息后自动开通试用，无需进入机构注册审核流程。加入机构后保留个人账号，仅新增机构成员身份。</div>
 <div class="content-card-header" style="margin-top:var(--spacing-xl);"><h3 class="content-card-title">新用户免费体验权益</h3></div>
@@ -75,7 +75,8 @@
 const personalAccounts={
   '1':{name:'张三',phone:'138****5678',idCard:'3301****1990****12',time:'2026-08-08 10:36',freeBenefits:[{agent:'合规监测智能体',total:20,used:4,lastUsed:'2026-08-15 10:20'},{agent:'数据分析智能体',total:20,used:18,lastUsed:'2026-08-15 11:05'}],memberships:[{org:'广州采购科技集团',type:'采购单位',role:'主账号',joinedAt:'2026-08-10'}]},
   '2':{name:'李四',phone:'139****8765',idCard:'4401****1988****25',time:'2026-08-07 15:22',freeBenefits:[{agent:'文案生成智能体',total:20,used:20,lastUsed:'2026-08-14 16:40'}],memberships:[]},
-  '3':{name:'王五',phone:'137****4321',idCard:'3101****1992****08',time:'2026-08-05 09:48',freeBenefits:[],memberships:[{org:'彩翼科技有限公司',type:'开发者',role:'子账号 · 操作员',joinedAt:'2026-08-09'}]}
+  '3':{name:'王五',phone:'137****4321',idCard:'3101****1992****08',time:'2026-08-05 09:48',source:'公开注册',freeBenefits:[],memberships:[{org:'彩翼科技有限公司',type:'开发者',role:'子账号 · 操作员',joinedAt:'2026-08-09'}]},
+  '4':{name:'赵敏',phone:'136****2088',idCard:'4401****1995****36',time:'2026-08-11 16:20',source:'运营后台创建 · 线下开户资料补录',freeBenefits:[],memberships:[]}
 };
 const accountId=new URLSearchParams(window.location.search).get('id')||'1';
 const account=personalAccounts[accountId]||personalAccounts['1'];
@@ -83,6 +84,7 @@ document.getElementById('userName').textContent=account.name;
 document.getElementById('userPhone').textContent=account.phone;
 document.getElementById('userIdCard').textContent=account.idCard;
 document.getElementById('registerTime').textContent=account.time;
+document.getElementById('accountSource').textContent=account.source||'公开注册';
 const freeBenefits=account.freeBenefits.length
   ? account.freeBenefits.map(item=>{
       const left=item.total-item.used;
