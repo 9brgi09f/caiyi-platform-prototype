@@ -8,20 +8,8 @@
 <link href="../styles.css" rel="stylesheet"/>
 <script src="../app.js"></script>
 <style>
-        .page-header {
-            background: linear-gradient(135deg, #2563EB, #1D4ED8);
-            color: white; padding: var(--spacing-lg) var(--spacing-xl);
-            border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg);
-        }
-        .page-header h2 { color: white; margin-bottom: var(--spacing-xs); }
-        .page-header p { opacity: 0.9; font-size: 14px; }
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
-        .stat-card { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-lg); }
-        .stat-label { font-size: 13px; color: var(--text-muted); margin-bottom: var(--spacing-xs); }
-        .stat-value { font-size: 28px; font-weight: 700; color: var(--developer-color); }
-        .stat-change { font-size: 12px; color: var(--text-muted); margin-top: var(--spacing-xs); }
-        .stat-change.up { color: var(--success-color); }
-    </style>
+:root{--dev-ink:#172B4D;--dev-blue:#2563EB;--dev-blue-deep:#1D4ED8;--dev-sky:#EDF4FF;--dev-canvas:#F6F8FC;--dev-line:#E6ECF5;--dev-muted:#708199}.main-content{background:var(--dev-canvas);padding:28px 32px 44px}.dev-hero{position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:20px;padding:27px 30px;border:1px solid #D9E6FA;border-radius:18px;background:linear-gradient(118deg,#fff 0%,#F2F7FF 63%,#E8F1FF 100%)}.dev-hero:after{content:'';position:absolute;right:-74px;bottom:-120px;width:300px;height:300px;border:38px solid rgba(37,99,235,.07);border-radius:50%}.dev-hero-copy{position:relative;z-index:1}.dev-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:9px;color:var(--dev-blue);font-size:11px;font-weight:750;letter-spacing:.1em}.dev-eyebrow:before{content:'';width:24px;height:3px;border-radius:4px;background:var(--dev-blue)}.dev-hero h2{margin:0 0 6px;color:var(--dev-ink);font-size:27px;letter-spacing:-.035em}.dev-hero p{margin:0;color:var(--dev-muted);font-size:13px}.dev-hero-action{position:relative;z-index:1;display:flex;align-items:center;gap:12px;padding:11px 13px;border:1px solid #D8E7FF;border-radius:12px;background:rgba(255,255,255,.78);color:#47627F;font-size:12px}.dev-live-dot{width:8px;height:8px;border-radius:50%;background:#10B981;box-shadow:0 0 0 5px rgba(16,185,129,.12)}.dev-stats{display:grid;grid-template-columns:1.15fr repeat(3,1fr);gap:12px;margin-bottom:20px}.dev-stat{min-height:132px;padding:18px 19px;border:1px solid var(--dev-line);border-radius:14px;background:#fff}.dev-stat.featured{border-color:#CDE0FF;background:linear-gradient(135deg,#fff,#F4F8FF)}.dev-stat-label{display:flex;justify-content:space-between;gap:8px;margin-bottom:16px;color:var(--dev-muted);font-size:12px}.dev-stat-label span:last-child{color:var(--dev-blue);font-weight:700}.dev-stat-value{color:var(--dev-ink);font-size:28px;font-weight:740;letter-spacing:-.04em;line-height:1}.dev-stat-value.money{font-size:25px}.dev-stat-note{margin-top:11px;color:#8291A6;font-size:11px;line-height:1.55}.dev-stat-note.up{color:#059669;font-weight:650}.dev-layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(260px,.85fr);gap:20px}.dev-panel{border:1px solid var(--dev-line);border-radius:14px;background:#fff}.dev-panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px 14px;border-bottom:1px solid var(--dev-line)}.dev-panel-title{margin:0;color:var(--dev-ink);font-size:15px;font-weight:720}.dev-panel-sub{margin-top:3px;color:#94A3B8;font-size:11px}.dev-table-wrap{overflow-x:auto;padding:0 4px}.dev-table{width:100%;border-collapse:collapse;font-size:13px}.dev-table th{padding:12px 16px;color:#8291A6;font-size:11px;font-weight:700;text-align:left}.dev-table td{padding:14px 16px;border-top:1px solid #F0F3F8;color:#4D6078}.dev-table tr:hover td{background:#FAFCFF}.dev-agent-name{color:var(--dev-ink);font-weight:650}.dev-income{color:#059669;font-weight:700}.dev-status{display:inline-flex;align-items:center;gap:5px;padding:3px 7px;border-radius:999px;background:#ECFDF5;color:#047857;font-size:11px;font-weight:650}.dev-status.pending{background:#FFF8E7;color:#B7791F}.dev-status.fail{background:#FFF1F2;color:#E11D48}.dev-actions{display:grid;gap:9px;padding:12px}.dev-action{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 16px;border:1px solid var(--dev-line);border-radius:11px;background:#fff;color:var(--dev-ink);text-decoration:none;transition:.2s}.dev-action:hover{border-color:#A9C7FA;background:#F8FBFF;transform:translateX(2px)}.dev-action-primary{border-color:#BFD7FF;background:#F3F7FF}.dev-action-copy strong{display:block;font-size:13px}.dev-action-copy span{display:block;margin-top:3px;color:#8291A6;font-size:11px}.dev-action-arrow{color:var(--dev-blue);font-size:18px}.dev-tip{margin:5px 12px 14px;padding:13px 14px;border-radius:10px;background:#FFFBEB;color:#8A6419;font-size:12px;line-height:1.65}.dev-tip strong{display:block;margin-bottom:2px;color:#A16207}@media(max-width:1080px){.dev-layout{grid-template-columns:1fr}.dev-stats{grid-template-columns:repeat(2,1fr)}}@media(max-width:680px){.main-content{padding:18px 16px 32px}.dev-hero{align-items:flex-start;flex-direction:column;padding:22px 20px}.dev-hero h2{font-size:23px}.dev-stats{grid-template-columns:1fr}.dev-hero-action{width:100%}.dev-panel-head{align-items:flex-start;flex-direction:column}.dev-table{min-width:620px}}
+</style>
 
 <style id="identity-switcher-css">
 .id-switcher{position:relative;display:inline-flex;align-items:center;}
@@ -113,98 +101,20 @@ document.addEventListener('click',function(e){
 </div>
 </aside>
 <main class="main-content">
-<div class="page-header">
-<h2>欢迎回来，张开发者</h2>
-<p>查看您的智能体表现、收入统计和结算信息</p>
-</div>
-<div class="stats-grid">
-<div class="stat-card">
-<div class="stat-label">我的智能体</div>
-<div class="stat-value">6</div>
-<div class="stat-change">已上架2 · 审核中1 · 已下架1 · 驳回1 · 草稿1</div>
-</div>
-<div class="stat-card">
-<div class="stat-label">本月调用次数</div>
-<div class="stat-value">8,520</div>
-<div class="stat-change up">↑ 23.5%</div>
-</div>
-<div class="stat-card">
-<div class="stat-label">本月收入</div>
-<div class="stat-value">¥4,260.50</div>
-<div class="stat-change up">↑ 18.2%</div>
-</div>
-<div class="stat-card">
-<div class="stat-label">待确认结算金额</div>
-<div class="stat-value" style="color: var(--warning-color);">¥3,584.00</div>
-<div class="stat-change">ST20260601 待确认，确认后计入可提现</div>
-</div>
-</div>
-<div class="content-card">
-<div class="content-card-header">
-<h3 class="content-card-title">快捷操作</h3>
-</div>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--spacing-md);">
-<a class="btn btn-outline" href="agent-add.html" style="padding: var(--spacing-lg); text-align: center; text-decoration: none;">+ 创建智能体</a>
-<a class="btn btn-outline" href="revenue-list.html" style="padding: var(--spacing-lg); text-align: center; text-decoration: none;">查看收入</a>
-<a class="btn btn-outline" href="agent-list.html" style="padding: var(--spacing-lg); text-align: center; text-decoration: none;">智能体管理</a>
-</div>
-</div>
-<div class="content-card">
-<div class="content-card-header">
-<h3 class="content-card-title">近期调用记录</h3>
-<a class="btn btn-sm btn-outline" href="revenue-list.html">查看全部</a>
-</div>
-<div class="table-wrapper">
-<table class="table">
-<thead>
-<tr>
-<th>时间</th>
-<th>智能体</th>
-<th>调用次数</th>
-<th>消费金额</th>
-<th>状态</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>2026-05-14 15:32</td>
-<td>合规监测智能体</td>
-<td>5</td>
-<td class="amount positive">¥2.50</td>
-<td><span class="badge badge-success">已入账</span></td>
-</tr>
-<tr>
-<td>2026-05-14 14:18</td>
-<td>数据分析智能体</td>
-<td>3</td>
-<td class="amount positive">¥9.00</td>
-<td><span class="badge badge-success">已入账</span></td>
-</tr>
-<tr>
-<td>2026-05-14 11:45</td>
-<td>合规监测智能体</td>
-<td>8</td>
-<td class="amount positive">¥4.00</td>
-<td><span class="badge badge-success">已入账</span></td>
-</tr>
-<tr>
-<td>2026-05-14 10:20</td>
-<td>数据分析智能体</td>
-<td>2</td>
-<td class="amount positive">¥6.00</td>
-<td><span class="badge badge-warning">处理中</span></td>
-</tr>
-<tr>
-<td>2026-05-14 09:05</td>
-<td>合规监测智能体</td>
-<td>1</td>
-<td class="amount positive">¥0.50</td>
-<td><span class="badge" style="background:#fee2e2; color:#dc2626;">入账失败</span></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+  <section class="dev-hero">
+    <div class="dev-hero-copy"><div class="dev-eyebrow">DEVELOPER CONSOLE</div><h2>你好，张开发者</h2><p>管理智能体发布节奏，关注调用表现和可结算收入。</p></div>
+    <div class="dev-hero-action"><span class="dev-live-dot"></span><span>2 个智能体正在为用户提供服务</span></div>
+  </section>
+  <section class="dev-stats" aria-label="本月经营概览">
+    <div class="dev-stat featured"><div class="dev-stat-label">智能体资产 <span>查看管理 →</span></div><div class="dev-stat-value">6</div><div class="dev-stat-note">已上架 2 · 审核中 1 · 待处理 3</div></div>
+    <div class="dev-stat"><div class="dev-stat-label">本月调用次数</div><div class="dev-stat-value">8,520</div><div class="dev-stat-note up">↑ 23.5% 较上月</div></div>
+    <div class="dev-stat"><div class="dev-stat-label">本月预估收入</div><div class="dev-stat-value money">¥4,260.50</div><div class="dev-stat-note up">↑ 18.2% 较上月</div></div>
+    <div class="dev-stat"><div class="dev-stat-label">待确认结算</div><div class="dev-stat-value money" style="color:#C57613">¥3,584.00</div><div class="dev-stat-note">ST20260601 待确认</div></div>
+  </section>
+  <div class="dev-layout">
+    <section class="dev-panel"><div class="dev-panel-head"><div><h3 class="dev-panel-title">近期调用收入</h3><p class="dev-panel-sub">最近五笔已产生收入的调用记录</p></div><a class="btn btn-sm btn-outline" href="revenue-list.html">查看收入明细</a></div><div class="dev-table-wrap"><table class="dev-table"><thead><tr><th>调用时间</th><th>智能体</th><th>调用次数</th><th>收入</th><th>状态</th></tr></thead><tbody><tr><td>2026-05-14 15:32</td><td class="dev-agent-name">合规监测智能体</td><td>5</td><td class="dev-income">¥2.50</td><td><span class="dev-status">● 已入账</span></td></tr><tr><td>2026-05-14 14:18</td><td class="dev-agent-name">数据分析智能体</td><td>3</td><td class="dev-income">¥9.00</td><td><span class="dev-status">● 已入账</span></td></tr><tr><td>2026-05-14 11:45</td><td class="dev-agent-name">合规监测智能体</td><td>8</td><td class="dev-income">¥4.00</td><td><span class="dev-status">● 已入账</span></td></tr><tr><td>2026-05-14 10:20</td><td class="dev-agent-name">数据分析智能体</td><td>2</td><td class="dev-income">¥6.00</td><td><span class="dev-status pending">● 处理中</span></td></tr><tr><td>2026-05-14 09:05</td><td class="dev-agent-name">合规监测智能体</td><td>1</td><td class="dev-income">¥0.50</td><td><span class="dev-status fail">● 入账失败</span></td></tr></tbody></table></div></section>
+    <aside class="dev-panel"><div class="dev-panel-head"><div><h3 class="dev-panel-title">下一步操作</h3><p class="dev-panel-sub">把待办变成可发布的产品</p></div></div><div class="dev-actions"><a class="dev-action dev-action-primary" href="agent-add.html"><span class="dev-action-copy"><strong>创建智能体</strong><span>配置能力、计费与发布信息</span></span><span class="dev-action-arrow">→</span></a><a class="dev-action" href="agent-list.html"><span class="dev-action-copy"><strong>处理智能体状态</strong><span>草稿、审核与上架状态一览</span></span><span class="dev-action-arrow">→</span></a><a class="dev-action" href="settlement-list.html"><span class="dev-action-copy"><strong>确认待结算单</strong><span>确认后计入可提现金额</span></span><span class="dev-action-arrow">→</span></a></div><div class="dev-tip"><strong>待处理提醒</strong>存在 1 个智能体正在审核中，审核期间线上版本不受影响。</div></aside>
+  </div>
 </main>
 </body>
 </html>

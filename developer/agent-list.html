@@ -8,75 +8,8 @@
 <link href="../styles.css" rel="stylesheet"/>
 <script src="../app.js"></script>
 <style>
-        .page-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: var(--spacing-lg);
-            padding: 4px 0 18px;
-            margin-bottom: var(--spacing-lg);
-            border-bottom: 1px solid var(--border-light);
-        }
-        .page-header-title {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            min-width: 0;
-        }
-        .page-header-title::before {
-            content: '';
-            width: 3px;
-            height: 42px;
-            flex-shrink: 0;
-            margin-top: 1px;
-            border-radius: 3px;
-            background: #5B8DEF;
-        }
-        .page-header h2 { margin: 0 0 3px; color: var(--text-primary); font-size: 21px; font-weight: 600; }
-        .page-header p { margin: 0; color: var(--text-secondary); font-size: 13px; }
-        .page-header .btn { flex-shrink: 0; }
-        @media (max-width: 640px) {
-            .page-header { align-items: flex-start; flex-direction: column; }
-            .page-header .btn { width: 100%; justify-content: center; }
-        }
-        .agent-card {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-lg);
-            padding: var(--spacing-lg);
-            background: var(--card-bg);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-lg);
-            margin-bottom: var(--spacing-md);
-            transition: all 0.2s;
-        }
-        .agent-card:hover { border-color: var(--developer-color); box-shadow: var(--shadow-md); }
-        .agent-avatar {
-            width: 64px; height: 64px;
-            background: var(--developer-light);
-            border-radius: var(--radius-lg);
-            display: flex; align-items: center; justify-content: center;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        .agent-info { flex: 1; }
-        .agent-name { font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-xs); }
-        .agent-meta { display: flex; gap: var(--spacing-lg); font-size: 13px; color: var(--text-secondary); }
-        .agent-meta span { display: flex; align-items: center; gap: var(--spacing-xs); }
-        .agent-actions { display: flex; gap: var(--spacing-sm); }
-        .status-badge {
-            display: inline-flex; align-items: center; gap: var(--spacing-xs);
-            padding: var(--spacing-xs) var(--spacing-sm);
-            border-radius: var(--radius-md); font-size: 12px; font-weight: 500;
-        }
-        .status-online { background: var(--success-light); color: var(--success-color); }
-        .status-offline { background: var(--border-light); color: var(--text-muted); }
-        .status-audit { background: var(--admin-light); color: var(--admin-color); }
-        .status-rejected { background: #fee2e2; color: var(--danger-color); }
-        .status-draft { background: #f1f5f9; color: #64748b; }
-        .btn-offline { color: var(--danger-color); border-color: var(--danger-color); }
-        #toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 14px; display: none; z-index: 1200; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
-    </style>
+:root{--agent-ink:#172B4D;--agent-blue:#2563EB;--agent-canvas:#F6F8FC;--agent-line:#E6ECF5;--agent-muted:#708199}.main-content{background:var(--agent-canvas);padding:28px 32px 44px}.agent-hero{position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:16px;padding:25px 28px;border:1px solid #D9E6FA;border-radius:18px;background:linear-gradient(115deg,#fff,#F0F6FF)}.agent-hero:after{content:'';position:absolute;right:-55px;top:-105px;width:230px;height:230px;border:32px solid rgba(37,99,235,.07);border-radius:50%}.agent-hero-copy,.agent-hero .btn{position:relative;z-index:1}.agent-kicker{display:flex;align-items:center;gap:8px;margin-bottom:8px;color:var(--agent-blue);font-size:11px;font-weight:750;letter-spacing:.1em}.agent-kicker:before{content:'';width:24px;height:3px;border-radius:3px;background:var(--agent-blue)}.agent-hero h2{margin:0 0 5px;color:var(--agent-ink);font-size:26px;letter-spacing:-.035em}.agent-hero p{margin:0;color:var(--agent-muted);font-size:13px}.agent-shell{border:1px solid var(--agent-line);border-radius:15px;background:#fff}.agent-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:17px 19px 14px;border-bottom:1px solid var(--agent-line)}.agent-toolbar-title{margin:0;color:var(--agent-ink);font-size:15px;font-weight:720}.agent-toolbar-title span{margin-left:7px;color:#8291A6;font-size:12px;font-weight:500}.agent-search{width:215px!important;border-color:#DCE6F4!important;border-radius:9px!important;background:#FAFCFF!important;font-size:12px!important}.agent-tabs{display:flex;gap:7px;overflow-x:auto;padding:13px 19px 14px;border-bottom:1px solid var(--agent-line)}.agent-tabs .tab-btn{flex:0 0 auto;padding:6px 10px;border:1px solid transparent;border-radius:999px;background:#F5F7FB;color:#64748B;font-size:12px;font-weight:600}.agent-tabs .tab-btn:hover{background:#EDF4FF;color:var(--agent-blue)}.agent-tabs .tab-btn.active{border-color:#C8DBFC;background:#EAF2FF;color:#1D4ED8}.agent-list{padding:10px 12px 12px}.agent-card{display:grid;grid-template-columns:56px minmax(0,1fr) auto auto;align-items:center;gap:16px;margin:0;padding:17px 12px;border:1px solid transparent;border-radius:12px;background:#fff;transition:.2s}.agent-card:hover{border-color:#CBDBF5;background:#FAFCFF;box-shadow:0 5px 14px rgba(37,99,235,.05)}.agent-card+.agent-card{margin-top:3px}.agent-avatar{width:56px;height:56px;border-radius:13px}.agent-avatar svg{width:56px;height:56px}.agent-info{min-width:0}.agent-name{margin-bottom:6px;color:var(--agent-ink);font-size:15px;font-weight:720}.agent-meta{gap:14px;color:#8090A5;font-size:12px;flex-wrap:wrap}.agent-meta span{gap:4px}.agent-meta svg{width:13px;height:13px}.agent-actions{gap:6px;justify-content:flex-end}.agent-actions .btn{border-radius:7px}.status-badge{white-space:nowrap;border-radius:999px;font-size:11px;font-weight:650}.status-online{background:#ECFDF5;color:#047857}.status-offline{background:#F1F5F9;color:#64748B}.status-audit{background:#FFF8E7;color:#B7791F}.status-rejected{background:#FFF1F2;color:#E11D48}.status-draft{background:#F1F5F9;color:#64748B}.btn-offline{color:#DC2626;border-color:#FCA5A5}.agent-summary{display:flex;gap:8px;margin-bottom:16px}.agent-summary-item{padding:6px 10px;border:1px solid #DCE8FA;border-radius:999px;background:#fff;color:#5D708A;font-size:11px}.agent-summary-item b{margin-right:4px;color:var(--agent-blue)}#toast{border-radius:9px;background:#172B4D}@media(max-width:900px){.main-content{padding:20px}.agent-card{grid-template-columns:56px minmax(0,1fr) auto}.agent-actions{grid-column:2 / -1;justify-content:flex-start}.agent-card .status-badge{grid-column:3}.agent-meta{gap:8px}}@media(max-width:620px){.main-content{padding:18px 16px 32px}.agent-hero{align-items:flex-start;flex-direction:column;padding:22px 20px}.agent-hero .btn{width:100%}.agent-toolbar{align-items:flex-start;flex-direction:column}.agent-search{width:100%!important}.agent-card{grid-template-columns:52px minmax(0,1fr);gap:12px}.agent-avatar,.agent-avatar svg{width:52px;height:52px}.agent-card .status-badge{grid-column:2}.agent-actions{grid-column:1 / -1}.agent-summary{overflow-x:auto;white-space:nowrap}}
+</style>
 
 <style id="identity-switcher-css">
 .id-switcher{position:relative;display:inline-flex;align-items:center;}
@@ -168,21 +101,10 @@ document.addEventListener('click',function(e){
 </div>
 </aside>
 <main class="main-content">
-<div class="page-header">
-<div class="page-header-title">
-<div>
-<h2>智能体管理</h2>
-<p>查看智能体状态与运营数据</p>
-</div>
-</div>
-<a class="btn btn-primary" href="agent-add.html">+ 创建智能体</a>
-</div>
-<div class="content-card">
-<div class="content-card-header">
-<h3 class="content-card-title">我的智能体 (6)</h3>
-<input class="form-input" placeholder="搜索智能体..." style="width: 200px;" type="text"/>
-</div>
-<div class="tab-nav">
+<section class="agent-hero"><div class="agent-hero-copy"><div class="agent-kicker">AGENT PORTFOLIO</div><h2>智能体管理</h2><p>把产品状态、调用表现与发布动作集中在一个工作台。</p></div><a class="btn btn-primary" href="agent-add.html">+ 创建智能体</a></section>
+<div class="agent-summary" aria-label="智能体状态摘要"><span class="agent-summary-item"><b>2</b> 正在服务</span><span class="agent-summary-item"><b>1</b> 审核中</span><span class="agent-summary-item"><b>1</b> 待处理</span></div>
+<section class="agent-shell"><div class="agent-toolbar"><h3 class="agent-toolbar-title">我的智能体 <span>共 6 个</span></h3><input class="form-input agent-search" placeholder="搜索智能体名称" type="text"/></div>
+<div class="agent-tabs">
 <button class="tab-btn active" onclick="filterStatus('all', this)" type="button">全部 (6)</button>
 <button class="tab-btn" onclick="filterStatus('草稿', this)" type="button">草稿 (1)</button>
 <button class="tab-btn" onclick="filterStatus('审核中', this)" type="button">审核中 (1)</button>
@@ -190,6 +112,7 @@ document.addEventListener('click',function(e){
 <button class="tab-btn" onclick="filterStatus('已上架', this)" type="button">已上架 (2)</button>
 <button class="tab-btn" onclick="filterStatus('已下架', this)" type="button">已下架 (1)</button>
 </div>
+<div class="agent-list">
 <div class="agent-card" data-status="草稿">
 <div class="agent-avatar"><svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cv1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2563EB"/><stop offset="1" stop-color="#1D4ED8"/></linearGradient></defs><rect width="64" height="64" fill="url(#cv1)"/><circle cx="54" cy="10" r="29" fill="#ffffff" opacity="0.10"/><circle cx="8" cy="59" r="20" fill="#ffffff" opacity="0.08"/><g transform="translate(17.9,17.9) scale(1.173)" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></g></svg></div>
 <div class="agent-info">
@@ -291,6 +214,7 @@ document.addEventListener('click',function(e){
 </div>
 </div>
 </div>
+</section>
 <!-- 下架确认弹窗 -->
 <div class="modal-overlay" id="offlineModal" onclick="if(event.target===this)closeOffline()">
 <div class="modal" style="max-width: 420px;">
