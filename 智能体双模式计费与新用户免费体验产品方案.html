@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>彩翼平台 · 智能体双模式计费与新用户免费体验产品方案</title>
+<style>
+:root{--blue:#2563eb;--blue-dark:#1d4ed8;--blue-light:#eff4ff;--ink:#1e293b;--muted:#64748b;--border:#e2e8f0;--page:#f1f5f9;--green:#047857;--green-bg:#ecfdf5;--amber:#a16207;--amber-bg:#fffbeb}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--page);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:14px;line-height:1.85}header{padding:36px 32px;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff}header h1{margin:0 0 7px;font-size:25px;letter-spacing:-.02em}header p{margin:0;font-size:13px;opacity:.92}.toc{position:sticky;top:0;z-index:10;display:flex;gap:5px;flex-wrap:wrap;padding:10px 24px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.97)}.toc a{padding:4px 9px;border-radius:14px;background:var(--blue-light);color:var(--blue);font-size:12px;text-decoration:none;white-space:nowrap}.toc a:hover{background:var(--blue);color:#fff}.wrap{max-width:980px;margin:0 auto;padding:24px 20px 64px}.card{margin-bottom:20px;padding:25px 28px;border-radius:12px;background:#fff;box-shadow:0 1px 6px rgba(15,23,42,.06);scroll-margin-top:62px}h2{margin:0 0 14px;padding-left:12px;border-left:4px solid var(--blue);color:var(--blue-dark);font-size:19px;line-height:1.4}h3{margin:19px 0 8px;color:var(--blue);font-size:15px}p{margin:7px 0}.muted{color:var(--muted);font-size:12.5px}.highlight,.notice,.success{margin:12px 0;padding:11px 14px;border-radius:8px;font-size:13px;line-height:1.75}.highlight{border-left:4px solid var(--blue);background:var(--blue-light);color:var(--blue-dark)}.notice{border-left:4px solid #f59e0b;background:var(--amber-bg);color:#92400e}.success{border-left:4px solid #10b981;background:var(--green-bg);color:#065f46}table{width:100%;margin:10px 0 6px;border-collapse:collapse;font-size:13px}th{background:var(--blue-light);color:var(--blue-dark);font-weight:650;text-align:left}th,td{padding:9px 10px;border:1px solid var(--border);vertical-align:top;line-height:1.7}tr:nth-child(even) td{background:#fafcff}.tag{display:inline-flex;padding:2px 7px;border-radius:5px;background:#dbeafe;color:#1d4ed8;font-size:11px;font-weight:700}.tag.done{background:#dcfce7;color:#15803d}.tag.todo{background:#fef3c7;color:#a16207}.flow{display:grid;grid-template-columns:repeat(5,minmax(120px,1fr));gap:0;margin:14px 0;padding:17px 18px;border:1px solid var(--border);border-radius:10px;background:#fff;overflow-x:auto}.flow-step{position:relative;min-width:130px;padding:3px 20px 3px 0;color:#334155;font-size:13px;font-weight:650}.flow-step:not(:last-child):after{position:absolute;right:6px;content:'→';color:#94a3b8;font-size:17px;font-weight:400}.flow-step small{display:block;margin-top:4px;color:#64748b;font-size:11px;font-weight:400;line-height:1.55}.list{margin:7px 0;padding-left:20px}.list li{margin:3px 0}.ac-id{color:var(--blue);font-weight:700;white-space:nowrap}footer{padding:0 20px 42px;color:var(--muted);font-size:12px;text-align:center}@media print{.toc{display:none}body{background:#fff}.card{box-shadow:none;page-break-inside:avoid}}@media(max-width:680px){header{padding:28px 20px}header h1{font-size:21px}.toc{padding:9px 12px}.wrap{padding:18px 12px 42px}.card{padding:20px 16px}.flow{grid-template-columns:repeat(2,minmax(140px,1fr));gap:10px}.flow-step:after{display:none}table{font-size:12px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>彩翼平台 · 智能体双模式计费与新用户免费体验产品方案</h1>
+  <p>产品方案｜V1.0 · 2026-08-11 · 覆盖开发者定价、用户权益、运营配置与研发验收</p>
+</header>
+<nav class="toc">
+  <a href="#sec1">1 背景与目标</a><a href="#sec2">2 范围与角色</a><a href="#sec3">3 计费设计</a><a href="#sec4">4 免费体验</a><a href="#sec5">5 各端交互</a><a href="#sec6">6 数据与流程</a><a href="#sec7">7 异常边界</a><a href="#sec8">8 验收标准</a><a href="#sec9">9 后续迭代</a>
+</nav>
+<main class="wrap">
+  <section class="card" id="sec1">
+    <h2>1 背景与目标</h2>
+    <p>平台需要同时适配不同智能体的成本与商业化方式：输出量波动较大的智能体适合按 Token 计费；任务边界稳定、用户容易理解的智能体适合按次计费。同时，新注册个人用户需要先体验智能体价值，再进入充值和付费调用路径。</p>
+    <div class="highlight"><strong>本期目标：</strong>让开发者可选择合适的收费模式；让用户在调用前明确知道是否扣费；让运营可统一配置新用户免费次数，并可追踪权益消耗。</div>
+    <table><thead><tr><th style="width:25%">目标</th><th>可验证指标</th></tr></thead><tbody>
+      <tr><td>降低首次使用门槛</td><td>新注册用户可在市场、详情页和调用反馈中识别每个智能体的免费体验剩余次数。</td></tr>
+      <tr><td>统一收费表达</td><td>开发者、用户和运营端均明确展示智能体的按 Token或按次收费规则，避免“按量”等模糊表述。</td></tr>
+      <tr><td>保证权益与扣费正确</td><td>每次成功调用只发生一次权益扣减或一次付费扣减；重复请求、失败调用不得重复扣费。</td></tr>
+      <tr><td>支持经营分析</td><td>免费调用、付费调用、平台成本和后续转化可按用户、智能体、时间维度查询。</td></tr>
+    </tbody></table>
+  </section>
+
+  <section class="card" id="sec2">
+    <h2>2 适用范围与角色</h2>
+    <table><thead><tr><th style="width:20%">对象</th><th style="width:30%">本期职责</th><th>关键边界</th></tr></thead><tbody>
+      <tr><td>新注册个人用户</td><td>获得免费体验资格，浏览、调用智能体并查看权益与消费记录。</td><td>免费权益绑定平台个人账号；加入机构不会新建或重置个人免费权益。</td></tr>
+      <tr><td>开发者</td><td>创建、编辑智能体时选择按 Token或按次计费，并完成价格与用量配置。</td><td>免费体验不向用户收费；本期原型不将免费调用纳入开发者分成。</td></tr>
+      <tr><td>平台运营</td><td>配置后续新注册用户的每智能体免费次数，并查询用户权益消耗。</td><td>规则调整只影响调整后新注册用户，已注册用户保留注册时获得的规则快照。</td></tr>
+      <tr><td>财务与结算</td><td>按正式账务口径处理付费调用、开发者结算和发票。</td><td>免费调用金额为 0，不进入用户开票和开发者分成；平台承担对应算力成本。</td></tr>
+    </tbody></table>
+    <div class="notice"><strong>范围说明：</strong>本期免费权益仅面向新注册的个人账号。企业/机构审核通过后获得的是机构成员身份，不应重复发放“新用户”免费权益。</div>
+  </section>
+
+  <section class="card" id="sec3">
+    <h2>3 智能体双模式计费设计</h2>
+    <h3>3.1 计费模式</h3>
+    <table><thead><tr><th style="width:18%">模式</th><th style="width:28%">适用场景</th><th style="width:27%">开发者配置</th><th>用户侧展示</th></tr></thead><tbody>
+      <tr><td><strong>按 Token 计费</strong></td><td>输出长度、推理复杂度或上下文波动较大的智能体。</td><td>Token → 彩豆换算率、单次预估 Token 区间、单次 Token 熔断上限。</td><td>“按实际 Token 用量计费”，在调用前展示预估区间；最终以成功调用的实际 Token 为准。</td></tr>
+      <tr><td><strong>按次计费</strong></td><td>任务输出相对稳定、适合用单次价格表达价值的智能体。</td><td>固定每次价格、单次预估 Token、单次 Token 熔断上限。</td><td>“{价格} 彩豆/次”，调用成功后扣除固定价格。</td></tr>
+    </tbody></table>
+    <h3>3.2 配置与校验规则</h3>
+    <table><thead><tr><th style="width:28%">规则</th><th>产品要求</th></tr></thead><tbody>
+      <tr><td>计费方式切换</td><td>创建和编辑页均支持两种模式；编辑已上架智能体时，变更随审核流程生效，审核期间继续使用线上已生效规则。</td></tr>
+      <tr><td>价格合法性</td><td>价格、换算率、预估 Token、熔断上限均须为正数；Token 熔断上限不得小于预估上限。</td></tr>
+      <tr><td>按次价格风险校验</td><td>若“每次价格 × 开发者分成比例”低于预估算力成本，则阻止提交并提示开发者调整价格或模型配置。</td></tr>
+      <tr><td>计费快照</td><td>每笔成功调用必须记录调用时已生效的计费模式、价格/换算率、分成比例与成本参数，后续规则变更不得回写历史记录。</td></tr>
+      <tr><td>Token 熔断</td><td>当累计 Token 达到上限时，服务端应中止后续生成并返回可解释结果；实际使用量按已产生的 Token 记录。</td></tr>
+    </tbody></table>
+  </section>
+
+  <section class="card" id="sec4">
+    <h2>4 新用户免费体验权益</h2>
+    <div class="success"><strong>核心规则：</strong>新注册用户 × 每个智能体 = 一组一次性免费体验次数。每个智能体独立累计，成功调用优先消耗 1 次；用完后不重置，后续按该智能体当前有效计费规则收费。</div>
+    <table><thead><tr><th style="width:28%">规则项</th><th>规则定义</th></tr></thead><tbody>
+      <tr><td>配置主体</td><td>平台运营在“计费规则”中统一配置每位后续新注册用户对每个智能体的免费次数。填 0 表示不提供免费体验。</td></tr>
+      <tr><td>权益归属</td><td>按“平台个人账号 × 智能体”独立累计；不与机构、角色、设备或浏览器绑定。</td></tr>
+      <tr><td>初始化时点</td><td>用户注册时记录适用的免费次数规则快照；首次成功调用某智能体时，创建该智能体的权益余额记录。也可在注册时批量初始化，但需控制智能体规模带来的数据量。</td></tr>
+      <tr><td>扣减时点</td><td>仅在调用成功、获得有效结果后扣减 1 次；模型超时、参数校验失败、系统错误或用户取消不得扣减。</td></tr>
+      <tr><td>用尽后处理</td><td>余额为 0 时，调用前展示收费规则；成功调用后按当次计费快照扣除彩豆。</td></tr>
+      <tr><td>成本与结算</td><td>免费调用的用户金额为 0，算力成本由平台承担；本期不计入开发者分成、不进入用户可开票金额。</td></tr>
+      <tr><td>规则变更</td><td>仅作用于规则生效后新注册用户。已注册用户继续按注册时记录的免费次数规则执行，剩余次数不受运营配置修改影响。</td></tr>
+    </tbody></table>
+  </section>
+
+  <section class="card" id="sec5">
+    <h2>5 各端产品交互</h2>
+    <h3>5.1 用户端：让用户知道、理解并能验证权益</h3>
+    <table><thead><tr><th style="width:24%">页面 / 节点</th><th>展示与交互要求</th><th style="width:21%">原型状态</th></tr></thead><tbody>
+      <tr><td>个人注册成功页</td><td>提示“新用户体验权益已到账”，说明每个智能体可免费体验 {次数} 次，并提供进入智能体市场的主按钮。</td><td><span class="tag done">已覆盖</span></td></tr>
+      <tr><td>智能体市场</td><td>每张智能体卡展示“剩余 N 次”“仅剩 N 次”或“免费体验已用完 · 按计费规则扣费”。</td><td><span class="tag done">已覆盖</span></td></tr>
+      <tr><td>智能体详情与调用前</td><td>明确本次是否消耗免费次数；余额为 0 时明确收费方式。禁止用户在不知情时进入付费调用。</td><td><span class="tag done">已覆盖</span></td></tr>
+      <tr><td>调用后反馈</td><td>免费调用显示已消耗 1 次及剩余次数；付费调用显示实际扣费、计费依据与消费记录入口。</td><td><span class="tag done">原型模拟</span></td></tr>
+      <tr><td>消费记录 / 调用详情</td><td>免费调用标记“免费体验”、金额为 0、不进入待开票范围；详情应展示权益扣减与调用快照。</td><td><span class="tag todo">需补齐详情</span></td></tr>
+      <tr><td>用户首页</td><td>建议增加权益摘要与“去体验智能体”入口，避免用户只能进入市场后才发现权益。</td><td><span class="tag todo">后续优化</span></td></tr>
+    </tbody></table>
+    <h3>5.2 开发者端：可定价、可理解审核边界</h3>
+    <p>创建和编辑智能体提供“按 Token计费 / 按次计费”单选入口，并随选择展示对应字段与测算说明。详情与列表对按次示例展示固定价格，对按 Token 示例展示按实际用量计费。</p>
+    <p class="muted">本期不要求开发者自行配置免费次数，也不在开发者收入中将免费调用包装为收入；正式经营报表可单独展示免费调用量、平台补贴成本和付费转化，避免混淆结算金额。</p>
+    <h3>5.3 运营端：可配置、可查询、可追溯</h3>
+    <p>“规则设置 → 计费规则”中配置免费次数，并清晰标注其仅对后续新注册个人用户有效。个人账号详情展示按智能体拆分的初始次数、已使用、剩余和最近使用时间。规则保存应生成修改记录。</p>
+  </section>
+
+  <section class="card" id="sec6">
+    <h2>6 核心数据与调用流程</h2>
+    <h3>6.1 建议的数据对象</h3>
+    <table><thead><tr><th style="width:26%">对象</th><th>关键字段</th><th>用途</th></tr></thead><tbody>
+      <tr><td>计费规则版本</td><td>规则版本、Token 单价、免费次数、启用状态、生效时间、操作人</td><td>运营配置留痕，并为新注册用户确定适用规则。</td></tr>
+      <tr><td>智能体计费版本</td><td>智能体 ID、模式、单价/换算率、Token 预估与上限、审核状态、生效时间</td><td>保证调用与结算使用正确的计费快照。</td></tr>
+      <tr><td>用户免费权益</td><td>个人账号 ID、智能体 ID、初始次数、已用次数、剩余次数、规则版本、最近使用时间</td><td>支撑市场展示、调用前判断、原子扣减与运营查询。</td></tr>
+      <tr><td>调用记录</td><td>调用请求 ID、用户、智能体、结果状态、Token 用量、免费/付费标记、金额、计费快照、时间</td><td>消费明细、对账、问题追溯和报表统计的唯一依据。</td></tr>
+      <tr><td>账户流水</td><td>流水 ID、账户、变动类型、彩豆金额、关联调用 ID、余额、时间</td><td>仅对付费调用产生扣费流水；免费调用可产生 0 元业务记录但不改余额。</td></tr>
+    </tbody></table>
+    <h3>6.2 调用主链路</h3>
+    <div class="flow"><div class="flow-step">发起调用<small>生成唯一请求 ID</small></div><div class="flow-step">读取权益与计费快照<small>判断剩余免费次数</small></div><div class="flow-step">执行智能体<small>记录实际 Token 与结果</small></div><div class="flow-step">成功后原子结算<small>扣免费次数或彩豆</small></div><div class="flow-step">返回结果与记录<small>展示剩余次数或扣费明细</small></div></div>
+    <div class="highlight"><strong>实现要求：</strong>权益判断、权益扣减/彩豆扣减、调用记录落库必须以请求 ID 做幂等控制。对于并发调用，服务端必须采用事务或条件更新，确保免费余额不会扣成负数，也不会出现同一次调用重复扣减。</div>
+  </section>
+
+  <section class="card" id="sec7">
+    <h2>7 异常、权限与口径边界</h2>
+    <table><thead><tr><th style="width:25%">场景</th><th>处理原则</th></tr></thead><tbody>
+      <tr><td>同一请求重试</td><td>使用请求 ID 幂等返回原结果或原结算结果，不得二次扣权益或余额。</td></tr>
+      <tr><td>调用执行失败</td><td>不扣免费次数、不扣彩豆；保留失败记录、错误码与耗时，便于排障和成本分析。</td></tr>
+      <tr><td>权益余额与页面不一致</td><td>详情页和结算以服务端实时余额为准；前端只作展示，不可凭前端变量决定最终扣减。</td></tr>
+      <tr><td>免费次数与计费规则变更</td><td>已有用户按权益记录中的规则快照执行；新用户按新规则初始化。历史调用按调用快照展示与结算。</td></tr>
+      <tr><td>彩豆余额不足</td><td>免费次数已用尽且余额不足时，在调用前阻止请求并引导充值；不得先调用后发现扣款失败。</td></tr>
+      <tr><td>智能体下架或审核中</td><td>不可发起新调用；已产生的调用记录与权益记录保留，不因下架删除。</td></tr>
+      <tr><td>个人账号加入或退出机构</td><td>个人免费权益不随机构成员关系迁移、复制或删除；机构资源与个人权益必须隔离。</td></tr>
+    </tbody></table>
+  </section>
+
+  <section class="card" id="sec8">
+    <h2>8 验收标准</h2>
+    <table><thead><tr><th style="width:12%">编号</th><th>验收标准</th></tr></thead><tbody>
+      <tr><td class="ac-id">AC01</td><td>开发者创建和编辑智能体均可在按 Token和按次计费之间选择，且各自配置项、校验规则和说明正确切换。</td></tr>
+      <tr><td class="ac-id">AC02</td><td>按 Token智能体按实际成功调用的 Token 用量计费；按次智能体成功调用后按固定价格计费；两种模式均记录调用时计费快照。</td></tr>
+      <tr><td class="ac-id">AC03</td><td>运营可配置每位后续新注册个人用户对每个智能体的免费次数，0 表示不提供；保存后产生可查询的规则版本或修改记录。</td></tr>
+      <tr><td class="ac-id">AC04</td><td>新注册个人用户对每个智能体获得独立的一次性免费次数；成功调用优先消耗 1 次，用完不重置。</td></tr>
+      <tr><td class="ac-id">AC05</td><td>个人用户注册成功页、智能体市场、详情页与调用反馈能准确展示免费权益状态；余额为 0 时在调用前明确收费规则。</td></tr>
+      <tr><td class="ac-id">AC06</td><td>免费调用金额为 0，消费记录明确标记免费体验且不进入待开票范围；免费调用不产生用户扣费流水和开发者分成。</td></tr>
+      <tr><td class="ac-id">AC07</td><td>运营端个人账号详情可查看每个智能体的初始、已用、剩余免费次数及最近使用时间。</td></tr>
+      <tr><td class="ac-id">AC08</td><td>系统对相同请求 ID 的重复调用保持幂等；失败调用不扣权益或彩豆；并发调用不会产生权益负数或重复扣款。</td></tr>
+      <tr><td class="ac-id">AC09</td><td>运营修改免费次数仅影响修改后注册的个人账号；已注册用户的免费权益和历史调用明细不被回写。</td></tr>
+      <tr><td class="ac-id">AC10</td><td>研发可按用户、智能体、时间区分免费与付费调用，并统计免费调用次数、平台成本、付费转化和收入。</td></tr>
+    </tbody></table>
+  </section>
+
+  <section class="card" id="sec9">
+    <h2>9 后续迭代建议</h2>
+    <table><thead><tr><th style="width:26%">方向</th><th>建议内容</th><th style="width:18%">优先级</th></tr></thead><tbody>
+      <tr><td>权益运营</td><td>支持指定智能体、指定渠道或指定人群的体验包；明确叠加、覆盖、有效期和回收规则。</td><td>P1</td></tr>
+      <tr><td>经营看板</td><td>按智能体查看免费体验领取率、调用率、用尽率、首充率、免费成本与付费收入。</td><td>P1</td></tr>
+      <tr><td>开发者分析</td><td>在开发者端分开呈现免费调用量、平台补贴成本、付费调用收入与实际结算，避免收入误解。</td><td>P1</td></tr>
+      <tr><td>调用详情</td><td>补齐用户消费详情中的免费标记、权益变化、Token 用量、计费快照和失败原因。</td><td>P0</td></tr>
+      <tr><td>风控与限额</td><td>增加用户、智能体、IP、设备等维度的调用频控；防止批量注册和免费权益滥用。</td><td>P1</td></tr>
+    </tbody></table>
+    <p class="muted">说明：当前静态原型中的余额、权益与扣减均为演示数据。正式上线前应完成服务端账户、调用、计费、幂等、审计、风控和监控能力建设。</p>
+  </section>
+</main>
+<footer>彩翼公共采购智能体协同管理平台 · 智能体双模式计费与新用户免费体验产品方案 V1.0 · 2026-08-11</footer>
+</body>
+</html>
