@@ -21,15 +21,13 @@
 
 <div class="stage s1">
   <div class="stage-head"><span class="stage-no">流程一</span><span class="stage-name">公开注册：个人账号或企业/机构身份</span></div>
-  <div class="notice"><strong>统一账号规则：</strong>手机号全平台唯一，对应一个长期保留的平台个人账号。个人用户注册后直接使用个人身份；企业/机构申请审核通过后，为申请人的个人账号新增机构主账号成员关系。</div>
+  <div class="notice"><strong>统一账号规则：</strong>手机号全平台唯一，对应一个长期保留的平台个人账号。个人与企业/机构用户均在运营审核通过后获得可用身份；企业/机构审核通过后，同时为申请人的个人账号新增机构主账号成员关系。</div>
   <div class="branch-divider">选择注册身份</div>
   <div class="branch-row">
-    <span class="path-tag approve">个人用户</span>
-    <div class="node">填写个人信息<div class="sub">姓名 · 身份证号 · 手机号 · 密码 · 协议</div></div><span class="arrow">→</span>
-    <div class="node">提交注册</div><span class="arrow">→</span>
-    <div class="node state-node">【免审开通试用】</div><span class="arrow">→</span>
-    <div class="node">初始化免费体验资格<div class="sub">每个智能体首次调用时初始化次数</div></div><span class="arrow">→</span>
-    <div class="node end-node">以个人身份登录使用</div>
+    <span class="path-tag" style="background:#2563eb">个人用户</span>
+    <div class="node">填写个人实名与账号信息<div class="sub">姓名 · 身份证号 · 手机号 · 密码 · 协议</div></div><span class="arrow">→</span>
+    <div class="node">提交注册申请</div><span class="arrow">→</span>
+    <div class="node state-node">【提交待审核】</div>
   </div>
   <div class="branch-row">
     <span class="path-tag" style="background:#2563eb">企业 / 机构</span>
@@ -39,8 +37,9 @@
     <div class="node state-node">【提交待审核】</div>
   </div>
   <div class="branch-wrap">
-    <div class="branch-divider">企业 / 机构运营审核分支</div>
-    <div class="branch-row"><span class="path-tag approve">通过</span><div class="node state-node">【机构身份已激活】</div><span class="arrow">→</span><div class="node">增加机构主账号成员关系</div><span class="arrow">→</span><div class="node ext">按类型执行账户初始化 / 金蝶建档等</div><span class="arrow">→</span><div class="node end-node">按「机构 + 角色」使用</div></div>
+    <div class="branch-divider">个人、企业 / 机构运营审核分支</div>
+    <div class="branch-row"><span class="path-tag approve">个人通过</span><div class="node state-node">【个人账号已激活】</div><span class="arrow">→</span><div class="node">初始化新用户免费体验资格</div><span class="arrow">→</span><div class="node end-node">以个人身份登录使用</div></div>
+    <div class="branch-row"><span class="path-tag approve">机构通过</span><div class="node state-node">【机构身份已激活】</div><span class="arrow">→</span><div class="node">增加机构主账号成员关系</div><span class="arrow">→</span><div class="node">初始化新用户免费体验资格</div><span class="arrow">→</span><div class="node ext">按类型执行账户初始化 / 金蝶建档等</div><span class="arrow">→</span><div class="node end-node">按「机构 + 角色」使用</div></div>
     <div class="branch-row"><span class="path-tag reject">驳回</span><div class="node state-node">【已驳回】</div><span class="arrow">→</span><div class="node">查看驳回原因并修改资料</div><span class="arrow">→</span><div class="node">重新提交审核</div></div>
   </div>
 </div>
@@ -67,6 +66,6 @@
   <div class="branch-row"><span class="path-tag" style="background:#f59e0b;color:#1e293b">忘记密码</span><div class="node">验证手机号</div><span class="arrow">→</span><div class="node">输入短信验证码</div><span class="arrow">→</span><div class="node">设置新密码</div><span class="arrow">→</span><div class="node end-node">返回登录</div></div>
 </div>
 
-<footer>彩翼公共采购智能体协同管理平台 · 用户注册流程图 V1.2 · 2026-08-11</footer>
+<footer>彩翼公共采购智能体协同管理平台 · 用户注册流程图 V1.3 · 2026-08-11</footer>
 </body>
 </html>

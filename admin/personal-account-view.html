@@ -60,9 +60,9 @@
 <div class="detail-item"><div class="detail-label">注册时间</div><div class="detail-value" id="registerTime">2026-08-08 10:36</div></div>
 <div class="detail-item"><div class="detail-label">账号来源</div><div class="detail-value" id="accountSource">公开注册</div></div>
 </div>
-<div class="detail-note">个人用户提交注册信息后自动开通试用，无需进入机构注册审核流程。加入机构后保留个人账号，仅新增机构成员身份。</div>
+<div class="detail-note">个人用户提交实名资料后进入运营注册审核；审核通过后激活个人账号并发放新用户免费体验权益。加入机构后保留个人账号，仅新增机构成员身份。</div>
 <div class="content-card-header" style="margin-top:var(--spacing-xl);"><h3 class="content-card-title">新用户免费体验权益</h3></div>
-<p style="margin:0 0 var(--spacing-sm);font-size:13px;color:var(--text-secondary);">按“平台个人账号 × 智能体”独立累计；次数在用户注册时初始化，用完后不重置。</p>
+<p style="margin:0 0 var(--spacing-sm);font-size:13px;color:var(--text-secondary);">按“平台个人账号 × 智能体”独立累计；审核通过后获得权益资格，首次调用该智能体时初始化免费次数，用完后不重置。</p>
 <div class="detail-grid" id="freeBenefits"></div>
 <div class="content-card-header" style="margin-top:var(--spacing-xl);"><h3 class="content-card-title">关联机构身份</h3></div>
 <div class="detail-grid" id="orgMemberships"></div>
@@ -73,8 +73,8 @@
 </main>
 <script>
 const personalAccounts={
-  '1':{name:'张三',phone:'138****5678',idCard:'3301****1990****12',time:'2026-08-08 10:36',freeBenefits:[{agent:'合规监测智能体',total:20,used:4,lastUsed:'2026-08-15 10:20'},{agent:'数据分析智能体',total:20,used:18,lastUsed:'2026-08-15 11:05'}],memberships:[{org:'广州采购科技集团',type:'采购单位',role:'主账号',joinedAt:'2026-08-10'}]},
-  '2':{name:'李四',phone:'139****8765',idCard:'4401****1988****25',time:'2026-08-07 15:22',freeBenefits:[{agent:'文案生成智能体',total:20,used:20,lastUsed:'2026-08-14 16:40'}],memberships:[]},
+  '1':{name:'张三',phone:'138****5678',idCard:'3301****1990****12',time:'2026-08-08 10:36',source:'公开注册 · 运营审核通过',freeBenefits:[{agent:'合规监测智能体',total:20,used:4,lastUsed:'2026-08-15 10:20'},{agent:'数据分析智能体',total:20,used:18,lastUsed:'2026-08-15 11:05'}],memberships:[{org:'广州采购科技集团',type:'采购单位',role:'主账号',joinedAt:'2026-08-10'}]},
+  '2':{name:'李四',phone:'139****8765',idCard:'4401****1988****25',time:'2026-08-07 15:22',source:'公开注册 · 运营审核通过',freeBenefits:[{agent:'文案生成智能体',total:20,used:20,lastUsed:'2026-08-14 16:40'}],memberships:[]},
   '3':{name:'王五',phone:'137****4321',idCard:'3101****1992****08',time:'2026-08-05 09:48',source:'公开注册',freeBenefits:[],memberships:[{org:'彩翼科技有限公司',type:'开发者',role:'子账号 · 操作员',joinedAt:'2026-08-09'}]},
   '4':{name:'赵敏',phone:'136****2088',idCard:'4401****1995****36',time:'2026-08-11 16:20',source:'运营后台创建 · 线下开户资料补录',freeBenefits:[],memberships:[]}
 };

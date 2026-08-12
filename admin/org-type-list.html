@@ -74,7 +74,7 @@
 </div>
 <div class="tab-nav-lg">
 <button class="tab-btn active" onclick="switchTab(this,'tab1')">机构类型</button>
-<button class="tab-btn" onclick="switchTab(this,'tab2')">注册审核 <span class="sidebar-badge">3</span></button>
+<button class="tab-btn" onclick="switchTab(this,'tab2')">注册审核 <span class="sidebar-badge">4</span></button>
 <button class="tab-btn" onclick="switchTab(this,'tab3')">账号管理</button>
 </div>
 <div id="tab1" class="tab-panel active">
@@ -120,7 +120,7 @@
 <tr>
 <td>个人用户</td>
 <td><span class="badge badge-yes">公开注册</span></td>
-<td><span class="badge" style="background:#D1FAE5;color:#059669;">免审</span></td>
+<td><span class="badge badge-yes">需审核</span></td>
 <td>0个</td>
 <td><a class="btn btn-sm btn-outline" href="org-type-view.html">查看</a><a class="btn btn-sm btn-outline" href="org-type-edit.html" style="margin-left:6px;">编辑</a></td>
 </tr>
@@ -138,17 +138,17 @@
 </div>
 <div id="tab2" class="tab-panel">
 <div class="stats-grid">
-<div class="stat-card"><div class="stat-value" style="color:#d97706;">3</div><div class="stat-label">待审核</div></div>
+<div class="stat-card"><div class="stat-value" style="color:#d97706;">4</div><div class="stat-label">待审核</div></div>
 <div class="stat-card"><div class="stat-value" style="color:#059669;">6</div><div class="stat-label">今日通过</div></div>
 <div class="stat-card"><div class="stat-value" style="color:#dc2626;">1</div><div class="stat-label">今日驳回</div></div>
-<div class="stat-card"><div class="stat-value">47</div><div class="stat-label">本月注册总数</div></div>
+<div class="stat-card"><div class="stat-value">48</div><div class="stat-label">本月注册总数</div></div>
 </div>
 <div class="audit-tip">
-💡 个人用户注册免审核，提交后自动激活，<strong>不进入审核列表</strong>。审核列表仅显示企业/机构类型注册申请。
+💡 个人用户与企业/机构用户共用注册审核队列。个人用户仅提交实名资料，无需营业执照；审核通过后激活账号并发放免费体验权益。
 </div>
 <div class="tab-nav">
-<button class="tab-btn active" onclick="filterAuditTab(this,'all')">全部 (47)</button>
-<button class="tab-btn" onclick="filterAuditTab(this,'pending')">待审核 (3)</button>
+<button class="tab-btn active" onclick="filterAuditTab(this,'all')">全部 (48)</button>
+<button class="tab-btn" onclick="filterAuditTab(this,'pending')">待审核 (4)</button>
 <button class="tab-btn" onclick="filterAuditTab(this,'approved')">已通过 (40)</button>
 <button class="tab-btn" onclick="filterAuditTab(this,'rejected')">已驳回 (4)</button>
 </div>
@@ -164,6 +164,12 @@
 </tr>
 </thead>
 <tbody id="auditTableBody">
+<tr data-audit-status="pending">
+<td>2026-08-11 11:30</td><td>个人实名申请</td><td>—</td>
+<td><span class="badge" style="background:#DBEAFE;color:#2563EB;">个人用户</span></td><td>张三</td><td>138****8888</td>
+<td><span class="badge badge-pending">待审核</span></td>
+<td><a class="btn btn-sm btn-primary" href="register-audit-detail.html?id=personal-1">审核</a></td>
+</tr>
 <tr data-audit-status="pending">
 <td>2026-08-07 09:12</td><td>广州采购科技集团</td><td>91440101MA1234XX00</td>
 <td><span class="badge badge-buyer">采购单位</span></td><td>李明</td><td>138****1234</td>
@@ -275,7 +281,7 @@
 <td>138****5678</td>
 <td>广州采购科技集团 · 主账号</td>
 <td><span class="badge badge-active">已激活</span></td>
-<td>公开注册</td>
+<td>公开注册 · 运营审核通过</td>
 <td>2026-08-08</td>
 <td><a class="btn btn-sm btn-outline" href="personal-account-view.html?id=1">查看</a></td>
 </tr>
@@ -285,7 +291,7 @@
 <td>139****8765</td>
 <td>—</td>
 <td><span class="badge badge-active">已激活</span></td>
-<td>公开注册</td>
+<td>公开注册 · 运营审核通过</td>
 <td>2026-08-07</td>
 <td><a class="btn btn-sm btn-outline" href="personal-account-view.html?id=2">查看</a></td>
 </tr>

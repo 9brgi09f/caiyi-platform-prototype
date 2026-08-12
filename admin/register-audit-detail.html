@@ -70,15 +70,15 @@
 <div class="page-header">
 <a class="back-link" href="org-type-list.html?tab=audit">← 返回注册审核</a>
 <h2>注册审核详情</h2>
-<p>核对机构注册信息与营业执照，决定是否开通账号</p>
+<p id="auditPageDesc">核对注册资料，决定是否激活账号或机构身份</p>
 </div>
 <div class="audit-layout">
 <div>
 <div class="content-card">
-<div class="content-card-header"><h3 class="content-card-title">机构信息</h3></div>
+<div class="content-card-header"><h3 class="content-card-title" id="orgInfoTitle">机构信息</h3></div>
 <div class="info-grid">
 <div class="info-item"><div class="info-label">组织名称</div><div class="info-value" id="dOrgName">广州采购科技集团</div></div>
-<div class="info-item"><div class="info-label">统一社会信用代码</div><div class="info-value" id="dCode">91440101MA1234XX00</div></div>
+<div class="info-item" id="creditCodeItem"><div class="info-label">统一社会信用代码</div><div class="info-value" id="dCode">91440101MA1234XX00</div></div>
 <div class="info-item"><div class="info-label">机构类型</div><div class="info-value"><span class="badge badge-buyer" id="dType">采购单位</span></div></div>
 <div class="info-item"><div class="info-label">申请时间</div><div class="info-value" id="dTime">2026-08-07 09:12</div></div>
 </div>
@@ -90,7 +90,7 @@
 <div class="info-item"><div class="info-label">手机号</div><div class="info-value" id="dPhone">13812341234</div></div>
 </div>
 </div>
-<div class="content-card">
+<div class="content-card" id="licenseCard">
 <div class="content-card-header"><h3 class="content-card-title">营业执照</h3></div>
 <div class="license-row">
 <div>
@@ -117,6 +117,7 @@
 <div class="audit-status-text">待审核</div>
 <div class="audit-status-time">申请时间 <span class="tl-apply-time">2026-08-07 09:12</span></div>
 </div>
+<div id="personalReviewNotice" style="display:none;margin:0 0 var(--spacing-md);padding:10px 12px;border-radius:var(--radius-md);background:#ECFDF5;color:#047857;font-size:12px;line-height:1.7;">个人申请审核通过后将激活个人账号；若为首次完成平台注册的新用户，将按当前规则发放免费体验权益。</div>
 <div class="audit-actions">
 <button class="btn btn-success" type="button" onclick="doApprove()">审核通过</button>
 <button class="btn btn-outline" type="button" onclick="toggleReject()">驳回</button>
@@ -135,7 +136,7 @@
 <div class="confirm-modal">
 <div class="confirm-modal-icon">✓</div>
 <h3 id="approveTitle">确认审核通过？</h3>
-<p>审核通过后，将激活该机构主账号；若申请人为首次完成平台注册的新用户，将按当前规则发放免费体验资格。</p>
+<p id="approveMessage">审核通过后，将激活该机构主账号；若申请人为首次完成平台注册的新用户，将按当前规则发放免费体验资格。</p>
 <div class="confirm-modal-actions">
 <button class="btn btn-outline" type="button" onclick="closeApproveModal()">取消</button>
 <button class="btn btn-success" type="button" onclick="confirmApprove()">确认通过</button>
@@ -146,7 +147,7 @@
 <div class="confirm-modal">
 <div class="confirm-modal-icon">✓</div>
 <h3 id="approveSuccessTitle">审核已通过</h3>
-<p>机构主账号已激活。该申请人为首次完成平台注册的新用户，已按当前规则获得每个智能体的免费体验资格。</p>
+<p id="approveSuccessMessage">机构主账号已激活。该申请人为首次完成平台注册的新用户，已按当前规则获得每个智能体的免费体验资格。</p>
 <div class="confirm-modal-actions">
 <button class="btn btn-primary" type="button" onclick="returnToAuditList()">返回注册审核</button>
 </div>
@@ -167,9 +168,10 @@ var demoData = {
   "1": {org:"广州采购科技集团",code:"91440101MA1234XX00",type:"采购单位",person:"李明",phone:"13812341234",time:"2026-08-07 09:12"},
   "2": {org:"深圳智算供应有限公司",code:"91440300MA5678XX00",type:"供应商",person:"王芳",phone:"13987654321",time:"2026-08-07 08:45"},
   "3": {org:"广州中介代理机构",code:"91440101MA9012XX00",type:"代理机构",person:"张伟",phone:"13787654321",time:"2026-08-07 07:30"},
-  "4": {org:"彩翼科技有限公司",code:"91440101MA3456XX00",type:"开发者",person:"陈晓",phone:"13687654321",time:"2026-08-06 16:20"}
+  "4": {org:"彩翼科技有限公司",code:"91440101MA3456XX00",type:"开发者",person:"陈晓",phone:"13687654321",time:"2026-08-06 16:20"},
+  "personal-1": {isPersonal:true,org:"个人实名申请",code:"",type:"个人用户",person:"张三",phone:"13812341234",time:"2026-08-11 11:30"}
 };
-var typeBadgeMap = {采购单位:'buyer',供应商:'supplier',代理机构:'agency',开发者:'developer'};
+var typeBadgeMap = {采购单位:'buyer',供应商:'supplier',代理机构:'agency',开发者:'developer',个人用户:'buyer'};
 
 document.addEventListener('DOMContentLoaded', function(){
   var id = new URLSearchParams(location.search).get('id') || '1';
@@ -185,6 +187,15 @@ document.addEventListener('DOMContentLoaded', function(){
   var badge = document.getElementById('dType');
   if(badge) badge.className = 'badge badge-' + (typeBadgeMap[d.type] || 'buyer');
   document.querySelectorAll('.tl-apply-time').forEach(function(el){ el.textContent = d.time; });
+  if(d.isPersonal){
+    document.getElementById('auditPageDesc').textContent = '核对个人实名资料，决定是否激活个人账号';
+    document.getElementById('orgInfoTitle').textContent = '个人申请信息';
+    document.getElementById('creditCodeItem').style.display = 'none';
+    document.getElementById('licenseCard').style.display = 'none';
+    document.getElementById('personalReviewNotice').style.display = 'block';
+    document.getElementById('approveMessage').textContent = '审核通过后，将激活该个人账号；若该申请人为首次完成平台注册的新用户，将按当前规则发放免费体验资格。';
+    document.getElementById('approveSuccessMessage').textContent = '个人账号已激活。该申请人为首次完成平台注册的新用户，已按当前规则获得每个智能体的免费体验资格。';
+  }
 });
 
 function doApprove(){
