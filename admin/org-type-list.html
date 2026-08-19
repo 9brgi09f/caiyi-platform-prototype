@@ -9,6 +9,7 @@
 <style>
 .page-header{background:linear-gradient(135deg,#2563EB,#1D4ED8);color:white;padding:var(--spacing-lg) var(--spacing-xl);border-radius:var(--radius-lg);margin-bottom:var(--spacing-lg);}
 .page-header h2{color:white;margin-bottom:var(--spacing-xs);}
+.page-header h2:last-child{margin-bottom:0;}
 .page-header p{opacity:.9;font-size:14px;}
 .tab-nav-lg{display:flex;gap:0;margin-bottom:var(--spacing-lg);border-bottom:2px solid var(--border-light);}
 .tab-nav-lg .tab-btn{font-size:15px;padding:var(--spacing-md) var(--spacing-xl);}
@@ -70,7 +71,6 @@
 <main class="main-content">
 <div class="page-header">
 <h2>机构管理</h2>
-<p>统一配置机构类型、处理注册审核并管理机构账号、个人账号及子账号。</p>
 </div>
 <div class="tab-nav-lg">
 <button class="tab-btn active" onclick="switchTab(this,'tab1')">机构类型</button>
@@ -213,52 +213,55 @@
 </div>
 <div id="tab3" class="tab-panel">
 <div class="tab-nav">
-<button class="tab-btn active" onclick="filterAccountType(this,'org')">机构账号</button>
+<button class="tab-btn active" onclick="filterAccountType(this,'org')">机构与成员账号</button>
 <button class="tab-btn" onclick="filterAccountType(this,'personal')">个人账号</button>
-<button class="tab-btn" onclick="filterAccountType(this,'sub')">子账号</button>
 </div>
 <div class="content-card" id="orgAccountCard">
 <div class="content-card-header">
-<h3 class="content-card-title">机构账号列表</h3>
+<h3 class="content-card-title">机构与成员账号</h3>
 <a class="btn btn-primary" href="org-create.html">+ 新增机构</a>
 </div>
 <div class="table-wrapper">
 <table class="table table-wide">
 <thead>
-<tr><th>机构名称</th><th>统一社会信用代码</th><th>机构类型</th><th>主账号手机号</th><th>状态</th><th>注册时间</th><th>操作</th></tr>
+<tr><th>机构名称</th><th>统一社会信用代码</th><th>机构类型</th><th>主账号</th><th>成员数量</th><th>状态</th><th>注册时间</th><th>操作</th></tr>
 </thead>
 <tbody id="orgAccountTable">
 <tr>
 <td>广州采购科技集团</td><td>91440101MA1234XX00</td>
 <td><span class="badge badge-buyer">采购单位</span></td>
-<td>138****1234</td>
+<td>张敏<br><span class="tip-text">138****1234</span></td>
+<td>4 名成员</td>
 <td><span class="badge badge-active">已激活</span></td>
 <td>2026-07-10</td>
-<td><a class="btn btn-sm btn-outline" href="org-view.html">查看</a><a class="btn btn-sm btn-outline" href="org-create.html?mode=edit" style="margin-left:6px;">编辑</a></td>
+<td><a class="btn btn-sm btn-outline" href="org-view.html">查看</a></td>
 </tr>
 <tr>
 <td>彩翼科技有限公司</td><td>91440101MA3456XX00</td>
 <td><span class="badge badge-developer">开发者</span></td>
-<td>136****3456</td>
+<td>陈晓<br><span class="tip-text">136****3456</span></td>
+<td>3 名成员</td>
 <td><span class="badge badge-active">已激活</span></td>
 <td>2026-07-05</td>
-<td><a class="btn btn-sm btn-outline" href="org-view.html">查看</a><a class="btn btn-sm btn-outline" href="org-create.html?mode=edit" style="margin-left:6px;">编辑</a></td>
+<td><a class="btn btn-sm btn-outline" href="org-view.html">查看</a></td>
 </tr>
 <tr>
 <td>省采购中心</td><td>91440000MA7890XX00</td>
 <td><span class="badge badge-buyer">采购单位</span></td>
-<td>135****7890</td>
+<td>刘洋<br><span class="tip-text">135****7890</span></td>
+<td>2 名成员</td>
 <td><span class="badge badge-active">已激活</span></td>
 <td>2026-06-20</td>
-<td><a class="btn btn-sm btn-outline" href="org-view.html">查看</a><a class="btn btn-sm btn-outline" href="org-create.html?mode=edit" style="margin-left:6px;">编辑</a></td>
+<td><a class="btn btn-sm btn-outline" href="org-view.html">查看</a></td>
 </tr>
 <tr>
 <td>广州测试供应公司</td><td>91440101MA1122XX00</td>
 <td><span class="badge badge-supplier">供应商</span></td>
-<td>134****1122</td>
+<td>赵雪<br><span class="tip-text">134****1122</span></td>
+<td>1 名成员</td>
 <td><span class="badge badge-rejected">已驳回</span></td>
 <td>2026-08-05</td>
-<td><a class="btn btn-sm btn-outline" href="org-view.html">查看</a><a class="btn btn-sm btn-outline" href="org-create.html?mode=edit" style="margin-left:6px;">编辑</a></td>
+<td><a class="btn btn-sm btn-outline" href="org-view.html">查看</a></td>
 </tr>
 </tbody>
 </table>
@@ -319,63 +322,8 @@
 </table>
 </div>
 </div>
-<div class="content-card" id="subAccountCard" style="display:none;">
-<div class="content-card-header">
-<h3 class="content-card-title">子账号列表</h3>
 </div>
-<div class="table-wrapper">
-<table class="table table-wide">
-<thead>
-<tr><th>所属机构</th><th>子账号手机号</th><th>姓名</th><th>角色</th><th>状态</th><th>创建时间</th></tr>
-</thead>
-<tbody>
-<tr>
-<td>广州采购科技集团 <span class="badge badge-buyer">采购单位</span></td>
-<td>13912345678</td><td>刘小明</td>
-<td><span class="badge badge-operator">操作员</span></td>
-<td><span class="badge badge-active">已激活</span></td>
-<td>2026-07-15</td>
-</tr>
-<tr>
-<td>广州采购科技集团 <span class="badge badge-buyer">采购单位</span></td>
-<td>13987654321</td><td>王丽</td>
-<td><span class="badge badge-readonly">只读</span></td>
-<td><span class="badge badge-active">已激活</span></td>
-<td>2026-07-18</td>
-</tr>
-<tr>
-<td>深圳智算供应有限公司 <span class="badge badge-supplier">供应商</span></td>
-<td>13611111111</td><td>赵强</td>
-<td><span class="badge badge-admin">管理员</span></td>
-<td><span class="badge badge-active">已激活</span></td>
-<td>2026-07-20</td>
-</tr>
-<tr>
-<td>彩翼科技有限公司 <span class="badge badge-developer">开发者</span></td>
-<td>13522222222</td><td>孙月</td>
-<td><span class="badge badge-operator">操作员</span></td>
-<td><span class="badge badge-active">已激活</span></td>
-<td>2026-08-01</td>
-</tr>
-<tr>
-<td>彩翼科技有限公司 <span class="badge badge-developer">开发者</span></td>
-<td>13533333333</td><td>李雷</td>
-<td><span class="badge badge-readonly">只读</span></td>
-<td><span class="badge" style="background:#f1f5f9;color:#94a3b8;">已停用</span></td>
-<td>2026-07-25</td>
-</tr>
-<tr>
-<td>广州中介代理机构 <span class="badge badge-agency">代理机构</span></td>
-<td>13644444444</td><td>韩梅梅</td>
-<td><span class="badge badge-operator">操作员</span></td>
-<td><span class="badge badge-active">已激活</span></td>
-<td>2026-08-03</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
+
 </main>
 <script>
 function switchTab(btn,tabId){
@@ -398,7 +346,6 @@ function filterAccountType(btn,type){
   btn.classList.add('active');
   document.getElementById('orgAccountCard').style.display = type === 'org' ? 'block' : 'none';
   document.getElementById('personalAccountCard').style.display = type === 'personal' ? 'block' : 'none';
-  document.getElementById('subAccountCard').style.display = type === 'sub' ? 'block' : 'none';
 }
 
 const initialTab = new URLSearchParams(window.location.search).get('tab');

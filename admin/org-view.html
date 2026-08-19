@@ -7,71 +7,156 @@
 <link href="../styles.css" rel="stylesheet"/>
 <script src="../app.js"></script>
 <style>
-.page-header{background:linear-gradient(135deg,#2563EB,#1D4ED8);color:white;padding:var(--spacing-lg) var(--spacing-xl);border-radius:var(--radius-lg);margin-bottom:var(--spacing-lg);}
-.page-header h2{color:white;margin-bottom:var(--spacing-xs);}
-.page-header p{opacity:.9;font-size:14px;margin:0;}
-.back-link{display:inline-block;margin-bottom:var(--spacing-sm);color:rgba(255,255,255,.9);font-size:14px;text-decoration:none;}
-.back-link:hover{color:white;text-decoration:underline;}
-.detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--spacing-lg);}
-.detail-item{padding:var(--spacing-md) 0;border-bottom:1px solid var(--border-light);}
-.detail-item.full-width{grid-column:1 / -1;}
-.detail-label{margin-bottom:6px;font-size:13px;color:var(--text-muted);}
-.detail-value{font-size:15px;font-weight:500;color:var(--text-primary);line-height:1.6;}
-.detail-note{margin-top:var(--spacing-lg);padding:var(--spacing-md);border-radius:var(--radius-md);background:var(--bg-light);font-size:13px;color:var(--text-secondary);line-height:1.7;}
-.card-actions{display:flex;justify-content:flex-end;gap:var(--spacing-sm);margin-top:var(--spacing-lg);padding-top:var(--spacing-lg);border-top:1px solid var(--border-light);}
-@media(max-width:720px){.detail-grid{grid-template-columns:1fr;}.detail-item.full-width{grid-column:auto;}.card-actions{justify-content:stretch;flex-direction:column;}.card-actions .btn{justify-content:center;}}
+.page-header{background:linear-gradient(135deg,#2563EB,#1D4ED8);color:white;padding:var(--spacing-lg) var(--spacing-xl);border-radius:var(--radius-lg);margin-bottom:var(--spacing-lg)}
+.page-header h2{color:white;margin-bottom:var(--spacing-xs)}
+.page-header h2:last-child{margin-bottom:0}
+.page-header p{opacity:.9;font-size:14px;margin:0}
+.back-link{display:inline-block;margin-bottom:var(--spacing-sm);color:rgba(255,255,255,.9);font-size:14px;text-decoration:none}.back-link:hover{color:white;text-decoration:underline}
+.detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--spacing-lg)}.detail-item{padding:var(--spacing-md) 0;border-bottom:1px solid var(--border-light)}.detail-item.full-width{grid-column:1 / -1}.detail-label{margin-bottom:6px;font-size:13px;color:var(--text-muted)}.detail-value{font-size:15px;font-weight:500;color:var(--text-primary);line-height:1.6}
+.card-actions{display:flex;justify-content:flex-end;gap:var(--spacing-sm);margin-top:var(--spacing-lg);padding-top:var(--spacing-lg);border-top:1px solid var(--border-light)}
+.modal-backdrop{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.42)}.modal-backdrop.active{display:flex}.member-modal{position:relative;width:min(100%,520px);max-height:calc(100vh - 40px);overflow:auto;padding:28px;border-radius:16px;background:#fff;box-shadow:0 18px 60px rgba(15,23,42,.22);color:var(--text-primary)}.modal-close{position:absolute;top:12px;right:14px;width:30px;height:30px;border:0;border-radius:8px;background:transparent;color:var(--text-muted);font-size:24px;line-height:1;cursor:pointer}.modal-close:hover{background:#f1f5f9;color:var(--text-primary)}.modal-kicker{margin-bottom:6px;color:#2563eb;font-size:12px;font-weight:600;letter-spacing:.04em}.member-modal h3{margin:0 36px 8px 0;color:var(--text-primary);font-size:20px}.modal-message{margin:0;color:var(--text-secondary);font-size:14px;line-height:1.7}.modal-warning{margin-top:16px;padding:12px 14px;border:1px solid #fde68a;border-radius:10px;background:#fffbeb;color:#92400e;font-size:13px;line-height:1.7}.modal-success{margin-top:16px;padding:12px 14px;border:1px solid #bbf7d0;border-radius:10px;background:#f0fdf4;color:#166534;font-size:13px;line-height:1.7}.member-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 20px;margin-top:18px}.member-detail-item{padding:11px 0;border-bottom:1px solid var(--border-light)}.member-detail-label{margin-bottom:3px;color:var(--text-muted);font-size:12px}.member-detail-value{color:var(--text-primary);font-size:14px;font-weight:500}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:24px}.modal-actions .btn{min-width:76px}@media(max-width:520px){.member-modal{padding:24px 20px}.member-detail-grid{grid-template-columns:1fr}.modal-actions{flex-direction:column-reverse}.modal-actions .btn{width:100%}}
+.member-note{margin:12px 0 16px;padding:11px 14px;border:1px solid #bfdbfe;border-radius:var(--radius-md);background:#eff6ff;color:#1d4ed8;font-size:13px;line-height:1.7}.member-name{font-weight:600;color:var(--text-primary)}.member-type{white-space:nowrap}.member-actions{display:flex;gap:6px;flex-wrap:wrap}.member-actions .btn{white-space:nowrap}
+@media(max-width:720px){.detail-grid{grid-template-columns:1fr}.detail-item.full-width{grid-column:auto}.card-actions{justify-content:stretch;flex-direction:column}.card-actions .btn{justify-content:center}}
 </style>
 </head>
 <body>
-<header class="top-bar admin">
-<div class="top-bar-left">
-<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
-<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
-</div>
-<div class="top-bar-right"><div class="top-bar-user"><div class="top-bar-avatar">管</div><span>管理员</span></div></div>
-</header>
-<aside class="sidebar admin">
-<div class="sidebar-section">
-<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
-<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
-<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
-<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
-<a class="sidebar-link" href="channel-list.html"><span class="icon">📡</span><span>渠道管理</span></a>
-<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
-<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
-<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a>
-<a class="sidebar-link" href="reconciliation-list.html"><span class="icon">🧮</span><span>账户对账</span></a>
-
-<a class="sidebar-link active" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
-<a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
-</div>
-</aside>
+<header class="top-bar admin"><div class="top-bar-left"><a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a><span class="top-bar-title">彩翼公共采购智能体协同管理平台</span></div><div class="top-bar-right"><div class="top-bar-user"><div class="top-bar-avatar">管</div><span>管理员</span></div></div></header>
+<aside class="sidebar admin"><div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a><a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a><a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a><a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a><a class="sidebar-link" href="channel-list.html"><span class="icon">📡</span><span>渠道管理</span></a><a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a><a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a><a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon">🧮</span><span>账户对账</span></a>
+<a class="sidebar-link active" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a><a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+</div></aside>
 <main class="main-content">
-<div class="page-header">
-<a class="back-link" href="org-type-list.html">← 返回机构管理</a>
-<h2>机构详情</h2>
-<p>查看机构与主账号信息</p>
-</div>
+<div class="page-header"><a class="back-link" href="org-type-list.html?tab=account">← 返回机构与成员账号</a><h2>机构详情</h2></div>
 <div class="content-card">
 <div class="content-card-header"><h3 class="content-card-title">机构信息</h3></div>
-<div class="detail-grid">
-<div class="detail-item"><div class="detail-label">机构名称</div><div class="detail-value">广州采购科技集团</div></div>
-<div class="detail-item"><div class="detail-label">机构类型</div><div class="detail-value"><span class="badge badge-buyer">采购单位</span></div></div>
-<div class="detail-item full-width"><div class="detail-label">统一社会信用代码</div><div class="detail-value">91440101MA1234XX00</div></div>
-<div class="detail-item"><div class="detail-label">机构状态</div><div class="detail-value"><span class="badge badge-active">已激活</span></div></div>
-<div class="detail-item"><div class="detail-label">创建时间</div><div class="detail-value">2026-07-10 10:20</div></div>
-</div>
+<div class="detail-grid"><div class="detail-item"><div class="detail-label">机构名称</div><div class="detail-value">广州采购科技集团</div></div><div class="detail-item"><div class="detail-label">机构类型</div><div class="detail-value"><span class="badge badge-buyer">采购单位</span></div></div><div class="detail-item full-width"><div class="detail-label">统一社会信用代码</div><div class="detail-value">91440101MA1234XX00</div></div><div class="detail-item"><div class="detail-label">机构状态</div><div class="detail-value"><span class="badge badge-active">已激活</span></div></div><div class="detail-item"><div class="detail-label">创建时间</div><div class="detail-value">2026-07-10 10:20</div></div></div>
 <div class="content-card-header" style="margin-top:var(--spacing-xl);"><h3 class="content-card-title">主账号信息</h3></div>
-<div class="detail-grid">
-<div class="detail-item"><div class="detail-label">姓名</div><div class="detail-value">张敏</div></div>
-<div class="detail-item"><div class="detail-label">手机号</div><div class="detail-value">138****1234</div></div>
-<div class="detail-item"><div class="detail-label">账号状态</div><div class="detail-value"><span class="badge badge-active" id="accountStatusBadge">正常</span></div></div>
-<div class="detail-item"><div class="detail-label">账号开通时间</div><div class="detail-value">2026-07-10 10:20</div></div>
+<div class="detail-grid"><div class="detail-item"><div class="detail-label">姓名</div><div class="detail-value">张敏</div></div><div class="detail-item"><div class="detail-label">手机号</div><div class="detail-value">138****1234</div></div><div class="detail-item"><div class="detail-label">账号状态</div><div class="detail-value"><span class="badge badge-active">已激活</span></div></div><div class="detail-item"><div class="detail-label">账号开通时间</div><div class="detail-value">2026-07-10 10:20</div></div></div>
+<div class="card-actions"><a class="btn btn-outline" href="org-create.html?mode=edit">编辑机构信息</a></div>
 </div>
-<div class="card-actions">
-<a class="btn btn-outline" href="org-create.html?mode=edit">编辑机构信息</a>
-</div>
+<div class="content-card" id="memberAccounts">
+<div class="content-card-header"><h3 class="content-card-title">机构成员账号 <span class="sidebar-badge">4</span></h3></div>
+<div class="table-wrapper"><table class="table table-wide"><thead><tr><th>成员</th><th>手机号</th><th>账号类型</th><th>岗位</th><th>账号状态</th><th>加入时间</th><th>操作</th></tr></thead><tbody>
+<tr><td><span class="member-name">张敏</span></td><td>138****1234</td><td class="member-type"><span class="badge badge-buyer">主账号</span></td><td>—</td><td><span class="badge badge-active">已激活</span></td><td>2026-07-10 10:20</td><td><div class="member-actions"><button class="btn btn-sm btn-outline" onclick="viewMember(this)">查看</button></div></td></tr>
+<tr><td><span class="member-name">刘小明</span></td><td>139****5678</td><td class="member-type"><span class="badge" style="background:#eff6ff;color:#2563eb;">子账号</span></td><td>示例岗位 A、示例岗位 B</td><td><span class="badge badge-active">已激活</span></td><td>2026-07-15 09:30</td><td><div class="member-actions"><button class="btn btn-sm btn-outline" onclick="viewMember(this)">查看</button><button class="btn btn-sm btn-outline" onclick="toggleMember(this,'停用')">停用</button></div></td></tr>
+<tr><td><span class="member-name">王丽</span></td><td>139****4321</td><td class="member-type"><span class="badge" style="background:#eff6ff;color:#2563eb;">子账号</span></td><td>示例岗位 C</td><td><span class="badge badge-active">已激活</span></td><td>2026-07-18 14:10</td><td><div class="member-actions"><button class="btn btn-sm btn-outline" onclick="viewMember(this)">查看</button><button class="btn btn-sm btn-outline" onclick="toggleMember(this,'停用')">停用</button></div></td></tr>
+<tr><td><span class="member-name">QA-TEST-陈凯</span></td><td>139****0026</td><td class="member-type"><span class="badge" style="background:#eff6ff;color:#2563eb;">子账号</span></td><td>示例岗位 D</td><td><span class="badge badge-pending">待首次登录</span></td><td>2026-08-18 16:40</td><td><div class="member-actions"><button class="btn btn-sm btn-outline" onclick="viewMember(this)">查看</button><button class="btn btn-sm btn-outline" onclick="resendPassword('QA-TEST-陈凯')">重发临时密码</button><button class="btn btn-sm btn-outline" onclick="toggleMember(this,'停用')">停用</button></div></td></tr>
+</tbody></table></div>
 </div>
 </main>
+<div class="modal-backdrop" id="memberModal" aria-hidden="true" onclick="closeMemberModal(event)">
+<div class="member-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" onclick="event.stopPropagation()">
+<button class="modal-close" type="button" aria-label="关闭" onclick="closeMemberModal()">×</button>
+<div class="modal-kicker" id="modalKicker">成员账号</div>
+<h3 id="modalTitle">成员账号</h3>
+<p class="modal-message" id="modalMessage"></p>
+<div id="modalContent"></div>
+<div class="modal-actions"><button class="btn btn-outline" id="modalCancel" type="button" onclick="closeMemberModal()">取消</button><button class="btn btn-primary" id="modalConfirm" type="button">确认</button></div>
+</div>
+</div>
+<script>
+var activeMemberRow = null;
+var activeMemberButton = null;
+
+function getMemberRowData(row){
+  var cells = row.querySelectorAll('td');
+  return {
+    name: cells[0].textContent.trim(),
+    phone: cells[1].textContent.trim(),
+    type: cells[2].textContent.trim(),
+    role: cells[3].textContent.trim(),
+    status: cells[4].textContent.trim(),
+    joinedAt: cells[5].textContent.trim()
+  };
+}
+
+function openMemberModal(title, message, content, confirmText, confirmClass, onConfirm, cancelText){
+  document.getElementById('modalKicker').textContent = '机构成员账号';
+  document.getElementById('modalTitle').textContent = title;
+  var messageEl = document.getElementById('modalMessage');
+  messageEl.textContent = message || '';
+  messageEl.style.display = message ? '' : 'none';
+  document.getElementById('modalContent').innerHTML = content || '';
+  var cancel = document.getElementById('modalCancel');
+  var confirm = document.getElementById('modalConfirm');
+  cancel.textContent = cancelText || '取消';
+  confirm.textContent = confirmText || '确认';
+  confirm.className = 'btn ' + (confirmClass || 'btn-primary');
+  confirm.style.display = onConfirm ? '' : 'none';
+  confirm.onclick = onConfirm || null;
+  var modal = document.getElementById('memberModal');
+  modal.classList.add('active');
+  modal.setAttribute('aria-hidden','false');
+}
+
+function closeMemberModal(event){
+  if(event && event.target !== event.currentTarget) return;
+  var modal = document.getElementById('memberModal');
+  modal.classList.remove('active');
+  modal.setAttribute('aria-hidden','true');
+  activeMemberRow = null;
+  activeMemberButton = null;
+}
+
+function viewMember(button){
+  var data = getMemberRowData(button.closest('tr'));
+  var content = '<div class="member-detail-grid">' +
+    '<div class="member-detail-item"><div class="member-detail-label">姓名</div><div class="member-detail-value">' + data.name + '</div></div>' +
+    '<div class="member-detail-item"><div class="member-detail-label">手机号</div><div class="member-detail-value">' + data.phone + '</div></div>' +
+    '<div class="member-detail-item"><div class="member-detail-label">账号类型</div><div class="member-detail-value">' + data.type + '</div></div>' +
+    '<div class="member-detail-item"><div class="member-detail-label">岗位</div><div class="member-detail-value">' + data.role + '</div></div>' +
+    '<div class="member-detail-item"><div class="member-detail-label">账号状态</div><div class="member-detail-value">' + data.status + '</div></div>' +
+    '<div class="member-detail-item"><div class="member-detail-label">加入时间</div><div class="member-detail-value">' + data.joinedAt + '</div></div>' +
+    '</div>';
+  openMemberModal(data.name + '的账号信息', '', content, '', 'btn-primary', null, '关闭');
+}
+
+function showResult(title, message){
+  openMemberModal(title, message, '<div class="modal-success">操作记录已生成，当前页面状态已同步更新。</div>', '', 'btn-primary', null, '关闭');
+}
+
+function resendPassword(name){
+  openMemberModal('重发临时密码', '确认向 ' + name + ' 重发一次性临时密码？', '<div class="modal-warning">重发后，之前发送的一次性临时密码将失效。平台不会展示或保存成员的正式登录密码。</div>', '确认重发', 'btn-primary', function(){
+    closeMemberModal();
+    showResult('临时密码已重发', '已生成向 ' + name + ' 发送一次性临时密码的任务。');
+  });
+}
+
+function toggleMember(btn, action){
+  activeMemberRow = btn.closest('tr');
+  activeMemberButton = btn;
+  var data = getMemberRowData(activeMemberRow);
+  var isRestore = action === '恢复';
+  var title = isRestore ? '恢复机构成员账号' : '停用机构成员账号';
+  var message = (isRestore ? '确认恢复 ' : '确认停用 ') + data.name + ' 的机构成员关系？';
+  var content = isRestore
+    ? '<div class="modal-success">恢复后，该成员将按原有岗位重新获得本机构访问权限。</div>'
+    : '<div class="modal-warning">停用后，该成员将无法进入本机构；平台个人账号及其在其他机构的身份不受影响。</div>';
+  openMemberModal(title, message, content, isRestore ? '确认恢复' : '确认停用', isRestore ? 'btn-primary' : 'btn-danger', function(){
+    var row = activeMemberRow;
+    var actionButton = activeMemberButton;
+    var status = row.querySelector('td:nth-child(5)');
+    if(isRestore){
+      status.innerHTML = '<span class="badge badge-active">已激活</span>';
+      actionButton.textContent = '停用';
+      actionButton.classList.remove('btn-primary');
+      actionButton.classList.add('btn-outline');
+      actionButton.setAttribute('onclick', "toggleMember(this,'停用')");
+    }else{
+      status.innerHTML = '<span class="badge" style="background:#f1f5f9;color:#64748b;">已停用</span>';
+      actionButton.textContent = '恢复';
+      actionButton.classList.remove('btn-outline');
+      actionButton.classList.add('btn-primary');
+      actionButton.setAttribute('onclick', "toggleMember(this,'恢复')");
+    }
+    closeMemberModal();
+    showResult(isRestore ? '成员账号已恢复' : '成员账号已停用', isRestore ? data.name + ' 已恢复本机构访问权限。' : data.name + ' 已停用本机构访问权限。');
+  });
+}
+
+document.addEventListener('keydown', function(event){
+  if(event.key === 'Escape') closeMemberModal();
+});
+</script>
 </body>
 </html>

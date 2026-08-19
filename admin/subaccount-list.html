@@ -3,186 +3,19 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>子账号管理 - 平台管理端</title>
+<title>子账号入口说明 - 平台管理端</title>
 <link href="../styles.css" rel="stylesheet"/>
 <script src="../app.js"></script>
 <style>
-.page-header{background:linear-gradient(135deg,#2563EB,#1D4ED8);color:white;padding:var(--spacing-lg) var(--spacing-xl);border-radius:var(--radius-lg);margin-bottom:var(--spacing-lg);}
-.page-header h2{color:white;margin-bottom:var(--spacing-xs);}
-.breadcrumb{font-size:13px;color:rgba(255,255,255,0.8);margin-bottom:var(--spacing-xs);}
-.breadcrumb a{color:rgba(255,255,255,0.8);text-decoration:none;}
-.breadcrumb a:hover{color:white;}
-.search-bar{display:flex;gap:var(--spacing-sm);margin-bottom:var(--spacing-lg);flex-wrap:wrap;}
-.search-bar input{flex:2;min-width:200px;padding:var(--spacing-sm) var(--spacing-md);border:1px solid var(--border-color);border-radius:var(--radius-md);font-size:14px;}
-.search-bar select{flex:1;min-width:120px;padding:var(--spacing-sm) var(--spacing-md);border:1px solid var(--border-color);border-radius:var(--radius-md);font-size:14px;background:white;}
-.tip-text{font-size:13px;color:var(--text-muted);}
-.badge-buyer{background:#dbeafe;color:#2563eb;}
-.badge-supplier{background:#d1fae5;color:#059669;}
-.badge-agency{background:#ede9fe;color:#7c3aed;}
-.badge-developer{background:#fef3c7;color:#d97706;}
-.badge-admin{background:#dbeafe;color:#2563eb;}
-.badge-operator{background:#ede9fe;color:#7c3aed;}
-.badge-readonly{background:#f1f5f9;color:#64748b;}
-.badge-active{background:#d1fae5;color:#059669;}
-.badge-disabled{background:#f1f5f9;color:#94a3b8;}
+.page-header{background:linear-gradient(135deg,#2563EB,#1D4ED8);color:white;padding:var(--spacing-lg) var(--spacing-xl);border-radius:var(--radius-lg);margin-bottom:var(--spacing-lg)}.page-header h2{color:white;margin-bottom:var(--spacing-xs)}.page-header p{margin:0;opacity:.9;font-size:14px}.breadcrumb{font-size:13px;color:rgba(255,255,255,.8);margin-bottom:var(--spacing-xs)}.breadcrumb a{color:rgba(255,255,255,.8);text-decoration:none}.breadcrumb a:hover{color:#fff}.migration-card{max-width:760px;margin:7vh auto;padding:36px 40px;text-align:center}.migration-icon{width:54px;height:54px;display:inline-flex;align-items:center;justify-content:center;border-radius:16px;background:#eff6ff;color:#2563eb;font-size:28px}.migration-card h3{margin:18px 0 8px;font-size:20px;color:var(--text-primary)}.migration-card p{margin:0 auto;color:var(--text-secondary);line-height:1.8;max-width:560px}.migration-steps{margin:24px auto;text-align:left;max-width:560px;padding:18px 20px;border-radius:var(--radius-md);background:var(--bg-light);color:var(--text-secondary);font-size:14px;line-height:2}.migration-steps b{color:var(--text-primary)}@media(max-width:720px){.migration-card{margin:4vh 0;padding:28px 20px}}
 </style>
 </head>
 <body>
-<header class="top-bar admin">
-<div class="top-bar-left">
-<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
-<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
-</div>
-<div class="top-bar-right">
-<div class="top-bar-user"><div class="top-bar-avatar">管</div><span>管理员</span></div>
-</div>
-</header>
-<aside class="sidebar admin">
-<div class="sidebar-section">
-<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a>
-<a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a>
-<a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a>
-<a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a>
-<a class="sidebar-link" href="channel-list.html"><span class="icon">📡</span><span>渠道管理</span></a>
-<a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a>
-<a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a>
-<a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a>
-<a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
-
-<a class="sidebar-link active" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
-<a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
-</div>
-</aside>
-<main class="main-content">
-<div class="page-header">
-<div class="breadcrumb"><a href="org-type-list.html">机构管理</a> &gt; 子账号管理</div>
-<h2>子账号管理</h2>
-</div>
-<div class="content-card">
-<div class="content-card-header">
-<h3 class="content-card-title">子账号列表</h3>
-<span class="tip-text">子账号由各机构主账号自行邀请创建，平台可查看并停用</span>
-</div>
-<div class="search-bar">
-<input type="text" placeholder="按机构名称/手机号搜索..."/>
-<select>
-<option value="">全部机构类型</option>
-<option>采购单位</option>
-<option>供应商</option>
-<option>代理机构</option>
-<option>开发者</option>
-<option>采购监管</option>
-</select>
-<select>
-<option value="">全部角色</option>
-<option>管理员</option>
-<option>操作员</option>
-<option>只读</option>
-</select>
-<button class="btn btn-primary">搜索</button>
-<div style="text-align:right;margin-bottom:12px;"><button class="btn btn-primary btn-sm" onclick="inviteSubaccount()" style="margin-left:auto;">+ 邀请子账号</button></div>
-</div>
-<div class="table-wrapper">
-<table class="table table-wide">
-<thead>
-<tr><th>所属机构</th><th>子账号手机号</th><th>姓名</th><th>角色</th><th>状态</th><th>创建时间</th><th>操作</th></tr>
-</thead>
-<tbody>
-<tr>
-<td>广州采购科技集团 <span class="badge badge-buyer">采购单位</span></td>
-<td>13912345678</td><td>刘小明</td>
-<td><span class="badge badge-operator">操作员</span></td>
-<td><span class="badge badge-active">已激活</span></td>
-<td>2026-07-15</td>
-<td><button class="btn btn-sm btn-outline" onclick="toggleAccount(this,'停用')">停用</button></td>
-</tr>
-<tr>
-<td>广州采购科技集团 <span class="badge badge-buyer">采购单位</span></td>
-<td>13987654321</td><td>王丽</td>
-<td><span class="badge badge-readonly">只读</span></td>
-<td><span class="badge badge-active">已激活</span></td>
-<td>2026-07-18</td>
-<td><button class="btn btn-sm btn-outline" onclick="toggleAccount(this,'停用')">停用</button></td>
-</tr>
-<tr>
-<td>深圳智算供应有限公司 <span class="badge badge-supplier">供应商</span></td>
-<td>13611111111</td><td>赵强</td>
-<td><span class="badge badge-admin">管理员</span></td>
-<td><span class="badge badge-active">已激活</span></td>
-<td>2026-07-20</td>
-<td><button class="btn btn-sm btn-outline" onclick="toggleAccount(this,'停用')">停用</button></td>
-</tr>
-<tr>
-<td>彩翼科技有限公司 <span class="badge badge-developer">开发者</span></td>
-<td>13522222222</td><td>孙月</td>
-<td><span class="badge badge-operator">操作员</span></td>
-<td><span class="badge badge-active">已激活</span></td>
-<td>2026-08-01</td>
-<td><button class="btn btn-sm btn-outline" onclick="toggleAccount(this,'停用')">停用</button></td>
-</tr>
-<tr>
-<td>彩翼科技有限公司 <span class="badge badge-developer">开发者</span></td>
-<td>13533333333</td><td>李雷</td>
-<td><span class="badge badge-readonly">只读</span></td>
-<td><span class="badge badge-disabled">已停用</span></td>
-<td>2026-07-25</td>
-<td><button class="btn btn-sm btn-primary" onclick="toggleAccount(this,'启用')">启用</button></td>
-</tr>
-<tr>
-<td>广州中介代理机构 <span class="badge badge-agency">代理机构</span></td>
-<td>13644444444</td><td>韩梅梅</td>
-<td><span class="badge badge-operator">操作员</span></td>
-<td><span class="badge badge-active">已激活</span></td>
-<td>2026-08-03</td>
-<td><button class="btn btn-sm btn-outline" onclick="toggleAccount(this,'停用')">停用</button></td>
-</tr>
-<tr>
-<td>省采购中心 <span class="badge badge-buyer">采购单位</span></td>
-<td>13755555555</td><td>吴敏</td>
-<td><span class="badge badge-admin">管理员</span></td>
-<td><span class="badge badge-active">已激活</span></td>
-<td>2026-08-04</td>
-<td><button class="btn btn-sm btn-outline" onclick="toggleAccount(this,'停用')">停用</button></td>
-</tr>
-<tr>
-<td>广州采购科技集团 <span class="badge badge-buyer">采购单位</span></td>
-<td>13866666666</td><td>周杰</td>
-<td><span class="badge badge-readonly">只读</span></td>
-<td><span class="badge badge-active">已激活</span></td>
-<td>2026-08-05</td>
-<td><button class="btn btn-sm btn-outline" onclick="toggleAccount(this,'停用')">停用</button></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="pagination">
-<a class="pagination-item" href="#">«</a>
-<a class="pagination-item active" href="#">1</a>
-<a class="pagination-item" href="#">2</a>
-<a class="pagination-item" href="#">»</a>
-</div>
-</div>
-</main>
-<script>
-function toggleAccount(btn,action){
-  if(confirm('确认'+action+'该子账号？')){
-    alert(action+'成功');
-    var row=btn.closest('tr');
-    if(action==='停用'){
-      row.querySelector('td:nth-child(5)').innerHTML='<span class="badge badge-disabled">已停用</span>';
-      btn.textContent='启用';
-      btn.classList.remove('btn-outline');
-      btn.classList.add('btn-primary');
-      btn.setAttribute('onclick',"toggleAccount(this,'启用')");
-    }else{
-      row.querySelector('td:nth-child(5)').innerHTML='<span class="badge badge-active">已激活</span>';
-      btn.textContent='停用';
-      btn.classList.remove('btn-primary');
-      btn.classList.add('btn-outline');
-      btn.setAttribute('onclick',"toggleAccount(this,'停用')");
-    }
-  }
-}
-</script>
+<header class="top-bar admin"><div class="top-bar-left"><a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a><span class="top-bar-title">彩翼公共采购智能体协同管理平台</span></div><div class="top-bar-right"><div class="top-bar-user"><div class="top-bar-avatar">管</div><span>管理员</span></div></div></header>
+<aside class="sidebar admin"><div class="sidebar-section">
+<a class="sidebar-link" href="index.html"><span class="icon">📊</span><span>概览</span></a><a class="sidebar-link" href="recharge-records.html"><span class="icon">💰</span><span>充值记录</span></a><a class="sidebar-link" href="consumption-records.html"><span class="icon">📊</span><span>消费记录</span></a><a class="sidebar-link" href="agent-audit-list.html"><span class="icon">🤖</span><span>智能体管理</span></a><a class="sidebar-link" href="channel-list.html"><span class="icon">📡</span><span>渠道管理</span></a><a class="sidebar-link" href="invoice-list.html"><span class="icon">📄</span><span>发票管理</span></a><a class="sidebar-link" href="settlement-list.html"><span class="icon">📈</span><span>结算管理</span></a><a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a><a class="sidebar-link" href="reconciliation-list.html"><span class="icon">🧮</span><span>账户对账</span></a>
+<a class="sidebar-link active" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a><a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
+</div></aside>
+<main class="main-content"><div class="page-header"><div class="breadcrumb"><a href="org-type-list.html?tab=account">机构管理</a> &gt; 子账号入口说明</div><h2>机构成员账号</h2><p>机构主账号和子账号已按所属机构统一展示。</p></div><div class="content-card migration-card"><div class="migration-icon">↗</div><h3>子账号已并入机构成员账号</h3><p>为避免机构账号与子账号分开展示，运营端已改为以机构为单位查看账号。请从机构详情进入“机构成员账号”查看主账号和子账号。</p><div class="migration-steps"><b>查看路径</b><br>机构管理 → 账号管理 → 查看机构 / 查看账号（N） → 机构成员账号<br><b>运营端边界</b><br>可查看、按规则停用或恢复、重发临时密码；不可邀请成员、调整岗位或创建机构岗位。</div><a class="btn btn-primary" href="org-type-list.html?tab=account">前往机构与成员账号</a></div></main>
 </body>
 </html>
