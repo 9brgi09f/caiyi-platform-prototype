@@ -938,19 +938,12 @@ window.notifFilter = function (mode, btn) {
 // app.js 在 <head> 内同步加载，DOM 操作必须等到 DOMContentLoaded 之后
 (function () {
     var MODES = {
-        // 子账号 · 已配置企业彩豆使用额度
+        // 子账号 · 示例岗位 B：可充值、可消费共有彩豆；无彩豆管理与组织管理菜单，消费记录仅本人
         member: {
             surname: '王',
             badge: '示例岗位 B',
-            enterpriseQuota: true,
-            hidden: ['enterprise-bean.html', 'member-list.html', 'role-list.html']
-        },
-        // 子账号 · 未配置企业彩豆使用额度（额度为 0）
-        'member-basic': {
-            surname: '陈',
-            badge: '示例岗位 B',
-            enterpriseQuota: false,
-            hidden: ['enterprise-bean.html', 'member-list.html', 'role-list.html']
+            memberKey: 'wang',
+            hidden: ['balance.html', 'member-list.html', 'role-list.html']
         }
     };
 
@@ -967,13 +960,6 @@ window.notifFilter = function (mode, btn) {
 
     function onPage(name) {
         return location.pathname.indexOf(name) > -1;
-    }
-
-    function hasAny(text, words) {
-        for (var i = 0; i < words.length; i++) {
-            if (text.indexOf(words[i]) > -1) return true;
-        }
-        return false;
     }
 
     function applyRoleMode() {
@@ -1006,7 +992,12 @@ window.notifFilter = function (mode, btn) {
             });
         }
 
-        // 付款账户页：子账号仅保留个人付款方式，隐藏机构对公账户区块
+        // 无彩豆管理菜单权限：页面内指向彩豆管理的入口一并隐藏
+        document.querySelectorAll('.main-content a[href="balance.html"]').forEach(function (el) {
+            el.style.display = 'none';
+        });
+
+        // 付款账户页：无维护权限的子账号隐藏机构对公账户维护区块（充值付款时仍可选择机构账户）
         if (onPage('payment-accounts.html')) {
             document.querySelectorAll('.content-card').forEach(function (card) {
                 var title = card.querySelector('.content-card-title, h3');
@@ -1021,153 +1012,26 @@ window.notifFilter = function (mode, btn) {
             }
         }
 
-        // 账户充值页：企业充值需「企业彩豆管理」权限，子账号仅保留个人充值
-        if (onPage('recharge-list.html')) {
-            var kindTabs = document.querySelector('.tabs');
-            if (kindTabs) kindTabs.style.display = 'none';
-            if (typeof switchKind === 'function') switchKind('personal');
-        }
-
-        // 充值下单页：拦截 ?account=enterprise 直接进入企业充值
-        if (onPage('recharge-add.html')) {
-            var acct = new URLSearchParams(location.search).get('account');
-            if (acct === 'enterprise') {
-                location.replace('recharge-list.html');
-                return;
-            }
-        }
-
-        // 消费记录页：子账号仅可查看本人消费，隐藏全机构企业消费视图
-        // 页面内联脚本支持 ?scope=org 直接进入全机构视图，故需一并回退到本人视图
+        // 消费记录页：未授权查看全公司，仅展示本人消费
         if (onPage('consumption-list.html')) {
-            var scopeTabs = document.getElementById('scopeTabs');
-            if (scopeTabs) scopeTabs.style.display = 'none';
-            if (typeof setScope === 'function') setScope('mine');
-        }
-
-        if (!mode.enterpriseQuota) applyZeroQuota();
-    }
-
-    // 未配置企业彩豆使用额度（额度为 0）：额度归零、无企业来源消费，界面结构与已授权成员保持一致
-    function applyZeroQuota() {
-        // 我的彩豆页：本月企业额度归零
-        if (onPage('balance.html')) {
-            document.querySelectorAll('.account-grid > article').forEach(function (card) {
-                var eyebrow = card.querySelector('.eyebrow');
-                if (!eyebrow || eyebrow.textContent.indexOf('本月企业额度') < 0) return;
-
-                var amount = card.querySelector('.amount');
-                if (amount) amount.innerHTML = '0 <small>/ 0 彩豆</small>';
-
-                var desc = card.querySelector('p');
-                if (desc) desc.textContent = '尚未配置使用额度，暂不可使用企业彩豆。';
-
-                var used = card.querySelector('.quota-line span');
-                if (used) used.textContent = '本月已用 0 彩豆';
-                var left = card.querySelector('.quota-line b');
-                if (left) left.textContent = '未配置额度';
-
-                var bar = card.querySelector('.progress b');
-                if (bar) bar.style.width = '0';
+            var mf = document.getElementById('memberFilter');
+            if (mf) mf.style.display = 'none';
+            document.querySelectorAll('#rows tr').forEach(function (r) {
+                if (r.dataset.member !== mode.memberKey) r.remove();
             });
-
-            // 无企业来源与混合来源的变动明细
-            document.querySelectorAll('.lg-row').forEach(function (row) {
-                var meta = row.querySelector('.lg-meta');
-                var bal = row.querySelector('.lg-bal');
-                var t = (meta ? meta.textContent : '') + (bal ? bal.textContent : '');
-                if (hasAny(t, ['混合来源', '企业来源', '企业共享池'])) row.remove();
+            document.querySelectorAll('[data-member-col]').forEach(function (el) {
+                el.style.display = 'none';
             });
-            // 明细条数与分页由 lgRender 计算，删行后需重算（初始值是页面硬编码）
-            if (typeof lgRender === 'function') lgRender();
-        }
-
-        // 消费记录页：企业来源消费为 0，本月总消费等于个人来源
-        if (onPage('consumption-list.html')) {
-            var statsMine = document.getElementById('statsMine');
-            if (statsMine) {
-                var personalValue = null;
-                statsMine.querySelectorAll('.stat').forEach(function (stat) {
-                    var label = stat.querySelector('span');
-                    var value = stat.querySelector('b');
-                    if (!label || !value) return;
-                    if (label.textContent.indexOf('个人来源消费') > -1) personalValue = value.textContent;
-                    if (label.textContent.indexOf('企业来源消费') > -1) value.textContent = '0 彩豆';
-                });
-                if (personalValue) {
-                    statsMine.querySelectorAll('.stat').forEach(function (stat) {
-                        var label = stat.querySelector('span');
-                        var value = stat.querySelector('b');
-                        if (label && value && label.textContent.indexOf('本月总消费') > -1) {
-                            value.textContent = personalValue;
-                        }
-                    });
-                }
-            }
-
-            // 来源筛选按钮保留（与已授权成员界面一致），仅无企业来源与混合来源记录
-            document.querySelectorAll('#rows tr').forEach(function (row) {
-                if (row.dataset.kind === 'enterprise' || row.dataset.kind === 'mix') row.remove();
-            });
-
+            var desc = document.getElementById('pageDesc');
+            if (desc) desc.textContent = '本人的企业彩豆消费明细与开票状态。';
+            // 王晨本月：2 次调用，消费 275.75，其中待开票 80.15
+            var sm = document.getElementById('statMonth');
+            if (sm) sm.textContent = '275.75 彩豆';
+            var sc = document.getElementById('statCalls');
+            if (sc) sc.textContent = '2 次';
+            var si = document.getElementById('statInvoicable');
+            if (si) si.textContent = '80.15 彩豆';
             if (typeof filterRows === 'function') filterRows();
-        }
-
-        // 发票管理页：去掉企业彩豆来源与混合来源的发票记录
-        if (onPage('invoice-list.html')) {
-            document.querySelectorAll('tbody tr').forEach(function (row) {
-                var sub = row.querySelector('.sub');
-                if (sub && hasAny(sub.textContent, ['企业彩豆来源', '混合来源'])) row.remove();
-            });
-        }
-
-        // 从消费记录申请发票：仅保留个人彩豆来源的可选订单
-        if (onPage('invoice-add-from-consumption.html')) {
-            var removed = false;
-            document.querySelectorAll('#records tr').forEach(function (row) {
-                var src = row.querySelector('.source');
-                var sub = row.querySelector('.sub');
-                var t = (src ? src.textContent : '') + (sub ? sub.textContent : '');
-                if (hasAny(t, ['企业彩豆', '混合来源'])) {
-                    row.remove();
-                    removed = true;
-                }
-            });
-
-            document.querySelectorAll('p, .hint, .sub, .tip').forEach(function (el) {
-                if (el.children.length) return;
-                var t = el.textContent;
-                if (t.indexOf('无论使用个人彩豆、企业彩豆或混合来源') > -1) {
-                    el.textContent = '由实际消费人统一申请。同一消费订单仅可申请一次。';
-                } else if (t.indexOf('混合来源订单按整笔实际消费金额申请') > -1) {
-                    el.textContent = '按整笔实际消费金额申请。';
-                }
-            });
-
-            if (removed) {
-                var firstRecord = document.querySelector('#records .record');
-                if (firstRecord) {
-                    firstRecord.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-                var selectAll = document.getElementById('selectAll');
-                if (selectAll) selectAll.checked = true;
-            }
-        }
-
-        // 发票详情 / 提交成功页：去掉个人与企业彩豆拆分的表述
-        if (onPage('invoice-view.html') || onPage('invoice-success.html')) {
-            var eligibility = document.getElementById('eligibility');
-            if (eligibility && eligibility.textContent.indexOf('个人彩豆与企业彩豆') > -1) {
-                eligibility.textContent = '本申请包含实际消费人本人产生的消费订单。';
-            }
-            var noticeText = document.getElementById('noticeText');
-            if (noticeText && noticeText.textContent.indexOf('个人彩豆与企业彩豆') > -1) {
-                noticeText.textContent = '本次申请仅包含本人产生的消费订单。';
-            }
-            var fundCell = document.getElementById('fundSource');
-            if (fundCell && hasAny(fundCell.textContent, ['企业彩豆', '混合来源'])) {
-                fundCell.textContent = '个人彩豆';
-            }
         }
     }
 
