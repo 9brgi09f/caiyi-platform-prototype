@@ -103,7 +103,7 @@ if (new URLSearchParams(location.search).get('added') === '1') {
     var tr = document.createElement('tr');
     tr.innerHTML = '<td>中国银行广州珠江支行</td><td>广州智采科技有限公司</td><td>6217 **** **** 3021</td><td>对公账户</td>'
       + '<td><span class="badge badge-success">已启用</span></td>'
-      + '<td><button class="btn btn-sm btn-outline" onclick="showToast(\'演示数据：详情略\', \'ℹ\')" type="button">详情</button> <button class="btn btn-sm btn-outline" onclick="showToast(\'已设为默认收款账户（演示）\')" type="button">设为默认</button></td>';
+      + '<td><button class="btn btn-sm btn-outline" onclick="showToast(\'账户详情将在下一版补充\', \'ℹ\')" type="button">详情</button> <button class="btn btn-sm btn-outline" onclick="showToast(\'已设为默认收款账户\')" type="button">设为默认</button></td>';
     tb.appendChild(tr);
     showToast('收款账户已添加（已启用，未设为默认）');
   });

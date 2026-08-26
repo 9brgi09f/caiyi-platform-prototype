@@ -65,9 +65,9 @@
 <div class="top-bar-right">
 <div class="id-switcher" id="idSwitcher">
 <div class="id-trigger" onclick="toggleIdMenu()">
-<div class="id-avatar">李</div>
+<div class="id-avatar">张</div>
 <div class="id-info">
-<span class="id-org">广州某某科技有限公司</span>
+<span class="id-org">示例科技有限公司</span>
 <span class="id-type-badge">采购单位</span>
 </div>
 <span class="id-chevron">▾</span>
@@ -77,7 +77,7 @@
 <div class="id-menu-item current">
 <div class="id-dot active"></div>
 <div class="id-item-body">
-<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-org">示例科技有限公司</div>
 <div class="id-item-type">采购单位</div>
 </div>
 <span class="id-item-tag current-tag">当前</span>
@@ -85,7 +85,7 @@
 <div class="id-menu-item" onclick="location.href='../developer/index.html'">
 <div class="id-dot idle"></div>
 <div class="id-item-body">
-<div class="id-item-org">广州某某科技有限公司</div>
+<div class="id-item-org">示例科技有限公司</div>
 <div class="id-item-type">开发者</div>
 </div>
 </div>
@@ -106,8 +106,8 @@ document.addEventListener('click',function(e){
 </script>
 </div>
 </header>
-<aside class="sidebar user"><div class="sidebar-section"><a class="sidebar-link" href="index.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z"/></svg></span><span>概览</span></a><a class="sidebar-link" href="agent-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 10h8M8 14h5"/></svg></span><span>智能体市场</span></a><a class="sidebar-link" href="recharge-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M16 14h2"/></svg></span><span>账户充值</span></a><a class="sidebar-link active" href="payment-accounts.html"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-6 9 6v9H3v-9Z"/><path d="M6 10v9m4-9v9m4-9v9m4-9v9M2 19h20"/></svg></span><span>付款账户</span></a><a class="sidebar-link" href="balance.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6.5A2.5 2.5 0 0 1 4 17.5v-10Z"/><path d="M4 8h13M15 14h3"/></svg></span><span>我的彩豆</span></a><a class="sidebar-link" href="consumption-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M5 20V10m7 10V4m7 16v-7"/></svg></span><span>消费记录</span></a><a class="sidebar-link" href="invoice-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15l-3-2-3 2-3-2-3 2V3Z"/><path d="M9 9h6m-6 4h6"/></svg></span><span>发票管理</span></a><a class="sidebar-link" href="member-list.html"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.6-3.4 3-5 7-5s6.4 1.6 7 5"/></svg></span><span>账号管理</span></a><a class="sidebar-link" href="role-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 2.9 7.9 7 10 4.1-2.1 7-5.5 7-10V6l-7-3Z"/><path d="M9 12h6m-3-3v6"/></svg></span><span>岗位管理</span></a></div></aside>
-<main class="main-content"><section class="page-header"><a class="back-link" href="payment-accounts.html">← 返回付款账户</a><h2>添加付款账户</h2><p>绑定用于付款的银行账户，支持个人账户与企业账户。</p></section><div class="content-card"><h3 style="margin:0 0 20px;font-size:16px;">账户信息</h3><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">账户类型</label><div style="display:flex;gap:24px;"><label style="cursor:pointer;"><input checked="" name="acctKind" type="radio"/> 个人账户</label><label style="cursor:pointer;"><input name="acctKind" type="radio"/> 企业账户</label></div></div><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">开户银行</label><select style="width:100%;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;"><option>请选择开户银行</option><option>招商银行</option><option>工商银行</option><option>建设银行</option><option>中国银行</option><option>农业银行</option><option>浦发银行</option></select></div><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">卡号 / 账户号</label><input placeholder="请输入银行卡号或对公账户号" style="width:100%;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;"/></div><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">开户名称</label><input placeholder="个人填持卡人姓名 / 企业填企业名称" style="width:100%;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;"/></div><div style="margin-bottom:16px;"><label style="font-size:14px;cursor:pointer;"><input type="checkbox"/> 设为默认付款账户</label></div><div style="display:flex;gap:12px;margin-top:20px;"><a class="btn btn-outline" href="payment-accounts.html" style="flex:1;text-align:center;">取消</a><a class="btn btn-primary" href="payment-accounts.html" style="flex:1;text-align:center;">确认添加</a></div></div></main>
+<aside class="sidebar user"><div class="sidebar-section"><a class="sidebar-link" href="index.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z"/></svg></span><span>概览</span></a><a class="sidebar-link" href="agent-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 10h8M8 14h5"/></svg></span><span>智能体市场</span></a><a class="sidebar-link" href="recharge-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M16 14h2"/></svg></span><span>账户充值</span></a><a class="sidebar-link active" href="payment-accounts.html"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-6 9 6v9H3v-9Z"/><path d="M6 10v9m4-9v9m4-9v9m4-9v9M2 19h20"/></svg></span><span>付款账户</span></a><a class="sidebar-link" href="balance.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6.5A2.5 2.5 0 0 1 4 17.5v-10Z"/><path d="M4 8h13M15 14h3"/></svg></span><span>我的彩豆</span></a><a class="sidebar-link" href="enterprise-bean.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3c3.9 0 7 1.3 7 3s-3.1 3-7 3-7-1.3-7-3 3.1-3 7-3Z"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg></span><span>企业彩豆</span></a><a class="sidebar-link" href="consumption-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M5 20V10m7 10V4m7 16v-7"/></svg></span><span>消费记录</span></a><a class="sidebar-link" href="invoice-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15l-3-2-3 2-3-2-3 2V3Z"/><path d="M9 9h6m-6 4h6"/></svg></span><span>发票管理</span></a><a class="sidebar-link" href="member-list.html"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.6-3.4 3-5 7-5s6.4 1.6 7 5"/></svg></span><span>账号管理</span></a><a class="sidebar-link" href="role-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 2.9 7.9 7 10 4.1-2.1 7-5.5 7-10V6l-7-3Z"/><path d="M9 12h6m-3-3v6"/></svg></span><span>岗位管理</span></a></div></aside>
+<main class="main-content"><section class="page-header"><a class="back-link" href="payment-accounts.html">← 返回付款账户</a><h2>添加付款账户</h2><p id="aaSubtitle">绑定用于付款的银行账户。</p></section><div class="content-card"><h3 style="margin:0 0 20px;font-size:16px;">账户信息</h3><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">账户类型</label><div style="display:flex;gap:24px;"><label style="cursor:not-allowed;opacity:.75;"><input checked="" disabled="" name="acctKind" type="radio" value="personal"/> 个人账户</label><label style="cursor:not-allowed;opacity:.75;"><input disabled="" name="acctKind" type="radio" value="company"/> 企业账户</label></div><p id="aaKindNote" style="margin:8px 0 0;color:#708199;font-size:12px;line-height:1.65;"></p></div><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">开户银行</label><select style="width:100%;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;"><option>请选择开户银行</option><option>招商银行</option><option>工商银行</option><option>建设银行</option><option>中国银行</option><option>农业银行</option><option>浦发银行</option></select></div><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">卡号 / 账户号</label><input placeholder="请输入银行卡号或对公账户号" style="width:100%;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;"/></div><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">开户名称</label><input placeholder="个人填持卡人姓名 / 企业填企业名称" style="width:100%;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;"/></div><div style="margin-bottom:16px;"><label style="font-size:14px;cursor:pointer;"><input type="checkbox"/> 设为默认付款账户</label></div><div style="display:flex;gap:12px;margin-top:20px;"><a class="btn btn-outline" href="payment-accounts.html" style="flex:1;text-align:center;">取消</a><a class="btn btn-primary" href="payment-accounts.html" style="flex:1;text-align:center;">确认添加</a></div></div></main>
 <script>
 (function(){
   var q=new URLSearchParams(location.search);
@@ -120,9 +120,24 @@ document.addEventListener('click',function(e){
   var inputs=document.querySelectorAll('.content-card input[placeholder]');
   if(inputs[0]&&q.get('no')) inputs[0].value=q.get('no');
   if(inputs[1]&&q.get('name')) inputs[1].value=q.get('name');
-  if(q.get('type')==='company'){ var radios=document.querySelectorAll('input[name="acctKind"]'); if(radios[1]){ radios[0].checked=false; radios[1].checked=true; } }
   var ok=document.querySelector('.content-card .btn-primary');
   if(ok) ok.textContent='保存修改';
+})();
+(function(){
+  var q=new URLSearchParams(location.search);
+  var company=(q.get('kind')||q.get('type'))==='company';
+  var radios=document.querySelectorAll('input[name="acctKind"]');
+  if(radios[0]&&radios[1]){ radios[0].checked=!company; radios[1].checked=company; }
+  var sub=document.getElementById('aaSubtitle');
+  if(sub) sub.textContent=company?'绑定机构对公账户，用于企业充值付款。':'绑定个人银行账户，用于个人充值付款。';
+  var note=document.getElementById('aaKindNote');
+  if(note) note.textContent=company
+    ? '账户类型由入口决定，不可在此切换。对公账户属机构资产，需具备“维护机构对公账户”权限；开户名称须与机构注册主体一致。'
+    : '账户类型由入口决定，不可在此切换。个人账户仅用于个人充值付款，不可用于企业充值。';
+  var names=document.querySelectorAll('.content-card input[placeholder]');
+  if(names[1]) names[1].placeholder=company?'请输入机构注册全称':'请输入持卡人姓名';
+  var back=document.querySelector('.back-link');
+  if(back) back.textContent='← 返回付款账户';
 })();
 </script>
 </body>

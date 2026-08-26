@@ -1,1 +1,227 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>充值开票 - 用户端</title><link rel="stylesheet" href="../styles.css"><style>:root{--ink:#172b4d;--blue:#2563eb;--blue-weak:#eff4ff;--canvas:#f6f8fc;--line:#e2e9f3;--muted:#708199;--green:#047857;--green-bg:#ecfdf5;--amber:#b45309;--amber-bg:#fff7e8}.main-content{background:var(--canvas);padding:28px 32px 44px}.page-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:18px;padding:23px 26px;border:1px solid #dce8ff;border-radius:16px;background:linear-gradient(135deg,#fff 0%,#f1f6ff 100%)}.back{display:inline-block;margin-bottom:8px;color:var(--blue);font-size:13px;text-decoration:none}.page-head h2{margin:0;color:var(--ink);font-size:24px}.page-head p{max-width:760px;margin:7px 0 0;color:var(--muted);font-size:13px;line-height:1.65}.panel{width:100%;border:1px solid var(--line);border-radius:14px;background:#fff;padding:24px 26px;margin-bottom:18px}.panel h3{margin:0 0 16px;color:var(--ink);font-size:16px}.section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}.section-title .meta{color:var(--muted);font-size:12px}.notice{display:flex;gap:10px;align-items:flex-start;margin:0 0 18px;padding:12px 14px;border:1px solid #cfe0ff;border-radius:10px;background:#f5f9ff;color:#536982;font-size:13px;line-height:1.65}.notice b{flex:none;color:#235cc8}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 15px;border-radius:8px;font-size:13px;text-decoration:none;cursor:pointer}.btn-primary{border:1px solid var(--blue);background:var(--blue);color:#fff}.btn-outline{border:1px solid #cdd9e9;background:#fff;color:#46607f}.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}.source{display:inline-flex;align-items:center;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:700}.source.personal{background:#ecfdf5;color:#047857}.source.enterprise{background:#eff4ff;color:#2563eb}.data-table{width:100%;border-collapse:collapse;font-size:13px}.data-table th{padding:11px 12px;color:#8291a6;text-align:left;font-size:11px;font-weight:600;white-space:nowrap}.data-table td{padding:13px 12px;border-top:1px solid #edf1f6;color:#465a74;vertical-align:top}.data-table tr:hover td{background:#fbfcff}.data-table input{width:16px;height:16px;accent-color:var(--blue)}.table-wrap{overflow-x:auto}.amount{color:var(--ink);font-weight:700}.sub{display:block;margin-top:3px;color:#94a3b8;font-size:11px;line-height:1.45}.summary{display:flex;justify-content:flex-end;gap:8px;align-items:baseline;margin:13px 0 0;color:#62748c;font-size:13px}.summary strong{color:var(--blue);font-size:20px}.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{min-width:0}.field.full{grid-column:1/-1}.field label{display:block;margin-bottom:6px;color:#3f526b;font-size:13px}.req{color:#ef4444}.input{width:100%;height:42px;padding:0 11px;border:1px solid #d8e3f1;border-radius:8px;background:#fff;color:#253a55;font-size:14px}.input:focus{outline:0;border-color:var(--blue);box-shadow:0 0 0 3px #e6efff}.hint{margin:6px 0 0;color:#8291a6;font-size:12px;line-height:1.55}.form-actions{display:flex;gap:10px;justify-content:flex-end;padding-top:20px;border-top:1px solid var(--line)}.type-card{display:flex;gap:12px;align-items:center;padding:13px 14px;border:1px solid #bfcef0;border-radius:10px;background:#f5f8ff;color:#3e5471;font-size:13px}.type-card b{display:block;margin-bottom:3px;color:var(--ink)}.status{display:inline-flex;padding:3px 8px;border-radius:999px;background:var(--amber-bg);color:var(--amber);font-size:11px;font-weight:700}.detail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.detail-item{padding:15px;border:1px solid #e6edf7;border-radius:10px;background:#fbfcff}.detail-item .label{display:block;margin-bottom:6px;color:#8291a6;font-size:11px}.detail-item .value{color:#2f4561;font-size:14px;font-weight:650;line-height:1.5}.timeline{display:grid;gap:0}.event{display:grid;grid-template-columns:140px 1fr;gap:15px;padding:13px 0;border-top:1px solid #edf1f6}.event:first-child{border-top:0}.event time{color:#8a9aae;font-size:12px}.event p{margin:0;color:#526781;font-size:13px}@media(max-width:760px){.main-content{margin-left:0;padding:18px 16px 32px}.sidebar{display:none}.page-head{flex-direction:column;padding:20px}.panel{padding:20px}.field-grid{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr 1fr}.form-actions{flex-direction:column}.form-actions .btn{width:100%}.event{grid-template-columns:1fr;gap:4px}.data-table{min-width:690px}.top-bar-title{font-size:12px}.top-bar-user span{display:none}}@media(max-width:420px){.detail-grid{grid-template-columns:1fr}}</style></head><body><header class="top-bar user"><div class="top-bar-left"><a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a><span class="top-bar-title">彩翼公共采购智能体协同管理平台</span></div><div class="top-bar-right"><div class="top-bar-user"><div class="top-bar-avatar">李</div><span>广州某某科技有限公司</span></div></div></header><aside class="sidebar user"><div class="sidebar-section"><a class="sidebar-link" href="index.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z"/></svg></span><span>概览</span></a><a class="sidebar-link" href="agent-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 10h8M8 14h5"/></svg></span><span>智能体市场</span></a><a class="sidebar-link" href="recharge-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M16 14h2"/></svg></span><span>账户充值</span></a><a class="sidebar-link" href="payment-accounts.html"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-6 9 6v9H3v-9Z"/><path d="M6 10v9m4-9v9m4-9v9m4-9v9M2 19h20"/></svg></span><span>付款账户</span></a><a class="sidebar-link" href="balance.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6.5A2.5 2.5 0 0 1 4 17.5v-10Z"/><path d="M4 8h13M15 14h3"/></svg></span><span>我的彩豆</span></a><a class="sidebar-link" href="consumption-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M5 20V10m7 10V4m7 16v-7"/></svg></span><span>消费记录</span></a><a class="sidebar-link active" href="invoice-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15l-3-2-3 2-3-2-3 2V3Z"/><path d="M9 9h6m-6 4h6"/></svg></span><span>发票管理</span></a><a class="sidebar-link" href="member-list.html"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.6-3.4 3-5 7-5s6.4 1.6 7 5"/></svg></span><span>账号管理</span></a><a class="sidebar-link" href="role-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 2.9 7.9 7 10 4.1-2.1 7-5.5 7-10V6l-7-3Z"/><path d="M9 12h6m-3-3v6"/></svg></span><span>岗位管理</span></a></div></aside><main class="main-content"><section class="page-head"><div><a class="back" href="invoice-list.html">← 返回发票管理</a><h2 id="pageTitle">个人充值开票</h2><p id="pageDesc">仅可选择个人资产产生的充值订单；个人与企业充值发票不能合并申请。</p></div></section><section class="panel"><div class="section-title"><h3>选择充值记录</h3><span class="meta" id="scopeLabel">申请主体：张敏本人</span></div><div class="notice"><b>资金归属</b><span id="sourceNotice">本页只展示当前平台个人账号的可开票充值记录。提交后将占用对应记录的个人充值发票资格。</span></div><div class="table-wrap"><table class="data-table"><thead><tr><th><input aria-label="选择全部" type="checkbox" checked></th><th>充值订单</th><th>充值时间</th><th>资金归属</th><th>实付金额</th><th>发票资格</th></tr></thead><tbody id="records"></tbody></table></div><div class="summary">已选开票金额合计 <strong id="total">¥5.00</strong></div><p class="hint">仅供测试、非真实。已申请、已开具的充值订单不会重复列入申请范围。</p></section><form id="invoiceForm"><section class="panel"><h3>发票类型</h3><div class="type-card"><span aria-hidden="true">✓</span><div><b>预付卡发票（增值税普通发票）</b><span>充值与消费为两类独立业务口径，请按实际资金来源分别申请。</span></div></div></section><section class="panel"><h3>发票抬头</h3><div class="field-grid"><div class="field"><label>发票抬头 <span class="req">*</span></label><input class="input" id="title" required value="张敏"></div><div class="field"><label id="taxLabel">纳税人识别号</label><input class="input" id="taxNo" placeholder="企业申请时需填写统一社会信用代码"></div><div class="field full"><label>收票手机号 <span class="req">*</span></label><input class="input" required value="138****5678"><p class="hint">电子发票开具后将发送至此手机号关联的收票渠道。</p></div></div></section><div class="form-actions"><a class="btn btn-outline" href="invoice-list.html">取消</a><button class="btn btn-primary" type="submit">提交开票申请</button></div></form></main><script>(function(){var source=new URLSearchParams(location.search).get('source')==='enterprise'?'enterprise':'personal',enterprise=source==='enterprise';var data=enterprise?[{id:'QA-TEST-QY-CZ-20260814001',time:'2026-08-14 16:43:12',owner:'广州某某科技有限公司',amount:100}]:[{id:'QA-TEST-CZ-20260816002',time:'2026-08-16 09:18:24',owner:'张敏的平台个人账号',amount:5}];document.title=(enterprise?'企业':'个人')+'充值开票 - 用户端';document.getElementById('pageTitle').textContent=enterprise?'企业充值开票':'个人充值开票';document.getElementById('pageDesc').textContent=enterprise?'仅可选择企业共享彩豆池对应的充值订单；申请主体为机构。':'仅可选择个人资产产生的充值订单；个人与企业充值发票不能合并申请。';document.getElementById('scopeLabel').textContent='申请主体：'+(enterprise?'广州某某科技有限公司':'张敏本人');document.getElementById('sourceNotice').textContent=enterprise?'本页只展示归属广州某某科技有限公司的可开票企业充值记录。该资格不能和成员个人资金合并申请。':'本页只展示当前平台个人账号的可开票充值记录。提交后将占用对应记录的个人充值发票资格。';document.getElementById('records').innerHTML=data.map(function(x){return '<tr><td><input class="record" type="checkbox" checked data-amount="'+x.amount+'" aria-label="选择 '+x.id+'"></td><td><b>'+x.id+'</b><span class="sub">仅供测试、非真实</span></td><td>'+x.time+'</td><td><span class="source '+source+'">'+(enterprise?'企业':'个人')+'</span><span class="sub">'+x.owner+'</span></td><td class="amount">¥'+x.amount.toFixed(2)+'</td><td><span class="status">可申请</span></td></tr>'}).join('');var title=document.getElementById('title'),tax=document.getElementById('taxNo');if(enterprise){title.value='广州某某科技有限公司';tax.value='QA-TEST-USCC-20260818';tax.required=true;document.getElementById('taxLabel').innerHTML='纳税人识别号 <span class="req">*</span>';}function sum(){var total=[].slice.call(document.querySelectorAll('.record:checked')).reduce(function(n,x){return n+Number(x.dataset.amount)},0);document.getElementById('total').textContent='¥'+total.toFixed(2)}sum();document.addEventListener('change',function(e){if(e.target.matches('.record'))sum()});document.getElementById('invoiceForm').onsubmit=function(e){e.preventDefault();if(!document.querySelector('.record:checked')){alert('请至少选择一条可开票充值记录。');return}location.href='invoice-success.html?source='+source+'&type=recharge'};})();</script></body></html>
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>充值开票 - 用户端</title><link rel="stylesheet" href="../styles.css">
+<script src="../app.js"></script><style>:root{--ink:#172b4d;--blue:#2563eb;--blue-weak:#eff4ff;--canvas:#f6f8fc;--line:#e2e9f3;--muted:#708199;--green:#047857;--green-bg:#ecfdf5;--amber:#b45309;--amber-bg:#fff7e8}.main-content{background:var(--canvas);padding:28px 32px 44px}.page-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:18px;padding:23px 26px;border:1px solid #dce8ff;border-radius:16px;background:linear-gradient(135deg,#fff 0%,#f1f6ff 100%)}.back{display:inline-block;margin-bottom:8px;color:var(--blue);font-size:13px;text-decoration:none}.page-head h2{margin:0;color:var(--ink);font-size:24px}.page-head p{max-width:760px;margin:7px 0 0;color:var(--muted);font-size:13px;line-height:1.65}.panel{width:100%;border:1px solid var(--line);border-radius:14px;background:#fff;padding:24px 26px;margin-bottom:18px}.panel h3{margin:0 0 16px;color:var(--ink);font-size:16px}.section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}.section-title .meta{color:var(--muted);font-size:12px}.notice{display:flex;gap:10px;align-items:flex-start;margin:0 0 18px;padding:12px 14px;border:1px solid #cfe0ff;border-radius:10px;background:#f5f9ff;color:#536982;font-size:13px;line-height:1.65}.notice b{flex:none;color:#235cc8}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 15px;border-radius:8px;font-size:13px;text-decoration:none;cursor:pointer}.btn-primary{border:1px solid var(--blue);background:var(--blue);color:#fff}.btn-outline{border:1px solid #cdd9e9;background:#fff;color:#46607f}.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}.source{display:inline-flex;align-items:center;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:700}.source.personal{background:#ecfdf5;color:#047857}.source.enterprise{background:#eff4ff;color:#2563eb}.data-table{width:100%;border-collapse:collapse;font-size:13px}.data-table th{padding:11px 12px;color:#8291a6;text-align:left;font-size:11px;font-weight:600;white-space:nowrap}.data-table td{padding:13px 12px;border-top:1px solid #edf1f6;color:#465a74;vertical-align:top}.data-table tr:hover td{background:#fbfcff}.data-table input{width:16px;height:16px;accent-color:var(--blue)}.table-wrap{overflow-x:auto}.amount{color:var(--ink);font-weight:700}.sub{display:block;margin-top:3px;color:#94a3b8;font-size:11px;line-height:1.45}.summary{display:flex;justify-content:flex-end;gap:8px;align-items:baseline;margin:13px 0 0;color:#62748c;font-size:13px}.summary strong{color:var(--blue);font-size:20px}.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{min-width:0}.field.full{grid-column:1/-1}.field label{display:block;margin-bottom:6px;color:#3f526b;font-size:13px}.req{color:#ef4444}.input{width:100%;height:42px;padding:0 11px;border:1px solid #d8e3f1;border-radius:8px;background:#fff;color:#253a55;font-size:14px}.input:focus{outline:0;border-color:var(--blue);box-shadow:0 0 0 3px #e6efff}.hint{margin:6px 0 0;color:#8291a6;font-size:12px;line-height:1.55}.form-actions{display:flex;gap:10px;justify-content:flex-end;padding-top:20px;border-top:1px solid var(--line)}.type-card{display:flex;gap:12px;align-items:center;padding:13px 14px;border:1px solid #bfcef0;border-radius:10px;background:#f5f8ff;color:#3e5471;font-size:13px}.type-card b{display:block;margin-bottom:3px;color:var(--ink)}.status{display:inline-flex;padding:3px 8px;border-radius:999px;background:var(--amber-bg);color:var(--amber);font-size:11px;font-weight:700}.detail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.detail-item{padding:15px;border:1px solid #e6edf7;border-radius:10px;background:#fbfcff}.detail-item .label{display:block;margin-bottom:6px;color:#8291a6;font-size:11px}.detail-item .value{color:#2f4561;font-size:14px;font-weight:650;line-height:1.5}.timeline{display:grid;gap:0}.event{display:grid;grid-template-columns:140px 1fr;gap:15px;padding:13px 0;border-top:1px solid #edf1f6}.event:first-child{border-top:0}.event time{color:#8a9aae;font-size:12px}.event p{margin:0;color:#526781;font-size:13px}@media(max-width:760px){.main-content{margin-left:0;padding:18px 16px 32px}.sidebar{display:none}.page-head{flex-direction:column;padding:20px}.panel{padding:20px}.field-grid{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr 1fr}.form-actions{flex-direction:column}.form-actions .btn{width:100%}.event{grid-template-columns:1fr;gap:4px}.data-table{min-width:690px}.top-bar-title{font-size:12px}.top-bar-user span{display:none}}@media(max-width:420px){.detail-grid{grid-template-columns:1fr}}.title-section{align-items:center}.title-section h3{margin:0}.title-picker{display:flex;align-items:flex-start;gap:12px;margin:18px 0 0}.picker-label{padding-top:9px;color:#708199;font-size:12px;white-space:nowrap}.title-options{display:flex;flex-wrap:wrap;gap:8px}.title-option{display:flex;align-items:center;gap:6px;min-height:36px;padding:0 11px;border:1px solid #d8e3f1;border-radius:8px;background:#fff;color:#465a74;font-size:13px;cursor:pointer}.title-option small,.managed-title em{padding:2px 5px;border-radius:5px;background:#eaf2ff;color:#2563eb;font-size:10px;font-style:normal}.title-option.active{border-color:#7ea8f7;background:#f2f6ff;color:#2563eb;font-weight:700}.title-hint{margin:9px 0 18px}.drawer{position:fixed;z-index:50;inset:0;display:none}.drawer.open{display:block}.drawer-mask{position:absolute;inset:0;background:rgba(15,23,42,.34)}.drawer-panel{box-sizing:border-box;position:absolute;top:0;right:0;width:min(600px,100%);height:100%;padding:30px 28px;background:#fff;box-shadow:-14px 0 36px rgba(15,23,42,.13);overflow-y:auto}.drawer-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-bottom:20px;border-bottom:1px solid var(--line)}.drawer-head h3{margin:0;color:var(--ink);font-size:20px}.drawer-head p{margin:7px 0 0;color:var(--muted);font-size:12px;line-height:1.6}.drawer-close{width:32px;height:32px;border:0;border-radius:8px;background:#f4f7fb;color:#526781;font-size:24px;line-height:1;cursor:pointer}.drawer-body{display:grid;gap:24px;padding-top:22px}.drawer-subhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.drawer-subhead h4{margin:0;color:var(--ink);font-size:14px}.managed-title-list{display:grid;gap:8px}.managed-title{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:12px 13px;border:1px solid #e1e9f4;border-radius:9px;background:#fff;text-align:left;cursor:pointer}.managed-title b,.managed-title small{display:block}.managed-title b{color:#3f526b;font-size:13px}.managed-title small{margin-top:4px;color:#8291a6;font-size:11px}.managed-title.active{border-color:#7ea8f7;background:#f5f8ff}.title-editor{padding-top:20px;border-top:1px solid var(--line)}.default-toggle{color:#526781;font-size:12px}.default-toggle input{accent-color:var(--blue)}.drawer-actions{display:flex;justify-content:space-between;gap:10px;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}.drawer-actions .btn-primary{margin-left:auto}.drawer-actions .btn:disabled{cursor:not-allowed;opacity:.45}@media(max-width:760px){.title-picker{display:grid;gap:8px}.picker-label{padding-top:0}.drawer-panel{padding:26px 20px}.drawer-actions{flex-wrap:wrap}}</style></head><body><header class="top-bar user"><div class="top-bar-left"><a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a><span class="top-bar-title">彩翼公共采购智能体协同管理平台</span></div><div class="top-bar-right"><div class="top-bar-user"><div class="top-bar-avatar">张</div><span>示例科技有限公司</span></div></div></header><aside class="sidebar user"><div class="sidebar-section"><a class="sidebar-link" href="index.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z"/></svg></span><span>概览</span></a><a class="sidebar-link" href="agent-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 10h8M8 14h5"/></svg></span><span>智能体市场</span></a><a class="sidebar-link" href="recharge-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M16 14h2"/></svg></span><span>账户充值</span></a><a class="sidebar-link" href="payment-accounts.html"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-6 9 6v9H3v-9Z"/><path d="M6 10v9m4-9v9m4-9v9m4-9v9M2 19h20"/></svg></span><span>付款账户</span></a><a class="sidebar-link" href="balance.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6.5A2.5 2.5 0 0 1 4 17.5v-10Z"/><path d="M4 8h13M15 14h3"/></svg></span><span>我的彩豆</span></a><a class="sidebar-link" href="enterprise-bean.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3c3.9 0 7 1.3 7 3s-3.1 3-7 3-7-1.3-7-3 3.1-3 7-3Z"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg></span><span>企业彩豆</span></a><a class="sidebar-link" href="consumption-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M5 20V10m7 10V4m7 16v-7"/></svg></span><span>消费记录</span></a><a class="sidebar-link active" href="invoice-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15l-3-2-3 2-3-2-3 2V3Z"/><path d="M9 9h6m-6 4h6"/></svg></span><span>发票管理</span></a><a class="sidebar-link" href="member-list.html"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.6-3.4 3-5 7-5s6.4 1.6 7 5"/></svg></span><span>账号管理</span></a><a class="sidebar-link" href="role-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 2.9 7.9 7 10 4.1-2.1 7-5.5 7-10V6l-7-3Z"/><path d="M9 12h6m-3-3v6"/></svg></span><span>岗位管理</span></a></div></aside><main class="main-content">
+<section class="page-head">
+  <div>
+    <a class="back" href="invoice-list.html">← 返回发票管理</a>
+    <h2>充值开票</h2>
+    <p>按充值资金归属选择订单，充值发票与智能体消费发票分别申请。</p>
+  </div>
+</section>
+<section class="panel">
+  <div class="section-title"><h3>选择充值记录</h3><span class="meta">仅展示可申请开票的充值订单</span></div>
+  <div class="table-wrap">
+    <table class="data-table"><thead><tr><th><input aria-label="选择全部" id="selectAll" type="checkbox" checked></th><th>充值时间</th><th>支付方式</th><th>充值归属</th><th>充值金额</th><th>状态</th></tr></thead>
+      <tbody id="records"></tbody>
+    </table>
+  </div>
+  <div class="summary">已选开票金额合计 <strong id="total">¥105.00</strong></div>
+</section>
+<form id="invoiceForm">
+  <section class="panel"><h3>发票类型</h3><div class="type-card"><span aria-hidden="true">✓</span><div><b>预付卡发票（增值税普通发票）</b><span>税率 0%，用于彩豆充值业务。</span></div></div></section>
+  <section class="panel">
+    <div class="section-title title-section"><h3>发票抬头</h3><button class="btn btn-outline btn-sm" id="manageTitles" type="button">管理抬头</button></div>
+    <div class="title-picker"><span class="picker-label">常用抬头</span><div class="title-options" id="titleOptions" aria-label="常用发票抬头"></div></div>
+    <p class="hint title-hint">选择常用抬头可一键填入下方信息；可在“管理抬头”中新增、编辑或删除。</p>
+    <div class="field-grid">
+      <div class="field"><label>发票抬头 <span class="req">*</span></label><input class="input" id="title" required value="示例科技有限公司"></div>
+      <div class="field"><label id="taxLabel">纳税人识别号 <span class="req">*</span></label><input class="input" id="taxNo" required placeholder="填写 15-20 位数字或大写字母"></div>
+      <div class="field"><label>开户银行</label><input class="input" id="bankName" placeholder="选填"></div>
+      <div class="field"><label>银行账号</label><input class="input" id="bankAccount" placeholder="选填"></div>
+      <div class="field"><label>注册地址</label><input class="input" id="registeredAddress" placeholder="选填"></div>
+      <div class="field"><label>注册电话</label><input class="input" id="registeredPhone" placeholder="选填"></div>
+    </div>
+  </section>
+  <section class="panel"><h3>收票信息</h3><div class="field-grid"><div class="field"><label>收票手机号 <span class="req">*</span></label><input class="input" id="receiptPhone" required value="138****5678"><p class="hint">电子发票开具后将发送至此手机号关联的收票渠道。</p></div><div class="field"><label>收票邮箱</label><input class="input" id="receiptEmail" type="email" placeholder="选填"></div><div class="field full"><label>备注</label><input class="input" id="remark" placeholder="选填"></div></div></section>
+  <div class="form-actions"><a class="btn btn-outline" href="invoice-list.html">取消</a><button class="btn btn-primary" type="submit">提交开票申请</button></div>
+</form>
+<div class="drawer" id="titleDrawer" aria-hidden="true">
+  <div class="drawer-mask" data-close-drawer></div>
+  <aside class="drawer-panel" aria-labelledby="drawerTitle" role="dialog" aria-modal="true">
+    <div class="drawer-head"><div><h3 id="drawerTitle">管理抬头</h3><p>维护常用发票抬头，保存后可直接用于开票。</p></div><button class="drawer-close" aria-label="关闭" data-close-drawer type="button">×</button></div>
+    <div class="drawer-body"><div class="title-list-wrap"><div class="drawer-subhead"><h4>常用抬头</h4><button class="btn btn-outline btn-sm" id="addTitle" type="button">新增抬头</button></div><div class="managed-title-list" id="managedTitleList"></div></div>
+      <form class="title-editor" id="titleEditor"><div class="drawer-subhead"><h4 id="editorHeading">编辑抬头</h4><label class="default-toggle"><input id="editorDefault" type="checkbox"> 设为默认</label></div>
+        <div class="field-grid"><div class="field full"><label>发票抬头 <span class="req">*</span></label><input class="input" id="editorTitle" required></div><div class="field"><label>抬头类型 <span class="req">*</span></label><select class="input" id="editorType"><option value="company">企业</option><option value="personal">个人</option></select></div><div class="field"><label id="editorTaxLabel">纳税人识别号 <span class="req">*</span></label><input class="input" id="editorTaxNo" required placeholder="填写 15-20 位数字或大写字母"></div><div class="field"><label>开户银行</label><input class="input" id="editorBankName" placeholder="选填"></div><div class="field"><label>银行账号</label><input class="input" id="editorBankAccount" placeholder="选填"></div><div class="field"><label>注册地址</label><input class="input" id="editorAddress" placeholder="选填"></div><div class="field"><label>注册电话</label><input class="input" id="editorPhone" placeholder="选填"></div></div>
+        <div class="drawer-actions"><button class="btn btn-outline" id="deleteTitle" type="button">删除</button><button class="btn btn-primary" type="submit">保存抬头</button></div>
+      </form>
+    </div>
+  </aside>
+</div>
+</main><script>
+(function(){
+  var storageKey='caiyi-invoice-titles';
+  var records=[
+    {id:'QA-TEST-QY-CZ-20260814001',time:'2026-08-14 16:43:12',payment:'充值订单',ownership:'企业充值',ownerClass:'enterprise',amount:100},
+    {id:'QA-TEST-CZ-20260816002',time:'2026-08-16 09:18:24',payment:'充值订单',ownership:'个人充值',ownerClass:'personal',amount:5}
+  ];
+  var defaultTitles=[
+    {id:'company',name:'示例科技有限公司',type:'company',taxNo:'QA-TEST-USCC-20260818',bankName:'',bankAccount:'',address:'',phone:'',isDefault:true},
+    {id:'personal',name:'张敏',type:'personal',taxNo:'',bankName:'',bankAccount:'',address:'',phone:'',isDefault:false}
+  ];
+  var titles=loadTitles();
+  var activeTitleId=(titles.filter(function(item){return item.isDefault})[0]||titles[0]).id;
+  var editingTitleId=activeTitleId;
+  var drawer=document.getElementById('titleDrawer');
+
+  function loadTitles(){
+    try{
+      var saved=JSON.parse(sessionStorage.getItem(storageKey));
+      if(Array.isArray(saved)&&saved.length) return saved.map(function(item){item.type=item.type||((item.taxNo||'')?'company':'personal');return item;});
+    }catch(error){}
+    return defaultTitles;
+  }
+  function saveTitles(){
+    try{sessionStorage.setItem(storageKey,JSON.stringify(titles));}catch(error){}
+  }
+  function escapeHtml(value){
+    return String(value||'').replace(/[&<>'"]/g,function(char){return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char];});
+  }
+  function getTitle(id){return titles.filter(function(item){return item.id===id})[0];}
+  function setTaxRequirement(type){
+    var required=type==='company';
+    document.getElementById('taxNo').required=required;
+    document.getElementById('taxLabel').innerHTML=required?'纳税人识别号 <span class="req">*</span>':'纳税人识别号';
+  }
+  function setEditorTaxRequirement(type){
+    var required=type==='company';
+    document.getElementById('editorTaxNo').required=required;
+    document.getElementById('editorTaxLabel').innerHTML=required?'纳税人识别号 <span class="req">*</span>':'纳税人识别号';
+    document.getElementById('editorTaxNo').placeholder=required?'填写 15-20 位数字或大写字母':'个人抬头选填';
+  }
+  function applyTitle(id){
+    var item=getTitle(id);
+    if(!item) return;
+    activeTitleId=id;
+    document.getElementById('title').value=item.name;
+    document.getElementById('taxNo').value=item.taxNo||'';
+    document.getElementById('bankName').value=item.bankName||'';
+    document.getElementById('bankAccount').value=item.bankAccount||'';
+    document.getElementById('registeredAddress').value=item.address||'';
+    document.getElementById('registeredPhone').value=item.phone||'';
+    setTaxRequirement(item.type);
+    renderTitleOptions();
+  }
+  function renderTitleOptions(){
+    document.getElementById('titleOptions').innerHTML=titles.map(function(item){
+      return '<button class="title-option '+(item.id===activeTitleId?'active':'')+'" data-title-id="'+item.id+'" type="button"><span>'+escapeHtml(item.name)+'</span>'+(item.isDefault?'<small>默认</small>':'')+'</button>';
+    }).join('');
+  }
+  function renderManagedTitleList(){
+    document.getElementById('managedTitleList').innerHTML=titles.map(function(item){
+      return '<button class="managed-title '+(item.id===editingTitleId?'active':'')+'" data-edit-title-id="'+item.id+'" type="button"><span><b>'+escapeHtml(item.name)+'</b><small>'+(item.type==='company'?escapeHtml(item.taxNo||'未填写税号'):'个人抬头')+'</small></span>'+(item.isDefault?'<em>默认</em>':'')+'</button>';
+    }).join('');
+  }
+  function setEditor(id){
+    var item=getTitle(id);
+    if(!item) return;
+    editingTitleId=id;
+    document.getElementById('editorHeading').textContent='编辑抬头';
+    document.getElementById('editorTitle').value=item.name||'';
+    document.getElementById('editorType').value=item.type||'company';
+    document.getElementById('editorTaxNo').value=item.taxNo||'';
+    document.getElementById('editorBankName').value=item.bankName||'';
+    document.getElementById('editorBankAccount').value=item.bankAccount||'';
+    document.getElementById('editorAddress').value=item.address||'';
+    document.getElementById('editorPhone').value=item.phone||'';
+    document.getElementById('editorDefault').checked=!!item.isDefault;
+    document.getElementById('deleteTitle').disabled=titles.length===1;
+    setEditorTaxRequirement(item.type);
+    renderManagedTitleList();
+  }
+  function openDrawer(){
+    setEditor(activeTitleId);
+    drawer.classList.add('open');
+    drawer.setAttribute('aria-hidden','false');
+  }
+  function closeDrawer(){
+    drawer.classList.remove('open');
+    drawer.setAttribute('aria-hidden','true');
+  }
+  function renderRecords(){
+    document.getElementById('records').innerHTML=records.map(function(item){
+      return '<tr><td><input class="record" type="checkbox" checked data-amount="'+item.amount+'" aria-label="选择 '+item.id+'"></td><td>'+item.time+'<span class="sub">'+item.id+'</span></td><td>'+item.payment+'</td><td><span class="source '+item.ownerClass+'">'+item.ownership+'</span></td><td class="amount">¥'+item.amount.toFixed(2)+'</td><td><span class="status">可开票</span></td></tr>';
+    }).join('');
+  }
+  function sum(){
+    var selected=[].slice.call(document.querySelectorAll('.record:checked'));
+    var total=selected.reduce(function(value,item){return value+Number(item.dataset.amount)},0);
+    document.getElementById('total').textContent='¥'+total.toFixed(2);
+    document.getElementById('selectAll').checked=selected.length===records.length;
+  }
+
+  document.getElementById('titleOptions').addEventListener('click',function(event){
+    var button=event.target.closest('[data-title-id]');
+    if(button) applyTitle(button.dataset.titleId);
+  });
+  document.getElementById('manageTitles').addEventListener('click',openDrawer);
+  drawer.addEventListener('click',function(event){if(event.target.matches('[data-close-drawer]')) closeDrawer();});
+  document.getElementById('managedTitleList').addEventListener('click',function(event){
+    var button=event.target.closest('[data-edit-title-id]');
+    if(button) setEditor(button.dataset.editTitleId);
+  });
+  document.getElementById('addTitle').addEventListener('click',function(){
+    editingTitleId='new';
+    document.getElementById('editorHeading').textContent='新增抬头';
+    document.getElementById('titleEditor').reset();
+    document.getElementById('editorType').value='company';
+    document.getElementById('editorDefault').checked=false;
+    document.getElementById('deleteTitle').disabled=true;
+    setEditorTaxRequirement('company');
+    renderManagedTitleList();
+    document.getElementById('editorTitle').focus();
+  });
+  document.getElementById('editorType').addEventListener('change',function(){
+    setEditorTaxRequirement(this.value);
+  });
+  document.getElementById('titleEditor').addEventListener('submit',function(event){
+    event.preventDefault();
+    var item={
+      id:editingTitleId==='new'?'title-'+Date.now():editingTitleId,
+      name:document.getElementById('editorTitle').value.trim(),
+      type:document.getElementById('editorType').value,
+      taxNo:document.getElementById('editorTaxNo').value.trim(),
+      bankName:document.getElementById('editorBankName').value.trim(),
+      bankAccount:document.getElementById('editorBankAccount').value.trim(),
+      address:document.getElementById('editorAddress').value.trim(),
+      phone:document.getElementById('editorPhone').value.trim(),
+      isDefault:document.getElementById('editorDefault').checked
+    };
+    if(!item.name) return;
+    if(item.type==='company'&&!item.taxNo){document.getElementById('editorTaxNo').focus();return;}
+    if(item.isDefault) titles.forEach(function(title){title.isDefault=false;});
+    if(editingTitleId==='new') titles.push(item);
+    else titles=titles.map(function(title){return title.id===item.id?item:title;});
+    if(!titles.some(function(title){return title.isDefault})) titles[0].isDefault=true;
+    saveTitles();
+    applyTitle(item.id);
+    setEditor(item.id);
+  });
+  document.getElementById('deleteTitle').addEventListener('click',function(){
+    if(editingTitleId==='new'||titles.length===1) return;
+    titles=titles.filter(function(item){return item.id!==editingTitleId;});
+    if(!titles.some(function(item){return item.isDefault})) titles[0].isDefault=true;
+    saveTitles();
+    activeTitleId=titles[0].id;
+    applyTitle(activeTitleId);
+    setEditor(activeTitleId);
+  });
+  document.addEventListener('change',function(event){
+    if(event.target.matches('.record')) sum();
+    if(event.target.id==='selectAll'){
+      document.querySelectorAll('.record').forEach(function(item){item.checked=event.target.checked;});
+      sum();
+    }
+  });
+  document.getElementById('invoiceForm').addEventListener('submit',function(event){
+    event.preventDefault();
+    var selected=[].slice.call(document.querySelectorAll('.record:checked'));
+    if(!selected.length){alert('请至少选择一条可开票充值记录。');return;}
+    var total=selected.reduce(function(value,item){return value+Number(item.dataset.amount);},0);
+    var invoiceTitle=document.getElementById('title').value.trim();
+    location.href='invoice-success.html?type=recharge&amount='+encodeURIComponent(total.toFixed(2))+'&title='+encodeURIComponent(invoiceTitle);
+  });
+  renderRecords();
+  renderTitleOptions();
+  applyTitle(activeTitleId);
+  sum();
+})();
+</script></body></html>

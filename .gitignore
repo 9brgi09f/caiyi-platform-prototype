@@ -4,3 +4,12 @@ node_modules/
 .dev.vars
 .env
 .env.*
+
+# 本地备份与临时产物（不入库）
+*.bak
+*.bak-*
+*.bak.*
+*.broken-*
+*.tar.gz
+_to_delete/
+.obsidian/
