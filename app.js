@@ -938,12 +938,15 @@ window.notifFilter = function (mode, btn) {
 // app.js 在 <head> 内同步加载，DOM 操作必须等到 DOMContentLoaded 之后
 (function () {
     var MODES = {
-        // 子账号 · 示例岗位 B：可充值、可消费共有彩豆；无彩豆管理与组织管理菜单，消费记录仅本人
+        // 子账号 · 示例岗位 B：仅可使用智能体并查看本人消费；无彩豆管理、账户充值、发票与组织管理菜单
         member: {
             surname: '王',
             badge: '示例岗位 B',
             memberKey: 'wang',
-            hidden: ['balance.html', 'member-list.html', 'role-list.html']
+            // 侧边栏隐藏的菜单
+            hidden: ['balance.html', 'recharge-list.html', 'invoice-list.html', 'member-list.html', 'role-list.html'],
+            // 无权限菜单下的页面，正文中的入口一并隐藏
+            blocked: ['balance.html', 'recharge-list.html', 'recharge-add.html', 'invoice-list.html', 'invoice-view.html', 'invoice-add.html', 'invoice-add-from-consumption.html', 'member-list.html', 'member-create.html', 'member-view.html', 'role-list.html']
         }
     };
 
@@ -992,9 +995,11 @@ window.notifFilter = function (mode, btn) {
             });
         }
 
-        // 无彩豆管理菜单权限：页面内指向彩豆管理的入口一并隐藏
-        document.querySelectorAll('.main-content a[href="balance.html"]').forEach(function (el) {
-            el.style.display = 'none';
+        // 无权限菜单对应的正文入口一并隐藏，避免跳到无权限页面
+        (mode.blocked || []).forEach(function (file) {
+            document.querySelectorAll('.main-content a[href^="' + file + '"]').forEach(function (el) {
+                el.style.display = 'none';
+            });
         });
 
         // 付款账户页：无维护权限的子账号隐藏机构对公账户维护区块（充值付款时仍可选择机构账户）
