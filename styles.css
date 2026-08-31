@@ -1238,3 +1238,65 @@ h4 { font-size: 16px; }
 .table-xwide { min-width: 1600px; }         /* ≥12 列的表 */
 .table-wide td { white-space: nowrap; }     /* 宽表单元格单行展示，靠横向滚动兜底 */
 .table-wide td > div { white-space: normal; } /* 单元格内备注小字仍可正常换行 */
+
+/* ========== 用户端工作台视觉（概览 / 智能体市场 / 发票管理 统一） ========== */
+/* 新增独立命名空间 .wk-*，不覆盖任何既有类，其他角色端不受影响 */
+
+/* 画布：浅蓝底 + 浮起白卡 */
+.wk-canvas { background: #F4F7FD; padding: 28px 32px 44px; }
+
+/* 页头：标题 + 右侧日期与主操作，不使用渐变横幅 */
+.wk-head { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; }
+.wk-head h2 { margin: 0; font-size: 25px; letter-spacing: -0.03em; color: #1A2740; }
+.wk-head-note { margin: 9px 0 0; color: #5B6880; font-size: 13px; line-height: 1.7; }
+.wk-head-aside { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.wk-date { color: #5B6880; font-size: 12px; }
+
+/* 指标砖：蓝系递进，余额优先 */
+.wk-metrics { display: grid; grid-template-columns: 1.36fr 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.wk-metric { position: relative; overflow: hidden; min-height: 130px; padding: 20px; border-radius: 18px; box-shadow: 0 8px 24px rgba(35,67,125,.08); }
+.wk-metric::after { content: ''; position: absolute; right: -22px; top: -30px; width: 100px; height: 100px; border-radius: 30px; transform: rotate(28deg); background: rgba(255,255,255,.28); }
+.wk-metric.lv1 { background: linear-gradient(135deg,#DCE9FF,#CBDCFF); }
+.wk-metric.lv2 { background: linear-gradient(135deg,#EAF1FF,#DDE9FF); }
+.wk-metric.lv3 { background: linear-gradient(135deg,#F3F7FF,#E9F0FC); }
+.wk-metric-label { position: relative; color: #3F5A8A; font-size: 12px; font-weight: 600; }
+.wk-metric-value { position: relative; margin-top: 13px; color: #284CB0; font-size: 28px; font-weight: 800; letter-spacing: -0.05em; }
+.wk-metric-value .unit { font-size: 13px; font-weight: 700; letter-spacing: 0; }
+.wk-metric-hint { position: relative; margin-top: 8px; color: #4A5F88; font-size: 11px; }
+
+/* 浮起白卡 */
+.wk-panel { border-radius: 18px; background: #fff; box-shadow: 0 8px 24px rgba(35,67,125,.08); margin-bottom: 14px; }
+.wk-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 58px; padding: 0 19px; border-bottom: 1px solid #EDF1F7; }
+.wk-panel-head h3 { margin: 0; font-size: 15px; }
+.wk-more { color: #376BCE; font-size: 12px; font-weight: 600; text-decoration: none; }
+.wk-more:hover { text-decoration: underline; }
+
+/* 列表行：图标 + 名称 + 使用情况 + 单一操作 */
+.wk-row { display: grid; grid-template-columns: 36px 1fr auto; align-items: center; gap: 12px; padding: 13px 18px; border-bottom: 1px solid #F0F3F8; }
+.wk-row:last-child { border-bottom: 0; }
+.wk-row-icon { width: 36px; height: 36px; border-radius: 10px; overflow: hidden; }
+.wk-row-icon svg { display: block; width: 36px; height: 36px; }
+.wk-row-name { color: #1A2740; font-size: 13px; font-weight: 600; }
+.wk-row-sub { margin-top: 4px; color: #61708A; font-size: 11px; }
+
+/* 胶囊按钮 */
+.wk-cta { padding: 9px 15px; border: 0; border-radius: 999px; background: var(--klein); color: #fff; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; transition: background .2s; }
+.wk-cta:hover { background: var(--klein-deep); }
+.wk-cta-ghost { padding: 8px 15px; border: 1px solid #D7E2F5; border-radius: 999px; background: #fff; color: #2C4E86; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; transition: all .2s; }
+.wk-cta-ghost:hover { border-color: var(--klein); color: var(--klein-deep); }
+.wk-use { padding: 6px 13px; border: 1px solid #D7E2F5; border-radius: 999px; background: #fff; color: #43648F; font-size: 12px; font-weight: 600; text-decoration: none; white-space: nowrap; transition: all .2s; }
+.wk-use:hover { border-color: var(--klein); background: var(--klein-light); color: var(--klein-deep); }
+
+/* 焦点可见 */
+.wk-cta:focus-visible, .wk-cta-ghost:focus-visible, .wk-use:focus-visible, .wk-more:focus-visible { outline: 2px solid var(--klein); outline-offset: 2px; }
+
+@media (max-width: 980px) { .wk-metrics { grid-template-columns: 1fr 1fr; } .wk-metric.lv1 { grid-column: 1 / -1; } }
+@media (max-width: 700px) {
+    .wk-canvas { padding: 20px 16px 32px; }
+    .wk-head { align-items: flex-start; flex-direction: column; }
+    .wk-head h2 { font-size: 22px; }
+    .wk-metrics { grid-template-columns: 1fr; }
+    .wk-metric { min-height: 0; }
+    .wk-row { grid-template-columns: 36px 1fr; }
+    .wk-row .wk-use { grid-column: 2; justify-self: start; }
+}

@@ -6,26 +6,53 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>付款账户 - 用户端</title>
 <link href="../styles.css" rel="stylesheet"/>
+<link href="_bento-lite-skin.css" rel="stylesheet">
+<link href="_glass-soft-skin.css" rel="stylesheet"/>
 <script src="../app.js"></script>
 <style>
-        .page-header{background:linear-gradient(125deg,#fff 0%,#f2f7ff 100%);color:#172b4d;padding:24px 27px;border:1px solid #c9dcfb;border-radius:16px;margin-bottom:18px}
-        .page-header h2{color:#172b4d;margin:0;font-size:24px}
-        .page-header p{margin:7px 0 0;color:#708199;font-size:13px;opacity:1}
-        .balance-display { background: linear-gradient(135deg, #2563EB, #1D4ED8); color: white; padding: var(--spacing-xl); border-radius: var(--radius-lg); text-align: center; margin-bottom: var(--spacing-lg); }
-        .balance-amount { font-size: 48px; font-weight: 700; }
-        .balance-unit { font-size: 16px; opacity: 0.8; }
-        .balance-beans { font-size: 20px; margin-top: var(--spacing-sm); opacity: 0.9; }
-        .alert-card { background: #FEF3C7; border: 1px solid #F59E0B; border-radius: var(--radius-md); padding: var(--spacing-md); margin-bottom: var(--spacing-lg); display: flex; align-items: center; gap: var(--spacing-md); }
-        .alert-icon { font-size: 24px; }
-        .transaction-item { display: flex; align-items: center; padding: var(--spacing-md) 0; border-bottom: 1px solid var(--border-light); }
-        .transaction-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: var(--spacing-md); font-size: 18px; }
-        .transaction-info { flex: 1; }
-        .transaction-title { font-weight: 500; margin-bottom: 2px; }
-        .transaction-time { font-size: 12px; color: var(--text-muted); }
-        .transaction-amount { font-weight: 600; font-size: 16px; }
-        .transaction-amount.positive { color: var(--success-color); }
-        .transaction-amount.negative { color: var(--error-color); }
-    </style>
+:root{--ink:#172544;--ink-soft:#52627e;--blue:#315df4;--blue-deep:#2447c7;--cyan:#10b9c6;--violet:#8b6cff;--canvas:#fafbff;--line:#e7ebf5;--muted:#74839a}.bento-lite .main-content{position:relative;isolation:isolate;min-height:100%;padding:32px 34px 48px!important;background:radial-gradient(circle at 91% -8%,rgba(117,105,255,.13),transparent 25rem),radial-gradient(circle at 53% -11%,rgba(23,192,202,.11),transparent 30rem),var(--canvas)!important}.bento-lite .main-content:before{position:absolute;z-index:-1;inset:0;background-image:linear-gradient(rgba(49,93,244,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(49,93,244,.028) 1px,transparent 1px);background-size:36px 36px;content:"";mask-image:linear-gradient(to bottom,black,transparent 62%)}.page-header{position:relative;overflow:hidden;background:rgba(255,255,255,.86)!important;color:var(--ink)!important;padding:24px 27px!important;border:1px solid rgba(222,228,241,.92)!important;border-radius:20px!important;margin-bottom:18px!important;box-shadow:0 12px 32px rgba(38,55,100,.055)!important;backdrop-filter:blur(12px)}.page-header:after{position:absolute;top:0;right:0;left:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--violet));content:""}.page-header h2{color:var(--ink)!important;margin:0;font-size:27px!important;font-weight:800;letter-spacing:-.045em}.page-header h2:before{display:inline-block;width:26px;height:8px;margin:0 10px 4px 0;border-radius:99px;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--violet));content:""}.page-header p{margin:8px 0 0!important;color:#71819a!important;font-size:13px!important;opacity:1!important}.content-card{position:relative;padding:23px 24px!important;margin-bottom:18px!important;border:1px solid rgba(222,228,241,.92)!important;border-radius:20px!important;background:rgba(255,255,255,.9)!important;box-shadow:0 12px 32px rgba(38,55,100,.05)!important;backdrop-filter:blur(12px)}.content-card-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:15px;border-bottom:1px solid #edf0f6}.content-card-title{margin:0!important;color:var(--ink)!important;font-size:17px!important;font-weight:800!important;letter-spacing:-.02em}.content-card-title:before{display:inline-block;width:7px;height:7px;margin:0 9px 1px 1px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));box-shadow:0 0 0 4px rgba(49,93,244,.07);content:""}.content-card .btn-primary{border:0!important;border-radius:11px!important;background:linear-gradient(105deg,#315df4,#247eea 58%,#14aabd)!important;box-shadow:0 8px 16px rgba(43,93,226,.2)!important;font-weight:750!important}.content-card>p{margin:12px 0 15px!important;color:#77869d!important}.content-card .table{width:100%;margin:0!important;border-collapse:collapse!important}.content-card .table thead th{padding:12px 11px!important;background:linear-gradient(90deg,#f6f9ff,#f7fffe)!important;border:0!important;color:#718099!important;font-size:12px!important;font-weight:750!important}.content-card .table thead th:first-child{border-radius:10px 0 0 10px}.content-card .table thead th:last-child{border-radius:0 10px 10px 0}.content-card .table tbody td{padding:16px 11px!important;border-bottom:1px solid #edf1f7!important;color:#40536b!important;font-size:13px!important}.content-card .table tbody tr:last-child td{border-bottom:0!important}.content-card .table tbody tr{transition:background .18s}.content-card .table tbody tr:hover{background:#f7faff}.tag{border-radius:99px!important}.bento-lite .sidebar.user .sidebar-link.active{position:relative;background:linear-gradient(90deg,#e7efff 0%,#f7fcff 100%)!important;box-shadow:none!important;color:#2f60d4!important}.bento-lite .sidebar-link.active::before{position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(var(--blue),var(--cyan));content:""}.bento-lite .sidebar-link.active .icon{background:#d7e5ff!important;color:#2f60d4!important}@media(max-width:760px){.bento-lite .main-content{padding:24px 15px 36px!important}.content-card{padding:19px 16px!important}.content-card-header{align-items:flex-start;flex-direction:column}.page-header{padding:22px 20px!important}.content-card .table{min-width:650px}.content-card{overflow-x:auto}}
+
+/* 恢复与其他用户菜单一致的蓝灰色内容区背景 */
+.bento-lite{background:#f6f8fc!important}
+.main-content,.bento-lite .main-content{background:#f6f8fc!important}
+.main-content:before,.bento-lite .main-content:before,.main-content:after,.bento-lite .main-content:after{display:none!important}
+
+
+/* 蓝灰视觉统一：标题与强调元素使用单一蓝色体系，取消蓝绿／紫色渐变 */
+:root{--cyan:#6f8fe9;--violet:#91a9ec;--mint:#5276d6;--canvas:#f6f8fc}
+.bento-lite{background:#f6f8fc!important}
+.main-content,.bento-lite .main-content{background:#f6f8fc!important}
+.main-content:before,.bento-lite .main-content:before,.main-content:after,.bento-lite .main-content:after{display:none!important}
+.page-head h2:before,.page-header h2:before,.bento-lite .page-header h2:before{background:#315df4!important}
+.page-header:after{background:#315df4!important}
+.account-overview:before,.confirmation-card:first-of-type:before{background:#315df4!important}
+.option:before{background:#315df4!important}
+.bento-lite .sidebar-link.active::before{background:#315df4!important}
+
+.content-card-title:before{background:#315df4!important}
+.content-card .btn-primary{background:#315df4!important}
+.content-card .table thead th{background:#f5f8ff!important}
+
+
+/* 列表页统一：移除卡片顶部横线，标题下方保留短横线。 */
+.page-header:after{display:none!important}
+.page-header h2:before{display:none!important}
+.page-header h2::after{display:block!important;width:26px!important;height:6px!important;margin-top:10px!important;border-radius:999px!important;background:#315df4!important;content:""!important}
+
+/* 与其他菜单页对齐：标题不再作为独立卡片，占用同一内容起始线。 */
+.page-header{position:static!important;overflow:visible!important;margin:0 0 20px!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important}
+.page-header h2{margin:0!important;font-size:28px!important;font-weight:800!important;letter-spacing:-.02em!important}
+
+/* 接入第 3 版玻璃皮肤：中和本页历史皮肤补丁的冲突规则（仅视觉，不影响内容） */
+.bento-lite{background:radial-gradient(880px 620px at 56% 32%,rgba(126,164,255,.20),transparent 70%),radial-gradient(700px 520px at 12% 9%,rgba(123,147,255,.19),transparent 67%),radial-gradient(620px 560px at 94% 4%,rgba(146,219,255,.24),transparent 65%),radial-gradient(720px 520px at 30% 66%,rgba(146,219,255,.13),transparent 68%),radial-gradient(760px 620px at 61% 94%,rgba(216,190,255,.17),transparent 70%),linear-gradient(135deg,#f9fbff 0%,#f4f8ff 47%,#fbf9ff 100%)!important}
+.main-content,.bento-lite .main-content{background:transparent!important}
+.main-content:before,.bento-lite .main-content:before,.main-content:after,.bento-lite .main-content:after{display:none!important}
+.bento-lite .sidebar.user .sidebar-link.active{background:rgba(255,255,255,.64)!important;color:var(--glass-blue-deep)!important;border:1px solid rgba(255,255,255,.88);box-shadow:6px 7px 16px rgba(84,110,168,.13),-5px -5px 12px rgba(255,255,255,.82),inset 0 1px 0 #fff!important}
+.bento-lite .sidebar-link.active::before{display:none!important}
+.bento-lite .sidebar-link.active .icon{background:linear-gradient(145deg,#4f7dff,#79d8ed)!important;color:#fff!important;box-shadow:3px 4px 10px rgba(53,108,246,.30),inset 0 1px 0 rgba(255,255,255,.45)!important}
+.content-card .btn-primary{background:linear-gradient(145deg,#4f7dff,#356cf6)!important;box-shadow:0 8px 18px rgba(53,108,246,.26),inset 0 1px 0 rgba(255,255,255,.35)!important}
+.content-card .table thead th{background:rgba(250,252,255,.56)!important}
+</style>
 
 <style id="identity-switcher-css">
 .id-switcher{position:relative;display:inline-flex;align-items:center;}
@@ -56,7 +83,7 @@
 .id-menu-action:hover{background:#F8FAFC;color:#2563EB;}
 </style>
 </head>
-<body>
+<body class="bento-lite">
 <header class="top-bar user">
 <div class="top-bar-left">
 <a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
@@ -107,13 +134,13 @@ document.addEventListener('click',function(e){
 </div>
 </header>
 <aside class="sidebar user"><div class="sidebar-section"><a class="sidebar-link" href="index.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z"/></svg></span><span>概览</span></a><a class="sidebar-link" href="agent-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 10h8M8 14h5"/></svg></span><span>智能体市场</span></a><a class="sidebar-link" href="recharge-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M16 14h2"/></svg></span><span>账户充值</span></a><a class="sidebar-link active" href="payment-accounts.html"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-6 9 6v9H3v-9Z"/><path d="M6 10v9m4-9v9m4-9v9m4-9v9M2 19h20"/></svg></span><span>付款账户</span></a><a class="sidebar-link" href="balance.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6.5A2.5 2.5 0 0 1 4 17.5v-10Z"/><path d="M4 8h13M15 14h3"/></svg></span><span>彩豆管理</span></a><a class="sidebar-link" href="consumption-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M5 20V10m7 10V4m7 16v-7"/></svg></span><span>消费记录</span></a><a class="sidebar-link" href="invoice-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15l-3-2-3 2-3-2-3 2V3Z"/><path d="M9 9h6m-6 4h6"/></svg></span><span>发票管理</span></a><a class="sidebar-link" href="member-list.html"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.6-3.4 3-5 7-5s6.4 1.6 7 5"/></svg></span><span>账号管理</span></a><a class="sidebar-link" href="role-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 2.9 7.9 7 10 4.1-2.1 7-5.5 7-10V6l-7-3Z"/><path d="M9 12h6m-3-3v6"/></svg></span><span>岗位管理</span></a></div></aside>
-<main class="main-content"><div class="page-header"><h2>付款账户</h2><p>分别管理个人支付方式与机构对公账户</p></div><div class="content-card"><div class="content-card-header"><h3 class="content-card-title">个人付款方式</h3><a class="btn btn-primary" href="account-add.html?kind=personal">+ 添加个人账户</a></div><p style="color:var(--text-muted);font-size:13px;margin:8px 0 16px;">由本人维护，充值付款时可选用。</p><table class="table"><thead><tr><th>开户银行</th><th>卡号 / 账户号</th><th>开户名称</th><th>状态</th><th>操作</th></tr></thead><tbody data-kind="personal">
+<main class="main-content"><div class="page-header"><h2>付款账户</h2></div><div class="content-card"><div class="content-card-header"><h3 class="content-card-title">个人账户</h3><a class="btn btn-primary" href="account-add.html?kind=personal">+ 添加个人账户</a></div><p style="color:var(--text-muted);font-size:13px;margin:8px 0 16px;">由本人维护，充值付款时可选用。</p><table class="table"><thead><tr><th>开户银行</th><th>卡号 / 账户号</th><th>开户名称</th><th>状态</th><th>操作</th></tr></thead><tbody data-kind="personal">
 <tr data-bank="招商银行" data-no="6214 **** **** 3333" data-raw="6214000000003333" data-name="张敏" data-branch="广州分行营业部" data-time="2026-04-02 11:30" data-type="个人账户" data-default="1">
 <td>招商银行</td><td>6214 **** **** 3333</td><td>张敏</td><td class="st-cell"></td><td class="ops-cell" style="white-space:nowrap;"></td>
 </tr>
 </tbody></table></div>
 
-<div class="content-card"><div class="content-card-header"><h3 class="content-card-title">机构对公账户</h3><a class="btn btn-primary" href="account-add.html?kind=company">+ 添加对公账户</a></div><p style="color:var(--text-muted);font-size:13px;margin:8px 0 16px;">充值付款时全员可选用，仅有权限的成员可维护。</p><table class="table"><thead><tr><th>开户银行</th><th>卡号 / 账户号</th><th>账户角色</th><th>状态</th><th>操作</th></tr></thead><tbody data-kind="company">
+<div class="content-card"><div class="content-card-header"><h3 class="content-card-title">企业账户</h3><a class="btn btn-primary" href="account-add.html?kind=company">+ 添加企业账户</a></div><p style="color:var(--text-muted);font-size:13px;margin:8px 0 16px;">充值付款时全员可选用，仅有权限的成员可维护。</p><table class="table"><thead><tr><th>开户银行</th><th>卡号 / 账户号</th><th>账户角色</th><th>状态</th><th>操作</th></tr></thead><tbody data-kind="company">
 <tr data-bank="招商银行" data-no="6214 **** **** 8888" data-raw="6214000000008888" data-name="示例科技有限公司" data-branch="广州天河支行" data-time="2026-04-10 14:00" data-type="企业账户" data-role="main" data-default="1">
 <td>招商银行</td><td>6214 **** **** 8888</td><td class="role-cell"></td><td class="st-cell"></td><td class="ops-cell" style="white-space:nowrap;"></td>
 </tr>

@@ -1017,27 +1017,6 @@ window.notifFilter = function (mode, btn) {
             }
         }
 
-        // 消费记录页：未授权查看全公司，仅展示本人消费
-        if (onPage('consumption-list.html')) {
-            var mf = document.getElementById('memberFilter');
-            if (mf) mf.style.display = 'none';
-            document.querySelectorAll('#rows tr').forEach(function (r) {
-                if (r.dataset.member !== mode.memberKey) r.remove();
-            });
-            document.querySelectorAll('[data-member-col]').forEach(function (el) {
-                el.style.display = 'none';
-            });
-            var desc = document.getElementById('pageDesc');
-            if (desc) desc.textContent = '本人的企业彩豆消费明细与开票状态。';
-            // 王晨本月：2 次调用，消费 275.75，其中待开票 80.15
-            var sm = document.getElementById('statMonth');
-            if (sm) sm.textContent = '275.75 彩豆';
-            var sc = document.getElementById('statCalls');
-            if (sc) sc.textContent = '2 次';
-            var si = document.getElementById('statInvoicable');
-            if (si) si.textContent = '80.15 彩豆';
-            if (typeof filterRows === 'function') filterRows();
-        }
     }
 
     if (document.readyState === 'loading') {

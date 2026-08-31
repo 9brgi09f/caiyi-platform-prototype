@@ -6,6 +6,8 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>添加账户 - 用户端</title>
 <link href="../styles.css" rel="stylesheet"/>
+<link href="_bento-lite-skin.css" rel="stylesheet">
+<link href="_glass-soft-skin.css" rel="stylesheet"/>
 <script src="../app.js"></script>
 <style>
         .page-header{background:linear-gradient(125deg,#fff 0%,#f2f7ff 100%);color:#172b4d;padding:24px 27px;border:1px solid #c9dcfb;border-radius:16px;margin-bottom:18px}
@@ -25,7 +27,24 @@
         .transaction-amount { font-weight: 600; font-size: 16px; }
         .transaction-amount.positive { color: var(--success-color); }
         .transaction-amount.negative { color: var(--error-color); }
-    </style>
+    
+
+/* 账户详情页与其他详情页一致：文字返回、标题下方短横线、无标题副文案。 */
+.page-header{padding:6px 2px 0!important;margin-bottom:22px!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.page-header .back-link{display:inline-block!important;margin:0 0 9px!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;color:#2563eb!important;font-size:13px!important;font-weight:600!important;line-height:1.4!important;text-decoration:none!important}
+.page-header .back-link:hover{background:transparent!important;color:#1d4ed8!important;transform:none!important}
+.page-header h2{margin:0!important;color:#172b4d!important;font-size:28px!important;font-weight:800!important;letter-spacing:-.02em!important}
+.page-header h2::after{display:block!important;width:26px!important;height:6px!important;margin-top:10px!important;border-radius:999px!important;background:#315df4!important;content:""!important}
+
+/* 表单操作区：次级操作弱化，主操作聚焦，避免等宽按钮挤满整行。 */
+.account-form-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:28px;padding-top:20px;border-top:1px solid #e8edf5}
+.account-form-actions .btn{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-width:108px;height:40px;margin:0!important;border-radius:9px!important;font-size:14px;font-weight:650;text-decoration:none}
+.account-form-actions .btn-outline{border:1px solid #d9e3f0!important;background:#fff!important;color:#51627b!important}
+.account-form-actions .btn-outline:hover{border-color:#9cb8ed!important;background:#f7faff!important;color:#315df4!important}
+.account-form-actions .btn-primary{min-width:128px;border:1px solid #315df4!important;background:#315df4!important;box-shadow:0 6px 14px rgba(49,93,244,.18)!important}
+.account-form-actions .btn-primary:hover{background:#244fd9!important;box-shadow:0 8px 17px rgba(49,93,244,.24)!important}
+@media(max-width:560px){.account-form-actions{justify-content:stretch}.account-form-actions .btn{flex:1;min-width:0}}
+</style>
 
 <style id="identity-switcher-css">
 .id-switcher{position:relative;display:inline-flex;align-items:center;}
@@ -56,7 +75,7 @@
 .id-menu-action:hover{background:#F8FAFC;color:#2563EB;}
 </style>
 </head>
-<body>
+<body class="bento-lite">
 <header class="top-bar user">
 <div class="top-bar-left">
 <a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
@@ -107,7 +126,7 @@ document.addEventListener('click',function(e){
 </div>
 </header>
 <aside class="sidebar user"><div class="sidebar-section"><a class="sidebar-link" href="index.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z"/></svg></span><span>概览</span></a><a class="sidebar-link" href="agent-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 10h8M8 14h5"/></svg></span><span>智能体市场</span></a><a class="sidebar-link" href="recharge-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M16 14h2"/></svg></span><span>账户充值</span></a><a class="sidebar-link active" href="payment-accounts.html"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-6 9 6v9H3v-9Z"/><path d="M6 10v9m4-9v9m4-9v9m4-9v9M2 19h20"/></svg></span><span>付款账户</span></a><a class="sidebar-link" href="balance.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6.5A2.5 2.5 0 0 1 4 17.5v-10Z"/><path d="M4 8h13M15 14h3"/></svg></span><span>彩豆管理</span></a><a class="sidebar-link" href="consumption-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M5 20V10m7 10V4m7 16v-7"/></svg></span><span>消费记录</span></a><a class="sidebar-link" href="invoice-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15l-3-2-3 2-3-2-3 2V3Z"/><path d="M9 9h6m-6 4h6"/></svg></span><span>发票管理</span></a><a class="sidebar-link" href="member-list.html"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.6-3.4 3-5 7-5s6.4 1.6 7 5"/></svg></span><span>账号管理</span></a><a class="sidebar-link" href="role-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 2.9 7.9 7 10 4.1-2.1 7-5.5 7-10V6l-7-3Z"/><path d="M9 12h6m-3-3v6"/></svg></span><span>岗位管理</span></a></div></aside>
-<main class="main-content"><section class="page-header"><a class="back-link" href="payment-accounts.html">← 返回付款账户</a><h2>添加付款账户</h2><p id="aaSubtitle">绑定用于付款的银行账户。</p></section><div class="content-card"><h3 style="margin:0 0 20px;font-size:16px;">账户信息</h3><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">账户类型</label><div style="display:flex;gap:24px;"><label style="cursor:not-allowed;opacity:.75;"><input checked="" disabled="" name="acctKind" type="radio" value="personal"/> 个人账户</label><label style="cursor:not-allowed;opacity:.75;"><input disabled="" name="acctKind" type="radio" value="company"/> 企业账户</label></div><p id="aaKindNote" style="margin:8px 0 0;color:#708199;font-size:12px;line-height:1.65;"></p></div><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">开户银行</label><select style="width:100%;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;"><option>请选择开户银行</option><option>招商银行</option><option>工商银行</option><option>建设银行</option><option>中国银行</option><option>农业银行</option><option>浦发银行</option></select></div><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">卡号 / 账户号</label><input placeholder="请输入银行卡号或对公账户号" style="width:100%;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;"/></div><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">开户名称</label><input placeholder="个人填持卡人姓名 / 企业填企业名称" style="width:100%;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;"/></div><div style="margin-bottom:16px;"><label style="font-size:14px;cursor:pointer;"><input type="checkbox"/> 设为默认付款账户</label></div><div style="display:flex;gap:12px;margin-top:20px;"><a class="btn btn-outline" href="payment-accounts.html" style="flex:1;text-align:center;">取消</a><a class="btn btn-primary" href="payment-accounts.html" style="flex:1;text-align:center;">确认添加</a></div></div></main>
+<main class="main-content"><section class="page-header"><a class="back-link" href="payment-accounts.html">← 返回付款账户</a><h2>添加付款账户</h2></section><div class="content-card"><h3 style="margin:0 0 20px;font-size:16px;">账户信息</h3><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">账户类型</label><div style="display:flex;gap:24px;"><label style="cursor:not-allowed;opacity:.75;"><input checked="" disabled="" name="acctKind" type="radio" value="personal"/> 个人账户</label><label style="cursor:not-allowed;opacity:.75;"><input disabled="" name="acctKind" type="radio" value="company"/> 企业账户</label></div><p id="aaKindNote" style="margin:8px 0 0;color:#708199;font-size:12px;line-height:1.65;"></p></div><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">开户银行</label><select style="width:100%;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;"><option>请选择开户银行</option><option>招商银行</option><option>工商银行</option><option>建设银行</option><option>中国银行</option><option>农业银行</option><option>浦发银行</option></select></div><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">卡号 / 账户号</label><input placeholder="请输入银行卡号或对公账户号" style="width:100%;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;"/></div><div style="margin-bottom:16px;"><label style="display:block;font-weight:500;margin-bottom:6px;font-size:14px;">开户名称</label><input placeholder="个人填持卡人姓名 / 企业填企业名称" style="width:100%;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;"/></div><div style="margin-bottom:16px;"><label style="font-size:14px;cursor:pointer;"><input type="checkbox"/> 设为默认付款账户</label></div><div class="account-form-actions"><a class="btn btn-outline" href="payment-accounts.html">取消</a><a class="btn btn-primary" href="payment-accounts.html">确认添加</a></div></div></main>
 <script>
 (function(){
   var q=new URLSearchParams(location.search);
@@ -128,8 +147,6 @@ document.addEventListener('click',function(e){
   var company=(q.get('kind')||q.get('type'))==='company';
   var radios=document.querySelectorAll('input[name="acctKind"]');
   if(radios[0]&&radios[1]){ radios[0].checked=!company; radios[1].checked=company; }
-  var sub=document.getElementById('aaSubtitle');
-  if(sub) sub.textContent=company?'绑定机构对公账户，充值付款时可选用。':'绑定个人银行账户，充值付款时可选用。';
   var note=document.getElementById('aaKindNote');
   if(note) note.textContent=company
     ? '账户类型由入口决定，不可在此切换。对公账户属机构资产，需具备“维护机构对公账户”权限；开户名称须与机构注册主体一致。'

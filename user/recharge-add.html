@@ -6,28 +6,55 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>充值支付 - 用户端</title>
 <link href="../styles.css" rel="stylesheet"/>
+<link href="_bento-lite-skin.css" rel="stylesheet">
+<link href="_glass-soft-skin.css" rel="stylesheet"/>
 <script src="../app.js"></script>
 <style>
-        .page-header{background:linear-gradient(125deg,#fff 0%,#f2f7ff 100%);color:#172b4d;padding:24px 27px;border:1px solid #c9dcfb;border-radius:16px;margin-bottom:18px}
-        .page-header h2{color:#172b4d;margin:0;font-size:24px}
-        .page-header p{margin:7px 0 0;color:#708199;font-size:13px;opacity:1}
-        .order-card {
-            background: var(--card-bg); border: 1px solid var(--border-light);
-            border-radius: var(--radius-lg); padding: var(--spacing-xl);
-            margin-bottom: var(--spacing-lg);
-        }
-        .order-item { display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-md) 0; border-bottom: 1px solid var(--border-light); }
-        .order-item:last-child { border-bottom: none; }
-        .order-total { display: flex; justify-content: space-between; align-items: center; padding-top: var(--spacing-lg); margin-top: var(--spacing-md); }
-        .payment-method {
-            display: flex; align-items: center; gap: var(--spacing-md);
-            padding: var(--spacing-md); border: 2px solid var(--border-light);
-            border-radius: var(--radius-lg); cursor: pointer; margin-bottom: var(--spacing-sm);
-        }
-        .payment-method:hover { border-color: var(--user-color); }
-        .payment-method.selected { border-color: var(--user-color); background: var(--user-light); }
-        .payment-icon { width: 40px; height: 40px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 20px; } .hide{display:none;}
-    </style>
+:root{--ink:#172544;--ink-soft:#52627e;--blue:#315df4;--blue-deep:#2447c7;--cyan:#10b9c6;--violet:#8b6cff;--mint:#20b486;--canvas:#fafbff;--line:#e7ebf5;--muted:#74839a}.bento-lite{background:var(--canvas)}.bento-lite .main-content{position:relative;isolation:isolate;min-height:100%;padding:32px 38px 52px!important;background:radial-gradient(circle at 84% -5%,rgba(117,105,255,.13),transparent 25rem),radial-gradient(circle at 43% -12%,rgba(23,192,202,.11),transparent 30rem),var(--canvas)!important}.bento-lite .main-content:before{position:absolute;z-index:-1;inset:0;background-image:linear-gradient(rgba(49,93,244,.027) 1px,transparent 1px),linear-gradient(90deg,rgba(49,93,244,.027) 1px,transparent 1px);background-size:36px 36px;content:"";mask-image:linear-gradient(to bottom,black,transparent 60%)}.recharge-workbench{max-width:1000px}.bento-lite .page-header{display:flex;align-items:center;gap:13px;background:transparent!important;padding:0!important;margin:0 0 20px!important;border:0!important;box-shadow:none!important}.bento-lite .back-link{display:inline-flex;align-items:center;min-height:32px;margin:0!important;padding:0 12px;border:1px solid #dce6ff;border-radius:999px!important;background:rgba(255,255,255,.8);color:#315df4!important;font-size:13px;font-weight:750;text-decoration:none;transition:all .18s}.bento-lite .back-link:hover{border-color:#9db9ff;background:#fff;transform:translateX(-2px)}.bento-lite .page-header h2{margin:0;color:var(--ink)!important;font-size:28px!important;font-weight:800;letter-spacing:-.045em}.bento-lite .page-header h2:before{display:inline-block;width:26px;height:8px;margin:0 10px 4px 0;border-radius:99px;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--violet));content:""}.bento-lite .page-header h2::after{display:none!important}
+.confirmation-card{position:relative;padding:24px 26px;background:rgba(255,255,255,.9)!important;border:1px solid rgba(222,228,241,.94)!important;border-radius:20px!important;box-shadow:0 12px 32px rgba(38,55,100,.055)!important;backdrop-filter:blur(12px)}.confirmation-card:first-of-type{overflow:hidden}.confirmation-card:first-of-type:before{position:absolute;top:0;right:0;left:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--violet));content:""}.confirmation-card+.confirmation-card{margin-top:18px}.card-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}.card-heading h3{margin:0;color:var(--ink);font-size:17px;font-weight:800;letter-spacing:-.02em}.recharge-summary{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #e9edf5;border-radius:15px;overflow:hidden;background:linear-gradient(100deg,#fbfcff,#f8fffe)}.summary-item{padding:19px 21px;border-right:1px solid #e9edf5}.summary-item:last-child{border-right:0}.summary-label{display:block;margin-bottom:8px;color:#7a889d;font-size:12px;font-weight:650}.summary-value{color:#2c3c57;font-size:18px;font-weight:800;letter-spacing:-.025em}.summary-value.accent{color:#244cc8;font-size:23px}.payment-content{display:grid;grid-template-columns:1fr 1fr;gap:22px}.payment-group-title{display:flex;align-items:center;gap:8px;margin:0 0 10px;color:#61728e!important;font-size:12px!important;font-weight:800!important;letter-spacing:.04em}.payment-group-title:before{width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));box-shadow:0 0 0 4px rgba(49,93,244,.07);content:""}.payment-options{display:grid;gap:9px}.payment-method{display:flex;align-items:center;gap:11px;min-height:60px;width:100%;margin:0!important;padding:10px 12px!important;border:1px solid #e5eaf4!important;border-radius:13px!important;background:linear-gradient(145deg,#fff,#fcfdff);cursor:pointer;text-align:left;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}.payment-method:hover{border-color:#b8cafb!important;box-shadow:0 7px 17px rgba(37,74,164,.06);transform:translateY(-1px)}.payment-method.selected{border-color:#80a3fb!important;background:linear-gradient(120deg,#f0f5ff,#effdfb)!important;box-shadow:0 0 0 3px rgba(49,93,244,.09),0 8px 18px rgba(37,74,164,.07)}.payment-icon{display:flex;align-items:center;justify-content:center;flex:0 0 auto;width:34px!important;height:34px!important;border-radius:11px!important;font-size:15px!important;box-shadow:inset 0 1px rgba(255,255,255,.32)}.payment-name{color:#2b3952;font-size:14px;font-weight:750}.payment-note{display:block;margin-top:3px;color:#7c899e;font-size:12px}.manage-accounts{display:inline-flex;align-items:center;min-height:30px;margin:0;color:#315df4!important;font-size:13px;font-weight:750;text-decoration:none}.manage-accounts:after{margin-left:5px;content:"→"}.payment-total{display:flex;align-items:center;justify-content:space-between;margin-top:20px;padding:16px 18px;border:1px solid rgba(168,195,253,.45);border-radius:13px;background:linear-gradient(100deg,#f1f6ff,#f1fffc)}.payment-total span{color:#536780;font-size:14px;font-weight:750}.payment-total strong{color:#244cc8;font-size:25px;letter-spacing:-.05em}.pay-action{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:18px;padding:15px 18px 15px 22px;border:1px solid rgba(201,217,250,.9);border-radius:16px;background:rgba(255,255,255,.86);box-shadow:0 12px 26px rgba(38,55,100,.06);backdrop-filter:blur(10px)}.pay-tip{color:#6f8099;font-size:13px}.pay-action .btn-primary{min-width:178px!important;min-height:45px!important;border:0!important;border-radius:12px!important;background:linear-gradient(105deg,#315df4,#247eea 55%,#14aabd)!important;box-shadow:0 10px 19px rgba(43,93,226,.25)!important;font-weight:800!important;transition:transform .18s,box-shadow .18s!important}.pay-action .btn-primary:hover{box-shadow:0 13px 24px rgba(43,93,226,.31)!important;transform:translateY(-1px)}.bento-lite .sidebar.user .sidebar-link.active{position:relative;background:linear-gradient(90deg,#e7efff 0%,#f7fcff 100%)!important;box-shadow:none!important;color:#2f60d4!important}.bento-lite .sidebar-link.active::before{position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(var(--blue),var(--cyan));content:""}.bento-lite .sidebar-link.active .icon{background:#d7e5ff!important;color:#2f60d4!important}
+@media(max-width:900px){.bento-lite .main-content{padding:25px 17px 38px!important}.recharge-summary{grid-template-columns:1fr}.summary-item{border-right:0;border-bottom:1px solid #edf1f7}.summary-item:last-child{border-bottom:0}.payment-content{grid-template-columns:1fr}.pay-action{align-items:stretch;flex-direction:column}.pay-action .btn-primary{width:100%}}@media(max-width:560px){.bento-lite .main-content{padding:22px 15px 32px!important}.card-heading{align-items:flex-start}.bento-lite .page-header h2{font-size:25px!important}}
+
+/* 蓝灰视觉统一：标题与强调元素使用单一蓝色体系，取消蓝绿／紫色渐变 */
+:root{--cyan:#6f8fe9;--violet:#91a9ec;--mint:#5276d6;--canvas:#f6f8fc}
+.bento-lite{background:#f6f8fc!important}
+.main-content,.bento-lite .main-content{background:#f6f8fc!important}
+.main-content:before,.bento-lite .main-content:before,.main-content:after,.bento-lite .main-content:after{display:none!important}
+.page-head h2:before,.page-header h2:before,.bento-lite .page-header h2:before{background:#315df4!important}
+.page-header:after{background:#315df4!important}
+.account-overview:before,.confirmation-card:first-of-type:before{background:#315df4!important}
+.option:before{background:#315df4!important}
+.bento-lite .sidebar-link.active::before{background:#315df4!important}
+
+.recharge-summary{background:linear-gradient(100deg,#fbfcff,#f5f8ff)!important}
+.payment-group-title:before{background:#315df4!important}
+.payment-method.selected{background:linear-gradient(120deg,#f0f5ff,#f6f8ff)!important}
+.payment-total{background:linear-gradient(100deg,#f1f6ff,#f6f8ff)!important}
+.pay-action .btn-primary{background:#315df4!important}
+
+
+/* 详情页统一：使用文字返回与标题下方短横线。 */
+.bento-lite .page-header{display:block!important}
+.bento-lite .back-link{display:inline-block!important;min-height:0!important;margin:0 0 9px!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;color:#2563eb!important;font-size:13px!important;font-weight:600!important;line-height:1.4!important;transform:none!important}
+.bento-lite .back-link:hover{border:0!important;background:transparent!important;color:#1d4ed8!important;transform:none!important}
+.bento-lite .page-header h2:before{display:none!important}
+.bento-lite .page-header h2::after{display:block!important;width:26px!important;height:6px!important;margin-top:10px!important;border-radius:999px!important;background:#315df4!important;content:""!important}
+
+/* 接入第 3 版玻璃皮肤：环境光、侧栏、标题短杠、卡片与其余详情页统一（仅视觉，不影响内容） */
+.bento-lite{background:radial-gradient(880px 620px at 56% 32%,rgba(126,164,255,.20),transparent 70%),radial-gradient(700px 520px at 12% 9%,rgba(123,147,255,.19),transparent 67%),radial-gradient(620px 560px at 94% 4%,rgba(146,219,255,.24),transparent 65%),radial-gradient(720px 520px at 30% 66%,rgba(146,219,255,.13),transparent 68%),radial-gradient(760px 620px at 61% 94%,rgba(216,190,255,.17),transparent 70%),linear-gradient(135deg,#f9fbff 0%,#f4f8ff 47%,#fbf9ff 100%)!important}
+.main-content,.bento-lite .main-content{background:transparent!important}
+.main-content:before,.bento-lite .main-content:before,.main-content:after,.bento-lite .main-content:after{display:none!important}
+.bento-lite .sidebar.user .sidebar-link.active{background:rgba(255,255,255,.64)!important;color:var(--glass-blue-deep)!important;border:1px solid rgba(255,255,255,.88);box-shadow:6px 7px 16px rgba(84,110,168,.13),-5px -5px 12px rgba(255,255,255,.82),inset 0 1px 0 #fff!important}
+.bento-lite .sidebar-link.active::before{display:none!important}
+.bento-lite .sidebar-link.active .icon{background:linear-gradient(145deg,#4f7dff,#79d8ed)!important;color:#fff!important;box-shadow:3px 4px 10px rgba(53,108,246,.30),inset 0 1px 0 rgba(255,255,255,.45)!important}
+.bento-lite .page-header h2::after{width:30px!important;height:5px!important;background:linear-gradient(90deg,#4e7fff,#78d9ef)!important}
+.confirmation-card:first-of-type:before{display:none!important}
+.recharge-summary{border:0!important;background:transparent!important;border-radius:0!important}
+.recharge-summary .summary-item{border-right:0!important}
+.summary-value.accent{color:#294fbd!important}
+.payment-total{border-color:rgba(160,190,255,.42)!important;background:rgba(240,246,255,.62)!important}
+.pay-action{border-color:var(--glass-line)!important;background:var(--glass-surface-strong)!important}
+.pay-action .btn-primary{background:linear-gradient(145deg,#4f7dff,#356cf6)!important;box-shadow:0 8px 18px rgba(53,108,246,.26),inset 0 1px 0 rgba(255,255,255,.35)!important}
+</style>
 
 <style id="identity-switcher-css">
 .id-switcher{position:relative;display:inline-flex;align-items:center;}
@@ -58,7 +85,7 @@
 .id-menu-action:hover{background:#F8FAFC;color:#2563EB;}
 </style>
 </head>
-<body>
+<body class="bento-lite">
 <header class="top-bar user">
 <div class="top-bar-left">
 <a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
@@ -109,51 +136,12 @@ document.addEventListener('click',function(e){
 </div>
 </header>
 <aside class="sidebar user"><div class="sidebar-section"><a class="sidebar-link" href="index.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z"/></svg></span><span>概览</span></a><a class="sidebar-link" href="agent-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 10h8M8 14h5"/></svg></span><span>智能体市场</span></a><a class="sidebar-link active" href="recharge-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M16 14h2"/></svg></span><span>账户充值</span></a><a class="sidebar-link" href="payment-accounts.html"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-6 9 6v9H3v-9Z"/><path d="M6 10v9m4-9v9m4-9v9m4-9v9M2 19h20"/></svg></span><span>付款账户</span></a><a class="sidebar-link" href="balance.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6.5A2.5 2.5 0 0 1 4 17.5v-10Z"/><path d="M4 8h13M15 14h3"/></svg></span><span>彩豆管理</span></a><a class="sidebar-link" href="consumption-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M5 20V10m7 10V4m7 16v-7"/></svg></span><span>消费记录</span></a><a class="sidebar-link" href="invoice-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15l-3-2-3 2-3-2-3 2V3Z"/><path d="M9 9h6m-6 4h6"/></svg></span><span>发票管理</span></a><a class="sidebar-link" href="member-list.html"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.6-3.4 3-5 7-5s6.4 1.6 7 5"/></svg></span><span>账号管理</span></a><a class="sidebar-link" href="role-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 2.9 7.9 7 10 4.1-2.1 7-5.5 7-10V6l-7-3Z"/><path d="M9 12h6m-3-3v6"/></svg></span><span>岗位管理</span></a></div></aside>
-<main class="main-content">
-<div class="page-header">
-<a class="back-link" href="recharge-list.html" style="color:#2563eb;margin-bottom:9px;">← 返回</a>
-<h2>确认充值</h2>
-<p>选择支付方式完成充值</p>
-</div>
-<div class="order-card">
-<h3 style="font-size: 16px; font-weight: 600; margin-bottom: var(--spacing-lg);">充值信息</h3>
-<div class="order-item">
-<span>充值档位</span>
-<span style="font-weight: 600;" id="rcTier">¥10 档</span>
-</div>
-<div class="order-item">
-<span>到账彩豆</span>
-<span style="color: var(--user-color); font-weight: 600;" id="rcBeans">10 彩豆</span>
-</div>
-<!-- 赠送彩豆：本期暂不支持充值赠送，隐藏此行（恢复时移除 display:none） -->
-<div class="order-item" style="display:none;">
-<span>赠送彩豆</span>
-<span style="color: var(--success-color);" id="rcBonus">0 彩豆</span>
-</div>
-
-<div class="order-item">
-<span>充值前企业彩豆</span>
-<span style="font-weight: 500;" id="rcBefore">18,700 彩豆</span>
-</div>
-
-<div class="order-item">
-<span>充值后企业彩豆</span>
-<span style="color: var(--user-color); font-weight: 600;" id="rcAfter">18,800 彩豆</span>
-</div>
-
-<div class="order-total">
-<span style="font-size: 16px; font-weight: 600;">应付金额</span>
-<span style="font-size: 24px; font-weight: 700; color: var(--user-color);" id="rcPay">¥10.00</span>
-</div>
-</div>
-<div class="order-card"><h3 style="font-size:16px;font-weight:600;margin-bottom:var(--spacing-lg);">付款方式</h3><div style="font-size:13px;font-weight:600;color:#5e7189;margin-bottom:var(--spacing-sm);">个人支付</div><div class="payment-method selected" onclick="selectPay(this)"><div class="payment-icon" style="background:#07c160;color:white;">微</div><div style="flex:1;"><div style="font-weight:500;">微信支付</div><div style="font-size:12px;color:var(--text-muted);">推荐</div></div></div><div class="payment-method" onclick="selectPay(this)"><div class="payment-icon" style="background:#1677ff;color:white;">支</div><div style="flex:1;"><div style="font-weight:500;">支付宝</div></div></div><div class="payment-method" onclick="selectPay(this)"><div class="payment-icon" style="background:#c0392b;color:white;">银</div><div style="flex:1;"><div style="font-weight:500;">招商银行 尾号 3333</div><div style="font-size:12px;color:var(--text-muted);">个人储蓄卡</div></div></div><div style="font-size:13px;font-weight:600;color:#5e7189;margin:var(--spacing-lg) 0 var(--spacing-sm);">机构账户支付</div><div class="payment-method" onclick="selectPay(this)"><div class="payment-icon" style="background:#c0392b;color:white;">银</div><div style="flex:1;"><div style="font-weight:500;">招商银行 尾号 8888</div><div style="font-size:12px;color:var(--text-muted);">对公主账户 · 默认</div></div></div><div class="payment-method" onclick="selectPay(this)"><div class="payment-icon" style="background:#e67e22;color:white;">银</div><div style="flex:1;"><div style="font-weight:500;">工商银行 尾号 6666</div><div style="font-size:12px;color:var(--text-muted);">对公子账户</div></div></div><div style="text-align:right;margin-top:8px;"><a href="payment-accounts.html" style="font-size:13px;color:var(--user-color);">管理付款账户</a></div></div>
-<div style="text-align: center;">
-<button class="btn btn-primary" style="min-width: 200px;" onclick="confirmPay()">确认支付</button>
-</div>
-<script>function selectPay(el){document.querySelectorAll(".payment-method").forEach(function(m){m.classList.remove("selected");});el.classList.add("selected");}
+<main class="main-content"><div class="recharge-workbench"><div class="page-header"><a class="back-link" href="recharge-list.html">← 返回账户充值</a><h2>确认充值</h2></div><section class="confirmation-card" aria-label="充值信息"><div class="card-heading"><h3>充值信息</h3></div><div class="recharge-summary"><div class="summary-item"><span class="summary-label">充值金额</span><strong class="summary-value accent" id="rcPay">¥100.00</strong></div><div class="summary-item"><span class="summary-label">当前单位彩豆</span><strong class="summary-value" id="rcBefore">18,700 彩豆</strong></div><div class="summary-item"><span class="summary-label">充值后单位彩豆</span><strong class="summary-value accent" id="rcAfter">18,800 彩豆</strong></div></div></section><section class="confirmation-card" aria-label="付款方式"><div class="card-heading"><h3>付款方式</h3><a class="manage-accounts" href="payment-accounts.html">管理付款账户</a></div><div class="payment-content"><div><div class="payment-group-title">个人支付</div><div class="payment-options"><button type="button" class="payment-method selected" onclick="selectPay(this)"><span class="payment-icon" style="background:#07c160;color:#fff;">微</span><span><span class="payment-name">微信支付</span><span class="payment-note">推荐使用</span></span></button><button type="button" class="payment-method" onclick="selectPay(this)"><span class="payment-icon" style="background:#1677ff;color:#fff;">支</span><span><span class="payment-name">支付宝</span></span></button><button type="button" class="payment-method" onclick="selectPay(this)"><span class="payment-icon" style="background:#c0392b;color:#fff;">银</span><span><span class="payment-name">招商银行 尾号 3333</span><span class="payment-note">个人储蓄卡</span></span></button></div></div><div><div class="payment-group-title">企业支付</div><div class="payment-options"><button type="button" class="payment-method" onclick="selectPay(this)"><span class="payment-icon" style="background:#c0392b;color:#fff;">银</span><span><span class="payment-name">招商银行 尾号 8888</span><span class="payment-note">对公主账户 · 默认</span></span></button><button type="button" class="payment-method" onclick="selectPay(this)"><span class="payment-icon" style="background:#e67e22;color:#fff;">银</span><span><span class="payment-name">工商银行 尾号 6666</span><span class="payment-note">对公子账户</span></span></button></div></div></div><div class="payment-total"><span>应付金额</span><strong id="paymentTotal">¥100.00</strong></div></section><div class="pay-action"><span class="pay-tip">确认支付后，彩豆即时到账。</span><button class="btn btn-primary" onclick="confirmPay()">确认支付</button></div></div></main>
+<script>
+function selectPay(el){document.querySelectorAll('.payment-method').forEach(function(m){m.classList.remove('selected');});el.classList.add('selected');}
 function getParam(k){var m=new RegExp('[?&]'+k+'=([^&]*)').exec(location.search);return m?decodeURIComponent(m[1]):null;}
-function initOrder(){var amount=parseFloat(getParam('amount')||'100');var beans=parseInt(getParam('beans')||Math.round(amount),10);var bonus=parseInt(getParam('bonus')||'0',10);var before=18700;document.getElementById('rcTier').textContent='¥'+amount+' 档';document.getElementById('rcBeans').textContent=beans.toLocaleString()+' 彩豆';document.getElementById('rcBonus').textContent=bonus.toLocaleString()+' 彩豆';document.getElementById('rcBefore').textContent=before.toLocaleString()+' 彩豆';document.getElementById('rcAfter').textContent=(before+beans+bonus).toLocaleString()+' 彩豆';document.getElementById('rcPay').textContent='¥'+amount.toFixed(2);}
+function initOrder(){var amount=parseFloat(getParam('amount')||'100');var beans=parseInt(getParam('beans')||Math.round(amount),10);var bonus=parseInt(getParam('bonus')||'0',10);var before=18700;var beforeText=before.toLocaleString()+' 彩豆';var afterText=(before+beans+bonus).toLocaleString()+' 彩豆';var payText='¥'+amount.toFixed(2);document.getElementById('rcBefore').textContent=beforeText;document.getElementById('rcAfter').textContent=afterText;document.getElementById('rcPay').textContent=payText;document.getElementById('paymentTotal').textContent=payText;}
 function confirmPay(){alert('本次充值 '+document.getElementById('rcPay').textContent+' 已完成模拟支付，彩豆已入企业账户。');window.location.href='recharge-list.html';}
-document.addEventListener("DOMContentLoaded",initOrder);</script></main>
-</body>
+document.addEventListener('DOMContentLoaded',initOrder);
+</script></body>
 </html>
