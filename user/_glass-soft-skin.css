@@ -1,0 +1,392 @@
+/* 彩翼企业端 · 玻璃拟态 + Soft UI 进化版（共享皮肤）
+ * 基于第 3 版样张 index-glass.html 抽取，叠加在 _bento-lite-skin.css 之后加载。
+ * 只承接既有页面结构与字段，不引入业务内容；文字实底高对比，玻璃感留给外壳层。
+ */
+:root{
+  --glass-ink:#15213c;
+  --glass-muted:#475672;
+  --glass-blue:#356cf6;
+  --glass-blue-deep:#2456d4;
+  --glass-line:rgba(255,255,255,.72);
+  --glass-surface:rgba(255,255,255,.62);
+  --glass-surface-strong:rgba(255,255,255,.86);
+  --glass-shadow:0 12px 32px rgba(54,83,150,.10), inset 0 1px 0 rgba(255,255,255,.78);
+}
+
+/* 不是大面积渐变：环境光只承载玻璃的“透出层”。 */
+.bento-lite{
+  --bt-canvas:#edf3ff;
+  --bt-ink:var(--glass-ink);
+  --bt-soft:var(--glass-muted);
+  --bt-blue:var(--glass-blue);
+  --bt-blue-deep:var(--glass-blue-deep);
+  --bt-blue-ink:var(--glass-blue-deep);
+  --bt-blue-wash:rgba(53,108,246,.10);
+  --bg-light:rgba(246,249,255,.58);
+  --card-bg:rgba(255,255,255,.72);
+  --bt-shadow:var(--glass-shadow);
+  position:relative;
+  min-height:100vh;
+  overflow-x:hidden;
+  background:
+    radial-gradient(880px 620px at 56% 32%,rgba(126,164,255,.20),transparent 70%),
+    radial-gradient(700px 520px at 12% 9%,rgba(123,147,255,.19),transparent 67%),
+    radial-gradient(620px 560px at 94% 4%,rgba(146,219,255,.24),transparent 65%),
+    radial-gradient(720px 520px at 30% 66%,rgba(146,219,255,.13),transparent 68%),
+    radial-gradient(760px 620px at 61% 94%,rgba(216,190,255,.17),transparent 70%),
+    linear-gradient(135deg,#f9fbff 0%,#f4f8ff 47%,#fbf9ff 100%) !important;
+}
+
+.bento-lite::before,
+.bento-lite::after{
+  position:fixed;
+  z-index:0;
+  width:260px;
+  height:260px;
+  border-radius:42% 58% 64% 36% / 41% 44% 56% 59%;
+  filter:blur(8px);
+  pointer-events:none;
+  content:"";
+}
+.bento-lite::before{right:7%;top:21%;background:rgba(140,193,255,.10);transform:rotate(21deg)}
+.bento-lite::after{left:20%;bottom:-96px;background:rgba(182,154,255,.08);transform:rotate(-18deg)}
+
+.bento-lite .top-bar{
+  position:fixed;
+  top:0;
+  right:0;
+  left:0;
+  z-index:100;
+  background:rgba(255,255,255,.58) !important;
+  border-bottom:1px solid rgba(255,255,255,.76) !important;
+  box-shadow:0 1px 0 rgba(95,126,185,.07) !important;
+  backdrop-filter:blur(18px) saturate(120%);
+  -webkit-backdrop-filter:blur(18px) saturate(120%);
+}
+.bento-lite .top-bar-title{color:#485875 !important;border-left-color:rgba(105,132,186,.17) !important}
+.bento-lite .id-trigger:hover{background:rgba(255,255,255,.64) !important}
+.bento-lite .top-bar-user:hover{background:rgba(255,255,255,.64) !important}
+.bento-lite .id-avatar{background:rgba(237,243,255,.82);color:var(--glass-blue-deep);box-shadow:inset 0 0 0 1px rgba(255,255,255,.85)}
+
+.bento-lite .sidebar.user{
+  position:fixed;
+  top:68px;
+  bottom:0;
+  left:0;
+  height:auto;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  z-index:1;
+  background:rgba(255,255,255,.23) !important;
+  border-right:1px solid rgba(255,255,255,.62) !important;
+  backdrop-filter:blur(14px) saturate(112%);
+  -webkit-backdrop-filter:blur(14px) saturate(112%);
+}
+.bento-lite .sidebar-link{color:#44536e !important}
+.bento-lite .sidebar-link .icon{background:rgba(255,255,255,.48) !important;color:#5d78c7 !important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.62)}
+.bento-lite .sidebar-link:hover{background:rgba(255,255,255,.47) !important;color:var(--glass-ink) !important}
+.bento-lite .sidebar.user .sidebar-link.active,
+.bento-lite .sidebar-link.active{
+  position:relative;
+  overflow:hidden;
+  background:rgba(255,255,255,.64) !important;
+  color:var(--glass-blue-deep) !important;
+  border:1px solid rgba(255,255,255,.88);
+  box-shadow:0 8px 20px rgba(57,85,148,.09),inset 0 1px 0 #fff !important;
+}
+.bento-lite .sidebar-link.active .icon{background:linear-gradient(145deg,#4f7dff,#79d8ed) !important;color:#fff !important;box-shadow:0 6px 14px rgba(53,108,246,.22)}
+
+.bento-lite .main-content{
+  position:relative;
+  z-index:1;
+  padding-top:32px !important;
+  background:transparent !important;
+}
+/* 页头自身不再叠加留白，标题与顶栏保持 32px 舒适间距。 */
+.bento-lite .page-header,.bento-lite .page-head{margin-top:0 !important;padding-top:0 !important}
+/* 含返回链接的详情页页头整体下移 14px：返回入口不与顶栏相挤，所有详情页位置统一。 */
+.bento-lite .page-header:has(.back-link),.bento-lite .page-header:has(.back),.bento-lite .page-head:has(.back),.bento-lite .page-head:has(.back-link){padding-top:14px !important}
+.bento-lite .page-header h2,.bento-lite .page-head h2,.bento-lite .wk-head h2{color:var(--glass-ink) !important}
+.bento-lite .page-header h2::after,.bento-lite .page-head h2::after,.bento-lite .wk-head h2::after{width:30px !important;height:5px !important;background:linear-gradient(90deg,#4e7fff,#78d9ef) !important}
+.bento-lite .main-content.wk-canvas{background:transparent !important}
+
+/* ===== 概览统计卡（仅概览页使用 stat-card） ===== */
+.bento-lite .stats-grid{gap:16px !important}
+.bento-lite .stat-card{
+  min-height:128px;
+  padding:24px 26px !important;
+  overflow:hidden;
+  border:1px solid var(--glass-line) !important;
+  border-radius:18px !important;
+  background:var(--glass-surface) !important;
+  box-shadow:var(--glass-shadow) !important;
+  backdrop-filter:blur(20px) saturate(128%);
+  -webkit-backdrop-filter:blur(20px) saturate(128%);
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.bento-lite .stat-card::before{position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.45),transparent 45%);pointer-events:none;content:""}
+.bento-lite .stat-card::after{right:-25px;top:-30px;width:118px;height:118px;border-radius:50%;background:radial-gradient(circle,rgba(160,209,255,.34),rgba(160,209,255,0) 69%) !important;transform:none !important}
+.bento-lite .stat-card:nth-child(1){background:rgba(248,252,255,.64) !important}
+.bento-lite .stat-card:nth-child(2){background:rgba(250,251,255,.60) !important}
+.bento-lite .stat-card:nth-child(3){background:rgba(250,249,255,.58) !important}
+.bento-lite .stat-card:hover{transform:translateY(-3px);box-shadow:0 17px 38px rgba(54,83,150,.14),inset 0 1px 0 rgba(255,255,255,.92) !important}
+.bento-lite .stat-value{position:relative;color:#294fbd !important}
+.bento-lite .stat-card:first-child .stat-value{font-size:34px;background:linear-gradient(105deg,#2358d5,#5884f5 48%,#38b9d0);-webkit-background-clip:text;background-clip:text;color:transparent !important}
+.bento-lite .stat-label{position:relative;display:flex;align-items:center;gap:7px;color:var(--glass-muted) !important}
+.bento-lite .stat-label::before{width:7px;height:7px;border-radius:50%;background:#79b9f7;box-shadow:0 0 0 4px rgba(121,185,247,.14);content:""}
+
+/* ===== 通用内容容器：玻璃面 ===== */
+.bento-lite .content-card,
+.bento-lite .panel,
+.bento-lite .detail-card,
+.bento-lite .form-card,
+.bento-lite .info-card,
+.bento-lite .order-card,
+.bento-lite .records-panel,
+.bento-lite .ledger-panel,
+.bento-lite .warn-panel,
+.bento-lite .pricing-card,
+.bento-lite .notification-card,
+.bento-lite .confirmation-card,
+.bento-lite .shell,
+.bento-lite .section{
+  border:1px solid var(--glass-line) !important;
+  border-radius:20px !important;
+  background:var(--glass-surface-strong) !important;
+  box-shadow:var(--glass-shadow) !important;
+  backdrop-filter:blur(20px) saturate(122%);
+  -webkit-backdrop-filter:blur(20px) saturate(122%);
+}
+.bento-lite .content-card-title,.bento-lite .section-title,.bento-lite .detail-section h3,.bento-lite .form-section h3{color:var(--glass-ink) !important}
+.bento-lite .content-card-header,.bento-lite .section-head,.bento-lite .records-title,.bento-lite .detail-section,.bento-lite .form-section{border-color:rgba(148,170,214,.20) !important}
+
+/* ===== 筛选、工具栏、表格：半透玻璃 ===== */
+.bento-lite .toolbar,.bento-lite .filter-bar,.bento-lite .ledger-tools{background:rgba(250,252,255,.52) !important;border-color:rgba(148,170,214,.20) !important}
+.bento-lite .table th,.bento-lite .data-table th,.bento-lite .record-table th{background:rgba(250,252,255,.80) !important;color:var(--glass-muted) !important;border-color:rgba(148,170,214,.18) !important}
+.bento-lite .table td,.bento-lite .data-table td,.bento-lite .record-table td{border-color:rgba(148,170,214,.16) !important;color:#3d4c68}
+.bento-lite .table tbody tr:hover,.bento-lite .data-table tbody tr:hover,.bento-lite .record-table tbody tr:hover,
+.bento-lite .table tbody tr:hover td,.bento-lite .data-table tbody tr:hover td,.bento-lite .record-table tbody tr:hover td{background:rgba(255,255,255,.52) !important}
+.bento-lite .toolbar select,.bento-lite .toolbar input,.bento-lite .filter-bar select,.bento-lite .filter-bar input,.bento-lite .search,.bento-lite .input,.bento-lite .form-input,.bento-lite .form-select,.bento-lite .form-textarea,.bento-lite .ledger-tools select,.bento-lite .custom input{
+  border:1px solid rgba(148,170,214,.55) !important;background:rgba(255,255,255,.78) !important;color:var(--glass-ink) !important;box-shadow:inset 0 1px 0 rgba(255,255,255,.85) !important;
+}
+.bento-lite .input:focus,.bento-lite .form-input:focus,.bento-lite .form-select:focus,.bento-lite .form-textarea:focus,.bento-lite .toolbar input:focus,.bento-lite .toolbar select:focus,.bento-lite .filter-bar input:focus,.bento-lite .filter-bar select:focus,.bento-lite .ledger-tools select:focus,.bento-lite .custom input:focus{border-color:rgba(78,127,255,.55) !important;box-shadow:0 0 0 3px rgba(53,108,246,.14) !important;outline:0}
+
+/* ===== 信息字段与选项块：半透底 ===== */
+.bento-lite .detail-item,.bento-lite .overview-item,.bento-lite .info-line,.bento-lite .order-item,.bento-lite .record,.bento-lite .type-card,
+.bento-lite .eb-card,.bento-lite .summary,.bento-lite .info-row,.bento-lite .option,.bento-lite .payment-method,.bento-lite .detail,.bento-lite .lg-row{
+  border-color:rgba(148,170,214,.20) !important;background:rgba(250,252,255,.56) !important;border-radius:14px !important;
+}
+.bento-lite .payment-method.selected,.bento-lite .option.selected,.bento-lite .type-card.selected{border-color:rgba(78,127,255,.55) !important;background:rgba(239,245,255,.72) !important}
+.bento-lite .detail-item .label,.bento-lite .detail-label,.bento-lite .label,.bento-lite .info-label,.bento-lite .field label,.bento-lite .form-label{color:var(--glass-muted) !important}
+.bento-lite .detail-item .value,.bento-lite .value,.bento-lite .info-value,.bento-lite .field,.bento-lite .pricing-amount{color:var(--glass-ink)}
+.bento-lite .notice,.bento-lite .benefit-note,.bento-lite .free-benefit{border-radius:14px !important;border-color:rgba(160,190,255,.42) !important;background:rgba(240,246,255,.62) !important;color:#415472}
+
+/* ===== 按钮：玻璃 + 可按压柔和立体 ===== */
+.bento-lite .btn-outline{
+  background:linear-gradient(145deg,rgba(255,255,255,.82),rgba(238,244,255,.58)) !important;
+  border-color:rgba(255,255,255,.92) !important;
+  color:#516485 !important;
+  box-shadow:4px 5px 12px rgba(84,110,168,.15),-3px -3px 9px rgba(255,255,255,.90),inset 0 1px 0 rgba(255,255,255,.92) !important;
+  transition:box-shadow .15s ease,transform .15s ease,color .15s ease !important;
+}
+.bento-lite .btn-outline:hover{
+  background:linear-gradient(145deg,rgba(255,255,255,.92),rgba(232,240,255,.68)) !important;
+  border-color:rgba(255,255,255,.95) !important;
+  color:var(--glass-blue-deep) !important;
+}
+.bento-lite .btn-outline:active{
+  transform:translateY(1px);
+  box-shadow:inset 3px 3px 8px rgba(84,110,168,.18),inset -2px -2px 6px rgba(255,255,255,.85) !important;
+}
+.bento-lite .btn-primary{
+  background:linear-gradient(145deg,#4f7dff,#356cf6) !important;border-color:rgba(255,255,255,.35) !important;color:#fff !important;
+  box-shadow:0 8px 18px rgba(53,108,246,.26),inset 0 1px 0 rgba(255,255,255,.35) !important;
+}
+.bento-lite .btn-primary:hover{background:linear-gradient(145deg,#5d88ff,#2f5fdd) !important;box-shadow:0 10px 22px rgba(53,108,246,.32),inset 0 1px 0 rgba(255,255,255,.4) !important}
+.bento-lite .btn-primary:active{transform:translateY(1px);box-shadow:inset 2px 3px 8px rgba(23,58,150,.35) !important}
+
+/* ===== 标签态保持语义色，仅柔化底色透明度 ===== */
+.bento-lite .badge-info,.bento-lite .badge-primary,.bento-lite .tag{background:rgba(53,108,246,.10) !important;color:var(--glass-blue-deep) !important}
+.bento-lite .badge-success,.bento-lite .done,.bento-lite .ok,.bento-lite .pay-success{background:rgba(226,246,236,.82) !important;color:var(--bt-mint-ink) !important}
+.bento-lite .badge-warning,.bento-lite .pending,.bento-lite .processing,.bento-lite .warn{background:rgba(255,243,214,.85) !important;color:var(--bt-sun-ink) !important}
+.bento-lite .badge-danger,.bento-lite .fail,.bento-lite .rejected{background:rgba(255,233,226,.85) !important;color:var(--bt-coral-ink) !important}
+
+/* ===== 页签、胶囊、分页：玻璃 chip ===== */
+.bento-lite .tab,.bento-lite .pill.all,.bento-lite .tab-btn,.bento-lite .record-tab{
+  background:rgba(255,255,255,.55) !important;border:1px solid rgba(255,255,255,.88) !important;color:#516485 !important;
+  box-shadow:3px 4px 10px rgba(84,110,168,.10),inset 0 1px 0 rgba(255,255,255,.85) !important;
+}
+.bento-lite .tab:hover,.bento-lite .pill:hover,.bento-lite .tab-btn:hover,.bento-lite .record-tab:hover{color:var(--glass-blue-deep) !important;background:rgba(255,255,255,.78) !important}
+.bento-lite .tab.active,.bento-lite .pill.on,.bento-lite .tab-btn.active,.bento-lite .record-tab.active{
+  background:linear-gradient(145deg,#4f7dff,#356cf6) !important;color:#fff !important;border-color:rgba(255,255,255,.35) !important;
+  box-shadow:0 6px 14px rgba(53,108,246,.26),inset 0 1px 0 rgba(255,255,255,.35) !important;
+}
+.bento-lite .pagination-item,.bento-lite .page-current,.bento-lite .pager a{background:rgba(255,255,255,.55) !important;border-color:rgba(255,255,255,.88) !important}
+.bento-lite .pagination-item.active,.bento-lite .page-current{background:var(--glass-blue) !important;color:#fff !important}
+
+/* ===== 列表分页条：玻璃 chip 按钮（消费/发票/充值/彩豆明细统一） ===== */
+.bento-lite .records-footer{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(148,170,214,.16);color:#7b8aa6;font-size:13px}
+.bento-lite .pager{display:flex;align-items:center;gap:10px}
+.bento-lite .pager button{display:inline-flex;align-items:center;justify-content:center;width:32px !important;height:32px !important;padding:0 !important;border:1px solid rgba(255,255,255,.88) !important;border-radius:9px !important;background:rgba(255,255,255,.62) !important;color:#516485 !important;font-size:15px !important;cursor:pointer;box-shadow:2px 3px 8px rgba(84,110,168,.08),inset 0 1px 0 rgba(255,255,255,.85) !important;transition:all .15s}
+.bento-lite .pager button:hover:not(:disabled){color:var(--glass-blue-deep) !important;background:rgba(255,255,255,.88) !important}
+.bento-lite .pager button:disabled{opacity:.42;cursor:not-allowed}
+.bento-lite .pager .page-current{display:inline-flex;align-items:center;justify-content:center;width:32px !important;height:32px !important;padding:0 !important;border:1px solid rgba(255,255,255,.35) !important;border-radius:9px !important;background:linear-gradient(145deg,#4f7dff,#356cf6) !important;color:#fff !important;font-size:13px !important;font-weight:700;box-shadow:0 5px 12px rgba(53,108,246,.24) !important}
+
+/* ===== 弹窗、抽屉、账户切换：玻璃模糊 ===== */
+.bento-lite .modal,.bento-lite .drawer-panel,.bento-lite .id-menu{
+  background:rgba(255,255,255,.86) !important;
+  border:1px solid rgba(255,255,255,.90) !important;
+  border-radius:20px !important;
+  box-shadow:0 18px 42px rgba(54,83,150,.20) !important;
+  backdrop-filter:blur(20px) saturate(120%);
+  -webkit-backdrop-filter:blur(20px) saturate(120%);
+}
+.bento-lite .modal-header,.bento-lite .modal-footer,.bento-lite .drawer-head,.bento-lite .drawer-actions,.bento-lite .id-menu-hd,.bento-lite .id-menu-sep{border-color:rgba(148,170,214,.20) !important}
+.bento-lite .id-menu-item:hover,.bento-lite .id-menu-action:hover{background:rgba(244,248,255,.8) !important}
+
+/* ===== 智能体市场组件 ===== */
+.bento-lite .flt{background:var(--glass-surface-strong) !important;border:1px solid var(--glass-line) !important;box-shadow:var(--glass-shadow) !important;backdrop-filter:blur(20px) saturate(122%);-webkit-backdrop-filter:blur(20px) saturate(122%)}
+.bento-lite .mkt-card{
+  background:var(--glass-surface-strong) !important;border:1px solid var(--glass-line) !important;box-shadow:var(--glass-shadow) !important;
+  backdrop-filter:blur(20px) saturate(122%);-webkit-backdrop-filter:blur(20px) saturate(122%);
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.bento-lite .mkt-card:hover{transform:translateY(-3px);box-shadow:0 17px 38px rgba(54,83,150,.15),inset 0 1px 0 rgba(255,255,255,.92) !important}
+.bento-lite .flt-row,.bento-lite .flt-chips,.bento-lite .mkt-ops{border-top-color:rgba(148,170,214,.22) !important}
+.bento-lite .flt-name,.bento-lite .chip{background:rgba(53,108,246,.10) !important;color:var(--glass-blue-deep) !important}
+.bento-lite .flt-sort,.bento-lite .form-input{border-color:rgba(148,170,214,.55) !important;background:rgba(255,255,255,.78) !important}
+.bento-lite .mkt-3rd.official{background:rgba(53,108,246,.10) !important;color:var(--glass-blue-deep) !important}
+.bento-lite .who,.bento-lite .source{background:rgba(255,255,255,.55) !important;color:#516485 !important}
+.bento-lite .mkt-price{color:var(--glass-blue-deep) !important}
+.bento-lite .vbtn,.bento-lite .mbtn-primary{background:linear-gradient(145deg,#4f7dff,#356cf6) !important;box-shadow:0 6px 14px rgba(53,108,246,.24),inset 0 1px 0 rgba(255,255,255,.35) !important}
+.bento-lite .mbtn-icon,.bento-lite .mbtn-match{background:rgba(255,255,255,.6) !important;border-color:rgba(255,255,255,.88) !important;color:#516485 !important}
+
+/* ===== 消息、时间线等杂项 ===== */
+.bento-lite .notification-card.unread{border-color:rgba(160,190,255,.45) !important;background:rgba(248,251,255,.78) !important}
+.bento-lite .timeline,.bento-lite .ded-list,.bento-lite .permission-tree,.bento-lite .event,.bento-lite .ded-row,.bento-lite .permission-node{border-color:rgba(148,170,214,.18) !important}
+.bento-lite .form-actions,.bento-lite .actions{border-color:rgba(148,170,214,.20) !important}
+.bento-lite .back,.bento-lite .back-link{color:var(--glass-blue-deep) !important}
+.bento-lite .empty,.bento-lite .empty-state,.bento-lite .record-empty,.bento-lite .lg-empty{color:#7b8aa6}
+.bento-lite .role-tags span{border-color:rgba(255,255,255,.86) !important;background:rgba(255,255,255,.6) !important}
+.bento-lite .role-tags input:checked+span{border-color:rgba(78,127,255,.55) !important;background:rgba(239,245,255,.8) !important;color:var(--glass-blue-deep) !important}
+
+/* ===== 概览页专属：智能体条目保持“半实”，避免文字在多层透明中失焦 ===== */
+.bento-lite.overview .content-card > div:last-child > div{
+  border:1px solid rgba(255,255,255,.78) !important;
+  background:rgba(249,252,255,.80) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72) !important;
+  transition:background .18s ease,transform .18s ease;
+}
+.bento-lite.overview .content-card > div:last-child > div:hover{background:rgba(255,255,255,.76) !important;transform:translateX(2px)}
+.bento-lite.overview .content-card > div:last-child > div > div:first-child{
+  box-shadow:3px 4px 10px rgba(84,110,168,.16),inset 0 1px 0 rgba(255,255,255,.35);
+}
+
+/* ===== Soft UI Evolution：柔和立体光影层（玻璃通透保留） ===== */
+/* 统计卡：表面微渐变 + 左上受光、右下柔和投影的外凸感。 */
+.bento-lite .stat-card{
+  box-shadow:10px 12px 26px rgba(84,110,168,.14),-8px -8px 20px rgba(255,255,255,.85),inset 0 1px 0 rgba(255,255,255,.88) !important;
+}
+.bento-lite .stat-card:nth-child(1){background:linear-gradient(145deg,rgba(253,254,255,.74),rgba(240,247,255,.54)) !important}
+.bento-lite .stat-card:nth-child(2){background:linear-gradient(145deg,rgba(254,254,255,.70),rgba(242,246,255,.52)) !important}
+.bento-lite .stat-card:nth-child(3){background:linear-gradient(145deg,rgba(254,253,255,.68),rgba(245,242,255,.50)) !important}
+.bento-lite .stat-card:hover{
+  transform:translateY(-3px);
+  box-shadow:14px 18px 34px rgba(84,110,168,.17),-8px -8px 22px rgba(255,255,255,.92),inset 0 1px 0 rgba(255,255,255,.95) !important;
+}
+
+/* 内容容器：柔和外凸投影。 */
+.bento-lite .content-card,
+.bento-lite .panel,
+.bento-lite .detail-card,
+.bento-lite .form-card,
+.bento-lite .info-card,
+.bento-lite .order-card,
+.bento-lite .records-panel,
+.bento-lite .ledger-panel,
+.bento-lite .warn-panel,
+.bento-lite .pricing-card,
+.bento-lite .notification-card,
+.bento-lite .confirmation-card,
+.bento-lite .section{
+  box-shadow:12px 14px 30px rgba(84,110,168,.11),-8px -8px 22px rgba(255,255,255,.70),inset 0 1px 0 rgba(255,255,255,.80) !important;
+}
+
+/* 侧栏：选中项柔和浮起，图标柔光凸起。 */
+.bento-lite .sidebar.user .sidebar-link.active,
+.bento-lite .sidebar-link.active{
+  box-shadow:6px 7px 16px rgba(84,110,168,.13),-5px -5px 12px rgba(255,255,255,.82),inset 0 1px 0 #fff !important;
+}
+.bento-lite .sidebar-link .icon{
+  box-shadow:3px 3px 8px rgba(84,110,168,.13),-2px -2px 6px rgba(255,255,255,.82),inset 0 0 0 1px rgba(255,255,255,.62) !important;
+}
+.bento-lite .sidebar-link.active .icon{
+  box-shadow:3px 4px 10px rgba(53,108,246,.30),inset 0 1px 0 rgba(255,255,255,.45) !important;
+}
+
+/* 头像：统一柔和凸起触感。 */
+.bento-lite .id-avatar,.bento-lite .top-bar-avatar{
+  box-shadow:3px 3px 8px rgba(84,110,168,.15),-2px -2px 6px rgba(255,255,255,.85),inset 0 0 0 1px rgba(255,255,255,.85) !important;
+}
+
+@media (max-width:900px){
+  .bento-lite .sidebar.user{position:static;height:auto;overflow:visible;background:rgba(255,255,255,.62) !important}
+  .bento-lite .stat-card{min-height:112px}
+}
+@media (prefers-reduced-motion:reduce){
+  .bento-lite .stat-card,.bento-lite .mkt-card,.bento-lite.overview .content-card > div:last-child > div{transition:none !important}
+}
+
+/* ===== KPI 统计块统一规范：概览/充值/彩豆/消费共用同一套玻璃卡语言 =====
+ * 规范：18px 圆角玻璃面 + Soft UI 双阴影 + 圆点标签 + hover 浮起；
+ * 概览保留渐变数字与光斑（首页门面），子页面数字用纯色更克制，语义色不动。 */
+.bento-lite .eb-card,.bento-lite .stats .stat{
+  position:relative;
+  border:1px solid var(--glass-line)!important;
+  border-radius:18px!important;
+  background:var(--glass-surface)!important;
+  box-shadow:10px 12px 26px rgba(84,110,168,.14),-8px -8px 20px rgba(255,255,255,.85),inset 0 1px 0 rgba(255,255,255,.88)!important;
+  backdrop-filter:blur(20px) saturate(128%);
+  -webkit-backdrop-filter:blur(20px) saturate(128%);
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.bento-lite .eb-card:hover,.bento-lite .stats .stat:hover{
+  transform:translateY(-3px);
+  box-shadow:14px 18px 34px rgba(84,110,168,.17),-8px -8px 22px rgba(255,255,255,.92),inset 0 1px 0 rgba(255,255,255,.95)!important;
+}
+/* 栅格节奏与概览一致。 */
+.bento-lite .eb-grid,.bento-lite .stats{gap:16px!important}
+/* 标签统一：圆点 + 玻璃灰蓝小字（与概览 stat-label 一致）。 */
+.bento-lite .eb-card .lab,.bento-lite .stats .stat span{color:var(--glass-muted)!important;font-weight:600}
+.bento-lite .eb-card .lab i{width:7px!important;height:7px!important;background:#79b9f7!important;box-shadow:0 0 0 4px rgba(121,185,247,.14)}
+.bento-lite .stats .stat span{display:flex;align-items:center;gap:7px}
+.bento-lite .stats .stat span::before{width:7px;height:7px;border-radius:50%;background:#79b9f7;box-shadow:0 0 0 4px rgba(121,185,247,.14);content:""}
+/* 数字统一：24-26px、粗 800、紧字距；正/负/警示语义色保持页面原定义。 */
+.bento-lite .eb-card .num,.bento-lite .stats .stat b{font-size:24px;font-weight:800;letter-spacing:-.02em}
+/* 充值页账户快照：由连体面板改为三张独立 KPI 卡（与彩豆/消费一致）。 */
+.bento-lite .panel.account-overview{
+  background:transparent!important;border:0!important;box-shadow:none!important;
+  backdrop-filter:none;-webkit-backdrop-filter:none;
+  overflow:visible;gap:16px;
+}
+.bento-lite .account-overview .balance-block,.bento-lite .account-overview .account-item{
+  position:relative;
+  border:1px solid var(--glass-line)!important;
+  border-radius:18px!important;
+  background:var(--glass-surface)!important;
+  box-shadow:10px 12px 26px rgba(84,110,168,.14),-8px -8px 20px rgba(255,255,255,.85),inset 0 1px 0 rgba(255,255,255,.88)!important;
+  backdrop-filter:blur(20px) saturate(128%);
+  -webkit-backdrop-filter:blur(20px) saturate(128%);
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.bento-lite .account-overview .balance-block:hover,.bento-lite .account-overview .account-item:hover{
+  transform:translateY(-3px);
+  box-shadow:14px 18px 34px rgba(84,110,168,.17),-8px -8px 22px rgba(255,255,255,.92),inset 0 1px 0 rgba(255,255,255,.95)!important;
+}
+.bento-lite .account-overview .balance-label,.bento-lite .account-item span{display:flex;align-items:center;gap:7px;color:var(--glass-muted)!important}
+.bento-lite .account-overview .balance-label::before,.bento-lite .account-item span::before{width:7px;height:7px;border-radius:50%;background:#79b9f7;box-shadow:0 0 0 4px rgba(121,185,247,.14);content:""}
+.bento-lite .account-overview .balance-value{color:#294fbd!important}
+
+@media (prefers-reduced-motion:reduce){
+  .bento-lite .eb-card,.bento-lite .stats .stat{transition:none !important}
+}
