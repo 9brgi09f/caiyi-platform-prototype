@@ -13,3 +13,6 @@ node_modules/
 *.tar.gz
 _to_delete/
 .obsidian/
+
+# 内部材料（不随 Cloudflare Pages 公开）
+docs/内部材料/
