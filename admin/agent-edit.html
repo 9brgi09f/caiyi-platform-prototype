@@ -7,6 +7,7 @@
 <title>修改智能体 - 平台管理端</title>
 <link href="../styles.css" rel="stylesheet"/>
 <script src="../app.js"></script>
+<script src="../agent-taxonomy.js"></script>
 <style>
         .page-header {
             background: linear-gradient(135deg, #2563EB, #1D4ED8);
@@ -82,44 +83,15 @@
 <div class="form-grid">
 <div class="form-item">
 <label class="form-label">应用类型 <span style="color: red;">*</span></label>
-<select class="select" required="">
-<option selected="" value="self">自研智能体</option>
-<option value="third_agent">第三方智能体</option>
-<option value="third_app">第三方应用</option>
-<option value="saas">SaaS</option>
-</select>
+<select class="select" data-cy-apptype required=""><option value="hosted" selected>平台托管</option><option value="protocol">协议接入</option><option value="redirect">外部跳转</option></select>
+<span class="cy-src-row" data-cy-source></span>
 </div>
 <div class="form-item">
 <label class="form-label">产品名称 <span style="color: red;">*</span></label>
 <input class="input" required="" type="text" value="合规监测智能体"/>
 </div>
 <div class="form-item">
-<label class="form-label">产品分类 <span style="color: red;">*</span></label>
-<select class="select" required="">
-<option value="cat_purchase">采购管理</option>
-<option selected="" value="cat_compliance">合规风控</option>
-<option value="cat_data">数据分析</option>
-<option value="cat_service">智能客服</option>
-<option value="cat_policy">政策法规</option>
-</select>
-</div>
-<div class="form-item">
-<label class="form-label">智能体属性</label>
-<select class="select">
-<option selected="">智能辅助审查</option>
-<option>智能评审</option>
-<option>风险防控</option>
-<option>价格比对</option>
-<option>成本分析</option>
-<option>政策咨询</option>
-<option>流程问答</option>
-<option>智能提取</option>
-<option>应标辅助</option>
-<option>资料抽取</option>
-</select>
-</div>
-<div class="form-item">
-<label class="form-label">区域</label>
+<label class="form-label">服务区域</label>
 <select class="select">
 <option selected="" value="">全国</option>
 <option>北京市</option>
@@ -169,6 +141,10 @@
 <input class="input" type="text" value="https://api.example.com/v1/compliance"/>
 </div>
 </div>
+</form>
+<form class="form-section">
+<h3 class="form-section-title">分类信息</h3>
+<div data-cy-taxonomy="edit" data-values='{"zones":["gov"],"roles":["buyer","agency","regulator"],"stages":[],"funcs":[]}' data-pending></div>
 </form>
 <form class="form-section">
 <h3 class="form-section-title">能力与接入</h3>

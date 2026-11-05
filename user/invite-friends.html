@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>邀请好友 - 彩翼平台企业用户端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="_bento-lite-skin.css" rel="stylesheet"/>
+<link href="_glass-soft-skin.css" rel="stylesheet"/>
+<link href="invitation.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<script src="invitation-model.js" defer></script>
+<script src="vendor/qrcode.js" defer></script>
+<script src="invitation.js" defer></script>
+</head>
+<body class="bento-lite invitation-page">
+<header class="top-bar user">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="id-switcher" id="idSwitcher">
+<div class="id-trigger" onclick="toggleIdMenu()">
+<div class="id-avatar">张</div>
+<div class="id-info">
+<span class="id-org">示例科技有限公司</span>
+<span class="id-type-badge">采购单位</span>
+</div>
+<span class="id-chevron">▾</span>
+</div>
+<div class="id-menu">
+<div class="id-menu-hd">切换工作台身份</div>
+<div class="id-menu-item current">
+<div class="id-dot active"></div>
+<div class="id-item-body">
+<div class="id-item-org">示例科技有限公司</div>
+<div class="id-item-type">采购单位</div>
+</div>
+<span class="id-item-tag current-tag">当前</span>
+</div>
+<div class="id-menu-item" onclick="location.href='../developer/index.html'">
+<div class="id-dot idle"></div>
+<div class="id-item-body">
+<div class="id-item-org">示例科技有限公司</div>
+<div class="id-item-type">开发者</div>
+</div>
+</div>
+<div class="id-menu-sep"></div>
+<a class="id-menu-action" href="../user/register-select.html">＋ 注册新机构类型</a>
+<a class="id-menu-action" href="#" onclick="alert('已退出登录');return false;">退出登录</a>
+</div>
+</div>
+<script>
+function toggleIdMenu(){
+  var el=document.getElementById('idSwitcher');
+  el.classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  var sw=document.getElementById('idSwitcher');
+  if(sw && !sw.contains(e.target)) sw.classList.remove('open');
+});
+</script>
+</div>
+</header>
+<aside class="sidebar user"><div class="sidebar-section"><a class="sidebar-link" href="index.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z"/></svg></span><span>概览</span></a><a class="sidebar-link" href="agent-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 10h8M8 14h5"/></svg></span><span>智能体市场</span></a><a class="sidebar-link" href="recharge-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M16 14h2"/></svg></span><span>账户充值</span></a><a class="sidebar-link" href="payment-accounts.html"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-6 9 6v9H3v-9Z"/><path d="M6 10v9m4-9v9m4-9v9m4-9v9M2 19h20"/></svg></span><span>付款账户</span></a><a class="sidebar-link" href="balance.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6.5A2.5 2.5 0 0 1 4 17.5v-10Z"/><path d="M4 8h13M15 14h3"/></svg></span><span>彩豆管理</span></a><a class="sidebar-link" href="consumption-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M5 20V10m7 10V4m7 16v-7"/></svg></span><span>消费记录</span></a><a class="sidebar-link" href="invoice-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15l-3-2-3 2-3-2-3 2V3Z"/><path d="M9 9h6m-6 4h6"/></svg></span><span>发票管理</span></a><a class="sidebar-link" href="member-list.html"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.6-3.4 3-5 7-5s6.4 1.6 7 5"/></svg></span><span>账号管理</span></a><a class="sidebar-link" href="role-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 2.9 7.9 7 10 4.1-2.1 7-5.5 7-10V6l-7-3Z"/><path d="M9 12h6m-3-3v6"/></svg></span><span>岗位管理</span></a></div></aside>
+<main class="main-content">
+<div class="page-header"><h2>邀请好友</h2></div>
+
+<section class="content-card invite-share-card" aria-labelledby="shareTitle">
+  <div class="content-card-header">
+    <div class="invite-section-heading"><span class="invite-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 21v-2a6 6 0 0 1 12 0v2M19 8v6m-3-3h6"/></svg></span><h3 class="content-card-title" id="shareTitle">邀请好友加入彩翼</h3></div>
+    <span class="invite-total">已邀请 <strong id="invitedCount">12</strong> 人</span>
+  </div>
+  <div class="invite-share-grid">
+    <div class="invite-code-block">
+      <label class="invite-label" for="inviteCode">我的邀请码</label>
+      <div class="invite-code-row"><input id="inviteCode" class="invite-code" value="CYZM2026" readonly aria-label="我的邀请码"/><button class="btn btn-outline" type="button" data-copy="code"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 4H5a2 2 0 0 0-2 2v10"/></svg>复制邀请码</button></div>
+      <p class="invite-muted">好友注册后，也可在“我的邀请人”中输入此码绑定。</p>
+      <div class="invite-link-field"><label class="invite-label" for="inviteLink">邀请链接</label><div class="invite-link-row"><input class="input" id="inviteLink" readonly/><button class="btn btn-primary" type="button" data-copy="link"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 4H5a2 2 0 0 0-2 2v10"/></svg>复制链接</button></div></div>
+    </div>
+    <div class="invite-share-options">
+      <span class="invite-icon invite-icon-large"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h2v2h-2zM19 15h2v6h-6v-2"/></svg></span>
+      <h3>扫码邀请，分享给好友</h3>
+      <p class="invite-muted">好友扫描二维码，携带邀请码进入注册。</p>
+      <button class="btn btn-outline" type="button" data-share="qr"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h2v2h-2zM19 15h2v6h-6v-2"/></svg>生成二维码</button>
+    </div>
+  </div>
+</section>
+<section class="content-card invite-records" aria-labelledby="recordsTitle">
+  <div class="content-card-header"><h3 class="content-card-title" id="recordsTitle">邀请记录</h3><span class="invite-muted" id="recordsCount">共 12 条记录</span></div>
+  <form class="filter-bar invite-filters" id="recordFilters">
+    <input class="input" id="recordKeyword" placeholder="搜索被邀请人或用户 ID" aria-label="搜索被邀请人或用户 ID"/>
+    <select class="input" id="recordMethod" aria-label="绑定方式"><option value="">全部绑定方式</option><option>链接绑定</option><option>邀请码绑定</option></select>
+    <button class="btn btn-primary" type="submit">查询</button><button class="btn btn-outline" type="reset">重置</button>
+  </form>
+  <div class="table-wrapper"><table class="table"><thead><tr><th scope="col">被邀请人</th><th scope="col">用户 ID</th><th scope="col">绑定方式</th><th scope="col">绑定时间</th><th scope="col">注册渠道</th></tr></thead><tbody id="invitationRows"></tbody></table></div>
+  <div class="records-footer"><span id="pageInfo"></span><nav class="pager" aria-label="邀请记录分页"><button type="button" id="prevPage" aria-label="上一页">‹</button><span id="pageNumber"></span><button type="button" id="nextPage" aria-label="下一页">›</button></nav></div>
+  <p class="invite-record-note">链接绑定：通过邀请链接注册　·　邀请码绑定：注册后手动输入邀请码</p>
+</section>
+</main>
+<dialog class="invite-dialog" id="shareDialog" aria-labelledby="shareDialogTitle">
+  <div class="invite-dialog-header"><h3 id="shareDialogTitle">扫码邀请好友</h3><button class="invite-close" type="button" data-close aria-label="关闭弹窗">×</button></div>
+  <div class="invite-dialog-body"><div class="invite-qr" id="inviteQR" role="img" aria-label="好友邀请二维码"></div><p id="shareHint">好友扫码后，携带邀请码进入注册。</p><p class="invite-muted">邀请码 <strong id="qrCodeText"></strong></p><p id="shareStatus" role="status" aria-live="polite"></p><p id="qrError" class="invite-error" role="alert"></p></div>
+  <div class="invite-dialog-footer"><button class="btn btn-outline" type="button" data-copy="link">复制邀请链接</button><button class="btn btn-primary" type="button" id="downloadQR">保存二维码</button></div>
+</dialog>
+<div class="invitation-toast" id="invitationToast" role="status" aria-live="polite"></div>
+</body>
+</html>

@@ -212,13 +212,13 @@
       sum();
     }
   });
-  document.getElementById('invoiceForm').addEventListener('submit',function(event){
+  document.getElementById('invoiceForm').addEventListener('submit',async function(event){
     event.preventDefault();
     var selected=[].slice.call(document.querySelectorAll('.record:checked'));
     if(!selected.length){alert('请至少选择一条可开票充值记录。');return;}
     var total=selected.reduce(function(value,item){return value+Number(item.dataset.amount);},0);
     var invoiceTitle=document.getElementById('title').value.trim();
-    location.href='invoice-success.html?type=recharge&amount='+encodeURIComponent(total.toFixed(2))+'&title='+encodeURIComponent(invoiceTitle);
+try{if(!window.RefundRuntime)throw Error('退款资格校验尚未完成，请稍后重试');var invoiceState=await window.RefundRuntime.commit({kind:'invoice',type:'recharge',ids:[].slice.call(document.querySelectorAll('.record:checked')).map(function(box){return box.getAttribute('aria-label').replace('选择 ','')})});}catch(error){alert(error.message);return;}    location.href='invoice-success.html?type=recharge&amount='+encodeURIComponent(total.toFixed(2))+'&title='+encodeURIComponent(invoiceTitle)+'&request='+invoiceState.invoiceRequests[0].id;
   });
   renderRecords();
   renderTitleOptions();

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>智能体广场 · 彩翼平台</title>
+<link rel="stylesheet" href="agent-market.css"/>
+<script src="../agent-taxonomy.js"></script>
+<script src="agent-market.js"></script>
+<style>
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{margin:0;display:flex;flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;color:#1e293b;
+  background:radial-gradient(circle at 7% 12%,rgba(88,143,246,.11),transparent 30%),radial-gradient(circle at 92% 3%,rgba(70,199,219,.12),transparent 26%),#f4f8fe;}
+button,select,input{font-family:inherit;}
+/* 顶栏：沿用线上门户 */
+.pt-bar{position:sticky;top:0;z-index:50;height:72px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 44px;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid #e6edf8;}
+.pt-brand{display:flex;align-items:center;gap:18px;text-decoration:none;color:#1e293b;}
+.pt-brand img{height:38px;}
+.pt-brand span{font-size:18px;font-weight:600;padding-left:18px;border-left:1px solid #dbe3f0;}
+.pt-right{display:flex;align-items:center;gap:12px;}
+.pt-btn{height:38px;padding:0 16px;border-radius:999px;border:1px solid #dbe3f0;background:#fff;color:#334155;font-size:14px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;cursor:pointer;}
+.pt-btn:hover{border-color:#93b4f5;color:#2563EB;}
+.pt-btn.primary{border-color:#bcd2fb;color:#2563EB;font-weight:600;}
+.pt-user{display:flex;align-items:center;gap:8px;font-size:13px;color:#334155;padding-left:6px;}
+.pt-user i{font-style:normal;width:32px;height:32px;border-radius:50%;background:#EFF4FF;color:#2563EB;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.pt-user small{display:block;font-size:11px;color:#2563EB;}
+.wrap{flex:1;width:min(1240px,calc(100% - 64px));margin:0 auto;padding:16px 0 48px;}
+/* 蓝色主区：专区、搜索、任务压缩为两行。不用 overflow:hidden，避免裁掉搜索联想 */
+.hero{position:relative;z-index:5;border-radius:18px;padding:16px 24px 18px;color:#fff;box-shadow:0 12px 30px rgba(37,99,235,.16);
+  background:radial-gradient(circle at 88% -30%,rgba(255,255,255,.28),transparent 42%),linear-gradient(120deg,#3D7BF2 0%,#5B95F7 55%,#8DB8FA 100%);}
+.hero-top{display:flex;align-items:baseline;gap:4px 12px;flex-wrap:wrap;margin-bottom:12px;}
+.hero h1{margin:0;font-size:22px;line-height:1.3;letter-spacing:.01em;}
+.hero-sub{margin:0;font-size:13px;opacity:.9;}
+.zone-row{display:flex;justify-content:center;margin-bottom:12px;}
+.zone-tabs{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:rgba(255,255,255,.8);border:1px solid #d6e3fb;box-shadow:0 6px 18px rgba(37,99,235,.08);}
+.zone-tabs button{border:none;background:transparent;padding:7px 24px;border-radius:999px;font-size:14px;font-weight:600;color:#475569;cursor:pointer;white-space:nowrap;}
+.zone-tabs button:hover{color:#2563EB;}
+.zone-tabs button[aria-selected="true"]{background:linear-gradient(135deg,#4F8BF7,#2563EB);color:#fff;box-shadow:0 4px 12px rgba(37,99,235,.26);}
+.zone-tabs button:focus{outline:none;}
+.zone-tabs button:focus-visible{outline:2px solid #93b4f5;outline-offset:2px;}
+.hero-find{display:flex;align-items:center;gap:12px 20px;flex-wrap:wrap;}
+.search{position:relative;flex:1 1 380px;min-width:0;display:flex;align-items:center;gap:10px;height:44px;background:#fff;border-radius:12px;padding:0 5px 0 14px;box-shadow:0 8px 20px rgba(15,40,100,.16);}
+.search svg{flex-shrink:0;color:#94a3b8;}
+.search input{flex:1;border:none;outline:none;font-size:14px;color:#1e293b;min-width:0;background:transparent;}
+.search > button{border:none;background:linear-gradient(135deg,#3B82F6,#2563EB);color:#fff;font-size:13px;font-weight:600;border-radius:9px;height:34px;padding:0 18px;cursor:pointer;}
+.suggest{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:20;background:#fff;border-radius:12px;border:1px solid #e2e8f0;box-shadow:0 14px 32px rgba(15,23,42,.14);padding:6px;display:none;}
+.suggest.show{display:block;}
+.suggest button{display:flex;justify-content:space-between;gap:12px;width:100%;text-align:left;border:none;background:none;padding:9px 12px;border-radius:8px;cursor:pointer;color:#1e293b;font-size:14px;}
+.suggest button:hover{background:#F1F6FF;}
+.suggest small{display:block;color:#94a3b8;font-size:12px;margin-top:2px;}
+.suggest em{font-style:normal;font-size:11px;color:#64748b;white-space:nowrap;padding-top:2px;}
+.tasks{display:flex;flex-wrap:wrap;align-items:center;gap:6px;}
+.tasks .lead{font-size:13px;opacity:.9;margin-right:4px;white-space:nowrap;}
+.tasks button{border:1px solid rgba(255,255,255,.45);background:rgba(255,255,255,.14);color:#fff;font-size:13px;padding:5px 13px;border-radius:999px;cursor:pointer;white-space:nowrap;}
+.tasks button:hover{background:rgba(255,255,255,.24);}
+.tasks button[aria-pressed="true"]{background:#fff;color:#1D4ED8;border-color:#fff;font-weight:600;}
+/* 条件区：角色与阶段同一行，按钮等高 */
+.panel{margin-top:12px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px 24px;background:rgba(255,255,255,.94);border:1px solid #e6edf8;border-radius:16px;padding:12px 20px 14px;box-shadow:0 8px 24px rgba(35,67,125,.06);}
+.ptitle{font-size:13px;font-weight:600;margin-bottom:7px;color:#1e293b;}
+.seg{display:flex;flex-wrap:wrap;gap:6px;}
+.seg button{height:44px;border:1px solid #dbe3f0;background:#fff;border-radius:10px;padding:0 14px;font-size:14px;color:#334155;cursor:pointer;white-space:nowrap;}
+.seg button:hover{border-color:#93b4f5;}
+.seg button[aria-pressed="true"]{border-color:#3B82F6;background:#EFF5FF;color:#1D4ED8;font-weight:600;}
+.stages{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;}
+.stages button{height:44px;text-align:left;border:1px solid #dbe3f0;background:#fff;border-radius:10px;padding:0 11px;cursor:pointer;color:#1e293b;}
+.stages button b{display:block;font-size:13px;line-height:1.3;}
+.stages button small{display:block;font-size:11px;line-height:1.3;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.stages button:hover{border-color:#93b4f5;}
+.stages button[aria-pressed="true"]{border-color:#3B82F6;background:#EFF5FF;box-shadow:0 0 0 2px rgba(59,130,246,.12);}
+.stages button[aria-pressed="true"] b{color:#1D4ED8;}
+/* 结果栏 */
+.res-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 2px 12px;flex-wrap:wrap;}
+.res-head h2{margin:0;font-size:16px;font-weight:600;}
+.res-head h2 b{color:#2563EB;margin:0 4px;}
+.res-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.res-tools label{font-size:13px;color:#64748b;}
+.sel{height:34px;border:1px solid #dbe3f0;border-radius:9px;padding:0 34px 0 12px;font-size:13px;color:#334155;cursor:pointer;
+  -webkit-appearance:none;appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 12px center;}
+.sel:hover{border-color:#93b4f5;}
+.sel:focus{outline:none;border-color:#7aa2f7;box-shadow:0 0 0 3px rgba(59,130,246,.12);}
+.linkbtn{border:none;background:none;color:#64748b;font-size:13px;cursor:pointer;padding:0 2px;}
+.linkbtn:hover{color:#2563EB;}
+/* 页脚：沿用线上门户 */
+.pt-foot{flex-shrink:0;background:#fff;border-top:1px solid #e6edf8;padding:14px 20px 16px;text-align:center;font-size:13px;}
+.pt-foot nav,.pt-foot p{display:flex;justify-content:center;flex-wrap:wrap;margin:0;}
+.pt-foot nav{margin-bottom:8px;}
+.pt-foot a,.pt-foot span{padding:0 18px;line-height:1.2;text-decoration:none;}
+.pt-foot nav a{color:#334155;}
+.pt-foot nav a:hover{color:#2563EB;}
+.pt-foot p a,.pt-foot p span{color:#8391a7;}
+.pt-foot a + a,.pt-foot a + span,.pt-foot span + span{border-left:1px solid #dbe3f0;}
+@media(max-width:1060px){.panel{grid-template-columns:1fr;}.pt-bar{padding:0 20px;}.pt-brand span{display:none;}}
+@media(max-width:700px){.stages{grid-template-columns:repeat(2,minmax(0,1fr));}.hero-sub{display:none;}.search{flex-basis:100%;}}
+@media(max-width:600px){.wrap{width:calc(100% - 24px);}.hero{padding:14px 14px 16px;}.hero h1{font-size:19px;}.pt-user span,#favLink{display:none;}.pt-foot a,.pt-foot span{padding:0 10px;}}
+</style>
+</head>
+<body>
+<header class="pt-bar">
+  <a class="pt-brand" href="../index.html"><img src="../logo.dc57457c.png" alt="彩翼高科"/><span>彩翼公共采购智能体协同管理平台</span></a>
+  <div class="pt-right">
+    <button type="button" class="pt-btn" onclick="CYMarket.toast('客服热线：020-0000 0000')">联系客服</button>
+    <a class="pt-btn" href="agent-list.html" id="favLink">☆ 我的收藏</a>
+    <a class="pt-btn primary" href="index.html">进入工作台</a>
+    <div class="pt-user"><i>张</i><span>示例科技有限公司<small>采购单位</small></span></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="zone-row">
+    <div class="zone-tabs" role="tablist" aria-label="专区">
+      <button type="button" role="tab" data-zone="gov" aria-selected="true">政府采购专区</button>
+      <button type="button" role="tab" data-zone="soe" aria-selected="false">国企采购专区</button>
+    </div>
+  </div>
+
+  <section class="hero" aria-label="查找智能体">
+    <div class="hero-top">
+      <h1 id="zoneTitle">政府采购专区 · 智能体广场</h1>
+      <p class="hero-sub">按采购环节查找，或直接搜索你要完成的工作</p>
+    </div>
+    <div class="hero-find">
+      <div class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16" y2="16"/></svg>
+        <input id="q" type="search" placeholder="今天帮你做些什么？如：查文件、审文件" autocomplete="off" aria-label="搜索智能体"/>
+        <button type="button" id="qBtn">搜索</button>
+        <div class="suggest" id="suggest" role="listbox"></div>
+      </div>
+      <div class="tasks">
+        <span class="lead">我今天要做…</span>
+        <button type="button" data-func="all" aria-pressed="true">全部任务</button>
+        <button type="button" data-func="gen" aria-pressed="false">生成内容</button>
+        <button type="button" data-func="check" aria-pressed="false">检查核验</button>
+        <button type="button" data-func="query" aria-pressed="false">查询信息</button>
+        <button type="button" data-func="consult" aria-pressed="false">分析咨询</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" aria-label="筛选条件">
+    <div>
+      <div class="ptitle">选择您的角色</div>
+      <div class="seg">
+        <button type="button" data-role="all" aria-pressed="true">不限</button>
+        <button type="button" data-role="buyer" aria-pressed="false">采购人</button>
+        <button type="button" data-role="agency" aria-pressed="false">代理机构</button>
+        <button type="button" data-role="regulator" aria-pressed="false">监管机构</button>
+        <button type="button" data-role="supplier" aria-pressed="false">供应商</button>
+      </div>
+    </div>
+    <div>
+      <div class="ptitle">选择采购阶段</div>
+      <div class="stages">
+        <button type="button" data-stage="all" aria-pressed="true"><b>全部阶段</b><small>浏览所有智能体</small></button>
+        <button type="button" data-stage="pre" aria-pressed="false"><b>采购前</b><small>需求调查、采购文件准备</small></button>
+        <button type="button" data-stage="mid" aria-pressed="false"><b>采购中</b><small>投标响应、评审与风险核查</small></button>
+        <button type="button" data-stage="post" aria-pressed="false"><b>采购后</b><small>质疑处理、合同与履约管理</small></button>
+      </div>
+    </div>
+  </section>
+
+  <div class="res-head">
+    <h2>为你找到<b id="count">0</b>个智能体</h2>
+    <div class="res-tools">
+      <label for="src">开发方</label>
+      <select class="sel" id="src"><option value="all">不限开发来源</option><option value="official">平台官方</option><option value="partner">生态伙伴</option></select>
+      <label for="sort">排序</label>
+      <select class="sel" id="sort" title="「单独计价」的智能体排在已标价之后"><option value="usage">综合排序</option><option value="price">按价格由低到高</option><option value="price-desc">按价格由高到低</option></select>
+      <button type="button" class="linkbtn" id="reset">清空条件</button>
+    </div>
+  </div>
+  <div class="mkt-grid" id="grid"></div>
+</main>
+
+<footer class="pt-foot">
+  <nav aria-label="门户快捷入口"><a href="#">可信数据空间</a><a href="#">模型广场</a><a href="#">算力广场</a><a href="#">文档中心</a></nav>
+  <p><a href="#">广州市政府采购中心</a><span>粤ICP备2025473350号-1</span></p>
+</footer>
+
+<script>
+(function(){
+  var M = window.CYMarket, $ = function(s){ return document.querySelector(s); };
+  var params = new URLSearchParams(location.search);
+  var state = { zone: params.get('zone') === 'soe' ? 'soe' : 'gov', func: 'all', role: 'all', stage: 'all', src: 'all', sort: 'usage', q: '' };
+
+  function list(){
+    var q = state.q.trim().toLowerCase();
+    var a = M.agents.filter(function(x){
+      return x.zones.indexOf(state.zone) > -1 &&
+        (state.func === 'all' || x.funcs.indexOf(state.func) > -1) &&
+        (state.role === 'all' || x.roles.indexOf(state.role) > -1) &&
+        (state.stage === 'all' || x.stages.indexOf(state.stage) > -1) &&
+        (state.src === 'all' || M.source(x) === state.src) &&
+        (!q || M.searchText(x).indexOf(q) > -1);
+    });
+    var up = function(v){ return v === null ? Infinity : v; }, down = function(v){ return v === null ? -1 : v; };
+    a.sort(function(x, y){
+      if (state.sort === 'price') return up(x.pv) - up(y.pv) || y.users - x.users;
+      if (state.sort === 'price-desc') return down(y.pv) - down(x.pv) || y.users - x.users;
+      return y.users - x.users;
+    });
+    return a;
+  }
+  function press(sel, attr, val, aria){ document.querySelectorAll(sel).forEach(function(b){ b.setAttribute(aria || 'aria-pressed', String(b.getAttribute(attr) === val)); }); }
+  function favText(){ $('#favLink').textContent = '☆ 我的收藏 ' + M.favCount(); }
+  function render(){
+    var zoneName = state.zone === 'gov' ? '政府采购专区' : '国企采购专区';
+    $('#zoneTitle').textContent = zoneName + ' · 智能体广场';
+    document.title = zoneName + ' · 智能体广场 · 彩翼平台';
+    press('[data-zone]', 'data-zone', state.zone, 'aria-selected');
+    press('[data-func]', 'data-func', state.func);
+    press('[data-role]', 'data-role', state.role);
+    press('[data-stage]', 'data-stage', state.stage);
+    $('#src').value = state.src; $('#sort').value = state.sort;
+    favText(); $('#favLink').href = 'agent-list.html?zone=' + state.zone;
+    var a = list();
+    $('#count').textContent = a.length;
+    $('#grid').innerHTML = a.length ? a.map(M.card).join('') :
+      '<div class="cy-empty-box"><strong>暂时没有找到匹配的智能体</strong>试试更换关键词，或调整角色、阶段和任务类型<br><button type="button" class="mbtn mbtn-primary" data-reset>清空条件</button></div>';
+  }
+  function suggest(){
+    var q = $('#q').value.trim().toLowerCase(), box = $('#suggest');
+    if (!q){ box.classList.remove('show'); box.innerHTML = ''; return; }
+    var hits = M.agents.filter(function(x){ return x.zones.indexOf(state.zone) > -1 && M.searchText(x).indexOf(q) > -1; }).slice(0, 6);
+    box.innerHTML = hits.length ? hits.map(function(x){
+      return '<button type="button" data-pick="' + x.id + '"><span>' + x.name + '<small>' + x.desc.slice(0, 32) + '…</small></span><em>' + (M.source(x) === 'official' ? '平台官方' : '生态伙伴') + '</em></button>';
+    }).join('') : '<button type="button" disabled><span>没有匹配结果<small>试试“审文件”“查企业”“投标”</small></span></button>';
+    box.classList.add('show');
+  }
+  function resetAll(){ state.func = 'all'; state.role = 'all'; state.stage = 'all'; state.src = 'all'; state.sort = 'usage'; state.q = ''; $('#q').value = ''; render(); }
+  function closeSuggest(){ $('#suggest').classList.remove('show'); }
+
+  document.addEventListener('click', function(e){
+    var t = e.target.closest('button');
+    if (!t || !t.closest('.search')) closeSuggest();
+    if (!t) return;
+    if (t.hasAttribute('data-zone')) { state.zone = t.getAttribute('data-zone'); render(); }
+    else if (t.hasAttribute('data-func')) { state.func = t.getAttribute('data-func'); render(); }
+    else if (t.hasAttribute('data-role')) { state.role = t.getAttribute('data-role'); render(); }
+    else if (t.hasAttribute('data-stage')) { state.stage = t.getAttribute('data-stage'); render(); }
+    else if (t.hasAttribute('data-reset') || t.id === 'reset') resetAll();
+    else if (t.hasAttribute('data-pick')) { var a = M.agents.filter(function(x){ return x.id === t.getAttribute('data-pick'); })[0]; $('#q').value = state.q = a.name; closeSuggest(); render(); }
+    else if (t.id === 'qBtn') { state.q = $('#q').value; closeSuggest(); render(); }
+  });
+  $('#q').addEventListener('input', function(){ suggest(); if (!this.value.trim()) { state.q = ''; render(); } });
+  $('#q').addEventListener('keydown', function(e){ if (e.key === 'Enter') { state.q = this.value; closeSuggest(); render(); } });
+  $('#src').addEventListener('change', function(){ state.src = this.value; render(); });
+  $('#sort').addEventListener('change', function(){ state.sort = this.value; render(); });
+  M.bindGrid($('#grid'), function(a){
+    var btn = document.querySelector('.mkt-card[data-id="' + a.id + '"] .fav-btn'), on = M.isFav(a.id);
+    btn.classList.toggle('on', on); btn.textContent = on ? '★' : '☆'; btn.setAttribute('aria-pressed', String(on)); btn.title = on ? '取消收藏' : '加入我的收藏';
+    favText();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

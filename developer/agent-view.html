@@ -7,6 +7,7 @@
 <title>智能体详情 - 开发者端</title>
 <link href="../styles.css" rel="stylesheet"/>
 <script src="../app.js"></script>
+<script src="../agent-taxonomy.js"></script>
 <style>
         .page-header {
             background: linear-gradient(135deg, #2563EB, #1D4ED8);
@@ -165,33 +166,22 @@ document.addEventListener('click',function(e){
 <div class="info-avatar" style="overflow:hidden;"><svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cv1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0EA5E9"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs><rect width="80" height="80" fill="url(#cv1)"/><circle cx="68" cy="12" r="36" fill="#ffffff" opacity="0.10"/><circle cx="10" cy="74" r="26" fill="#ffffff" opacity="0.08"/><g transform="translate(22.4,22.4) scale(1.467)" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 11.5 11 13.5 15 9.5"/></g></svg></div>
 <div class="info-title">
 <h3>合规监测智能体</h3>
-<div class="info-tags">
-<span class="info-tag">智能</span>
-<span class="info-tag">高效</span>
-<span class="info-tag">合规</span>
-</div>
+<div class="info-tags"><span class="cy-src official">平台官方</span></div>
 </div>
 <span class="info-status status-online">● 在线</span>
 </div>
 <div class="info-grid">
 <div class="info-item">
 <div class="info-label">应用类型</div>
-<div class="info-value">自研智能体</div>
+<div class="info-value">平台托管</div>
 </div>
 <div class="info-item">
 <div class="info-label">产品名称</div>
 <div class="info-value">合规监测智能体</div>
 </div>
+<div data-cy-taxonomy="view" data-values='{"zones":["gov"],"roles":["buyer","agency","regulator"],"stages":["pre","mid"],"funcs":["check"]}'></div>
 <div class="info-item">
-<div class="info-label">产品分类</div>
-<div class="info-value">合规风控</div>
-</div>
-<div class="info-item">
-<div class="info-label">智能体属性</div>
-<div class="info-value">智能辅助审查</div>
-</div>
-<div class="info-item">
-<div class="info-label">区域</div>
+<div class="info-label">服务区域</div>
 <div class="info-value">全国</div>
 </div>
 <div class="info-item">

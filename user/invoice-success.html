@@ -21,7 +21,7 @@
   var rechargeAmount=Number(query.get('amount'));
   document.title='开票申请提交成功 - 用户端';
   document.getElementById('invoiceNo').textContent=recharge?'FP20260827001':'FP20260827002';
-  document.getElementById('amount').textContent=recharge&&rechargeAmount>0?'¥'+rechargeAmount.toFixed(2):recharge?'¥1,100.00':'¥120.55';
+  document.getElementById('amount').textContent=rechargeAmount>0?'¥'+rechargeAmount.toFixed(2):recharge?'¥1,100.00':'¥120.55';
   document.getElementById('sourceType').textContent=recharge?'充值':'智能体消费';
   document.getElementById('applicantLabel').textContent=recharge?'发票抬头':'申请人';
   document.getElementById('applicant').textContent=recharge?rechargeTitle:'张敏';

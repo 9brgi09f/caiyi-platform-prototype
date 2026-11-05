@@ -7,6 +7,7 @@
 <title>创建智能体 - 开发者端</title>
 <link href="../styles.css" rel="stylesheet"/>
 <script src="../app.js"></script>
+<script src="../agent-taxonomy.js"></script>
 <style>
         .page-header {
             background: linear-gradient(135deg, #2563EB, #1D4ED8);
@@ -143,47 +144,15 @@ document.addEventListener('click',function(e){
 <div class="form-grid">
 <div class="form-item">
 <label class="form-label">应用类型 <span style="color: red;">*</span></label>
-<select class="select" required="">
-<option value="">请选择</option>
-<option value="self">自研智能体</option>
-<option value="third_agent">第三方智能体</option>
-<option value="third_app">第三方应用</option>
-<option value="saas">SaaS</option>
-</select>
+<select class="select" data-cy-apptype required=""><option value="">请选择</option><option value="hosted">平台托管</option><option value="protocol">协议接入</option><option value="redirect">外部跳转</option></select>
+<span class="cy-src-row" data-cy-source></span>
 </div>
 <div class="form-item">
 <label class="form-label">产品名称 <span style="color: red;">*</span></label>
 <input class="input" placeholder="请输入产品名称" required="" type="text"/>
 </div>
 <div class="form-item">
-<label class="form-label">产品分类 <span style="color: red;">*</span></label>
-<select class="select" required="">
-<option value="">请选择产品分类</option>
-<option value="cat_purchase">采购管理</option>
-<option value="cat_compliance">合规风控</option>
-<option value="cat_data">数据分析</option>
-<option value="cat_service">智能客服</option>
-<option value="cat_policy">政策法规</option>
-</select>
-</div>
-<div class="form-item">
-<label class="form-label">智能体属性</label>
-<select class="select">
-<option value="">请选择智能体属性</option>
-<option>智能辅助审查</option>
-<option>智能评审</option>
-<option>风险防控</option>
-<option>价格比对</option>
-<option>成本分析</option>
-<option>政策咨询</option>
-<option>流程问答</option>
-<option>智能提取</option>
-<option>应标辅助</option>
-<option>资料抽取</option>
-</select>
-</div>
-<div class="form-item">
-<label class="form-label">区域</label>
+<label class="form-label">服务区域</label>
 <select class="select">
 <option value="">全国</option>
 <option>北京市</option>
@@ -218,15 +187,6 @@ document.addEventListener('click',function(e){
 <span class="form-hint">支持 doc/docx/pdf/pptx，大小不超过 200MB</span>
 </div>
 <div class="form-item full-width">
-<label class="form-label">智能体标签</label>
-<div class="tag-input">
-<span class="tag-item">智能 <span style="cursor:pointer;">×</span></span>
-<span class="tag-item">高效 <span style="cursor:pointer;">×</span></span>
-<input placeholder="输入后按回车添加" type="text"/>
-</div>
-<span class="form-hint">最多添加 5 个标签</span>
-</div>
-<div class="form-item full-width">
 <label class="form-label">产品描述 <span style="color: red;">*</span></label>
 <textarea class="input" placeholder="请输入产品描述，50-200字" required=""></textarea>
 </div>
@@ -240,6 +200,10 @@ document.addEventListener('click',function(e){
 <span class="form-hint">智能体访问 / 设置入口地址</span>
 </div>
 </div>
+</form>
+<form class="form-section">
+<h3 class="form-section-title">分类信息</h3>
+<div data-cy-taxonomy="edit" data-values='{}'></div>
 </form>
 <form class="form-section">
 <h3 class="form-section-title">能力与接入</h3>

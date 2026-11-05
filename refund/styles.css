@@ -1,0 +1,60 @@
+.rf-inline{display:inline-flex;align-items:center;gap:8px;margin:5px 0;color:#2456d4;font-size:12px;text-decoration:none;white-space:nowrap}
+.rf-order-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.rf-order-actions>.btn{flex-shrink:0;white-space:nowrap;text-decoration:none}
+.rf-order-actions>.rf-reason{flex-basis:100%;margin:0}
+.rf-menu-check{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;font-size:13px;cursor:pointer}
+.rf-menu-check input{width:16px;height:16px;accent-color:#356cf6}
+.rf-permission-history{margin-top:18px}.rf-permission-history summary{cursor:pointer;font-size:13px;color:#53637c}
+#refundPermissionStatus{font-size:13px;color:#087b58;margin-top:12px}
+#refundMenuPermissions .rf-muted{margin-bottom:14px}
+.rf-reason{display:block;color:#748096;font-size:11px;line-height:1.6;max-width:180px;white-space:normal;margin:5px 0}
+.rf-summary-note{display:block;margin-top:9px;color:#475672;font-size:12px;line-height:1.8;font-weight:400}
+.rf-embedded{padding:20px 0;margin:18px 0;border-top:1px solid #dfe7f2;border-bottom:1px solid #dfe7f2;color:#283b58;font-size:13px;line-height:1.8}
+.rf-embedded h3{font-size:16px;margin:0 0 12px}.rf-embedded table{width:100%;border-collapse:collapse}.rf-embedded th,.rf-embedded td{text-align:left;padding:9px;border-bottom:1px solid #e6ebf3;font-size:12px}
+.refund-page{--rf-ink:#15213c;--rf-muted:#53637c;--rf-blue:#356cf6;--rf-line:#dfe7f2}
+.refund-page .main-content{min-width:0}
+.rf-mobile-menu{display:none;align-items:center;justify-content:center;flex-shrink:0;width:32px;height:32px;padding:0;border:1px solid #dfe7f2;background:#fff;color:#2456d4;border-radius:6px;cursor:pointer}
+.refund-page [hidden]{display:none!important}
+.rf-page-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px}
+.rf-page-head h2{font-size:26px;line-height:1.4;letter-spacing:0;margin:0;color:var(--rf-ink)}
+.rf-page-head h2:after{content:'';display:block;width:30px;height:5px;background:#6c9cf5;border-radius:3px;margin-top:10px}
+.rf-back{display:inline-block;margin-bottom:16px;color:#2456d4;text-decoration:none;font-size:13px}
+.rf-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:24px}
+.rf-stat{padding:20px;border-radius:18px;background:rgba(255,255,255,.64);border:1px solid rgba(255,255,255,.9);box-shadow:7px 9px 24px rgba(54,83,150,.08)}
+.rf-stat span{display:block;font-size:12px;color:var(--rf-muted);margin-bottom:8px}.rf-stat b{font-size:25px;color:var(--rf-ink);font-variant-numeric:tabular-nums;letter-spacing:0}.rf-stat small{font-size:12px;margin-left:6px;font-weight:400}
+.rf-tabs{display:flex;gap:24px;border-bottom:1px solid var(--rf-line);margin-bottom:18px;overflow-x:auto}
+.rf-tabs button{background:none;border:0;border-bottom:3px solid transparent;border-radius:0;padding:13px 2px;font:inherit;font-size:14px;color:var(--rf-muted);white-space:nowrap;cursor:pointer}
+.rf-tabs button[aria-selected=true]{color:#2456d4;border-bottom-color:#356cf6;font-weight:700}
+.rf-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:18px}
+.rf-toolbar input{width:290px;max-width:100%}.rf-toolbar select{width:170px}
+.refund-page :is(input,select,textarea){font:inherit;font-size:13px;min-height:40px;border:1px solid #bdcce3;background:rgba(255,255,255,.84);border-radius:8px;padding:9px 12px;color:var(--rf-ink);max-width:100%}
+.refund-page textarea{min-height:94px;resize:vertical;width:100%}.refund-page input[type=checkbox]{min-height:0;width:16px;height:16px}
+.refund-page .btn{min-height:38px;display:inline-flex;justify-content:center;align-items:center;gap:8px;border-radius:8px;font-size:13px;white-space:nowrap}
+.refund-page button:disabled{cursor:not-allowed;opacity:.45}
+.rf-table-wrap{overflow-x:auto;border-top:1px solid var(--rf-line);border-bottom:1px solid var(--rf-line);background:rgba(255,255,255,.65)}
+.rf-table{width:100%;border-collapse:collapse;min-width:780px;color:var(--rf-ink);font-size:13px}
+.rf-table th{padding:13px 12px;font-size:12px;color:var(--rf-muted);text-align:left;background:rgba(249,251,255,.7);font-weight:600;white-space:nowrap}
+.rf-table td{padding:16px 12px;border-top:1px solid rgba(148,170,214,.18);vertical-align:top;line-height:1.7}
+.rf-table tbody tr:hover{background:rgba(255,255,255,.55)}
+.rf-table small{display:block;color:var(--rf-muted);font-size:11px;margin-top:4px}
+.rf-table .rf-order{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;white-space:nowrap}
+.rf-table .rf-amount{white-space:nowrap;font-variant-numeric:tabular-nums}.rf-muted{color:var(--rf-muted);font-size:13px;line-height:1.8}
+.rf-status{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;font-size:12px;color:#8a6421}.rf-status:before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.rf-status.completed{color:#087b58}.rf-status.rejected{color:#b83f3f}.rf-status.cancelled{color:#79869a}
+.rf-pager{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 0;color:var(--rf-muted);font-size:12px}.rf-pager>div{display:flex;align-items:center;gap:12px}.rf-pager button{width:34px;height:34px;background:rgba(255,255,255,.7);border:1px solid var(--rf-line);border-radius:8px;cursor:pointer}
+.rf-empty{text-align:center!important;padding:42px 15px!important;color:var(--rf-muted)}
+.rf-section{padding:24px 0;border-top:1px solid var(--rf-line)}.rf-section h3{font-size:17px;color:var(--rf-ink);margin:0 0 20px}
+.rf-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin:0}.rf-fields div{min-width:0}.rf-fields dt{font-size:12px;color:var(--rf-muted);margin-bottom:7px}.rf-fields dd{font-size:14px;color:var(--rf-ink);margin:0;overflow-wrap:anywhere;line-height:1.7}
+.rf-fields .rf-wide{grid-column:1/-1}.rf-strong{font-weight:700;color:#2456d4!important}
+.rf-form{max-width:800px}.rf-form label:not(.rf-check){display:block;font-size:13px;font-weight:600;margin:0 0 9px}.rf-form select,.rf-form input:not([type=checkbox]){width:100%;margin-bottom:18px}.rf-form textarea{margin-bottom:18px}
+.rf-check{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--rf-muted);line-height:1.8;margin:14px 0}.rf-check input{margin-top:4px;flex-shrink:0}
+.rf-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}.rf-actions .btn{min-width:104px}
+.rf-notice{border-left:3px solid #8babea;padding:12px 16px;background:rgba(240,246,255,.65);font-size:13px;line-height:1.9;color:var(--rf-muted);margin:20px 0}
+.rf-error{color:#b42332;font-size:13px;line-height:1.8;margin:14px 0}.rf-error:empty{display:none}
+.rf-timeline{list-style:none;padding:0;margin:0}.rf-timeline li{padding:0 0 24px 24px;position:relative;border-left:1px solid #d8e2f0;margin-left:5px;font-size:13px;color:var(--rf-ink)}.rf-timeline li:before{content:'';position:absolute;left:-4px;top:5px;width:7px;height:7px;border-radius:50%;background:#719bee}.rf-timeline small{display:block;color:var(--rf-muted);margin-top:6px;line-height:1.8}.rf-timeline p{margin-top:5px;overflow-wrap:anywhere}
+.rf-dialog{position:fixed;inset:0;margin:auto;width:min(510px,calc(100vw - 32px));max-height:calc(100dvh - 40px);overflow:auto;padding:24px;border-radius:18px;border:1px solid #fff;background:rgba(255,255,255,.95);box-shadow:0 18px 45px rgba(44,65,110,.2);color:#15213c}.rf-dialog::backdrop{background:rgba(21,33,60,.3);backdrop-filter:blur(3px)}.rf-dialog h3{margin:0 0 18px;font-size:18px}.rf-dialog p{font-size:14px;line-height:1.9}.rf-dialog .rf-actions{justify-content:flex-end}
+.rf-toast{position:fixed;z-index:1200;top:80px;left:50%;transform:translateX(-50%);background:#15213c;color:#fff;padding:12px 18px;border-radius:8px;max-width:90vw;font-size:13px}
+.refund-page :is(button,a,input,textarea,select):focus-visible{outline:3px solid rgba(53,108,246,.4);outline-offset:3px}
+@media(max-width:900px){.rf-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.rf-page-head{align-items:flex-start}.refund-page .top-bar-title{display:none}.rf-mobile-menu{display:inline-flex}.refund-page .main-content{margin-left:0!important;margin-top:68px!important}.refund-page .sidebar{display:none}.refund-page.rf-nav-open .sidebar{display:block!important;position:fixed!important;z-index:101;top:68px;bottom:0;left:0;width:260px;height:calc(100dvh - 68px);overflow:auto!important;background:rgba(255,255,255,.98)!important;box-shadow:8px 0 20px rgba(21,33,60,.13)}}
+@media(max-width:620px){.rf-stats{grid-template-columns:1fr;gap:10px}.rf-stat{padding:15px 18px;display:flex;align-items:center;justify-content:space-between}.rf-stat span{margin:0}.rf-stat b{font-size:22px}.rf-fields{grid-template-columns:1fr}.rf-page-head h2{font-size:23px}.rf-toolbar input,.rf-toolbar select{width:100%}.rf-tabs{gap:18px}.rf-pager{flex-wrap:wrap}.refund-page .main-content{padding:24px 16px!important}.refund-page .top-bar{padding:0 12px}.refund-page .top-bar-left{gap:8px}.refund-page .top-bar-logo img{max-width:95px}.refund-page .top-bar-right{gap:8px}.refund-page .top-bar-user{gap:5px;font-size:12px}.rf-actions .btn{flex:1}.rf-dialog{padding:20px}}
+@media(prefers-reduced-motion:reduce){.refund-page *{transition:none!important;animation:none!important}}

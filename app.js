@@ -6,6 +6,34 @@
 // ============================================
 // 模拟数据
 // ============================================
+// 退款原型按需加载，沿用当前端的外壳与权限视角。
+(function () {
+    const base = new URL('.', document.currentScript.src);
+    function loadRefund() {
+        if (!document.querySelector('.sidebar.user, .sidebar.admin, .sidebar.developer')) return;
+        const css = document.createElement('link');
+        css.rel = 'stylesheet'; css.href = new URL('refund/styles.css', base).href;
+        document.head.appendChild(css);
+        const files = ['model.js', 'runtime.js', 'integration.js'];
+        if (document.getElementById('refundMenuPermissions')) files.push('permissions.js');
+        if (document.getElementById('refundApp')) files.push('page.js');
+        function next() {
+            const file = files.shift();
+            if (!file) { window.refundReady = true; return; }
+            const script = document.createElement('script');
+            script.src = new URL('refund/' + file, base).href;
+            script.onload = next;
+            script.onerror = function () {
+                const root = document.getElementById('refundApp');
+                if (root) root.textContent = '退款页面加载失败，请刷新重试。';
+            };
+            document.head.appendChild(script);
+        }
+        next();
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadRefund);
+    else loadRefund();
+})();
 const MockData = {
     // 开发者信息
     developer: {
@@ -196,10 +224,35 @@ const Navigation = {
     
     // 初始化导航
     init() {
+        this.injectUserInvitations();
         this.highlightCurrentNav();
         this.bindMobileMenu();
         this.injectTopbarNotify();
         this.injectSidebarIcons();
+    },
+
+    // 企业用户端的个人邀约入口；不向其他角色端注入。
+    injectUserInvitations() {
+        const sidebar = document.querySelector('.sidebar.user');
+        if (!sidebar || sidebar.querySelector('[data-invitation-nav]')) return;
+        const section = document.createElement('div');
+        section.className = 'sidebar-section';
+        section.dataset.invitationNav = '';
+        section.style.paddingTop = '0';
+        const current = location.pathname.split('/').pop().replace(/\.html$/, '');
+        const items = [
+            ['invite-friends', '邀请好友', '<circle cx="9" cy="8" r="3"/><path d="M3 21v-2a6 6 0 0 1 12 0v2M19 8v6m-3-3h6"/>'],
+            ['my-inviter', '我的邀请人', '<path d="M10 13a5 5 0 0 0 7 .1l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7-.1l-3 3a5 5 0 0 0 7 7l2-2"/>']
+        ];
+        items.forEach(([file, label, icon]) => {
+            const link = document.createElement('a');
+            link.href = file + '.html';
+            link.className = 'sidebar-link' + (current === file ? ' active' : '');
+            if (current === file) link.setAttribute('aria-current', 'page');
+            link.innerHTML = '<span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true">' + icon + '</svg></span><span>' + label + '</span>';
+            section.appendChild(link);
+        });
+        sidebar.appendChild(section);
     },
 
     // 侧边栏单色线性图标（按菜单文字映射，替换 emoji；一处维护全站生效）
@@ -953,9 +1006,14 @@ window.notifFilter = function (mode, btn) {
     var query = new URLSearchParams(location.search);
     var urlRole = query.get('role');
     // 岗位详情/编辑页也用 ?role= 传岗位 key（operator 等），只认账号角色值，避免互相覆盖
-    if (urlRole === 'owner' || MODES[urlRole]) sessionStorage.setItem('userRole', urlRole);
-
-    var role = sessionStorage.getItem('userRole') || 'owner';
+    var role;
+    try {
+        if (urlRole === 'owner' || MODES[urlRole]) sessionStorage.setItem('userRole', urlRole);
+        role = sessionStorage.getItem('userRole') || 'owner';
+    } catch (_) {
+        // 浏览器禁用存储时不应用不确定的账号视角；邀约页单独给出阻断提示。
+        return;
+    }
     if (role === 'owner') return; // 主账号为默认视图，不改动任何既有 DOM
 
     var mode = MODES[role];

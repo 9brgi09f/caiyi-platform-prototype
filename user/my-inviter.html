@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>我的邀请人 - 彩翼平台企业用户端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="_bento-lite-skin.css" rel="stylesheet"/>
+<link href="_glass-soft-skin.css" rel="stylesheet"/>
+<link href="invitation.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<script src="invitation-model.js" defer></script>
+<script src="vendor/qrcode.js" defer></script>
+<script src="invitation.js" defer></script>
+</head>
+<body class="bento-lite invitation-page">
+<header class="top-bar user">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="id-switcher" id="idSwitcher">
+<div class="id-trigger" onclick="toggleIdMenu()">
+<div class="id-avatar">张</div>
+<div class="id-info">
+<span class="id-org">示例科技有限公司</span>
+<span class="id-type-badge">采购单位</span>
+</div>
+<span class="id-chevron">▾</span>
+</div>
+<div class="id-menu">
+<div class="id-menu-hd">切换工作台身份</div>
+<div class="id-menu-item current">
+<div class="id-dot active"></div>
+<div class="id-item-body">
+<div class="id-item-org">示例科技有限公司</div>
+<div class="id-item-type">采购单位</div>
+</div>
+<span class="id-item-tag current-tag">当前</span>
+</div>
+<div class="id-menu-item" onclick="location.href='../developer/index.html'">
+<div class="id-dot idle"></div>
+<div class="id-item-body">
+<div class="id-item-org">示例科技有限公司</div>
+<div class="id-item-type">开发者</div>
+</div>
+</div>
+<div class="id-menu-sep"></div>
+<a class="id-menu-action" href="../user/register-select.html">＋ 注册新机构类型</a>
+<a class="id-menu-action" href="#" onclick="alert('已退出登录');return false;">退出登录</a>
+</div>
+</div>
+<script>
+function toggleIdMenu(){
+  var el=document.getElementById('idSwitcher');
+  el.classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  var sw=document.getElementById('idSwitcher');
+  if(sw && !sw.contains(e.target)) sw.classList.remove('open');
+});
+</script>
+</div>
+</header>
+<aside class="sidebar user"><div class="sidebar-section"><a class="sidebar-link" href="index.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z"/></svg></span><span>概览</span></a><a class="sidebar-link" href="agent-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 10h8M8 14h5"/></svg></span><span>智能体市场</span></a><a class="sidebar-link" href="recharge-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M16 14h2"/></svg></span><span>账户充值</span></a><a class="sidebar-link" href="payment-accounts.html"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-6 9 6v9H3v-9Z"/><path d="M6 10v9m4-9v9m4-9v9m4-9v9M2 19h20"/></svg></span><span>付款账户</span></a><a class="sidebar-link" href="balance.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6.5A2.5 2.5 0 0 1 4 17.5v-10Z"/><path d="M4 8h13M15 14h3"/></svg></span><span>彩豆管理</span></a><a class="sidebar-link" href="consumption-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M5 20V10m7 10V4m7 16v-7"/></svg></span><span>消费记录</span></a><a class="sidebar-link" href="invoice-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15l-3-2-3 2-3-2-3 2V3Z"/><path d="M9 9h6m-6 4h6"/></svg></span><span>发票管理</span></a><a class="sidebar-link" href="member-list.html"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.6-3.4 3-5 7-5s6.4 1.6 7 5"/></svg></span><span>账号管理</span></a><a class="sidebar-link" href="role-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 2.9 7.9 7 10 4.1-2.1 7-5.5 7-10V6l-7-3Z"/><path d="M9 12h6m-3-3v6"/></svg></span><span>岗位管理</span></a></div></aside>
+<main class="main-content">
+<div class="page-header"><h2>我的邀请人</h2></div>
+
+<div id="bindingLoadError" class="content-card invite-error" role="alert" hidden></div>
+<section class="content-card invite-bind-panel" id="unboundState" aria-labelledby="bindTitle">
+  <div class="invite-bind-layout">
+    <div class="invite-bind-intro"><span class="invite-icon invite-icon-large"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 .1l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7-.1l-3 3a5 5 0 0 0 7 7l2-2"/></svg></span><h3 id="bindTitle">绑定你的邀请人</h3><p>输入好友的邀请码<br/>建立专属邀请关系</p><span class="tag tag-warning">尚未绑定</span></div>
+    <form id="bindForm" class="invite-bind-form" novalidate>
+      <label class="invite-label" for="inviteCodeInput">好友的邀请码</label>
+      <input class="input invite-code-input" id="inviteCodeInput" name="friend_code" maxlength="8" placeholder="请输入 8 位邀请码" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="bindError bindNotice"/>
+      <p class="invite-error" id="bindError" role="alert"></p>
+      <p class="invite-notice" id="bindNotice"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 .1l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7-.1l-3 3a5 5 0 0 0 7 7l2-2"/></svg><span>每个账号仅可绑定一位邀请人，绑定后不可更改，请仔细核对。</span></p>
+      <button class="btn btn-primary" type="submit">确认绑定</button>
+    </form>
+  </div>
+</section>
+<section class="content-card invite-bound-panel" id="boundState" aria-labelledby="boundTitle" hidden>
+  <div class="content-card-header"><h3 class="content-card-title" id="boundTitle">已绑定邀请人</h3><span class="tag tag-success">已绑定</span></div>
+  <div class="invite-person"><span class="invite-person-avatar" id="inviterAvatar">陈</span><div><h3 id="inviterName"></h3><p class="invite-muted">用户 ID：<span id="inviterId"></span></p></div><span class="invite-bound-code" id="boundCode"></span></div>
+  <p class="invite-notice"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 .1l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7-.1l-3 3a5 5 0 0 0 7 7l2-2"/></svg><span>邀请关系已建立，绑定后不可更改。</span></p>
+</section>
+<section class="content-card" aria-labelledby="bindingRecordsTitle">
+  <div class="content-card-header"><h3 class="content-card-title" id="bindingRecordsTitle">绑定记录</h3></div>
+  <div class="invite-empty" id="noBindingRecord">暂无绑定记录<span>绑定邀请人后，可在这里查看绑定方式与时间。</span></div>
+  <dl class="invite-detail-grid" id="bindingRecord" hidden><div><dt>绑定方式</dt><dd id="bindingMethod"></dd></div><div><dt>绑定时间</dt><dd id="bindingTime"></dd></div><div><dt>注册渠道</dt><dd id="bindingChannel"></dd></div></dl>
+</section>
+<section class="content-card invite-faq" aria-labelledby="faqTitle">
+  <div class="content-card-header"><h3 class="content-card-title" id="faqTitle">常见问题</h3></div>
+  <details><summary>什么是邀请绑定？</summary><p>邀请绑定是您与邀请人建立的长期关联。您可以通过好友的邀请链接注册，或注册后在本页输入好友的邀请码。</p></details>
+  <details><summary>绑定后可以更改吗？</summary><p>不可以。每个账号仅可绑定一位邀请人，建立关系前请仔细核对邀请码。</p></details>
+  <details><summary>如何获取邀请码？</summary><p>请联系邀请人获取。邀请人可以在“邀请好友”中复制邀请码、邀请链接或分享二维码。</p></details>
+  <details><summary>邀请码输入错误怎么办？</summary><p>请核对后重新输入。若仍提示无效，请联系邀请人确认；您不能绑定自己的邀请码。</p></details>
+</section>
+</main>
+<dialog class="invite-dialog" id="confirmDialog" aria-labelledby="confirmTitle">
+  <div class="invite-dialog-header"><h3 id="confirmTitle">确认绑定邀请人</h3><button class="invite-close" type="button" data-close aria-label="关闭弹窗">×</button></div>
+  <div class="invite-dialog-body"><div class="invite-confirm-person"><span class="invite-person-avatar" id="confirmAvatar"></span><h3 id="confirmName"></h3><p class="invite-muted">用户 ID：<span id="confirmId"></span></p></div><div class="invite-confirm-code">邀请码 <strong id="confirmCode"></strong></div><p class="invite-notice">确认后邀请关系立即生效，且不可更改。</p><p class="invite-error" id="confirmError" role="alert"></p></div>
+  <div class="invite-dialog-footer"><button class="btn btn-outline" type="button" data-close autofocus>返回修改</button><button class="btn btn-primary" type="button" id="confirmBinding">确认并绑定</button></div>
+</dialog>
+<div class="invitation-toast" id="invitationToast" role="status" aria-live="polite"></div>
+</body>
+</html>

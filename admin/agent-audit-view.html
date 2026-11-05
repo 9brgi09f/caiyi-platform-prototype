@@ -7,6 +7,7 @@
 <title>智能体审核详情 - 平台管理端</title>
 <link href="../styles.css" rel="stylesheet"/>
 <script src="../app.js"></script>
+<script src="../agent-taxonomy.js"></script>
 <style>
         .page-header {
             background: linear-gradient(135deg, #2563EB, #1D4ED8);
@@ -93,20 +94,15 @@
 <div class="info-avatar"><svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cv1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3B82F6"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs><rect width="80" height="80" fill="url(#cv1)"/><circle cx="68" cy="12" r="36" fill="#ffffff" opacity="0.10"/><circle cx="10" cy="74" r="26" fill="#ffffff" opacity="0.08"/><g transform="translate(24,24)" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="12" height="12" rx="2"/><rect x="18" y="2" width="12" height="12" rx="2"/><rect x="2" y="18" width="12" height="12" rx="2"/><rect x="18" y="18" width="12" height="12" rx="2"/></g></svg></div>
 <div class="info-title">
 <h3 id="agentName">家具比价智能体</h3>
-<div class="info-tags">
-<span class="info-tag">智能</span>
-<span class="info-tag">比价</span>
-<span class="info-tag">家具</span>
-</div>
+<div class="info-tags"><span class="cy-src official">平台官方</span></div>
 </div>
 <span class="info-status status-audit" id="statusBadge">● 待审核</span>
 </div>
 <div class="info-grid">
-<div class="info-item"><div class="info-label">应用类型</div><div class="info-value">自研智能体</div></div>
+<div class="info-item"><div class="info-label">应用类型</div><div class="info-value">平台托管</div></div>
 <div class="info-item"><div class="info-label">开发者</div><div class="info-value">张开发者</div></div>
-<div class="info-item"><div class="info-label">产品分类</div><div class="info-value">生活服务</div></div>
-<div class="info-item"><div class="info-label">智能体属性</div><div class="info-value">价格比对</div></div>
-<div class="info-item"><div class="info-label">区域</div><div class="info-value">全国</div></div>
+<div data-cy-taxonomy="view" data-values='{"zones":["gov","soe"],"roles":["buyer"],"stages":["pre"],"funcs":["query","consult"]}'></div>
+<div class="info-item"><div class="info-label">服务区域</div><div class="info-value">全国</div></div>
 <div class="info-item"><div class="info-label">版本号</div><div class="info-value">v1.0.0</div></div>
 <div class="info-item"><div class="info-label">提交时间</div><div class="info-value">2026-05-14 09:30</div></div>
 <div class="info-item"><div class="info-label">封面图片</div><div class="info-value"><a href="#" style="color: var(--admin-color);">封面图.png</a></div></div>

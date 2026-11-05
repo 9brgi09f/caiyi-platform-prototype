@@ -59,18 +59,24 @@
 <a class="sidebar-link" href="withdrawal-audit-list.html"><span class="icon">💸</span><span>提现审核</span></a>
 <a class="sidebar-link" href="reconciliation-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/><path d="M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01"/><path d="M9 19h6"/></svg></span><span>账户对账</span></a>
 
-<a class="sidebar-link active" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
+<a class="sidebar-link" href="org-type-list.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg></span><span>机构管理</span></a>
 <a class="sidebar-link" href="rules-list.html"><span class="icon">⚙️</span><span>规则设置</span></a>
 </div>
 </aside>
 <main class="main-content">
-<div class="page-header">
 
 <div style="font-size:13px;color:var(--text-muted);margin-bottom:var(--spacing-md);">
 <a href="org-type-list.html" style="color:var(--klein);text-decoration:none;">机构管理</a> › 角色与权限
 </div>
 <div class="page-header"><h2>角色与权限</h2><p>平台内置角色定义与权限矩阵，适用于所有机构类型</p></div>
-<div class="info-tip">💡 平台内置四种角色，适用于所有机构类型，<strong>本期不支持自定义角色</strong>。主账号（超级管理员）由注册人自动获得，可邀请子账号并为其分配管理员 / 操作员 / 只读三种角色。如需新增或调整角色权限，请提需求给研发团队排期。</div>
+<section id="refundMenuPermissions" class="content-card" aria-labelledby="refundMenuPermissionTitle">
+<div class="content-card-header"><h3 class="content-card-title" id="refundMenuPermissionTitle">菜单授权</h3></div>
+<p class="rf-muted">“退款管理”默认不授予任何账号。按工作台与账号身份单独授权，菜单内的业务操作由身份和单据状态决定。</p>
+<div class="table-wrapper"><table class="table"><thead><tr><th>工作台</th><th>账号身份</th><th>退款管理</th><th>授权后可操作</th><th>操作</th></tr></thead><tbody id="refundPermissionRows"></tbody></table></div>
+<p id="refundPermissionStatus" role="status" aria-live="polite"></p><p id="refundPermissionError" class="rf-error" role="alert"></p>
+<details class="rf-permission-history"><summary>菜单授权记录</summary><div class="table-wrapper"><table class="table"><thead><tr><th>时间</th><th>授权对象</th><th>变更</th><th>操作人</th></tr></thead><tbody id="refundPermissionHistory"></tbody></table></div></details>
+</section>
+<div class="info-tip">💡 以下为机构内置角色及基础权限。“退款管理”不随默认业务权限自动授予，须在上方单独授权。主账号可邀请子账号并为其分配管理员 / 操作员 / 只读角色。</div>
 <div class="role-grid">
 <div class="role-box"><div class="ricon">👑</div><div class="rname">超级管理员（主账号）</div><div class="rdesc">账号注册人自动成为超级管理员，不可删除、不可转让（本期）。可邀请子账号、配置角色、管理全部业务。</div></div>
 <div class="role-box"><div class="ricon">🛡️</div><div class="rname">管理员</div><div class="rdesc">全部业务操作权限 + 管理子账号权限，但不可变更主账号、不可删除超级管理员。</div></div>
