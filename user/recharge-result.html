@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>支付结果 - 用户端</title>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="_bento-lite-skin.css" rel="stylesheet">
+<link href="_glass-soft-skin.css" rel="stylesheet"/>
+<script src="../app.js"></script>
+<link href="bean-plan.css" rel="stylesheet"/>
+<script src="bean-plan.js"></script>
+<style>
+:root{--ink:#172544;--ink-soft:#52627e;--blue:#315df4;--blue-deep:#2447c7;--cyan:#10b9c6;--violet:#8b6cff;--mint:#20b486;--canvas:#fafbff;--line:#e7ebf5;--muted:#74839a}.bento-lite{background:var(--canvas)}.bento-lite .main-content{position:relative;isolation:isolate;min-height:100%;padding:32px 38px 52px!important;background:radial-gradient(circle at 84% -5%,rgba(117,105,255,.13),transparent 25rem),radial-gradient(circle at 43% -12%,rgba(23,192,202,.11),transparent 30rem),var(--canvas)!important}.bento-lite .main-content:before{position:absolute;z-index:-1;inset:0;background-image:linear-gradient(rgba(49,93,244,.027) 1px,transparent 1px),linear-gradient(90deg,rgba(49,93,244,.027) 1px,transparent 1px);background-size:36px 36px;content:"";mask-image:linear-gradient(to bottom,black,transparent 60%)}.recharge-workbench{max-width:1000px}.bento-lite .page-header{display:flex;align-items:center;gap:13px;background:transparent!important;padding:0!important;margin:0 0 20px!important;border:0!important;box-shadow:none!important}.bento-lite .back-link{display:inline-flex;align-items:center;min-height:32px;margin:0!important;padding:0 12px;border:1px solid #dce6ff;border-radius:999px!important;background:rgba(255,255,255,.8);color:#315df4!important;font-size:13px;font-weight:750;text-decoration:none;transition:all .18s}.bento-lite .back-link:hover{border-color:#9db9ff;background:#fff;transform:translateX(-2px)}.bento-lite .page-header h2{margin:0;color:var(--ink)!important;font-size:28px!important;font-weight:800;letter-spacing:-.045em}.bento-lite .page-header h2:before{display:inline-block;width:26px;height:8px;margin:0 10px 4px 0;border-radius:99px;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--violet));content:""}.bento-lite .page-header h2::after{display:none!important}
+.confirmation-card{position:relative;padding:24px 26px;background:rgba(255,255,255,.9)!important;border:1px solid rgba(222,228,241,.94)!important;border-radius:20px!important;box-shadow:0 12px 32px rgba(38,55,100,.055)!important;backdrop-filter:blur(12px)}.confirmation-card:first-of-type{overflow:hidden}.confirmation-card:first-of-type:before{position:absolute;top:0;right:0;left:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--violet));content:""}.confirmation-card+.confirmation-card{margin-top:18px}.card-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}.card-heading h3{margin:0;color:var(--ink);font-size:17px;font-weight:800;letter-spacing:-.02em}.recharge-summary{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #e9edf5;border-radius:15px;overflow:hidden;background:linear-gradient(100deg,#fbfcff,#f8fffe)}.summary-item{padding:19px 21px;border-right:1px solid #e9edf5}.summary-item:last-child{border-right:0}.summary-label{display:block;margin-bottom:8px;color:#7a889d;font-size:12px;font-weight:650}.summary-value{color:#2c3c57;font-size:18px;font-weight:800;letter-spacing:-.025em}.summary-value.accent{color:#244cc8;font-size:23px}.payment-content{display:grid;grid-template-columns:1fr 1fr;gap:22px}.payment-group-title{display:flex;align-items:center;gap:8px;margin:0 0 10px;color:#61728e!important;font-size:12px!important;font-weight:800!important;letter-spacing:.04em}.payment-group-title:before{width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));box-shadow:0 0 0 4px rgba(49,93,244,.07);content:""}.payment-options{display:grid;gap:9px}.payment-method{display:flex;align-items:center;gap:11px;min-height:60px;width:100%;margin:0!important;padding:10px 12px!important;border:1px solid #e5eaf4!important;border-radius:13px!important;background:linear-gradient(145deg,#fff,#fcfdff);cursor:pointer;text-align:left;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}.payment-method:hover{border-color:#b8cafb!important;box-shadow:0 7px 17px rgba(37,74,164,.06);transform:translateY(-1px)}.payment-method.selected{border-color:#80a3fb!important;background:linear-gradient(120deg,#f0f5ff,#effdfb)!important;box-shadow:0 0 0 3px rgba(49,93,244,.09),0 8px 18px rgba(37,74,164,.07)}.payment-icon{display:flex;align-items:center;justify-content:center;flex:0 0 auto;width:34px!important;height:34px!important;border-radius:11px!important;font-size:15px!important;box-shadow:inset 0 1px rgba(255,255,255,.32)}.payment-name{color:#2b3952;font-size:14px;font-weight:750}.payment-note{display:block;margin-top:3px;color:#7c899e;font-size:12px}.manage-accounts{display:inline-flex;align-items:center;min-height:30px;margin:0;color:#315df4!important;font-size:13px;font-weight:750;text-decoration:none}.manage-accounts:after{margin-left:5px;content:"→"}.payment-total{display:flex;align-items:center;justify-content:space-between;margin-top:20px;padding:16px 18px;border:1px solid rgba(168,195,253,.45);border-radius:13px;background:linear-gradient(100deg,#f1f6ff,#f1fffc)}.payment-total span{color:#536780;font-size:14px;font-weight:750}.payment-total strong{color:#244cc8;font-size:25px;letter-spacing:-.05em}.pay-action{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:18px;padding:15px 18px 15px 22px;border:1px solid rgba(201,217,250,.9);border-radius:16px;background:rgba(255,255,255,.86);box-shadow:0 12px 26px rgba(38,55,100,.06);backdrop-filter:blur(10px)}.pay-tip{color:#6f8099;font-size:13px}.pay-action .btn-primary{min-width:178px!important;min-height:45px!important;border:0!important;border-radius:12px!important;background:linear-gradient(105deg,#315df4,#247eea 55%,#14aabd)!important;box-shadow:0 10px 19px rgba(43,93,226,.25)!important;font-weight:800!important;transition:transform .18s,box-shadow .18s!important}.pay-action .btn-primary:hover{box-shadow:0 13px 24px rgba(43,93,226,.31)!important;transform:translateY(-1px)}.bento-lite .sidebar.user .sidebar-link.active{position:relative;background:linear-gradient(90deg,#e7efff 0%,#f7fcff 100%)!important;box-shadow:none!important;color:#2f60d4!important}.bento-lite .sidebar-link.active::before{position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(var(--blue),var(--cyan));content:""}.bento-lite .sidebar-link.active .icon{background:#d7e5ff!important;color:#2f60d4!important}
+@media(max-width:900px){.bento-lite .main-content{padding:25px 17px 38px!important}.recharge-summary{grid-template-columns:1fr}.summary-item{border-right:0;border-bottom:1px solid #edf1f7}.summary-item:last-child{border-bottom:0}.payment-content{grid-template-columns:1fr}.pay-action{align-items:stretch;flex-direction:column}.pay-action .btn-primary{width:100%}}@media(max-width:560px){.bento-lite .main-content{padding:22px 15px 32px!important}.card-heading{align-items:flex-start}.bento-lite .page-header h2{font-size:25px!important}}
+
+/* 蓝灰视觉统一：标题与强调元素使用单一蓝色体系，取消蓝绿／紫色渐变 */
+:root{--cyan:#6f8fe9;--violet:#91a9ec;--mint:#5276d6;--canvas:#f6f8fc}
+.bento-lite{background:#f6f8fc!important}
+.main-content,.bento-lite .main-content{background:#f6f8fc!important}
+.main-content:before,.bento-lite .main-content:before,.main-content:after,.bento-lite .main-content:after{display:none!important}
+.page-head h2:before,.page-header h2:before,.bento-lite .page-header h2:before{background:#315df4!important}
+.page-header:after{background:#315df4!important}
+.account-overview:before,.confirmation-card:first-of-type:before{background:#315df4!important}
+.option:before{background:#315df4!important}
+.bento-lite .sidebar-link.active::before{background:#315df4!important}
+
+.recharge-summary{background:linear-gradient(100deg,#fbfcff,#f5f8ff)!important}
+.payment-group-title:before{background:#315df4!important}
+.payment-method.selected{background:linear-gradient(120deg,#f0f5ff,#f6f8ff)!important}
+.payment-total{background:linear-gradient(100deg,#f1f6ff,#f6f8ff)!important}
+.pay-action .btn-primary{background:#315df4!important}
+
+
+/* 详情页统一：使用文字返回与标题下方短横线。 */
+.bento-lite .page-header{display:block!important}
+.bento-lite .back-link{display:inline-block!important;min-height:0!important;margin:0 0 9px!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;color:#2563eb!important;font-size:13px!important;font-weight:600!important;line-height:1.4!important;transform:none!important}
+.bento-lite .back-link:hover{border:0!important;background:transparent!important;color:#1d4ed8!important;transform:none!important}
+.bento-lite .page-header h2:before{display:none!important}
+.bento-lite .page-header h2::after{display:block!important;width:26px!important;height:6px!important;margin-top:10px!important;border-radius:999px!important;background:#315df4!important;content:""!important}
+
+/* 接入第 3 版玻璃皮肤：环境光、侧栏、标题短杠、卡片与其余详情页统一（仅视觉，不影响内容） */
+.bento-lite{background:radial-gradient(880px 620px at 56% 32%,rgba(126,164,255,.20),transparent 70%),radial-gradient(700px 520px at 12% 9%,rgba(123,147,255,.19),transparent 67%),radial-gradient(620px 560px at 94% 4%,rgba(146,219,255,.24),transparent 65%),radial-gradient(720px 520px at 30% 66%,rgba(146,219,255,.13),transparent 68%),radial-gradient(760px 620px at 61% 94%,rgba(216,190,255,.17),transparent 70%),linear-gradient(135deg,#f9fbff 0%,#f4f8ff 47%,#fbf9ff 100%)!important}
+.main-content,.bento-lite .main-content{background:transparent!important}
+.main-content:before,.bento-lite .main-content:before,.main-content:after,.bento-lite .main-content:after{display:none!important}
+.bento-lite .sidebar.user .sidebar-link.active{background:rgba(255,255,255,.64)!important;color:var(--glass-blue-deep)!important;border:1px solid rgba(255,255,255,.88);box-shadow:6px 7px 16px rgba(84,110,168,.13),-5px -5px 12px rgba(255,255,255,.82),inset 0 1px 0 #fff!important}
+.bento-lite .sidebar-link.active::before{display:none!important}
+.bento-lite .sidebar-link.active .icon{background:linear-gradient(145deg,#4f7dff,#79d8ed)!important;color:#fff!important;box-shadow:3px 4px 10px rgba(53,108,246,.30),inset 0 1px 0 rgba(255,255,255,.45)!important}
+.bento-lite .page-header h2::after{width:30px!important;height:5px!important;background:linear-gradient(90deg,#4e7fff,#78d9ef)!important}
+.confirmation-card:first-of-type:before{display:none!important}
+.recharge-summary{border:0!important;background:transparent!important;border-radius:0!important}
+.recharge-summary .summary-item{border-right:0!important}
+.summary-value.accent{color:#294fbd!important}
+.payment-total{border-color:rgba(160,190,255,.42)!important;background:rgba(240,246,255,.62)!important}
+.pay-action{border-color:var(--glass-line)!important;background:var(--glass-surface-strong)!important}
+.pay-action .btn-primary{background:linear-gradient(145deg,#4f7dff,#356cf6)!important;box-shadow:0 8px 18px rgba(53,108,246,.26),inset 0 1px 0 rgba(255,255,255,.35)!important}
+</style>
+
+<style id="identity-switcher-css">
+.id-switcher{position:relative;display:inline-flex;align-items:center;}
+.id-trigger{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 6px;border-radius:8px;cursor:pointer;transition:background 0.15s;user-select:none;}
+.id-trigger:hover{background:rgba(0,0,0,0.05);}
+.id-avatar{width:32px;height:32px;border-radius:50%;background:#EFF4FF;color:#2563EB;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.id-info{display:flex;flex-direction:column;align-items:flex-start;line-height:1.3;}
+.id-org{font-size:13px;font-weight:500;color:#1e293b;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.id-type-badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;background:#EFF4FF;color:#2563EB;}
+.id-chevron{font-size:10px;color:#94a3b8;margin-left:2px;transition:transform 0.2s;}
+.id-switcher.open .id-chevron{transform:rotate(180deg);}
+.id-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:white;border:1px solid #dfe4ee;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:240px;z-index:999;overflow:hidden;}
+.id-switcher.open .id-menu{display:block;}
+.id-menu-hd{padding:10px 14px 8px;font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:1px;border-bottom:1px solid #ecf0f6;}
+.id-menu-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background 0.15s;text-decoration:none;color:inherit;}
+.id-menu-item:hover{background:#F8FAFC;}
+.id-menu-item.current{background:#F8FAFF;}
+.id-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.id-dot.active{background:#2563EB;}
+.id-dot.idle{background:#dfe4ee;}
+.id-item-body{flex:1;}
+.id-item-org{font-size:13px;font-weight:500;color:#1e293b;}
+.id-item-type{font-size:11px;color:#94a3b8;margin-top:1px;}
+.id-item-tag{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;margin-left:auto;flex-shrink:0;}
+.id-item-tag.current-tag{background:#EFF4FF;color:#2563EB;}
+.id-menu-sep{height:1px;background:#ecf0f6;margin:4px 0;}
+.id-menu-action{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:12px;color:#64748b;cursor:pointer;transition:background 0.15s;text-decoration:none;}
+.id-menu-action:hover{background:#F8FAFC;color:#2563EB;}
+</style>
+</head>
+<body class="bento-lite">
+<header class="top-bar user">
+<div class="top-bar-left">
+<a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
+<span class="top-bar-title">彩翼公共采购智能体协同管理平台</span>
+</div>
+<div class="top-bar-right">
+<div class="id-switcher" id="idSwitcher">
+<div class="id-trigger" onclick="toggleIdMenu()">
+<div class="id-avatar">张</div>
+<div class="id-info">
+<span class="id-org">示例科技有限公司</span>
+<span class="id-type-badge">采购单位</span>
+</div>
+<span class="id-chevron">▾</span>
+</div>
+<div class="id-menu">
+<div class="id-menu-hd">切换工作台身份</div>
+<div class="id-menu-item current">
+<div class="id-dot active"></div>
+<div class="id-item-body">
+<div class="id-item-org">示例科技有限公司</div>
+<div class="id-item-type">采购单位</div>
+</div>
+<span class="id-item-tag current-tag">当前</span>
+</div>
+<div class="id-menu-item" onclick="location.href='../developer/index.html'">
+<div class="id-dot idle"></div>
+<div class="id-item-body">
+<div class="id-item-org">示例科技有限公司</div>
+<div class="id-item-type">开发者</div>
+</div>
+</div>
+<div class="id-menu-sep"></div>
+<a class="id-menu-action" href="../user/register-select.html">＋ 注册新机构类型</a>
+<a class="id-menu-action" href="#" onclick="alert('已退出登录');return false;">退出登录</a>
+</div>
+</div>
+<script>
+function toggleIdMenu(){
+  var el=document.getElementById('idSwitcher');
+  el.classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  var sw=document.getElementById('idSwitcher');
+  if(sw && !sw.contains(e.target)) sw.classList.remove('open');
+});
+</script>
+</div>
+</header>
+<aside class="sidebar user"><div class="sidebar-section"><a class="sidebar-link" href="index.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z"/></svg></span><span>概览</span></a><a class="sidebar-link" href="agent-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 10h8M8 14h5"/></svg></span><span>智能体市场</span></a><a class="sidebar-link active" href="recharge-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M16 14h2"/></svg></span><span>账户充值</span></a><a class="sidebar-link" href="payment-accounts.html"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-6 9 6v9H3v-9Z"/><path d="M6 10v9m4-9v9m4-9v9m4-9v9M2 19h20"/></svg></span><span>付款账户</span></a><a class="sidebar-link" href="balance.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6.5A2.5 2.5 0 0 1 4 17.5v-10Z"/><path d="M4 8h13M15 14h3"/></svg></span><span>彩豆管理</span></a><a class="sidebar-link" href="consumption-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M5 20V10m7 10V4m7 16v-7"/></svg></span><span>消费记录</span></a><a class="sidebar-link" href="invoice-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15l-3-2-3 2-3-2-3 2V3Z"/><path d="M9 9h6m-6 4h6"/></svg></span><span>发票管理</span></a><a class="sidebar-link" href="member-list.html"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.6-3.4 3-5 7-5s6.4 1.6 7 5"/></svg></span><span>账号管理</span></a><a class="sidebar-link" href="role-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 2.9 7.9 7 10 4.1-2.1 7-5.5 7-10V6l-7-3Z"/><path d="M9 12h6m-3-3v6"/></svg></span><span>岗位管理</span></a></div></aside>
+<main class="main-content"><div class="recharge-workbench"><section class="confirmation-card bp-result" aria-live="polite" id="rrBox"></section></div></main>
+<script>
+(function(){
+var B=window.BeanPlan, o=B.findOrder(B.param('order')), box=document.getElementById('rrBox');
+if(!o){box.innerHTML='<h3>未找到订单</h3><p>订单不存在或已失效，请在充值记录中查看。</p><div class="bp-result-actions" style="margin-top:20px"><a class="bp-btn" href="recharge-list.html">返回账户充值</a></div>';return;}
+var b=B.buckets(), T={plan:'年包购买',upgrade:'年包升级',recharge:'单次充值'};
+var rows=[['订单号',o.orderNo],['订单类型',T[o.type]+(o.type==='recharge'?'':' · '+o.title)],['实付金额',B.money(o.paid)],['到账彩豆',B.fmt(o.base+o.gift)+' 彩豆'+(o.gift?'（基础 '+B.fmtInt(o.base)+' + 赠送 '+B.fmtInt(o.gift)+'）':'')],['有效期至',o.expireAt||'长期有效'],['支付方式',o.channel],['当前'+B.walletName(),B.fmt(b.total)+' 彩豆']];
+box.innerHTML='<div class="bp-result-icon" aria-hidden="true">✓</div><h3>支付成功，彩豆已到账</h3><p>'+o.time+'</p>'+
+ '<dl>'+rows.map(function(r){return '<dt>'+r[0]+'</dt><dd>'+B.esc(r[1])+'</dd>';}).join('')+'</dl>'+
+ '<div class="bp-result-actions"><a class="bp-btn" href="balance.html">查看彩豆</a><a class="bp-btn ghost" href="recharge-list.html">返回账户充值</a></div>';
+})();
+</script></body>
+</html>

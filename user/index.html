@@ -9,6 +9,8 @@
 <link href="_bento-lite-skin.css" rel="stylesheet"/>
 <link href="_glass-soft-skin.css" rel="stylesheet"/>
 <script src="../app.js"></script>
+<link href="bean-plan.css" rel="stylesheet"/>
+<script src="bean-plan.js"></script>
 
 <style id="identity-switcher-css">
 .id-switcher{position:relative;display:inline-flex;align-items:center;}
@@ -92,22 +94,24 @@ document.addEventListener('click',function(e){
 <aside class="sidebar user"><div class="sidebar-section"><a class="sidebar-link active" href="index.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z"/></svg></span><span>概览</span></a><a class="sidebar-link" href="agent-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 10h8M8 14h5"/></svg></span><span>智能体市场</span></a><a class="sidebar-link" href="recharge-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M16 14h2"/></svg></span><span>账户充值</span></a><a class="sidebar-link" href="payment-accounts.html"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-6 9 6v9H3v-9Z"/><path d="M6 10v9m4-9v9m4-9v9m4-9v9M2 19h20"/></svg></span><span>付款账户</span></a><a class="sidebar-link" href="balance.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6.5A2.5 2.5 0 0 1 4 17.5v-10Z"/><path d="M4 8h13M15 14h3"/></svg></span><span>彩豆管理</span></a><a class="sidebar-link" href="consumption-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M5 20V10m7 10V4m7 16v-7"/></svg></span><span>消费记录</span></a><a class="sidebar-link" href="invoice-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15l-3-2-3 2-3-2-3 2V3Z"/><path d="M9 9h6m-6 4h6"/></svg></span><span>发票管理</span></a><a class="sidebar-link" href="member-list.html"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.6-3.4 3-5 7-5s6.4 1.6 7 5"/></svg></span><span>账号管理</span></a><a class="sidebar-link" href="role-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 2.9 7.9 7 10 4.1-2.1 7-5.5 7-10V6l-7-3Z"/><path d="M9 12h6m-3-3v6"/></svg></span><span>岗位管理</span></a></div></aside>
 <main class="main-content">
 <div class="page-header">
-<h2>欢迎回来，李用户</h2>
+<h2 id="welcome">欢迎回来，李用户</h2>
 </div>
 <div class="stats-grid">
 <div class="stat-card">
-<div class="stat-value">18,700.00 彩豆</div>
-<div class="stat-label">单位彩豆余额</div>
+<div class="stat-value" id="ovBalance">—</div>
+<div class="stat-label" id="ovBalanceLabel">单位彩豆余额</div>
+<div class="bp-sub-line" id="ovBalanceSub"></div>
 </div>
 <div class="stat-card">
-<div class="stat-value">5</div>
+<div class="stat-value" id="ovCalls">—</div>
 <div class="stat-label">本月成功调用</div>
 </div>
 <div class="stat-card">
-<div class="stat-value">425.39 彩豆</div>
+<div class="stat-value" id="ovConsume">—</div>
 <div class="stat-label">本月消费</div>
 </div>
 </div>
+<div class="bp-strip" id="ovStrip"></div>
 <div class="content-card">
 <div class="content-card-header">
 <h3 class="content-card-title">正在使用的智能体</h3>
@@ -142,5 +146,41 @@ document.addEventListener('click',function(e){
 </div>
 </div>
 </main>
+<script>
+(function(){
+var B=window.BeanPlan;
+function render(){
+  var b=B.buckets(), s=B.monthStats(), cp=B.currentPlan(), cfg=B.loadCfg(), personal=B.isPersonal();
+  document.getElementById('welcome').textContent='欢迎回来，'+(personal?'张敏':'李用户');
+  document.getElementById('ovBalance').textContent=B.fmt(b.total)+' 彩豆';
+  document.getElementById('ovBalanceLabel').textContent=B.walletName()+'余额';
+  document.getElementById('ovBalanceSub').textContent=(personal?'免费 '+B.fmt(b.free)+' · ':'')+'年包 '+B.fmt(b.plan)+' · 充值 '+B.fmt(b.recharge);
+  document.getElementById('ovCalls').textContent=s.calls;
+  document.getElementById('ovConsume').textContent=B.fmt(s.consume)+' 彩豆';
+  var planCard;
+  if(cp){
+    var ups=B.upgradeTargets(cp);
+    planCard='<div class="panel bp-card"><div><h4>'+B.esc(cp.name)+'年包 · 剩余 '+B.fmt(cp.remaining)+' 彩豆</h4><p>'+cp.expireAt+' 到期，剩余 '+cp.daysLeft+' 天</p><div class="bp-progress"><i style="width:'+Math.max(2,cp.remaining/cp.total*100).toFixed(1)+'%"></i></div></div>'+
+      (ups.length?'<a class="bp-btn ghost" href="recharge-add.html?type=upgrade&plan='+encodeURIComponent(cp.id)+'">升级年包</a>':'<a class="bp-btn ghost" href="balance.html">查看</a>')+'</div>';
+  } else {
+    var st=B.cheapestPlan();
+    planCard=st?'<div class="panel bp-card"><div><h4>年包最高赠送 '+B.maxRatio()+'% 彩豆</h4><p>'+B.esc(st.name)+' '+B.money(st.price,0)+' 起，'+cfg.validityMonths+' 个月有效</p></div><a class="bp-btn ghost" href="recharge-list.html#plans">了解年包</a></div>':'';
+  }
+  var freeCard;
+  var mOn=cfg.monthly&&cfg.monthly.on;
+  if(personal&&cfg.login.on){
+    var done=s.login>=cfg.login.cap;
+    freeCard='<div class="panel bp-card"><div><h4>'+(done?'本月登录赠豆已领满':'今日登录赠豆已到账')+'</h4><p>'+(mOn?'本月月度赠豆 '+B.fmtInt(s.monthly)+' · ':'')+'登录赠豆 '+B.fmtInt(s.login)+' / '+cfg.login.cap+' · 免费彩豆 '+B.fmt(b.free)+'，'+b.freeExpire+' 到期</p><div class="bp-progress"><i style="width:'+Math.min(100,s.login/cfg.login.cap*100).toFixed(1)+'%"></i></div></div><button type="button" class="bp-link" data-bp-rules>规则</button></div>';
+  } else if(personal&&mOn){
+    freeCard='<div class="panel bp-card"><div><h4>本月月度赠豆已到账</h4><p>本月赠送 '+B.fmtInt(s.monthly)+' 彩豆 · 免费彩豆 '+B.fmt(b.free)+'，'+b.freeExpire+' 到期</p></div><button type="button" class="bp-link" data-bp-rules>规则</button></div>';
+  } else freeCard='';
+  var strip=document.getElementById('ovStrip');
+  strip.classList.toggle('one',!(planCard&&freeCard));
+  strip.innerHTML=planCard+freeCard;
+}
+render();
+document.addEventListener('beanplan:change',render);
+})();
+</script>
 </body>
 </html>

@@ -8,6 +8,8 @@
 <link href="_bento-lite-skin.css" rel="stylesheet">
 <link href="_glass-soft-skin.css" rel="stylesheet"/>
 <script src="../app.js"></script>
+<link href="bean-plan.css" rel="stylesheet"/>
+<script src="bean-plan.js"></script>
   <style>
     :root{--ink:#172b4d;--blue:#2563eb;--blue-soft:#eff6ff;--bg:#f6f8fc;--line:#e1e9f4;--muted:#708199;--success:#07845b;--warn:#b7791f}.main-content{background:var(--bg);padding:28px 32px 44px}.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px;padding:24px 27px;border:1px solid #c9dcfb;border-radius:16px;background:linear-gradient(125deg,#fff 0%,#f2f7ff 100%)}.page-head h2{margin:0;color:var(--ink);font-size:24px}.page-head p{margin:7px 0 0;color:var(--muted);font-size:13px}.panel{border:1px solid var(--line);border-radius:14px;background:#fff}
     .eb-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}.eb-card{padding:19px;border:1px solid var(--line);border-radius:13px;background:#fff}.eb-card.pool{border-color:#c9dcfb;background:linear-gradient(135deg,#fff,#f1f7ff)}.eb-card .lab{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:12px}.eb-card .lab i{width:7px;height:7px;border-radius:50%;background:#93b4f5}.eb-card.pool .lab i{background:#2563eb}.eb-card .num{margin:9px 0 0;color:var(--ink);font-size:26px;font-weight:700;letter-spacing:-.5px}.eb-card .num small{font-size:13px;font-weight:600;color:#7d8da2}.eb-card .num.plus{color:#07845b}.eb-card .num.minus{color:#c0392b}.eb-card .foot{margin-top:7px;color:#8494a8;font-size:12px}
@@ -23,52 +25,75 @@
 <body class="bento-lite">
 <header class="top-bar user"><div class="top-bar-left"><a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a><span class="top-bar-title">彩翼公共采购智能体协同管理平台</span></div><div class="top-bar-right"><div class="top-bar-user"><div class="top-bar-avatar">张</div><span>示例科技有限公司</span></div></div></header>
 <aside class="sidebar user"><div class="sidebar-section"><a class="sidebar-link" href="index.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z"/></svg></span><span>概览</span></a><a class="sidebar-link" href="agent-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 10h8M8 14h5"/></svg></span><span>智能体市场</span></a><a class="sidebar-link" href="recharge-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M16 14h2"/></svg></span><span>账户充值</span></a><a class="sidebar-link" href="payment-accounts.html"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-6 9 6v9H3v-9Z"/><path d="M6 10v9m4-9v9m4-9v9m4-9v9M2 19h20"/></svg></span><span>付款账户</span></a><a class="sidebar-link active" href="balance.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6.5A2.5 2.5 0 0 1 4 17.5v-10Z"/><path d="M4 8h13M15 14h3"/></svg></span><span>彩豆管理</span></a><a class="sidebar-link" href="consumption-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M5 20V10m7 10V4m7 16v-7"/></svg></span><span>消费记录</span></a><a class="sidebar-link" href="invoice-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15l-3-2-3 2-3-2-3 2V3Z"/><path d="M9 9h6m-6 4h6"/></svg></span><span>发票管理</span></a><a class="sidebar-link" href="member-list.html"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.6-3.4 3-5 7-5s6.4 1.6 7 5"/></svg></span><span>账号管理</span></a><a class="sidebar-link" href="role-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 2.9 7.9 7 10 4.1-2.1 7-5.5 7-10V6l-7-3Z"/><path d="M9 12h6m-3-3v6"/></svg></span><span>岗位管理</span></a></div></aside>
-<main class="main-content"><section class="page-head"><div><h2>彩豆管理</h2></div></section>
-<section class="eb-grid">
-<article class="eb-card pool"><div class="lab"><i></i>单位彩豆余额</div><div class="num">18,700.00 <small>彩豆</small></div><div class="foot">全体成员共用</div></article>
-<article class="eb-card"><div class="lab"><i></i>本月充值</div><div class="num plus">+1,600.00 <small>彩豆</small></div><div class="foot">3 笔充值已入账</div></article>
-<article class="eb-card"><div class="lab"><i></i>本月消费</div><div class="num minus">−425.39 <small>彩豆</small></div><div class="foot">智能体调用消耗</div></article>
-<article class="eb-card"><div class="lab"><i></i>本月成功调用</div><div class="num">5 <small>次</small></div><div class="foot">3 名成员发起</div></article>
+<main class="main-content"><section class="page-head"><div><h2>彩豆管理</h2></div><button type="button" class="bp-link-btn" data-bp-rules>彩豆规则</button></section>
+<section class="bp-balance-grid">
+<article class="panel bp-card" id="bpBalance" aria-label="彩豆余额"></article>
+<article class="panel bp-card bp-plan-mini" id="bpPlanMini" aria-label="年包"></article>
 </section>
 <section class="panel warn-panel">
 <div class="section-head"><h3>余额预警</h3><span class="warn-meta">阈值 500 彩豆 · 平台默认</span></div>
-<div class="warn-body">
-<div class="warn-state"><span>当前余额 18,700 彩豆，未触发预警。余额低于阈值时通知机构主账号及具备“彩豆管理”权限的成员。</span></div>
-</div>
+<div class="warn-body"><div class="warn-state"><span id="warnText"></span></div></div>
 </section>
 <section class="panel ledger-panel">
-<div class="section-head"><h3>彩豆变动明细</h3><div class="ledger-tools"><select id="lgType" onchange="lgFilter()" aria-label="按业务类型筛选"><option value="all">全部类型</option><option value="recharge">账户充值</option><option value="consume">智能体消费</option></select></div></div>
-<div id="lgRows">
-<div class="lg-row" data-type="consume"><div class="lg-icon out">消</div><div><div class="lg-title">张敏 · 采购需求分析智能体</div><div class="lg-meta">2026-08-18 14:36:21 · 业务单号：USE20260818143621</div><div class="lg-bal">单位彩豆：<b>18,710.40</b> → <b>18,700.00</b></div></div><div class="lg-amt minus">−10.40 彩豆</div></div>
-<div class="lg-row" data-type="consume"><div class="lg-icon out">消</div><div><div class="lg-title">王晨 · 合规监测智能体</div><div class="lg-meta">2026-08-15 11:05:31 · 业务单号：USE20260815110531</div><div class="lg-bal">单位彩豆：<b>18,790.55</b> → <b>18,710.40</b></div></div><div class="lg-amt minus">−80.15 彩豆</div></div>
-<div class="lg-row" data-type="recharge"><div class="lg-icon in">充</div><div><div class="lg-title">账户充值 · 李用户</div><div class="lg-meta">2026-08-14 16:06:31 · 业务单号：RC20260814160631 · 机构对公账户</div><div class="lg-bal">单位彩豆：<b>17,790.55</b> → <b>18,790.55</b></div></div><div class="lg-amt plus">+1,000.00 彩豆</div></div>
-<div class="lg-row" data-type="consume"><div class="lg-icon out">消</div><div><div class="lg-title">王晨 · 采购需求分析智能体</div><div class="lg-meta">2026-08-13 14:52:08 · 业务单号：USE20260813145208</div><div class="lg-bal">单位彩豆：<b>17,986.15</b> → <b>17,790.55</b></div></div><div class="lg-amt minus">−195.60 彩豆</div></div>
-<div class="lg-row" data-type="recharge"><div class="lg-icon in">充</div><div><div class="lg-title">账户充值 · 张敏</div><div class="lg-meta">2026-08-12 11:07:26 · 业务单号：RC20260812110726 · 微信支付（个人支付）</div><div class="lg-bal">单位彩豆：<b>17,886.15</b> → <b>17,986.15</b></div></div><div class="lg-amt plus">+100.00 彩豆</div></div>
-<div class="lg-row" data-type="consume"><div class="lg-icon out">消</div><div><div class="lg-title">张敏 · 智能体内容助手</div><div class="lg-meta">2026-08-12 09:42:06 · 业务单号：USE20260812094206 · 按次计费</div><div class="lg-bal">单位彩豆：<b>17,916.15</b> → <b>17,886.15</b></div></div><div class="lg-amt minus">−30.00 彩豆</div></div>
-<div class="lg-row" data-type="consume"><div class="lg-icon out">消</div><div><div class="lg-title">李用户 · 政府采购数据分析智能体</div><div class="lg-meta">2026-08-08 15:26:12 · 业务单号：USE20260808152612</div><div class="lg-bal">单位彩豆：<b>18,025.39</b> → <b>17,916.15</b></div></div><div class="lg-amt minus">−109.24 彩豆</div></div>
-<div class="lg-row" data-type="recharge"><div class="lg-icon in">充</div><div><div class="lg-title">账户充值 · 李用户</div><div class="lg-meta">2026-08-05 09:12:30 · 业务单号：RC20260805091230 · 机构对公账户</div><div class="lg-bal">单位彩豆：<b>17,525.39</b> → <b>18,025.39</b></div></div><div class="lg-amt plus">+500.00 彩豆</div></div>
-</div>
+<div class="section-head"><h3>彩豆变动明细</h3><div class="ledger-tools"><select id="lgType" aria-label="按业务类型筛选"><option value="all">全部类型</option><option value="recharge">单次充值</option><option value="plan">年包购买 / 升级</option><option value="gift">免费彩豆</option><option value="consume">智能体消费</option><option value="expire">到期清零</option></select></div></div>
+<div id="lgRows"></div>
 <div class="lg-empty hide" id="lgEmpty">暂无该类型的变动记录</div>
-<div class="records-footer"><span id="lgCount">共 8 条记录</span><div class="pager"><button id="lgPrev" type="button" aria-label="上一页" onclick="lgGo(-1)">‹</button><span class="page-current" id="lgCur">1</span><button id="lgNext" type="button" aria-label="下一页" onclick="lgGo(1)">›</button></div></div>
+<div class="records-footer"><span id="lgCount"></span><div class="pager"><button id="lgPrev" type="button" aria-label="上一页">‹</button><span class="page-current" id="lgCur">1</span><button id="lgNext" type="button" aria-label="下一页">›</button></div></div>
 </section>
 </main>
 <script>
-var LG_SIZE=5,lgPage=1,lgType='all';
-function lgRender(){
-  var all=[].slice.call(document.querySelectorAll('#lgRows .lg-row'));
-  var rows=all.filter(function(r){return lgType==='all'||r.dataset.type===lgType;});
-  var pages=Math.max(1,Math.ceil(rows.length/LG_SIZE));
-  if(lgPage>pages)lgPage=pages;
-  if(lgPage<1)lgPage=1;
-  all.forEach(function(r){r.style.display='none';});
-  rows.slice((lgPage-1)*LG_SIZE,lgPage*LG_SIZE).forEach(function(r){r.style.display='';});
-  document.getElementById('lgEmpty').classList.toggle('hide',rows.length!==0);
-  document.getElementById('lgCount').textContent='共 '+rows.length+' 条记录';
-  document.getElementById('lgCur').textContent=lgPage;
-  document.getElementById('lgPrev').disabled=lgPage<=1;
-  document.getElementById('lgNext').disabled=lgPage>=pages;
+(function(){
+var B=window.BeanPlan, LG_SIZE=6, lgPage=1, lgType='all';
+var GROUP={recharge:'recharge',plan:'plan',upgrade:'plan',monthly:'gift',login:'gift',consume:'consume',expire:'expire'};
+function renderTop(){
+  var b=B.buckets(), s=B.monthStats(), cfg=B.loadCfg(), personal=B.isPersonal(), cp=B.currentPlan();
+  var pct=function(v){return b.total>0?(v/b.total*100).toFixed(2)+'%':'0';};
+  var freeSub=b.freeExpire+' 到期';
+  var loginLine=(personal&&cfg.monthly&&cfg.monthly.on?'<span>本月月度赠豆 <b>'+B.fmtInt(s.monthly)+'</b></span>':'')+(personal&&cfg.login.on?'<span>本月登录赠豆 <b>'+B.fmtInt(s.login)+' / '+cfg.login.cap+'</b></span>':'');
+  document.getElementById('bpBalance').innerHTML='<div class="bp-card-head"><h3>'+B.walletName()+'余额</h3><span class="bp-note">'+(personal?'个人身份专用':'全体成员共用')+'</span></div>'+
+    '<div class="bp-big">'+B.fmt(b.total)+' <small>彩豆</small></div>'+
+    '<div class="bp-bar" aria-hidden="true"><i class="s-free" style="width:'+pct(b.free)+'"></i><i class="s-plan" style="width:'+pct(b.plan)+'"></i><i class="s-recharge" style="width:'+pct(b.recharge)+'"></i></div>'+
+    '<div class="bp-legend'+(personal?'':' two')+'">'+(personal?'<div><span class="lab"><i class="bp-dot s-free"></i>免费彩豆</span><b>'+B.fmt(b.free)+'</b><em class="'+(b.free>0?'bp-exp':'')+'">'+freeSub+'</em></div>':'')+
+    '<div><span class="lab"><i class="bp-dot s-plan"></i>年包彩豆</span><b>'+B.fmt(b.plan)+'</b><em>'+(b.planExpire?b.planExpire+' 到期':'未购买年包')+'</em></div>'+
+    '<div><span class="lab"><i class="bp-dot s-recharge"></i>充值彩豆</span><b>'+B.fmt(b.recharge)+'</b><em>长期有效'+(b.rechargeGift?' · 累计获赠 '+B.fmtInt(b.rechargeGift):'')+'</em></div></div>'+
+    '<div class="bp-month"><span>本月入账 <b>+'+B.fmt(s.income)+'</b></span><span>本月消费 <b>−'+B.fmt(s.consume)+'</b></span><span>本月成功调用 <b>'+s.calls+' 次</b></span>'+loginLine+'</div>';
+  var mini=document.getElementById('bpPlanMini');
+  if(cp){
+    var ups=B.upgradeTargets(cp);
+    mini.innerHTML='<div class="bp-card-head"><h3>我的年包</h3><span class="bp-tag'+(cp.daysLeft<=30?' warn':'')+'">'+(cp.daysLeft<=30?'剩 '+cp.daysLeft+' 天到期':'生效中')+'</span></div>'+
+      '<div class="name">'+B.esc(cp.name)+'</div><div class="meta">'+cp.buyAt+' 至 '+cp.expireAt+(cp.upgrades.length?' · 已升级':'')+'</div>'+
+      '<div class="nums"><span>剩余 <b>'+B.fmt(cp.remaining)+'</b></span><span>总额 <b>'+B.fmtInt(cp.total)+'</b></span></div>'+
+      '<div class="bp-progress"><i style="width:'+Math.max(2,cp.remaining/cp.total*100).toFixed(1)+'%"></i></div>'+
+      '<div class="bp-note">已使用 '+B.fmt(cp.used)+' 彩豆，到期未使用部分清零</div>'+
+      '<div class="acts">'+(ups.length?'<a class="bp-btn" href="recharge-add.html?type=upgrade&plan='+encodeURIComponent(cp.id)+'">升级年包</a>':'')+'<a class="bp-btn ghost" href="recharge-list.html#plans">查看年包</a></div>';
+  } else {
+    var st=B.cheapestPlan(), cfg2=B.loadCfg();
+    mini.innerHTML='<div class="bp-card-head"><h3>我的年包</h3><span class="bp-tag gray">未购买</span></div><p class="bp-empty-plan">'+(st?'年包最高赠送 '+B.maxRatio()+'% 彩豆，'+cfg2.validityMonths+' 个月有效。'+B.esc(st.name)+' '+B.money(st.price,0)+' 起，年度总彩豆 '+B.fmtInt(st.total)+'。':'暂无在售年包。')+'</p><div class="acts"><a class="bp-btn" href="recharge-list.html#plans">了解年包</a></div>';
+  }
+  document.getElementById('warnText').textContent=b.total<500?'当前余额 '+B.fmt(b.total)+' 彩豆，已低于预警阈值。':'当前余额 '+B.fmt(b.total)+' 彩豆，未触发预警。'+(personal?'':'余额低于阈值时通知机构主账号及具备“彩豆管理”权限的成员。');
 }
-function lgFilter(){lgType=document.getElementById('lgType').value;lgPage=1;lgRender();}
-function lgGo(d){lgPage+=d;lgRender();}
-lgRender();
+function renderLedger(){
+  var all=B.ledger().filter(function(r){return lgType==='all'||GROUP[r.flow.kind]===lgType;});
+  var pages=Math.max(1,Math.ceil(all.length/LG_SIZE)); lgPage=Math.min(Math.max(1,lgPage),pages);
+  document.getElementById('lgRows').innerHTML=all.slice((lgPage-1)*LG_SIZE,lgPage*LG_SIZE).map(function(r){
+    var fl=r.flow,k=B.KIND[fl.kind],d=r.delta,meta=[fl.time];
+    if(fl.orderNo&&fl.kind!=='monthly')meta.push('业务单号：'+fl.orderNo);
+    if(fl.channel)meta.push(fl.channel);
+    var parts=(fl.kind==='consume'||fl.kind==='expire')?'<div class="lg-parts">'+B.partsText(fl)+'</div>':fl.kind==='recharge'&&fl.gift?'<div class="lg-parts">实付 '+B.money(fl.paid,0)+' · 充值 '+B.fmtInt(fl.paid)+' + 赠送 '+B.fmtInt(fl.gift)+' 彩豆</div>':'';
+    return '<div class="lg-row"><div class="lg-icon '+k.cls+'">'+k.icon+'</div><div><div class="lg-title">'+B.esc(B.flowTitle(fl))+'</div><div class="lg-meta">'+B.esc(meta.join(' · '))+'</div>'+parts+
+      '<div class="lg-bal">'+B.walletName()+'：<b>'+B.fmt(r.before)+'</b> → <b>'+B.fmt(r.after)+'</b></div></div><div class="lg-amt '+(fl.kind==='expire'?'zero':d>=0?'plus':'minus')+'">'+(d>=0?'+':'−')+B.fmt(Math.abs(d))+' 彩豆</div></div>';
+  }).join('');
+  document.getElementById('lgEmpty').classList.toggle('hide',all.length!==0);
+  document.getElementById('lgCount').textContent='共 '+all.length+' 条记录';
+  document.getElementById('lgCur').textContent=lgPage;
+  document.getElementById('lgPrev').disabled=lgPage<=1; document.getElementById('lgNext').disabled=lgPage>=pages;
+}
+if(!B.isPersonal()){var og=document.querySelector('#lgType option[value=gift]');if(og)og.remove();}
+document.getElementById('lgType').addEventListener('change',function(){lgType=this.value;lgPage=1;renderLedger();});
+document.getElementById('lgPrev').onclick=function(){lgPage--;renderLedger();};
+document.getElementById('lgNext').onclick=function(){lgPage++;renderLedger();};
+function renderAll(){renderTop();renderLedger();}
+renderAll();
+document.addEventListener('beanplan:change',renderAll);
+})();
 </script></body></html>

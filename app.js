@@ -7,7 +7,10 @@
 // 模拟数据
 // ============================================
 // 退款原型按需加载，沿用当前端的外壳与权限视角。
+// 2026-11-18：退款业务确认不做，停止加载（代码与页面保留，改为 true 可恢复）。
+const REFUND_ENABLED = false;
 (function () {
+    if (!REFUND_ENABLED) return;
     const base = new URL('.', document.currentScript.src);
     function loadRefund() {
         if (!document.querySelector('.sidebar.user, .sidebar.admin, .sidebar.developer')) return;
@@ -1024,6 +1027,7 @@ window.notifFilter = function (mode, btn) {
     }
 
     function applyRoleMode() {
+        if (window.BeanPlan && window.BeanPlan.isPersonal()) return;
         var topBar = document.querySelector('.top-bar.user');
         var sidebar = document.querySelector('.sidebar.user');
         if (!topBar && !sidebar) return;

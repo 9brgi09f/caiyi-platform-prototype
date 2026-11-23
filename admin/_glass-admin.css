@@ -1,0 +1,46 @@
+/* 运营端 · 规则设置：套用企业用户端玻璃 Soft UI（docs/彩翼平台界面视觉规范说明-玻璃SoftUI-V1.0.md）
+ * 加载顺序：styles.css → 页面样式 → ../user/_bento-lite-skin.css → ../user/_glass-soft-skin.css → 本文件
+ * 本文件只做运营端外壳与规则页组件的适配，不改共享皮肤。 */
+
+/* 侧栏：与 .sidebar.user 同一材质 */
+.bento-lite .sidebar.admin{position:fixed;top:68px;bottom:0;left:0;height:auto;overflow-y:auto;overscroll-behavior:contain;z-index:1;border-top:0!important;background:rgba(255,255,255,.23)!important;border-right:1px solid rgba(255,255,255,.62)!important;backdrop-filter:blur(14px) saturate(112%);-webkit-backdrop-filter:blur(14px) saturate(112%)}
+.bento-lite .sidebar.admin .sidebar-link.active{background:rgba(255,255,255,.64)!important;color:var(--glass-blue-deep)!important}
+.bento-lite .top-bar.admin{border-top:0!important}
+
+/* 页头：去掉蓝色横幅，改为标题 + 渐变短杠 */
+.bento-lite .page-header{display:block!important;margin:0 0 22px!important;padding:0!important;background:transparent!important;color:var(--glass-ink)!important;border:0!important;box-shadow:none!important}
+.bento-lite .page-header:has(.back-link){padding-top:14px!important}
+.bento-lite .page-header h2{margin:0!important;color:var(--glass-ink)!important;font-size:28px!important;font-weight:800!important;letter-spacing:-.02em}
+.bento-lite .page-header p{margin:16px 0 0!important;color:var(--glass-muted)!important;opacity:1!important;font-size:13px!important}
+.bento-lite .page-header .back-link{display:inline-block!important;margin:0 0 10px!important;color:var(--glass-blue-deep)!important;font-size:13px!important;font-weight:600!important;text-decoration:none}
+.bento-lite .page-header .back-link:hover{color:#1d4ed8!important}
+
+/* 分组表单卡：近实白大面板 + Soft UI 双阴影 */
+.bento-lite .form-section{margin:0 0 18px!important;padding:24px 26px!important;border:1px solid var(--glass-line)!important;border-radius:20px!important;background:var(--glass-surface-strong)!important;box-shadow:12px 14px 30px rgba(84,110,168,.11),-8px -8px 22px rgba(255,255,255,.70),inset 0 1px 0 rgba(255,255,255,.80)!important;backdrop-filter:blur(20px) saturate(124%);-webkit-backdrop-filter:blur(20px) saturate(124%)}
+.bento-lite .form-section-title{margin:0 0 18px!important;padding:0 0 14px!important;border-bottom:1px solid rgba(148,170,214,.20)!important;color:var(--glass-ink)!important;font-size:17px!important;font-weight:800!important}
+.bento-lite .form-label{color:var(--glass-muted)!important;font-weight:700!important}
+.bento-lite .form-hint{color:#7b8aa6!important}
+.bento-lite .table-wrapper{border:1px solid rgba(148,170,214,.20);border-radius:14px;overflow-x:auto}
+.bento-lite .table th{background:rgba(250,252,255,.80)!important;color:var(--glass-muted)!important}
+.bento-lite .table td{color:#3d4c68!important;border-color:rgba(148,170,214,.16)!important}
+.bento-lite input[type=checkbox]{accent-color:var(--glass-blue)}
+
+/* 说明条 / 信息块 */
+.bento-lite .rule-note{border:1px solid rgba(148,170,214,.20)!important;border-radius:14px!important;background:rgba(53,108,246,.07)!important;color:var(--glass-blue-deep)!important}
+.bento-lite .free-card{border:1px solid rgba(148,170,214,.20)!important;border-radius:14px!important;background:rgba(249,252,255,.80)!important}
+.bento-lite .free-scope{color:var(--glass-blue-deep)!important}
+.bento-lite .reward-item,.bento-lite .recharge-tier{border:1px solid rgba(148,170,214,.20);border-radius:14px!important;background:rgba(249,252,255,.80)!important}
+.bento-lite .form-error{border-radius:14px!important;background:rgba(255,233,226,.85)!important;border-color:rgba(220,90,60,.25)!important}
+.bento-lite .save-ok{border:1px solid var(--glass-line)!important;border-radius:14px!important;background:var(--glass-surface-strong)!important;color:var(--glass-blue-deep)!important;box-shadow:0 18px 42px rgba(54,83,150,.20)!important;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+
+/* 规则列表卡 */
+.bento-lite .rule-card{border:1px solid var(--glass-line)!important;border-radius:18px!important;background:var(--glass-surface-strong)!important;box-shadow:10px 12px 26px rgba(84,110,168,.12),-8px -8px 20px rgba(255,255,255,.85),inset 0 1px 0 rgba(255,255,255,.88)!important;backdrop-filter:blur(20px) saturate(120%);-webkit-backdrop-filter:blur(20px) saturate(120%);transition:transform .18s ease,box-shadow .18s ease}
+.bento-lite .rule-card:hover{transform:translateY(-3px);box-shadow:14px 18px 34px rgba(84,110,168,.17),-8px -8px 22px rgba(255,255,255,.92),inset 0 1px 0 rgba(255,255,255,.95)!important}
+.bento-lite .rule-icon{border-radius:14px!important;background:rgba(53,108,246,.10)!important;color:var(--glass-blue-deep)!important;box-shadow:3px 3px 8px rgba(84,110,168,.13),-2px -2px 6px rgba(255,255,255,.82),inset 0 0 0 1px rgba(255,255,255,.62)}
+.bento-lite .rule-name{color:var(--glass-ink)!important;font-weight:800!important}
+.bento-lite .rule-desc{color:var(--glass-muted)!important}
+.bento-lite .rule-switch input:checked+.rule-slider{background:linear-gradient(145deg,#4f7dff,#356cf6)!important}
+.bento-lite .rule-slider{background:rgba(148,170,214,.45)!important}
+
+@media (max-width:900px){.bento-lite .sidebar.admin{position:static;height:auto;overflow:visible;background:rgba(255,255,255,.62)!important}}
+@media (prefers-reduced-motion:reduce){.bento-lite .rule-card{transition:none}.bento-lite .rule-card:hover{transform:none}}

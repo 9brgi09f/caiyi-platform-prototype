@@ -30,9 +30,27 @@
         .form-label { font-size: 14px; font-weight: 500; color: var(--text-primary); }
         .form-hint { font-size: 12px; color: var(--text-muted); }
         .recharge-tier { display: flex; align-items: center; gap: var(--spacing-md); margin-bottom: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-light); border-radius: var(--radius-md); }
+        .inline-field { display:flex; align-items:center; gap: var(--spacing-sm); flex-wrap: wrap; }
+        .rule-note { margin-top: var(--spacing-md); padding: var(--spacing-md); background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-md); color: #1e40af; font-size: 13px; }
+        .free-grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--spacing-lg); }
+        .free-card { display:grid; gap: var(--spacing-md); padding: var(--spacing-lg); border: 1px solid var(--border-color, #e2e8f0); border-radius: var(--radius-md); background: var(--bg-light); }
+        .free-switch { display:flex; gap: var(--spacing-md); align-items:flex-start; cursor:pointer; }
+        .free-switch input { margin-top: 3px; }
+        .free-switch b { display:block; font-size:14px; } .free-switch small { display:block; margin-top:2px; color: var(--text-muted); font-size:12px; }
+        @media (max-width: 900px) { .free-grid { grid-template-columns: 1fr; } }
+        .section-with-action { display:flex; align-items:center; justify-content:space-between; gap: var(--spacing-md); }
+        .lock-tip { color: #7b8aa6; font-size: 12px; }
+        .empty-cell { text-align:center; color:#7b8aa6; padding: 18px !important; }
+        .form-error { max-width: 640px; margin: 0 auto var(--spacing-md); padding: 10px 14px; border: 1px solid #fecaca; border-radius: var(--radius-md); background: #fef2f2; color: #b91c1c; font-size: 13px; text-align: center; }
+        .form-warn { padding: 9px 12px; border: 1px solid #fde68a; border-radius: var(--radius-md); background: #fffbeb; color: #92400e; font-size: 13px; }
+        .save-ok { position: fixed; top: 80px; right: 28px; z-index: 50; padding: 12px 18px; border-radius: 12px; background: #fff; border: 1px solid #bfdbfe; color: #1e40af; font-size: 13px; box-shadow: 0 10px 30px rgba(30,64,175,.15); }
     </style>
+<script src="../user/bean-plan.js"></script>
+<link href="../user/_bento-lite-skin.css" rel="stylesheet"/>
+<link href="../user/_glass-soft-skin.css" rel="stylesheet"/>
+<link href="_glass-admin.css" rel="stylesheet"/>
 </head>
-<body>
+<body class="bento-lite">
 <header class="top-bar admin">
 <div class="top-bar-left">
 <a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a>
@@ -65,123 +83,173 @@
 <div class="page-header">
 <a class="back-link" href="rules-list.html" style="color: white; margin-bottom: var(--spacing-sm);">← 返回列表</a>
 <h2>彩豆规则</h2>
-<p>配置彩豆充值比例与赠送规则</p>
+<p>配置兑换比例、单次充值与充值赠送、年包与免费彩豆</p>
 </div>
-<form class="form-section">
-<h3 class="form-section-title">基础比例配置</h3>
+<form class="form-section" id="beanForm" novalidate>
+<h3 class="form-section-title">兑换与单次充值</h3>
 <div class="form-grid">
-<div class="form-item">
-<label class="form-label">充值比例</label>
-<div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-<span>1 元 = </span>
-<input class="input" style="width: 100px;" type="number" value="100"/>
-<span>彩豆</span>
+<div class="form-item"><label class="form-label">兑换比例</label><div class="inline-field"><span>1 元 = 1 彩豆</span></div><span class="form-hint">全平台统一，不单独配置</span></div>
+<div class="form-item"><label class="form-label" for="small1">单次充值档位</label><div class="inline-field"><input class="input" id="small1" style="width:84px" type="number" min="1" step="1"/><span>元</span><input class="input" id="small2" style="width:84px" type="number" min="1" step="1" aria-label="第二档金额"/><span>元</span><input class="input" id="small3" style="width:84px" type="number" min="1" step="1" aria-label="第三档金额"/><span>元</span></div><span class="form-hint">长期有效；是否赠送见下方“充值赠送”</span></div>
+<div class="form-item"><label class="form-label" for="cMin">自定义金额范围</label><div class="inline-field"><input class="input" id="cMin" style="width:90px" type="number" min="1" step="1"/><span>至</span><input class="input" id="cMax" style="width:110px" type="number" min="1" step="1" aria-label="自定义金额上限"/><span>元</span></div></div>
 </div>
-<span class="form-hint">人民币与彩豆的兑换比例</span>
-</div>
-<div class="form-item">
-<label class="form-label">最小充值金额</label>
-<div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-<input class="input" style="width: 100px;" type="number" value="10"/>
-<span>元</span>
-</div>
-<span class="form-hint">单次充值最低金额限制</span>
-</div>
-<div class="form-item">
-<label class="form-label">最大单次充值</label>
-<div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-<input class="input" style="width: 120px;" type="number" value="10000"/>
-<span>元</span>
-</div>
-</div>
-<div class="form-item">
-<span class="form-hint">彩豆默认永久有效，不设有效期。</span>
-</div>
+<div class="free-card" style="margin-top:var(--spacing-lg)">
+<label class="free-switch"><input type="checkbox" id="gOn"/><span><b>充值赠送（限时活动）</b><small>档位与自定义金额统一按比例赠送，企业与个人身份每次充值均送；按支付成功时间判断是否在活动期内</small></span></label>
+<div class="inline-field"><span>赠送比例</span><input class="input" id="gRatio" style="width:84px" type="number" min="1" max="200" step="1" aria-label="充值赠送比例"/><span>%</span><span style="margin-left:var(--spacing-md)">活动时间</span><input class="input" id="gStart" style="width:150px" type="date" aria-label="活动开始日期"/><span>至</span><input class="input" id="gEnd" style="width:150px" type="date" aria-label="活动结束日期"/><span id="gState" class="lock-tip"></span></div>
+<div class="inline-field" id="gPreview" style="color:var(--text-muted);font-size:13px"></div>
+<div class="form-warn" id="gWarn" hidden></div>
 </div>
 </form>
-<form class="form-section">
-<h3 class="form-section-title">充值赠送规则</h3>
-<div style="padding: var(--spacing-md); background: #fef3c7; border: 1px solid #fbbf24; border-radius: var(--radius-md); color: #92400e; font-size: 13px; margin-bottom: var(--spacing-lg);"><strong>⏳ 本期暂不支持充值赠送</strong>：赠送彩豆功能（如充值满额赠送）本期暂不上线；以下配置界面先行保留、暂不生效，后续版本再启用。</div>
-<div class="form-item full-width">
-<label style="display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-light); border-radius: var(--radius-md);">
-<input disabled="" type="checkbox"/>
-<div>
-<div style="font-weight: 500; color: var(--text-muted);">启用充值赠送（本期暂不可用）</div>
-<div style="font-size: 12px; color: var(--text-muted);">达到一定金额时赠送额外彩豆</div>
-</div>
-</label>
-</div>
-<div style="margin-top: var(--spacing-lg); opacity: 0.55; pointer-events: none;">
-<div class="recharge-tier">
-<span style="width: 120px; font-weight: 500;">充值满</span>
-<input class="input" style="width: 100px;" type="number" value="100"/>
-<span>元，赠送</span>
-<input class="input" style="width: 100px;" type="number" value="10"/>
-<span>%</span>
-<button class="btn btn-sm btn-outline" type="button">删除</button>
-</div>
-<div class="recharge-tier">
-<span style="width: 120px; font-weight: 500;">充值满</span>
-<input class="input" style="width: 100px;" type="number" value="500"/>
-<span>元，赠送</span>
-<input class="input" style="width: 100px;" type="number" value="15"/>
-<span>%</span>
-<button class="btn btn-sm btn-outline" type="button">删除</button>
-</div>
-<div class="recharge-tier">
-<span style="width: 120px; font-weight: 500;">充值满</span>
-<input class="input" style="width: 100px;" type="number" value="1000"/>
-<span>元，赠送</span>
-<input class="input" style="width: 100px;" type="number" value="20"/>
-<span>%</span>
-<button class="btn btn-sm btn-outline" type="button">删除</button>
-</div>
-<button class="btn btn-sm btn-outline" style="margin-top: var(--spacing-sm);" type="button">+ 添加阶梯</button>
-</div>
-<p style="margin-top: var(--spacing-md); padding: var(--spacing-md); background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-md); color: #1e40af; font-size: 13px;">赠送彩豆为营销促销额度，单独记账：不计入分账基数与开票金额，财务计入"销售费用-用户促销"。实付与赠送按本金分摊系数（实付金额÷总彩豆）拆分核算。</p>
+<form class="form-section" novalidate>
+<h3 class="form-section-title section-with-action"><span>年包配置</span><button class="btn btn-sm btn-outline" type="button" id="addPlan">+ 新增年包</button></h3>
+<div class="form-grid" style="margin-bottom:var(--spacing-lg)"><div class="form-item"><label class="form-label" for="validity">有效期</label><div class="inline-field"><span>自购买日起</span><input class="input" id="validity" style="width:80px" type="number" min="1" max="36" step="1"/><span>个月</span></div><span class="form-hint">基础及赠送彩豆按同一有效期管理，到期未使用部分清零</span></div></div>
+<div class="table-wrapper"><table class="table"><thead><tr><th>年包名称</th><th>价格（元 / 年）</th><th>赠送比例</th><th>赠送彩豆</th><th>年度总彩豆</th><th>在售</th><th>操作</th></tr></thead><tbody id="planRows"></tbody></table></div>
+<p class="rule-note">用户端按价格从低到高展示在售年包，最多 <span id="maxSale"></span> 个；价格越高，年度总彩豆须越多。已产生订单的年包只能停售。修改仅对之后的新订单生效，已购年包按购买时的价格与比例执行。赠送彩豆不开票，消费不参与开发者分账。</p>
 </form>
-<form class="form-section">
-<h3 class="form-section-title">彩豆与金额比例修改记录</h3>
-<div class="form-item full-width">
-<span class="form-hint">每次修改比例都会保存记录，便于追踪审计</span>
-</div>
-<div class="table-wrapper">
-<table class="table">
-<thead>
-<tr>
-<th>修改时间</th>
-<th>比例值（1彩豆=）</th>
-<th>对应汇率（1元=）</th>
-<th>操作人</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>2026-05-01 09:00</td>
-<td>¥0.01</td>
-<td>100 彩豆</td>
-<td>管理员</td>
-</tr>
-<tr>
-<td>2026-03-15 14:30</td>
-<td>¥0.012</td>
-<td>≈83 彩豆</td>
-<td>管理员</td>
-</tr>
-<tr>
-<td>2026-01-01 00:00</td>
-<td>¥0.01</td>
-<td>100 彩豆</td>
-<td>系统</td>
-</tr>
-</tbody>
-</table>
-</div>
+<form class="form-section" novalidate>
+<h3 class="form-section-title">年包升级</h3>
+<p class="rule-note" style="margin-top:0">生效中的年包可升级到价格更高的任一在售年包，由用户选择：补差价 = 目标年包价格 − 原年包已付金额；补发彩豆 = 目标年包总彩豆 − 原年包总彩豆；有效期沿用原年包，不支持降级。</p>
+<div class="table-wrapper"><table class="table"><thead><tr><th>升级路径</th><th>补差价</th><th>补发彩豆</th><th>其中赠送</th></tr></thead><tbody id="upRows"></tbody></table></div>
 </form>
+<form class="form-section" novalidate>
+<h3 class="form-section-title">免费彩豆</h3>
+<div class="free-card">
+<label class="free-switch"><input type="checkbox" id="mOn"/><span><b>月度赠豆</b><small>个人身份每个自然月发放一次，当月首次登录到账</small></span></label>
+<div class="inline-field"><span>每月赠送</span><input class="input" id="mBeans" style="width:90px" type="number" min="1" step="1" aria-label="每月赠送彩豆"/><span>彩豆</span></div>
+</div>
+<div class="free-card" style="margin-top:var(--spacing-md)">
+<label class="free-switch"><input type="checkbox" id="lOn"/><span><b>每日登录赠豆</b><small>个人身份每天首次登录发放，自然日计</small></span></label>
+<div class="inline-field"><span>每天</span><input class="input" id="lBeans" style="width:80px" type="number" min="1" step="1" aria-label="每日登录赠送彩豆"/><span>彩豆，每月上限</span><input class="input" id="lCap" style="width:90px" type="number" min="1" step="1" aria-label="每月登录赠豆上限"/><span>彩豆</span></div>
+</div>
+<p class="rule-note">仅适用于个人身份，单位账户不发放月度赠豆，企业身份登录不赠豆。两项可单独开关，数量合计计入免费彩豆。当月有效，月底未使用部分清零；可用于全部智能体，与新用户免费体验次数相互独立。扣减顺序：免费彩豆 → 年包彩豆 → 充值彩豆。免费彩豆不开票，消费不参与开发者分账。</p>
+</form>
+<form class="form-section" novalidate>
+<h3 class="form-section-title">修改记录</h3>
+<div class="table-wrapper"><table class="table"><thead><tr><th>修改时间</th><th>修改项</th><th>修改后</th><th>操作人</th></tr></thead><tbody id="histRows"></tbody></table></div>
+</form>
+<div class="form-error" id="formErr" role="alert" hidden></div>
 <div style="display: flex; gap: var(--spacing-md); justify-content: center;">
 <a class="btn btn-outline" href="rules-list.html">取消</a>
-<button class="btn btn-primary" type="submit">保存配置（将生成修改记录）</button>
+<button class="btn btn-primary" type="button" id="saveBtn">保存配置</button>
 </div>
 </main>
+<script>
+(function(){
+var B=window.BeanPlan, cfg=B.loadCfg(), rows=[], sold=B.soldTiers();
+function $(id){return document.getElementById(id);}
+function attr(v){return B.esc(v);}
+function fill(){
+  $('gOn').checked=cfg.rechargeGift.on; $('gRatio').value=cfg.rechargeGift.ratio; $('gStart').value=cfg.rechargeGift.start; $('gEnd').value=cfg.rechargeGift.end;
+  $('mOn').checked=cfg.monthly.on; $('mBeans').value=cfg.monthly.beans;
+  $('lOn').checked=cfg.login.on; $('lBeans').value=cfg.login.beans; $('lCap').value=cfg.login.cap;
+  $('small1').value=cfg.small[0]; $('small2').value=cfg.small[1]; $('small3').value=cfg.small[2]; $('cMin').value=cfg.customMin; $('cMax').value=cfg.customMax; $('validity').value=cfg.validityMonths;
+  $('maxSale').textContent=B.MAX_ON_SALE;
+  rows=cfg.plans.slice().sort(function(a,b){return a.price-b.price;}).map(function(p){return {tier:p.tier,name:p.name,price:p.price,ratio:p.ratio,on:p.on!==false};});
+  renderRows(); renderHist();
+}
+function renderRows(){
+  $('planRows').innerHTML=rows.length?rows.map(function(p,i){
+    var locked=!!sold[p.tier];
+    return '<tr data-i="'+i+'"><td><input class="input pName" style="width:130px" type="text" maxlength="10" value="'+attr(p.name)+'" aria-label="年包名称"/></td>'+
+      '<td><input class="input pPrice" style="width:120px" type="number" min="1" step="1" value="'+attr(p.price)+'" aria-label="年包价格"/></td>'+
+      '<td><div class="inline-field"><input class="input pRatio" style="width:80px" type="number" min="0" max="100" step="1" value="'+attr(p.ratio)+'" aria-label="赠送比例"/><span>%</span></div></td>'+
+      '<td class="pGift"></td><td class="pTotal"></td>'+
+      '<td><label class="inline-field"><input type="checkbox" class="pOn"'+(p.on?' checked':'')+' aria-label="在售"/></label></td>'+
+      '<td>'+(locked?'<span class="lock-tip">已有订单，仅可停售</span>':'<button class="btn btn-sm btn-outline pDel" type="button">删除</button>')+'</td></tr>';
+  }).join(''):'<tr><td colspan="7" class="empty-cell">暂无年包，用户端不展示年包</td></tr>';
+  $('planRows').querySelectorAll('tr[data-i]').forEach(function(tr){
+    var p=rows[+tr.dataset.i];
+    tr.querySelector('.pName').addEventListener('input',function(){p.name=this.value;preview();});
+    tr.querySelector('.pPrice').addEventListener('input',function(){p.price=Number(this.value);preview();});
+    tr.querySelector('.pRatio').addEventListener('input',function(){p.ratio=Number(this.value);preview();});
+    tr.querySelector('.pOn').addEventListener('change',function(){p.on=this.checked;preview();});
+    var del=tr.querySelector('.pDel');
+    if(del) del.addEventListener('click',function(){rows.splice(+tr.dataset.i,1);renderRows();});
+  });
+  preview();
+}
+$('addPlan').addEventListener('click',function(){
+  rows.push({tier:'p'+Date.now().toString(36),name:'',price:'',ratio:0,on:false});
+  renderRows();
+  var inputs=$('planRows').querySelectorAll('.pName'); inputs[inputs.length-1].focus();
+});
+function valid(p){return p.price>0&&Math.floor(p.price)===p.price&&p.ratio>=0&&p.ratio<=100&&Math.floor(p.ratio)===p.ratio;}
+function preview(){
+  $('planRows').querySelectorAll('tr[data-i]').forEach(function(tr){
+    var p=rows[+tr.dataset.i], v=valid(p)?B.planView(p):null;
+    tr.querySelector('.pGift').textContent=v?B.fmtInt(v.gift):'—';
+    tr.querySelector('.pTotal').textContent=v?B.fmtInt(v.total):'—';
+  });
+  var sale=rows.filter(function(p){return p.on&&valid(p);}).map(B.planView).sort(function(a,b){return a.price-b.price;}), out=[];
+  for(var i=0;i<sale.length;i++)for(var j=i+1;j<sale.length;j++){
+    var a=sale[i],b=sale[j],pay=b.price-a.price,beans=b.total-a.total,ok=pay>0&&beans>0;
+    out.push('<tr><td>'+B.esc(a.name||'未命名')+' → '+B.esc(b.name||'未命名')+'</td><td>'+(ok?B.money(pay,0):'—')+'</td><td>'+(ok?B.fmtInt(beans):'<span class="lock-tip">总彩豆未递增，不可升级</span>')+'</td><td>'+(ok?B.fmtInt(beans-pay):'—')+'</td></tr>');
+  }
+  if(typeof giftPreview==='function'&&$('gOn')) giftPreview();
+  $('upRows').innerHTML=out.join('')||'<tr><td colspan="4" class="empty-cell">在售年包少于 2 个，暂无升级路径</td></tr>';
+}
+function giftPreview(){
+  var on=$('gOn').checked, ratio=Number($('gRatio').value), st=$('gStart').value, en=$('gEnd').value;
+  var smalls=[Number($('small1').value),Number($('small2').value),Number($('small3').value)];
+  var state=!on?'已关闭':!st||!en?'':B.TODAY<st?'未开始':B.TODAY>en?'已结束':'进行中';
+  $('gState').textContent=state?'（'+state+'）':'';
+  $('gPreview').textContent=on&&ratio>0?'用户端展示：'+smalls.filter(function(v){return v>0;}).map(function(v){return '充 '+B.fmtInt(v)+' 得 '+B.fmtInt(v+Math.round(v*ratio/100));}).join(' · '):'';
+  var sale=rows.filter(function(p){return p.on&&valid(p);}).map(B.planView).sort(function(a,b){return a.price-b.price;});
+  var low=sale.reduce(function(m,p){return m===null||p.ratio<m.ratio?p:m;},null), w=$('gWarn');
+  if(on&&low&&ratio>=low.ratio){w.hidden=false;w.textContent='充值赠送 '+ratio+'% 不低于年包“'+low.name+'”的 '+low.ratio+'%，且充值彩豆长期有效，年包将失去吸引力。可以保存，请确认这是限时活动。';}
+  else w.hidden=true;
+}
+['gOn','gRatio','gStart','gEnd','small1','small2','small3'].forEach(function(id){$(id).addEventListener('input',giftPreview);$(id).addEventListener('change',giftPreview);});
+function renderHist(){
+  $('histRows').innerHTML=cfg.history.slice().reverse().map(function(h){return '<tr><td>'+h.time+'</td><td>'+B.esc(h.item)+'</td><td>'+B.esc(h.after)+'</td><td>'+B.esc(h.by)+'</td></tr>';}).join('');
+}
+function err(msg){var e=$('formErr');e.hidden=!msg;e.textContent=msg||'';if(msg)e.scrollIntoView({block:'center',behavior:'smooth'});}
+$('saveBtn').addEventListener('click',function(){
+  var s1=Number($('small1').value), s2=Number($('small2').value), s3=Number($('small3').value), mn=Number($('cMin').value), mx=Number($('cMax').value), vm=Number($('validity').value);
+  var lb=Number($('lBeans').value), lc=Number($('lCap').value);
+  if([s1,s2,s3,mn,mx,vm,lb,lc].some(function(n){return !(n>=0)||Math.floor(n)!==n;})) return err('请填写有效的整数。');
+  if(!(s1>0&&s2>s1&&s3>s2)) return err('单次充值档位须大于 0，且由低到高。');
+  if(!(mn>0&&mx>mn)) return err('自定义金额上限须大于下限。');
+  if(!(vm>=1&&vm<=36)) return err('有效期须在 1–36 个月之间。');
+  var names={};
+  for(var i=0;i<rows.length;i++){
+    var p=rows[i], n=String(p.name||'').trim();
+    if(!n) return err('请填写第 '+(i+1)+' 行的年包名称。');
+    if(names[n]) return err('年包名称“'+n+'”重复。');
+    names[n]=1; p.name=n;
+    if(!valid(p)) return err('“'+n+'”的价格须为大于 0 的整数，赠送比例为 0–100 的整数。');
+  }
+  var sale=rows.filter(function(p){return p.on;}).map(B.planView).sort(function(a,b){return a.price-b.price;});
+  if(sale.length>B.MAX_ON_SALE) return err('在售年包最多 '+B.MAX_ON_SALE+' 个。');
+  for(var k=1;k<sale.length;k++){
+    if(sale[k].price===sale[k-1].price) return err('在售年包“'+sale[k-1].name+'”与“'+sale[k].name+'”价格相同，无法区分升级方向。');
+    if(sale[k].total<=sale[k-1].total) return err('“'+sale[k].name+'”价格更高，但年度总彩豆不高于“'+sale[k-1].name+'”，无法升级。');
+  }
+  var gOn=$('gOn').checked, gr=Number($('gRatio').value), gs=$('gStart').value, ge=$('gEnd').value;
+  if(gOn){
+    if(!(gr>=1&&gr<=200&&Number.isInteger(gr))) return err('充值赠送比例须为 1–200 的整数。');
+    if(!gs||!ge) return err('请填写充值赠送的活动开始和结束日期。');
+    if(ge<gs) return err('充值赠送的结束日期不能早于开始日期。');
+  }
+  var mb=Number($('mBeans').value);
+  if(!(mb>0&&Number.isInteger(mb))) return err('月度赠豆数量须为大于 0 的整数。');
+  if(!(lb>0&&lc>0)) return err('登录赠豆数量须大于 0。');
+  if(lc<lb) return err('登录赠豆每月上限不能小于每日赠送数量。');
+  err('');
+  var now=new Date(), t=B.TODAY+' '+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  var plans=rows.slice().sort(function(a,b){return a.price-b.price;}).map(function(p){return {tier:p.tier,name:p.name,price:p.price,ratio:p.ratio,on:p.on};});
+  var after='单次 '+s1+' / '+s2+' / '+s3+' 元 · 自定义 '+mn+'–'+mx+' 元 · 有效期 '+vm+' 个月 · '+(plans.map(function(p){return p.name+' ¥'+B.fmtInt(p.price)+' / '+p.ratio+'%'+(p.on?'':'（停售）');}).join(' · ')||'无年包')+' · 充值赠送 '+(gOn?gr+'%（'+gs+' 至 '+ge+'）':'关闭')+' · 月度赠豆 '+($('mOn').checked?mb+' 彩豆/月':'关闭')+' · 登录赠豆 '+($('lOn').checked?lb+' 彩豆/天，月上限 '+lc:'关闭');
+  cfg.rechargeGift={on:gOn,ratio:gr||cfg.rechargeGift.ratio,start:gs||cfg.rechargeGift.start,end:ge||cfg.rechargeGift.end};
+  cfg.monthly={on:$('mOn').checked,beans:mb};
+  cfg.login={on:$('lOn').checked,beans:lb,cap:lc};
+  cfg.small=[s1,s2,s3]; cfg.customMin=mn; cfg.customMax=mx; cfg.validityMonths=vm; cfg.plans=plans;
+  cfg.history.push({time:t,item:'彩豆规则',after:after,by:'管理员'});
+  try{B.saveCfg(cfg);}catch(_){return err('保存失败，请重试。');}
+  rows=plans.map(function(p){return Object.assign({},p);}); renderRows(); renderHist();
+  var ok=$('saveOk'); ok.hidden=false; setTimeout(function(){ok.hidden=true;},2500);
+});
+fill();
+})();
+</script>
+<div class="save-ok" id="saveOk" role="status" hidden>已保存，用户端新订单按新配置执行</div>
 </body>
 </html>

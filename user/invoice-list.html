@@ -1,7 +1,9 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>发票管理 - 用户端</title><link href="../styles.css" rel="stylesheet"/>
 <link href="_bento-lite-skin.css" rel="stylesheet">
 <link href="_glass-soft-skin.css" rel="stylesheet"/>
-<script src="../app.js"></script><style>
+<script src="../app.js"></script>
+<link href="bean-plan.css" rel="stylesheet"/>
+<script src="bean-plan.js"></script><style>
 :root{--ink:#172b4d;--blue:#2563eb;--bg:#f6f8fc;--line:#e1e9f4;--muted:#708199}.actions,.tabs{display:flex;flex-wrap:wrap;gap:8px}.tabs{margin-bottom:14px}.tab{padding:8px 16px;border:1px solid #dce7f4;border-radius:999px;background:#fff;color:#5b6880;font-size:13px;cursor:pointer;transition:all .2s}.tab:hover{border-color:#b9cdf4;color:#2563eb}.tab.active{border-color:#2563eb;background:#eff5ff;color:#2563eb;font-weight:700}.panel{border:1px solid #eaeff8;border-radius:18px;background:#fff;box-shadow:0 8px 24px rgba(35,67,125,.07)}.notice{display:flex;gap:10px;margin-bottom:16px;padding:14px 16px;border:1px solid #d8e8ff;border-radius:12px;background:#f5f9ff;color:#536b88;font-size:12px;line-height:1.7}.notice b{color:#234f91}.table-wrap{overflow-x:auto}.data-table{width:100%;min-width:980px;border-collapse:collapse}.invoice-column{width:168px}.data-table th{padding:13px 17px;color:#8291a6;font-size:11px;text-align:left}.data-table td{padding:15px 17px;border-top:1px solid #edf2f7;color:#4b5f78;font-size:13px}.data-table tr:hover td{background:#fafcff}.invoice{color:var(--ink);font-weight:700}.sub{display:block;margin-top:4px;color:#92a0b0;font-size:11px}.source{display:inline-flex;padding:4px 8px;border-radius:999px;background:#f1f5fb;color:#61738a;font-size:11px;font-weight:700}.source.enterprise{background:#edf4ff;color:#2563eb}.source.personal{background:#f2fbf7;color:#07845b}.badge{display:inline-flex;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:700}.badge.done{background:#ecfdf5;color:#07845b}.badge.pending{background:#fff8e7;color:#aa751a}.badge.process{background:#eff6ff;color:#2563eb}.empty{display:none;padding:38px;text-align:center;color:#8c9aab;font-size:13px}@media(max-width:700px){.wk-head-aside{width:100%}.wk-head-aside a{flex:1;text-align:center}}
 .data-table .btn,.filter-bar .btn{border-radius:999px}
 .filter-bar{display:flex;align-items:flex-end;flex-wrap:wrap;gap:10px;padding:16px 17px;border-bottom:1px solid #edf2f7}.filter-bar label{display:grid;gap:6px;color:#708199;font-size:12px}.filter-control{width:132px;height:34px;padding:0 9px;font-size:12px}.filter-separator{padding:0 2px 9px;color:#94a3b8;font-size:12px}.empty{padding:34px 16px;color:#94a3b8;text-align:center;font-size:13px}.badge.processing{background:#fff7e8;color:#b7791f}.badge.rejected{background:#fff1f2;color:#c24157}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}@media(max-width:720px){.filter-bar{align-items:stretch}.filter-bar label{width:100%}.filter-control{width:100%}.filter-separator{display:none}}
@@ -93,7 +95,10 @@
           <th>操作</th>
         </tr>
       </thead>
-      <tbody id="rows">
+      <tbody id="rows"></tbody>
+    </table>
+    <template id="orgHistory">
+      <table><tbody>
         <tr data-status="pending" data-source="consumption" data-date="2026-08-19" data-search="fp20260819001 use20260813145208">
           <td><span class="invoice">FP20260819001</span></td>
           <td>—</td>
@@ -224,16 +229,28 @@
           <td><span class="badge done">已开票</span></td>
           <td><a class="btn btn-sm btn-outline" href="invoice-view.html?invoice=FP20260710001&type=consumption">查看</a></td>
         </tr>
-      </tbody>
-    </table>
+      </tbody></table>
+    </template>
     <div class="empty" id="empty" style="display:none">暂无符合条件的开票申请</div>
   </div>
   <div class="records-footer"><span id="invCount">共 13 条记录</span><div class="pager"><button id="invPrev" type="button" aria-label="上一页">‹</button><span class="page-current" id="invCur">1</span><button id="invNext" type="button" aria-label="下一页">›</button></div></div>
 </section>
 </main><script>
 (function(){
-  var statusFilter=document.getElementById('statusFilter');
+  var B=window.BeanPlan, tb=document.getElementById('rows');
+  if(!B.isPersonal()){
+    var history=document.getElementById('orgHistory').content.querySelector('tbody');
+    Array.from(history.rows).forEach(function(row){tb.appendChild(row.cloneNode(true));});
+  }
+  (function(){
+    var html=B.invoicesOf().map(function(r){
+      var rec=r.kind==='recharge';
+      return '<tr data-status="pending" data-source="'+(rec?'recharge':'consumption')+'" data-date="'+r.time.slice(0,10)+'"><td><span class="invoice">'+B.esc(r.id)+'</span></td><td>—</td><td><span class="source personal">'+(rec?'充值':'智能体消费')+'</span></td><td>'+(rec?'预付卡发票（税率 0%）':'增值税普通发票')+'</td><td>'+B.money(r.amount)+'</td><td>'+B.esc(r.time)+'</td><td><span class="badge pending">待审核</span></td><td><a class="btn btn-sm btn-outline" href="invoice-view.html?request='+encodeURIComponent(r.id)+'">查看</a></td></tr>';
+    }).join('');
+    tb.insertAdjacentHTML('afterbegin',html);
+  })();
   var rows=[].slice.call(document.querySelectorAll('#rows tr'));
+  var statusFilter=document.getElementById('statusFilter');
   var sourceFilter=document.getElementById('sourceFilter');
   var startDate=document.getElementById('startDate');
   var endDate=document.getElementById('endDate');

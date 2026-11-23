@@ -2,51 +2,173 @@
 <html lang="zh-CN"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>账户充值 - 用户端</title><link href="../styles.css" rel="stylesheet"/>
 <link href="_bento-lite-skin.css" rel="stylesheet">
 <link href="_glass-soft-skin.css" rel="stylesheet"/>
-<script src="../app.js"></script><style>
-:root{--ink:#172544;--ink-soft:#52627e;--blue:#315df4;--blue-deep:#2447c7;--cyan:#10b9c6;--violet:#8b6cff;--mint:#20b486;--canvas:#fafbff;--line:#e7ebf5;--muted:#75839b;--success:#07845b}
-.main-content{position:relative;isolation:isolate;min-height:100%;padding:32px 34px 48px!important;background:radial-gradient(circle at 92% -8%,rgba(117,105,255,.13),transparent 25rem),radial-gradient(circle at 54% -11%,rgba(23,192,202,.12),transparent 30rem),var(--canvas)!important}.main-content:before{position:absolute;z-index:-1;inset:0;background-image:linear-gradient(rgba(49,93,244,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(49,93,244,.028) 1px,transparent 1px);background-size:36px 36px;content:"";mask-image:linear-gradient(to bottom,black,transparent 62%)}
-.page-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 20px!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important}.page-head h2{margin:0;color:var(--ink);font-size:28px!important;font-weight:800;letter-spacing:-.045em}.page-head h2:before{display:inline-block;width:28px;height:8px;margin:0 11px 4px 0;border-radius:99px;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--violet));content:""}.page-head h2::after{display:none!important}
-.panel{border:1px solid rgba(222,228,241,.92)!important;border-radius:20px!important;background:rgba(255,255,255,.88)!important;box-shadow:0 12px 32px rgba(38,55,100,.055)!important;backdrop-filter:blur(12px)}.account-overview{position:relative;display:grid;grid-template-columns:minmax(300px,1.15fr) repeat(2,minmax(170px,1fr));align-items:stretch;margin-bottom:18px;overflow:hidden}.account-overview:before{position:absolute;top:0;right:0;left:0;height:3px;background:linear-gradient(90deg,var(--blue) 0%,var(--cyan) 48%,var(--violet) 100%);content:""}.balance-block{position:relative;padding:25px 26px;background:linear-gradient(120deg,rgba(239,244,255,.94),rgba(246,255,254,.92));border-right:1px solid #e5ebf3}.balance-block:after{position:absolute;right:20px;bottom:18px;width:72px;height:72px;border:1px solid rgba(55,98,238,.18);border-radius:50%;box-shadow:0 0 0 12px rgba(21,193,197,.07),0 0 0 25px rgba(139,108,255,.045);content:""}.balance-label{display:block;margin-bottom:7px;color:#62728f;font-size:12px;font-weight:700;letter-spacing:.06em}.balance-value{position:relative;z-index:1;color:#193eae;font-size:32px;font-weight:800;letter-spacing:-.055em}.balance-value small{font-size:14px;letter-spacing:0}.account-item{display:flex;flex-direction:column;justify-content:center;padding:23px 24px;border-right:1px solid #edf0f6}.account-item:last-child{border-right:0}.account-item span{margin-bottom:7px;color:#8491a8;font-size:12px}.account-item b{color:#33425d;font-size:14px;font-weight:750}
-.recharge-panel{padding:24px 26px;margin-bottom:18px}.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px}.section-heading h3,.records-title{margin:0;color:var(--ink);font-size:17px;font-weight:800;letter-spacing:-.02em}.section-heading p{margin:0;color:#7c899e;font-size:13px}.options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;margin-top:19px}.option{position:relative;min-height:92px;padding:16px 17px;border:1px solid #e4eaf4!important;border-radius:15px!important;background:linear-gradient(145deg,#fff,#fbfcff)!important;text-align:left;cursor:pointer;overflow:hidden;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}.option:before{position:absolute;top:0;right:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--violet));content:"";opacity:0;transition:opacity .18s ease}.option:hover{border-color:#b8cafb!important;box-shadow:0 8px 18px rgba(37,74,164,.07)!important;transform:translateY(-2px)}.option.active{border-color:#82a3f9!important;background:linear-gradient(135deg,#f0f5ff,#f5fffe)!important;box-shadow:0 0 0 3px rgba(49,93,244,.09),0 10px 20px rgba(37,74,164,.08)!important}.option.active:before{opacity:1}.option b{display:block;color:#263653;font-size:19px;letter-spacing:-.025em}.option.active b{color:#244bc7}.option span{display:block;margin-top:6px;color:#7d8aa0;font-size:12px}.recharge-footer{display:grid;grid-template-columns:220px minmax(185px,1fr) 158px;align-items:end;gap:18px;margin-top:20px;padding-top:20px;border-top:1px solid #edf1f7}.custom label{display:block;margin-bottom:8px;color:#6e7e96;font-size:12px;font-weight:700}.custom-field{display:flex;align-items:center;gap:9px}.custom input{box-sizing:border-box;flex:1;height:42px;padding:0 12px;border:1px solid #dce5f3;border-radius:11px;background:#fff;color:#27354e;font-size:14px;outline:0;transition:border-color .18s,box-shadow .18s}.custom input:focus{border-color:#77a0fa;box-shadow:0 0 0 3px rgba(49,93,244,.10)}.custom-field span{color:#73829a;font-size:13px}.amount{padding:9px 0}.amount span{display:block;color:#74839a;font-size:12px}.amount b{display:block;margin-top:5px;color:#244bc7;font-size:27px;letter-spacing:-.05em}.amount b small{font-size:13px}.submit{width:100%;min-height:44px!important;margin:0!important;border:0!important;border-radius:12px!important;background:linear-gradient(105deg,#315df4,#247eea 55%,#14aabd)!important;box-shadow:0 10px 19px rgba(43,93,226,.25)!important;font-weight:800!important;transition:transform .18s,box-shadow .18s!important}.submit:hover{box-shadow:0 13px 24px rgba(43,93,226,.31)!important;transform:translateY(-1px)}
-.hide{display:none}.records-panel{padding:22px 22px 20px;overflow:hidden}.records-title{padding:0 2px 16px}.record-tabs{display:flex;gap:6px;margin:0 -22px;padding:11px 22px;border-top:1px solid #eef2f8;border-bottom:1px solid #edf2f7;background:linear-gradient(90deg,#fbfcff,#f7fbff)}.record-tab{padding:8px 12px;border:1px solid transparent;border-radius:9px;background:transparent!important;color:#708199;font-size:13px;cursor:pointer;transition:all .18s ease}.record-tab:hover{background:#eef4ff;color:#4c6080}.record-tab.active{border-color:#cfe0ff;background:linear-gradient(110deg,#eaf1ff,#e9fbfa)!important;color:#2859d4!important;font-weight:750;box-shadow:0 2px 5px rgba(43,93,226,.06)}.record-table-wrap{overflow-x:auto}.record-table{width:100%;min-width:1060px;border-collapse:collapse;font-size:13px}.record-table th{padding:15px 10px;background:transparent;color:#7a889d;font-size:12px;font-weight:700;text-align:left;white-space:nowrap}.record-table td{padding:16px 10px;border-top:1px solid #eff2f7;color:#53657d;white-space:nowrap}.record-table tbody tr{transition:background .18s}.record-table tbody tr:hover{background:#f7faff}.record-table td.amount-cell{color:#263a61;font-weight:750}.record-table td.id-cell,.mem{color:#40536b;font-weight:650}.status-badge{display:inline-flex;padding:4px 9px;border-radius:99px;font-size:12px;font-weight:650}.pay-success{background:#e5f8f0;color:#07845b}.invoice-pending,.invoice-complete{background:#edf3ff;color:#2563eb}.invoice-processing{background:#fff5df;color:#b7791f}.record-empty{padding:26px;text-align:center;color:#8b99aa;font-size:13px}.records-footer{display:flex;align-items:center;justify-content:space-between;padding-top:19px;color:#8090a5;font-size:13px}.pager{display:flex;align-items:center;gap:14px}.pager button,.pager .page-current{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;font-size:14px}.pager button{border:1px solid #dce7f4;background:#fff;color:#40536b;font-size:17px;cursor:pointer}.pager button:disabled{border-color:#eef2f7;background:#fbfcfe;color:#c9d3df;cursor:not-allowed}.pager .page-current{border:1px solid #b7caf9;background:#f5f8ff;color:#2563eb}
-.bento-lite .sidebar.user .sidebar-link.active{position:relative;background:linear-gradient(90deg,#e7efff 0%,#f7fcff 100%)!important;box-shadow:none!important;color:#2f60d4!important}.bento-lite .sidebar-link.active::before{position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(var(--blue),var(--cyan));content:""}.bento-lite .sidebar-link.active .icon{background:#d7e5ff!important;color:#2f60d4!important}
-@media(max-width:960px){.main-content{padding:25px 18px 38px!important}.account-overview{grid-template-columns:repeat(2,1fr)}.balance-block{grid-column:1/-1;border-right:0;border-bottom:1px solid #e4ebf8}.account-item:last-child{border-right:0}.options{grid-template-columns:repeat(2,minmax(0,1fr))}.recharge-footer{grid-template-columns:1fr 1fr}.custom{max-width:none}.submit{grid-column:1/-1}}@media(max-width:680px){.main-content{padding:22px 15px 32px!important}.account-overview{grid-template-columns:1fr}.account-item{border-right:0;border-bottom:1px solid #edf1f8}.account-item:last-child{border-bottom:0}.options{grid-template-columns:1fr}.recharge-footer{grid-template-columns:1fr}.page-head h2{font-size:25px!important}}
+<script src="../app.js"></script>
+<link href="bean-plan.css" rel="stylesheet"/>
+<script src="bean-plan.js"></script><style>
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.page-head h2{margin:0}
 
-/* 恢复与其他用户菜单一致的蓝灰色内容区背景 */
-.bento-lite{background:#f6f8fc!important}
-.main-content,.bento-lite .main-content{background:#f6f8fc!important}
-.main-content:before,.bento-lite .main-content:before,.main-content:after,.bento-lite .main-content:after{display:none!important}
+.recharge-panel{padding:24px;margin-bottom:18px}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+.section-heading h3,.records-title{margin:0;color:var(--glass-ink);font-size:17px;font-weight:800}
+.section-heading p{margin:0;color:var(--glass-muted);font-size:13px}
+.options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px}
+.option{min-height:84px;padding:16px;border:1px solid;text-align:left;cursor:pointer}
+.option:hover{box-shadow:0 8px 18px rgba(54,83,150,.08)}
+.bento-lite .option.active{border-color:rgba(78,127,255,.55)!important;background:rgba(239,245,255,.72)!important;box-shadow:0 0 0 2px rgba(53,108,246,.10)}
+.option b{display:block;color:#354969;font-size:19px;letter-spacing:-.02em}
+.option.active b,.amount b{color:var(--bp-value)}
+.option span{display:block;margin-top:6px;color:var(--glass-muted);font-size:12px}
+.option{position:relative}
+.bp-gift-tag{position:absolute;top:12px;right:12px;padding:2px 8px;border-radius:99px;background:#fff1e6;color:#b4531a;font-size:12px;font-style:normal;font-weight:700}
+.bp-promo{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin-top:14px;padding:11px 14px;border:1px solid #ffd9bf;border-radius:12px;background:linear-gradient(100deg,#fff6ef,#fffaf5)}
+.bp-promo[hidden]{display:none}
+.bp-promo b{color:#b4531a;font-size:14px}
+.bp-promo span{color:#8a5a3a;font-size:12px}
+.amount em{display:block;margin-top:2px;color:var(--glass-muted);font-size:12px;font-style:normal}
+.recharge-footer{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr) 158px;align-items:center;gap:18px;margin-top:20px;padding-top:20px;border-top:1px solid rgba(148,170,214,.20)}
+.custom label{display:block;margin-bottom:8px;color:var(--glass-muted);font-size:12px;font-weight:700}
+.custom-field{display:flex;align-items:center;gap:9px}
+.custom input{flex:1;min-width:0;height:42px;padding:0 12px;border-radius:11px;font-size:14px}
+.custom-field span,.amount span{color:var(--glass-muted);font-size:12px}
+.amount span,.amount b{display:block}
+.amount b{margin-top:4px;font-size:24px;letter-spacing:-.02em}
+.amount b small{color:var(--glass-muted);font-size:13px;letter-spacing:0}
+.submit{width:100%;min-height:42px;margin:0;border-radius:12px}
 
+.records-panel{padding:22px 22px 20px;overflow:hidden}
+.records-title{padding:0 2px 16px}
+.record-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 -22px;padding:12px 22px;border-block:1px solid rgba(148,170,214,.20)}
+.record-tab{padding:7px 12px;border-radius:9px;font-size:13px;cursor:pointer}
+.record-tab.active{font-weight:750}
+.record-table-wrap{overflow-x:auto}
+.record-table{width:100%;min-width:1060px;border-collapse:collapse;font-size:13px}
+.record-table th,.record-table td{padding:14px 10px;text-align:left;white-space:nowrap}
+.record-table th{font-size:12px;font-weight:700}
+.record-table td{border-top:1px solid}
+.record-table td.amount-cell,.record-table td.id-cell,.mem{font-weight:650}
+.status-badge{display:inline-flex;padding:4px 9px;border-radius:99px;font-size:12px;font-weight:650}
+.pay-success{background:#e5f8f0;color:#07845b}
+.invoice-pending,.invoice-complete{background:#edf3ff;color:var(--glass-blue-deep)}
+.invoice-processing{background:#fff5df;color:#8a6116}
+.record-empty{padding:26px;text-align:center;color:var(--glass-muted);font-size:13px}
+.hide{display:none}
 
-/* 蓝灰视觉统一：标题与强调元素使用单一蓝色体系，取消蓝绿／紫色渐变 */
-:root{--cyan:#6f8fe9;--violet:#91a9ec;--mint:#5276d6;--canvas:#f6f8fc}
-.bento-lite{background:#f6f8fc!important}
-.main-content,.bento-lite .main-content{background:#f6f8fc!important}
-.main-content:before,.bento-lite .main-content:before,.main-content:after,.bento-lite .main-content:after{display:none!important}
-.page-head h2:before,.page-header h2:before,.bento-lite .page-header h2:before{background:#315df4!important}
-.page-header:after{background:#315df4!important}
-.account-overview:before,.confirmation-card:first-of-type:before{background:#315df4!important}
-.option:before{background:#315df4!important}
-.bento-lite .sidebar-link.active::before{background:#315df4!important}
-
-.balance-block{background:linear-gradient(120deg,#f3f6ff,#f9fbff)!important}
-.balance-block:after{border-color:rgba(49,93,244,.16)!important;box-shadow:0 0 0 12px rgba(49,93,244,.055),0 0 0 25px rgba(49,93,244,.03)!important}
-.option.active{background:linear-gradient(135deg,#f0f5ff,#f7f9ff)!important}
-.submit{background:#315df4!important}
-
-
-/* 页面标题统一：标题下方短横线，不使用左侧装饰。 */
-.page-head h2:before{display:none!important}
-.page-head h2::after{display:block!important;width:26px!important;height:6px!important;margin-top:10px!important;border-radius:999px!important;background:#315df4!important;content:""!important}
-
-/* 接入第 3 版玻璃皮肤：中和本页历史皮肤补丁的冲突规则（仅视觉，不影响内容） */
-.bento-lite{background:radial-gradient(880px 620px at 56% 32%,rgba(126,164,255,.20),transparent 70%),radial-gradient(700px 520px at 12% 9%,rgba(123,147,255,.19),transparent 67%),radial-gradient(620px 560px at 94% 4%,rgba(146,219,255,.24),transparent 65%),radial-gradient(720px 520px at 30% 66%,rgba(146,219,255,.13),transparent 68%),radial-gradient(760px 620px at 61% 94%,rgba(216,190,255,.17),transparent 70%),linear-gradient(135deg,#f9fbff 0%,#f4f8ff 47%,#fbf9ff 100%)!important}
-.main-content,.bento-lite .main-content{background:transparent!important}
-.main-content:before,.bento-lite .main-content:before,.main-content:after,.bento-lite .main-content:after{display:none!important}
-.bento-lite .sidebar.user .sidebar-link.active{background:rgba(255,255,255,.64)!important;color:var(--glass-blue-deep)!important;border:1px solid rgba(255,255,255,.88);box-shadow:6px 7px 16px rgba(84,110,168,.13),-5px -5px 12px rgba(255,255,255,.82),inset 0 1px 0 #fff!important}
-.bento-lite .sidebar-link.active::before{display:none!important}
-.bento-lite .sidebar-link.active .icon{background:linear-gradient(145deg,#4f7dff,#79d8ed)!important;color:#fff!important;box-shadow:3px 4px 10px rgba(53,108,246,.30),inset 0 1px 0 rgba(255,255,255,.45)!important}
-.account-overview:before{display:none!important}
-.balance-block:after{display:none!important}
-.option:before{display:none!important}
-</style></head><body class="bento-lite"><header class="top-bar user"><div class="top-bar-left"><a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a><span class="top-bar-title">彩翼公共采购智能体协同管理平台</span></div><div class="top-bar-right"><div class="top-bar-user"><div class="top-bar-avatar">张</div><span>示例科技有限公司</span></div></div></header><aside class="sidebar user"><div class="sidebar-section"><a class="sidebar-link" href="index.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z"/></svg></span><span>概览</span></a><a class="sidebar-link" href="agent-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 10h8M8 14h5"/></svg></span><span>智能体市场</span></a><a class="sidebar-link active" href="recharge-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M16 14h2"/></svg></span><span>账户充值</span></a><a class="sidebar-link" href="payment-accounts.html"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-6 9 6v9H3v-9Z"/><path d="M6 10v9m4-9v9m4-9v9m4-9v9M2 19h20"/></svg></span><span>付款账户</span></a><a class="sidebar-link" href="balance.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6.5A2.5 2.5 0 0 1 4 17.5v-10Z"/><path d="M4 8h13M15 14h3"/></svg></span><span>彩豆管理</span></a><a class="sidebar-link" href="consumption-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M5 20V10m7 10V4m7 16v-7"/></svg></span><span>消费记录</span></a><a class="sidebar-link" href="invoice-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15l-3-2-3 2-3-2-3 2V3Z"/><path d="M9 9h6m-6 4h6"/></svg></span><span>发票管理</span></a><a class="sidebar-link" href="member-list.html"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.6-3.4 3-5 7-5s6.4 1.6 7 5"/></svg></span><span>账号管理</span></a><a class="sidebar-link" href="role-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 2.9 7.9 7 10 4.1-2.1 7-5.5 7-10V6l-7-3Z"/><path d="M9 12h6m-3-3v6"/></svg></span><span>岗位管理</span></a></div></aside><main class="main-content"><section class="page-head"><div><h2>账户充值</h2></div></section><section class="panel account-overview" aria-label="账户概览"><div class="balance-block"><span class="balance-label">单位彩豆余额</span><strong class="balance-value">18,700 <small>彩豆</small></strong></div><div class="account-item"><span>使用范围</span><b>全体成员共用</b></div><div class="account-item"><span>兑换规则</span><b>1 元 = 1 彩豆</b></div></section><section class="panel recharge-panel"><div class="section-heading"><h3>选择充值金额</h3><p>充值成功后，彩豆将自动入账。</p></div><div class="options" id="options"><button class="option active" data-amount="100"><b>100 元</b><span>到账 100 彩豆</span></button><button class="option" data-amount="500"><b>500 元</b><span>到账 500 彩豆</span></button><button class="option" data-amount="1000"><b>1,000 元</b><span>到账 1,000 彩豆</span></button><button class="option" data-amount="5000"><b>5,000 元</b><span>到账 5,000 彩豆</span></button></div><div class="recharge-footer"><div class="custom"><label for="custom">自定义金额</label><div class="custom-field"><input id="custom" type="number" min="1" placeholder="输入充值金额"/><span>元</span></div></div><div class="amount"><span>本次充值</span><b id="amount">100 <small>元</small></b></div><button class="btn btn-primary submit" onclick="goRecharge()">立即充值</button></div></section><section class="panel records-panel"><h3 class="records-title">充值记录</h3><div class="record-tabs" role="tablist" aria-label="充值发票状态"><button class="record-tab active" type="button" data-filter="all">全部 (5)</button><button class="record-tab" type="button" data-filter="pending">待开票 (2)</button><button class="record-tab" type="button" data-filter="processing">开票中 (1)</button><button class="record-tab" type="button" data-filter="complete">已开票 (2)</button></div><div class="record-table-wrap"><table class="record-table"><thead><tr><th>充值单号</th><th>时间</th><th>充值人</th><th>充值金额</th><th>购买彩豆</th><th>支付方式</th><th>支付状态</th><th>开票状态</th><th>操作</th></tr></thead><tbody id="rechargeRecords"><tr data-invoice="pending"><td class="id-cell">RC20260814160631</td><td>2026-08-14 16:06:31</td><td><span class="mem">李用户</span></td><td class="amount-cell">¥1,000.00</td><td>1,000.00</td><td>企业账户</td><td><span class="status-badge pay-success">支付成功</span></td><td><span class="status-badge invoice-pending">待开票</span></td><td>—</td></tr><tr data-invoice="pending"><td class="id-cell">RC20260812110726</td><td>2026-08-12 11:07:26</td><td><span class="mem">张敏</span></td><td class="amount-cell">¥100.00</td><td>100.00</td><td>微信支付（个人支付）</td><td><span class="status-badge pay-success">支付成功</span></td><td><span class="status-badge invoice-pending">待开票</span></td><td>—</td></tr><tr data-invoice="processing"><td class="id-cell">RC20260805091230</td><td>2026-08-05 09:12:30</td><td><span class="mem">李用户</span></td><td class="amount-cell">¥500.00</td><td>500.00</td><td>企业账户</td><td><span class="status-badge pay-success">支付成功</span></td><td><span class="status-badge invoice-processing">开票中</span></td><td>—</td></tr><tr data-invoice="complete"><td class="id-cell">RC20260728101502</td><td>2026-07-28 10:15:02</td><td><span class="mem">李用户</span></td><td class="amount-cell">¥2,000.00</td><td>2,000.00</td><td>企业账户</td><td><span class="status-badge pay-success">支付成功</span></td><td><span class="status-badge invoice-complete">已开票</span></td><td>—</td></tr><tr data-invoice="complete"><td class="id-cell">RC20260722143010</td><td>2026-07-22 14:30:10</td><td><span class="mem">张敏</span></td><td class="amount-cell">¥500.00</td><td>500.00</td><td>微信支付（个人支付）</td><td><span class="status-badge pay-success">支付成功</span></td><td><span class="status-badge invoice-complete">已开票</span></td><td>—</td></tr><tr data-invoice="complete"><td class="id-cell">RC20260810102518</td><td>2026-08-10 10:25:18</td><td><span class="mem">王晨</span></td><td class="amount-cell">¥300.00</td><td>300.00</td><td>企业账户</td><td><span class="status-badge pay-success">支付成功</span></td><td><span class="status-badge invoice-complete">已开票</span></td><td>—</td></tr><tr data-invoice="complete"><td class="id-cell">RC20260809141205</td><td>2026-08-09 14:12:05</td><td><span class="mem">李用户</span></td><td class="amount-cell">¥2,000.00</td><td>2,000.00</td><td>企业账户</td><td><span class="status-badge pay-success">支付成功</span></td><td><span class="status-badge invoice-complete">已开票</span></td><td>—</td></tr><tr data-invoice="complete"><td class="id-cell">RC20260803105441</td><td>2026-08-03 10:54:41</td><td><span class="mem">张敏</span></td><td class="amount-cell">¥500.00</td><td>500.00</td><td>微信支付（个人支付）</td><td><span class="status-badge pay-success">支付成功</span></td><td><span class="status-badge invoice-complete">已开票</span></td><td>—</td></tr><tr data-invoice="complete"><td class="id-cell">RC20260726113022</td><td>2026-07-26 11:30:22</td><td><span class="mem">李用户</span></td><td class="amount-cell">¥1,000.00</td><td>1,000.00</td><td>企业账户</td><td><span class="status-badge pay-success">支付成功</span></td><td><span class="status-badge invoice-complete">已开票</span></td><td>—</td></tr><tr data-invoice="complete"><td class="id-cell">RC20260719091533</td><td>2026-07-19 09:15:33</td><td><span class="mem">王晨</span></td><td class="amount-cell">¥200.00</td><td>200.00</td><td>微信支付（个人支付）</td><td><span class="status-badge pay-success">支付成功</span></td><td><span class="status-badge invoice-complete">已开票</span></td><td>—</td></tr><tr data-invoice="complete"><td class="id-cell">RC20260712084627</td><td>2026-07-12 08:46:27</td><td><span class="mem">张敏</span></td><td class="amount-cell">¥600.00</td><td>600.00</td><td>企业账户</td><td><span class="status-badge pay-success">支付成功</span></td><td><span class="status-badge invoice-complete">已开票</span></td><td>—</td></tr></tbody></table><div class="record-empty hide" id="recordEmpty">暂无符合条件的充值记录</div></div><div class="records-footer"><span id="recordCount">共 11 条记录</span><div class="pager"><button type="button" aria-label="上一页" id="rcPrev" onclick="rcGo(-1)" disabled>‹</button><span class="page-current" id="rcCur">1</span><button type="button" aria-label="下一页" id="rcNext" onclick="rcGo(1)">›</button></div></div></section></main><script>var amount=100,invoiceFilter='all',RC_SIZE=5,rcPage=1;function refreshRecords(){var counts={all:0,pending:0,processing:0,complete:0},visible=[];document.querySelectorAll('#rechargeRecords tr').forEach(function(row){counts.all++;counts[row.dataset.invoice]++;if(invoiceFilter==='all'||row.dataset.invoice===invoiceFilter)visible.push(row)});document.querySelectorAll('.record-tab').forEach(function(tab){var filter=tab.dataset.filter;tab.textContent=({all:'全部',pending:'待开票',processing:'开票中',complete:'已开票'})[filter]+' ('+counts[filter]+')'});var pages=Math.max(1,Math.ceil(visible.length/RC_SIZE));if(rcPage>pages)rcPage=pages;if(rcPage<1)rcPage=1;document.querySelectorAll('#rechargeRecords tr').forEach(function(row){row.classList.add('hide')});visible.slice((rcPage-1)*RC_SIZE,rcPage*RC_SIZE).forEach(function(row){row.classList.remove('hide')});document.getElementById('recordCount').textContent='共 '+visible.length+' 条记录';document.getElementById('recordEmpty').classList.toggle('hide',visible.length!==0);document.getElementById('rcCur').textContent=rcPage;document.getElementById('rcPrev').disabled=rcPage<=1;document.getElementById('rcNext').disabled=rcPage>=pages}function rcGo(d){rcPage+=d;refreshRecords()}document.querySelectorAll('.option').forEach(function(o){o.onclick=function(){amount=+o.dataset.amount;document.getElementById('custom').value='';document.querySelectorAll('.option').forEach(function(x){x.classList.toggle('active',x===o)});document.getElementById('amount').innerHTML=amount+' <small>元</small>'}});document.getElementById('custom').oninput=function(){if(this.value>0){amount=+this.value;document.querySelectorAll('.option').forEach(function(x){x.classList.remove('active')});document.getElementById('amount').innerHTML=amount+' <small>元</small>'}};function goRecharge(){location.href='recharge-add.html?amount='+encodeURIComponent(amount)}document.querySelectorAll('.record-tab').forEach(function(tab){tab.addEventListener('click',function(){invoiceFilter=tab.dataset.filter;rcPage=1;document.querySelectorAll('.record-tab').forEach(function(item){item.classList.toggle('active',item===tab)});refreshRecords();});});refreshRecords();</script></body></html>
+@media(max-width:760px){
+  .recharge-panel{padding:18px}
+  .recharge-footer{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .submit{grid-column:1/-1}
+}
+@media(max-width:480px){
+  .options{grid-template-columns:1fr}
+  .recharge-footer{grid-template-columns:1fr}
+}
+</style></head><body class="bento-lite"><header class="top-bar user"><div class="top-bar-left"><a class="top-bar-logo" href="../index.html"><img alt="彩翼高科" class="logo-img" src="../logo.dc57457c.png"/></a><span class="top-bar-title">彩翼公共采购智能体协同管理平台</span></div><div class="top-bar-right"><div class="top-bar-user"><div class="top-bar-avatar">张</div><span>示例科技有限公司</span></div></div></header><aside class="sidebar user"><div class="sidebar-section"><a class="sidebar-link" href="index.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z"/></svg></span><span>概览</span></a><a class="sidebar-link" href="agent-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 10h8M8 14h5"/></svg></span><span>智能体市场</span></a><a class="sidebar-link active" href="recharge-list.html"><span class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M16 14h2"/></svg></span><span>账户充值</span></a><a class="sidebar-link" href="payment-accounts.html"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-6 9 6v9H3v-9Z"/><path d="M6 10v9m4-9v9m4-9v9m4-9v9M2 19h20"/></svg></span><span>付款账户</span></a><a class="sidebar-link" href="balance.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6.5A2.5 2.5 0 0 1 4 17.5v-10Z"/><path d="M4 8h13M15 14h3"/></svg></span><span>彩豆管理</span></a><a class="sidebar-link" href="consumption-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M5 20V10m7 10V4m7 16v-7"/></svg></span><span>消费记录</span></a><a class="sidebar-link" href="invoice-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15l-3-2-3 2-3-2-3 2V3Z"/><path d="M9 9h6m-6 4h6"/></svg></span><span>发票管理</span></a><a class="sidebar-link" href="member-list.html"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.6-3.4 3-5 7-5s6.4 1.6 7 5"/></svg></span><span>账号管理</span></a><a class="sidebar-link" href="role-list.html"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 2.9 7.9 7 10 4.1-2.1 7-5.5 7-10V6l-7-3Z"/><path d="M9 12h6m-3-3v6"/></svg></span><span>岗位管理</span></a></div></aside><main class="main-content">
+<section class="page-head"><div><h2>账户充值</h2></div><button type="button" class="bp-link-btn" data-bp-rules>彩豆规则</button></section>
+<section class="stats bp-compose" id="bpCompose" aria-label="彩豆余额"></section>
+<section class="panel recharge-panel" id="plans" aria-labelledby="plansTitle"><div class="section-heading"><h3 id="plansTitle">年包</h3><p id="plansSub"></p></div><div class="bp-plans" id="bpPlans"></div></section>
+<section class="panel recharge-panel" aria-labelledby="smallTitle"><div class="section-heading"><h3 id="smallTitle">单次充值</h3><p id="smallSub">长期有效</p></div><div class="bp-promo" id="rcPromo" hidden></div><div class="options" id="options"></div><div class="recharge-footer"><div class="custom"><label for="custom">自定义金额</label><div class="custom-field"><input id="custom" type="number" min="1" step="1" placeholder="输入充值金额"/><span>元</span></div><div class="bp-err" id="customErr" hidden></div></div><div class="amount"><span>本次充值</span><b id="amount">100 <small>元</small></b><em id="amountGet"></em></div><button class="btn btn-primary submit" type="button" id="rechargeBtn">立即充值</button><div class="bp-hint" id="planHint" hidden></div></div></section>
+<section class="panel records-panel"><h3 class="records-title">充值记录</h3><div class="record-tabs" role="tablist" aria-label="开票状态"><button class="record-tab active" type="button" data-filter="all">全部</button><button class="record-tab" type="button" data-filter="pending">待开票</button><button class="record-tab" type="button" data-filter="processing">开票中</button><button class="record-tab" type="button" data-filter="complete">已开票</button></div><div class="record-table-wrap"><table class="record-table"><thead><tr><th>订单号</th><th>时间</th><th>充值人</th><th>订单类型</th><th>实付金额</th><th>到账彩豆</th><th>其中赠送</th><th>有效期至</th><th>支付方式</th><th>开票状态</th></tr></thead><tbody id="rechargeRecords"></tbody></table><div class="record-empty hide" id="recordEmpty">暂无符合条件的充值记录</div></div><div class="records-footer"><span id="recordCount"></span><div class="pager"><button type="button" aria-label="上一页" id="rcPrev">‹</button><span class="page-current" id="rcCur">1</span><button type="button" aria-label="下一页" id="rcNext">›</button></div></div></section>
+</main>
+<script>
+(function(){
+var B=window.BeanPlan, amount=null, invoiceFilter='all', RC_SIZE=6, rcPage=1;
+var INV={pending:['待开票','invoice-pending'],processing:['开票中','invoice-processing'],complete:['已开票','invoice-complete']};
+var TYPE={plan:'年包',upgrade:'年包升级',recharge:'单次充值'};
+function renderCompose(){
+  var b=B.buckets(), personal=B.isPersonal();
+  var pct=function(v){return b.total>0?(v/b.total*100).toFixed(2)+'%':'0';};
+  document.getElementById('bpCompose').classList.toggle('two',!personal);
+  document.getElementById('bpCompose').innerHTML=
+   '<div class="stat bp-total"><span>'+B.walletName()+'余额</span><b>'+B.fmt(b.total)+' <small>彩豆</small></b>'+
+   '<div class="bp-bar" aria-hidden="true"><i class="s-free" style="width:'+pct(b.free)+'"></i><i class="s-plan" style="width:'+pct(b.plan)+'"></i><i class="s-recharge" style="width:'+pct(b.recharge)+'"></i></div>'+
+   '<p class="bp-kpi-meta">'+(personal?'1 元 = 1 彩豆':'全体成员共用 · 1 元 = 1 彩豆')+'</p></div>'+
+   (personal?'<div class="stat s-free"><span>免费彩豆</span><b>'+B.fmt(b.free)+'</b><p class="bp-kpi-meta bp-exp">'+b.freeExpire.slice(5).replace('-','月')+'日到期</p></div>':'')+
+   '<div class="stat s-plan"><span>年包彩豆</span><b>'+B.fmt(b.plan)+'</b><p class="bp-kpi-meta">'+(b.planExpire?b.planExpire+' 到期':'未购买年包')+'</p></div>'+
+   '<div class="stat s-recharge"><span>充值彩豆</span><b>'+B.fmt(b.recharge)+'</b><p class="bp-kpi-meta">长期有效'+(b.rechargeGift?' · 累计获赠 '+B.fmtInt(b.rechargeGift):'')+'</p></div>';
+}
+function li(t){return '<li>'+t+'</li>';}
+function renderPlans(){
+  var cfg=B.loadCfg(), cp=B.currentPlan();
+  document.getElementById('plansSub').textContent='自购买日起 '+cfg.validityMonths+' 个月有效，基础与赠送彩豆同期管理';
+  var sale=B.salePlans(cfg);
+  document.getElementById('plans').hidden=!sale.length;
+  document.getElementById('bpPlans').innerHTML=sale.map(function(p){
+    var isCur=cp&&cp.tier===p.tier, foot='', tip='', tag='';
+    if(isCur){
+      tag='<span class="bp-tag">当前年包</span>';
+      tip='<div class="bp-upgrade-tip">剩余 <b>'+B.fmt(cp.remaining)+'</b> / '+B.fmtInt(cp.total)+' 彩豆 · '+cp.expireAt+' 到期<div class="bp-progress"><i style="width:'+Math.max(2,cp.remaining/cp.total*100).toFixed(1)+'%"></i></div></div>';
+      foot='<a class="bp-btn ghost" href="recharge-add.html?type=plan&tier='+p.tier+'">再购一份</a>';
+    } else if(cp&&p.price>cp.price){
+      var c=B.calcUpgrade(cp,p.tier);
+      if(c.ok){
+        tag='<span class="bp-tag ok">可升级</span>';
+        tip='<div class="bp-upgrade-tip">从'+cp.name+'升级：补 <b>'+B.money(c.pay,0)+'</b>，补发 <b>'+B.fmtInt(c.beans)+'</b> 彩豆，有效期不变</div>';
+        foot='<a class="bp-btn" href="recharge-add.html?type=upgrade&plan='+encodeURIComponent(cp.id)+'&tier='+p.tier+'">升级到'+B.esc(p.name)+'</a><a class="bp-link bp-alt" href="recharge-add.html?type=plan&tier='+p.tier+'">单独购买</a>';
+      } else {
+        foot='<a class="bp-btn" href="recharge-add.html?type=plan&tier='+p.tier+'">立即购买</a>';
+      }
+    } else {
+      foot='<a class="bp-btn'+(cp?' ghost':'')+'" href="recharge-add.html?type=plan&tier='+p.tier+'">立即购买</a>';
+    }
+    return '<article class="bp-plan'+(isCur?' current':'')+'"><div class="bp-plan-head"><span class="bp-plan-name">'+B.esc(p.name)+'</span>'+tag+'</div>'+
+      '<div class="bp-plan-price">'+B.money(p.price,0)+'<small>/ 年</small></div>'+
+      '<div class="bp-plan-beans">年度总彩豆 <b>'+B.fmtInt(p.total)+'</b></div>'+
+      '<ul class="bp-plan-list">'+li('基础 '+B.fmtInt(p.base)+' + 赠送 '+B.fmtInt(p.gift)+' 彩豆')+li('含 '+p.ratio+'% 赠送彩豆')+li(cfg.validityMonths+' 个月有效，可用于全部智能体')+'</ul>'+
+      tip+'<div class="bp-plan-foot">'+foot+'</div></article>';
+  }).join('');
+}
+function setAmount(v){amount=v;var g=v?B.rechargeGiftOf(v):0;document.getElementById('amount').innerHTML=(v?B.fmtInt(v):'—')+' <small>元</small>';document.getElementById('amountGet').textContent=v?'到账 '+B.fmtInt(v+g)+' 彩豆'+(g?'（含赠送 '+B.fmtInt(g)+'）':''):'';checkHint();}
+function checkHint(){
+  var hint=document.getElementById('planHint'), starter=B.cheapestPlan();
+  var more=starter?starter.total-(starter.price+B.rechargeGiftOf(starter.price)):0;
+  if(amount&&starter&&more>0&&amount>=starter.price){hint.hidden=false;hint.innerHTML='同样支付 '+B.money(starter.price,0)+' 购买'+B.esc(starter.name)+'年包，可多得 '+B.fmtInt(more)+' 彩豆。<a class="bp-link" href="#plans">查看年包</a>';}
+  else hint.hidden=true;
+}
+function renderSmall(){
+  var cfg=B.loadCfg(), box=document.getElementById('options');
+  document.getElementById('custom').placeholder=cfg.customMin+'–'+B.fmtInt(cfg.customMax)+' 元';
+  var promo=B.rechargePromo(cfg), pb=document.getElementById('rcPromo');
+  document.getElementById('smallSub').textContent=promo.active?'长期有效 · 赠送彩豆不开票':'不赠送，长期有效';
+  pb.hidden=!promo.active;
+  if(promo.active) pb.innerHTML='<b>限时充值 '+(promo.ratio===100?'1:1 ':promo.ratio+'% ')+'赠送</b><span>'+promo.start+' 至 '+promo.end+'，档位与自定义金额均按充值金额的 '+promo.ratio+'% 赠送彩豆</span>';
+  box.innerHTML=cfg.small.map(function(v,i){var g=B.rechargeGiftOf(v,cfg);return '<button class="option'+(i===0?' active':'')+'" type="button" data-amount="'+v+'"><b>'+B.fmtInt(v)+' 元</b><span>到账 '+B.fmtInt(v+g)+' 彩豆</span>'+(g?'<i class="bp-gift-tag">送 '+B.fmtInt(g)+'</i>':'')+'</button>';}).join('');
+  box.querySelectorAll('.option').forEach(function(o){o.onclick=function(){document.getElementById('custom').value='';document.getElementById('customErr').hidden=true;box.querySelectorAll('.option').forEach(function(x){x.classList.toggle('active',x===o);});setAmount(+o.dataset.amount);};});
+  setAmount(cfg.small[0]);
+}
+document.getElementById('custom').addEventListener('input',function(){
+  var cfg=B.loadCfg(), v=Number(this.value), err=document.getElementById('customErr');
+  document.querySelectorAll('#options .option').forEach(function(x){x.classList.remove('active');});
+  if(!this.value){err.hidden=true;setAmount(null);return;}
+  if(!(v>=cfg.customMin&&v<=cfg.customMax)||Math.floor(v)!==v){err.hidden=false;err.textContent='请输入 '+cfg.customMin+'–'+B.fmtInt(cfg.customMax)+' 之间的整数金额';setAmount(null);return;}
+  err.hidden=true;setAmount(v);
+});
+document.getElementById('rechargeBtn').addEventListener('click',function(){
+  if(!amount){var err=document.getElementById('customErr');err.hidden=false;err.textContent=err.textContent||'请选择或输入充值金额';document.getElementById('custom').focus();return;}
+  location.href='recharge-add.html?type=recharge&amount='+encodeURIComponent(amount);
+});
+function renderRecords(){
+  var orders=B.acct().orders.slice().sort(function(a,b){return a.time<b.time?1:-1;});
+  var counts={all:orders.length,pending:0,processing:0,complete:0};
+  orders.forEach(function(o){counts[o.invoice]++;});
+  document.querySelectorAll('.record-tab').forEach(function(tab){var k=tab.dataset.filter;tab.textContent=({all:'全部',pending:'待开票',processing:'开票中',complete:'已开票'})[k]+' ('+counts[k]+')';});
+  var rows=orders.filter(function(o){return invoiceFilter==='all'||o.invoice===invoiceFilter;});
+  var pages=Math.max(1,Math.ceil(rows.length/RC_SIZE)); rcPage=Math.min(Math.max(1,rcPage),pages);
+  document.getElementById('rechargeRecords').innerHTML=rows.slice((rcPage-1)*RC_SIZE,rcPage*RC_SIZE).map(function(o){
+    return '<tr><td class="id-cell">'+B.esc(o.orderNo)+'</td><td>'+o.time+'</td><td><span class="mem">'+B.esc(o.who)+'</span></td><td><span class="bp-type '+o.type+'">'+(o.type==='recharge'?TYPE.recharge:B.esc(o.title))+'</span></td>'+
+      '<td class="amount-cell">'+B.money(o.paid)+'</td><td>'+B.fmt(o.base+o.gift)+'</td><td>'+(o.gift?B.fmt(o.gift):'—')+'</td><td>'+(o.expireAt||'长期有效')+'</td><td>'+B.esc(o.channel)+'</td>'+
+      '<td><span class="status-badge '+INV[o.invoice][1]+'">'+INV[o.invoice][0]+'</span></td></tr>';
+  }).join('');
+  document.getElementById('recordCount').textContent='共 '+rows.length+' 条记录';
+  document.getElementById('recordEmpty').classList.toggle('hide',rows.length!==0);
+  document.getElementById('rcCur').textContent=rcPage;
+  document.getElementById('rcPrev').disabled=rcPage<=1; document.getElementById('rcNext').disabled=rcPage>=pages;
+}
+document.getElementById('rcPrev').onclick=function(){rcPage--;renderRecords();};
+document.getElementById('rcNext').onclick=function(){rcPage++;renderRecords();};
+document.querySelectorAll('.record-tab').forEach(function(tab){tab.addEventListener('click',function(){invoiceFilter=tab.dataset.filter;rcPage=1;document.querySelectorAll('.record-tab').forEach(function(t){t.classList.toggle('active',t===tab);});renderRecords();});});
+function renderAll(){renderCompose();renderPlans();renderRecords();}
+renderAll();renderSmall();
+document.addEventListener('beanplan:change',renderAll);
+})();
+</script></body></html>
