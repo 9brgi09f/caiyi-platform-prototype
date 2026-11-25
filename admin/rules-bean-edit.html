@@ -103,9 +103,9 @@
 <h3 class="form-section-title section-with-action"><span>年包配置</span><button class="btn btn-sm btn-outline" type="button" id="addPlan">+ 新增年包</button></h3>
 <div class="form-grid" style="margin-bottom:var(--spacing-lg)"><div class="form-item"><label class="form-label" for="validity">有效期</label><div class="inline-field"><span>自购买日起</span><input class="input" id="validity" style="width:80px" type="number" min="1" max="36" step="1"/><span>个月</span></div><span class="form-hint">基础及赠送彩豆按同一有效期管理，到期未使用部分清零</span></div></div>
 <div class="table-wrapper"><table class="table"><thead><tr><th>年包名称</th><th>价格（元 / 年）</th><th>赠送比例</th><th>赠送彩豆</th><th>年度总彩豆</th><th>在售</th><th>操作</th></tr></thead><tbody id="planRows"></tbody></table></div>
-<p class="rule-note">用户端按价格从低到高展示在售年包，最多 <span id="maxSale"></span> 个；价格越高，年度总彩豆须越多。已产生订单的年包只能停售。修改仅对之后的新订单生效，已购年包按购买时的价格与比例执行。赠送彩豆不开票，消费不参与开发者分账。</p>
+<p class="rule-note">用户端按价格从低到高展示在售年包，最多 <span id="maxSale"></span> 个；已产生订单的年包只能停售。修改仅对之后的新订单生效，已购年包按购买时的价格与比例执行。赠送彩豆不开票，消费不参与开发者分账。</p>
 </form>
-<form class="form-section" novalidate>
+<form class="form-section" id="upgradeSection" novalidate>
 <h3 class="form-section-title">年包升级</h3>
 <p class="rule-note" style="margin-top:0">生效中的年包可升级到价格更高的任一在售年包，由用户选择：补差价 = 目标年包价格 − 原年包已付金额；补发彩豆 = 目标年包总彩豆 − 原年包总彩豆；有效期沿用原年包，不支持降级。</p>
 <div class="table-wrapper"><table class="table"><thead><tr><th>升级路径</th><th>补差价</th><th>补发彩豆</th><th>其中赠送</th></tr></thead><tbody id="upRows"></tbody></table></div>
@@ -221,6 +221,7 @@ $('saveBtn').addEventListener('click',function(){
   var sale=rows.filter(function(p){return p.on;}).map(B.planView).sort(function(a,b){return a.price-b.price;});
   if(sale.length>B.MAX_ON_SALE) return err('在售年包最多 '+B.MAX_ON_SALE+' 个。');
   for(var k=1;k<sale.length;k++){
+    if(!B.UPGRADE_ENABLED) break;
     if(sale[k].price===sale[k-1].price) return err('在售年包“'+sale[k-1].name+'”与“'+sale[k].name+'”价格相同，无法区分升级方向。');
     if(sale[k].total<=sale[k-1].total) return err('“'+sale[k].name+'”价格更高，但年度总彩豆不高于“'+sale[k-1].name+'”，无法升级。');
   }
@@ -247,6 +248,7 @@ $('saveBtn').addEventListener('click',function(){
   rows=plans.map(function(p){return Object.assign({},p);}); renderRows(); renderHist();
   var ok=$('saveOk'); ok.hidden=false; setTimeout(function(){ok.hidden=true;},2500);
 });
+$('upgradeSection').hidden=!B.UPGRADE_ENABLED;
 fill();
 })();
 </script>

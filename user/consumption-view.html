@@ -34,7 +34,7 @@ document.title=fl.orderNo+' - 消费详情';
 var src=document.getElementById('srcList'), parts=fl.parts, html='';
 ['free','plan','recharge'].forEach(function(k){
   if(!parts[k]) return;
-  var note=k==='free'?'不开票':k==='plan'?'按年包订单开票':(B.rechargeBatches(fl).some(function(x){return x.coef<1;})?'含赠送部分，折算后开票':'计入消费开票金额');
+  var note=k==='free'?'不开票':k==='plan'||B.invoiceLines(fl).some(function(x){return x.gift;})?'含赠送部分，折算后开票':'计入消费开票金额';
   html+='<div class="ded-row"><span><i class="bp-dot s-'+k+'"></i> '+B.SOURCE_LABEL[k]+(note?' <em class="src-note">'+note+'</em>':'')+'</span><b class="minus">−'+B.fmt(-parts[k])+'</b></div>';
 });
 if(!html) html='<div class="ded-row"><span>未产生扣减</span><b>—</b></div>';
@@ -42,14 +42,14 @@ src.innerHTML=html;
 if(!failed){
   var base=B.invoiceBase(fl), box=document.getElementById('invBase');
   var eligible=m.invoice==='eligible';
-  var note=base>0?(eligible?'仅充值彩豆部分可开具消费发票，按整笔申请。':INV[0]):
-    '这笔消费没有使用充值彩豆。';
+  var note=base>0?(eligible?'年包彩豆与充值彩豆可开具消费发票，按整笔申请。':INV[0]):
+    '这笔消费仅使用免费彩豆，不开票。';
   box.hidden=false;
   box.style.marginTop='14px';
-  var bt=B.rechargeBatches(fl), gifted=bt.some(function(x){return x.coef<1;});
-  var lines=gifted?bt.map(function(x){return '<div class="ded-row"><span>'+B.esc(x.label)+' <em class="src-note">'+B.fmt(x.beans)+' 彩豆 × '+(x.coef===1?'1':x.coef)+'</em></span><b>'+B.money(x.amount)+'</b></div>';}).join(''):'';
-  if(gifted&&eligible) note='充值彩豆按来源充值订单的“实付 ÷ 到账彩豆”折算，赠送部分不开票，按整笔申请。';
-  box.innerHTML='<div class="ded-list">'+lines+'<div class="ded-row total"><span>可开票金额</span><b>'+B.money(eligible?base:0)+'</b></div></div>'+
+  var bt=B.invoiceLines(fl), gifted=bt.some(function(x){return !x.plain;});
+  var lines=gifted?bt.map(function(x){return '<div class="ded-row"><span>'+B.esc(x.label)+' <em class="src-note">'+B.fmt(x.beans)+' 彩豆'+(x.plain?' × 1':' × 未分摊 '+B.money(x.remainPaid)+' ÷ 未使用 '+B.fmt(x.remainBeans)+' 彩豆')+'</em></span><b>'+B.money(x.amount)+'</b></div>';}).join(''):'';
+  if(gifted&&eligible) note='按来源年包或充值订单的未分摊实付 ÷ 未使用彩豆折算，赠送部分不开票；批次用完时合计等于实付。按整笔申请。';
+  box.innerHTML='<div class="ded-list">'+lines+'<div class="ded-row total"><span>'+(m.invoice==='pending'||m.invoice==='done'?'开票金额':'可开票金额')+'</span><b>'+B.money(eligible||m.invoice==='pending'||m.invoice==='done'?base:0)+'</b></div></div>'+
     '<p class="ded-note">'+note+'</p>';
 }
 if(failed) document.getElementById('srcSection').style.display='none';

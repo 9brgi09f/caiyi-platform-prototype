@@ -172,6 +172,8 @@ function build(){
     info.innerHTML='<div class="bp-calc">'+row('年包',p.name)+row('年度总彩豆',B.fmtInt(p.total)+' 彩豆','基础 '+B.fmtInt(p.base)+' + 赠送 '+B.fmtInt(p.gift)+'（'+p.ratio+'%）')+
       row('有效期',B.TODAY+' 至 '+exp,cfg.validityMonths+' 个月，到期未使用部分清零')+row('当前'+wallet,B.fmt(b.total)+' 彩豆')+row('购买后'+wallet,B.fmt(b.total+p.total)+' 彩豆','',true)+'</div>'+
       '<p class="bp-note" style="margin:10px 2px 0">按实付金额 '+B.money(p.price,0)+' 开票，赠送彩豆不开票。</p>';
+  } else if(type==='upgrade'&&!B.UPGRADE_ENABLED){
+    return fail('年包升级暂未开放，可再购一份年包或单次充值。');
   } else if(type==='upgrade'){
     var plan=B.activePlans().filter(function(x){return x.id===planId;})[0];
     if(!plan) return fail('年包不存在或已到期，请返回重新选择。');

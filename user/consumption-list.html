@@ -29,7 +29,6 @@ function sources(fl){
 function noteFor(fl){
   if(B.isFailed(fl)) return '';
   var p=fl.parts;
-  if(fl.meta.invoice==='none'&&p.plan<0&&!p.recharge) return '<div class="sub">按年包订单开票</div>';
   return '';
 }
 function stats(){

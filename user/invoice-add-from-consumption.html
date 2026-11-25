@@ -12,7 +12,7 @@
 </section>
 <section class="panel">
   <div class="section-title"><h3>选择消费记录</h3><span class="meta">申请人：张敏</span></div>
-  <div class="notice"><b>申请规则</b><span id="invoiceRule">可为全公司消费订单申请开票，每笔仅可申请一次。消费开票金额按充值彩豆部分计算。</span></div>
+  <div class="notice"><b>申请规则</b><span id="invoiceRule">可为全公司消费订单申请开票，每笔仅可申请一次。年包彩豆与充值彩豆按实付比例折算开票，免费彩豆不开票。</span></div>
   <div class="table-wrap">
     <table class="data-table"><thead><tr><th><input aria-label="选择全部" id="selectAll" type="checkbox" checked></th><th>消费时间</th><th>消费单号</th><th>智能体</th><th>消费人</th><th>消费金额</th><th>可开票金额</th><th>状态</th></tr></thead><tbody id="records"></tbody></table>
   </div>
@@ -37,7 +37,7 @@
   var B=window.BeanPlan;
   var personal=B.isPersonal();
   var storageKey=personal?'caiyi-invoice-titles-personal':'caiyi-invoice-titles';
-  if(personal) document.getElementById('invoiceRule').textContent='可为本人消费订单申请开票，每笔仅可申请一次。消费开票金额按充值彩豆部分计算。';
+  if(personal) document.getElementById('invoiceRule').textContent='可为本人消费订单申请开票，每笔仅可申请一次。年包彩豆与充值彩豆按实付比例折算开票，免费彩豆不开票。';
   var records=B.invoiceableConsumptions().map(function(r){var fl=r.flow;return {id:fl.orderNo,agent:fl.title,time:fl.time,member:fl.who,amount:B.invoiceBase(fl),total:-r.delta};});
   var defaultTitles=[
     {id:'company',name:'示例科技有限公司',type:'company',taxNo:'91440101MA5EXMPL3K',bankName:'',bankAccount:'',address:'',phone:'',isDefault:false},

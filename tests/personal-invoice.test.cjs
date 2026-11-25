@@ -41,9 +41,7 @@ test('个人充值和消费按本人账本计费，单位订单无法提交', ()
   assert.equal(personal.invoiceableConsumptions().length, 0);
 
   const plan = personal.createPlan('starter', '支付宝');
-  const upgrade = personal.createUpgrade(plan.orderNo, 'standard', '支付宝');
   assert.equal(personal.submitInvoice('recharge', [plan.orderNo], { title: '张敏' }).amount, 5980);
-  assert.equal(personal.submitInvoice('recharge', [upgrade.orderNo], { title: '张敏' }).amount, 25000);
 });
 
 test('个人与单位各自提交开票并凭单号查询，不覆盖已存在的申请', () => {

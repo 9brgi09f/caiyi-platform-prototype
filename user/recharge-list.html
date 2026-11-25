@@ -99,7 +99,7 @@ function renderPlans(){
       tag='<span class="bp-tag">当前年包</span>';
       tip='<div class="bp-upgrade-tip">剩余 <b>'+B.fmt(cp.remaining)+'</b> / '+B.fmtInt(cp.total)+' 彩豆 · '+cp.expireAt+' 到期<div class="bp-progress"><i style="width:'+Math.max(2,cp.remaining/cp.total*100).toFixed(1)+'%"></i></div></div>';
       foot='<a class="bp-btn ghost" href="recharge-add.html?type=plan&tier='+p.tier+'">再购一份</a>';
-    } else if(cp&&p.price>cp.price){
+    } else if(B.UPGRADE_ENABLED&&cp&&p.price>cp.price){
       var c=B.calcUpgrade(cp,p.tier);
       if(c.ok){
         tag='<span class="bp-tag ok">可升级</span>';

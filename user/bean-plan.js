@@ -12,6 +12,8 @@
   var WS_KEY = 'caiyi.beanplan.ws';
   var TODAY = '2026-11-18';
   var MAX_ON_SALE = 6; // 在售年包上限，保证用户端卡片可读
+  // 2026-11-25：年包升级本期不做，入口与下单均关闭（测算与分摊代码保留，改为 true 可恢复）
+  var UPGRADE_ENABLED = false;
 
   var DEFAULT_CFG = {
     plans: [
@@ -140,11 +142,11 @@
         f('2026-08-16 10:22:05', 'consume', { who: '陈晓', title: '合规监测智能体', orderNo: 'USE20260816102205', meta: cm('Token 计费', 'Web', 'none', '失败') }),
         f('2026-08-18 14:36:21', 'consume', { who: '张敏', title: '采购需求分析智能体', orderNo: 'USE20260818143621', recharge: -10.4, meta: cm('Token 计费', 'Web', 'eligible') }),
         f('2026-09-01 10:20:15', 'plan', { who: '李用户', title: '入门版', orderNo: P, channel: '机构对公账户', planId: P, plan: 7774 }),
-        f('2026-09-05 15:12:40', 'consume', { who: '王晨', title: '采购需求分析智能体', orderNo: 'USE20260905151240', planId: P, plan: -320, meta: cm('Token 计费', 'Web', 'none') }),
-        f('2026-09-18 10:31:08', 'consume', { who: '张敏', title: '合规监测智能体', orderNo: 'USE20260918103108', planId: P, plan: -860, meta: cm('按次计费', 'Web', 'none') }),
-        f('2026-10-12 14:05:22', 'consume', { who: '李用户', title: '政府采购数据分析智能体', orderNo: 'USE20261012140522', planId: P, plan: -1045.6, meta: cm('Token 计费', 'API', 'none') }),
-        f('2026-10-26 16:40:11', 'consume', { who: '王晨', title: '合规监测智能体', orderNo: 'USE20261026164011', planId: P, plan: -210.4, meta: cm('Token 计费', 'Web', 'none') }),
-        f('2026-11-06 09:18:45', 'consume', { who: '张敏', title: '采购需求分析智能体', orderNo: 'USE20261106091845', planId: P, plan: -12, meta: cm('Token 计费', 'Web', 'none') })
+        f('2026-09-05 15:12:40', 'consume', { who: '王晨', title: '采购需求分析智能体', orderNo: 'USE20260905151240', planId: P, plan: -320, meta: cm('Token 计费', 'Web', 'done') }),
+        f('2026-09-18 10:31:08', 'consume', { who: '张敏', title: '合规监测智能体', orderNo: 'USE20260918103108', planId: P, plan: -860, meta: cm('按次计费', 'Web', 'pending') }),
+        f('2026-10-12 14:05:22', 'consume', { who: '李用户', title: '政府采购数据分析智能体', orderNo: 'USE20261012140522', planId: P, plan: -1045.6, meta: cm('Token 计费', 'API', 'eligible') }),
+        f('2026-10-26 16:40:11', 'consume', { who: '王晨', title: '合规监测智能体', orderNo: 'USE20261026164011', planId: P, plan: -210.4, meta: cm('Token 计费', 'Web', 'eligible') }),
+        f('2026-11-06 09:18:45', 'consume', { who: '张敏', title: '采购需求分析智能体', orderNo: 'USE20261106091845', planId: P, plan: -12, meta: cm('Token 计费', 'Web', 'eligible') })
       ],
       plans: [
         { id: P, tier: 'starter', name: '入门版', buyAt: '2026-09-01', expireAt: '2027-08-31', price: 5980, ratio: 30, paid: 5980, base: 5980, gift: 1794, total: 7774, upgrades: [] }
@@ -177,10 +179,7 @@
       // 限时充值 1:1 赠送期间充值，随后一笔消费跨越无赠送与含赠送两个充值批次
       f('2026-11-16 10:05:12', 'recharge', { who: '张敏', orderNo: 'RC20261116100512', channel: '微信支付', recharge: 200, gift: 100, paid: 100 }),
       f('2026-11-17 14:30:26', 'consume', { who: '张敏', title: '政府采购数据分析智能体', orderNo: 'USE20261117143026', free: -10, recharge: -267,
-        meta: Object.assign(cm('Token 计费', 'Web', 'eligible'), { rbatches: [
-          { orderNo: '', label: '无赠送充值', beans: 157, coef: 1 },
-          { orderNo: 'RC20261116100512', label: '限时赠送充值（充 100 得 200）', beans: 110, coef: 0.5 }
-        ] }) })
+        meta: cm('Token 计费', 'Web', 'eligible') })
     ].concat(logins);
     return {
       flows: flows,
@@ -193,7 +192,7 @@
       base: 0
     };
   }
-  function seed() { return { version: 6, org: seedOrg(), personal: seedPersonal() }; }
+  function seed() { return { version: 8, org: seedOrg(), personal: seedPersonal() }; }
 
   // ---------- 状态 ----------
   var memoryState = null;
@@ -201,7 +200,7 @@
     if (memoryState && !refresh) return memoryState;
     try {
       var raw = localStorage.getItem(STATE_KEY);
-      if (raw) { var s = JSON.parse(raw); if (s && s.version === 6 && s.org && s.personal) { memoryState = s; return s; } }
+      if (raw) { var s = JSON.parse(raw); if (s && s.version === 8 && s.org && s.personal) { memoryState = s; return s; } }
     } catch (_) { /* 重新初始化 */ }
     if (memoryState) return memoryState;
     memoryState = seed();
@@ -264,19 +263,64 @@
     rows = rows.reverse();
     return withFailed ? rows : rows.filter(function (r) { return !isFailed(r.flow); });
   }
-  // 消费可开票金额：仅充值彩豆部分；年包彩豆已随年包订单开票，免费彩豆不开票
-  // 充值彩豆含赠送时按来源充值批次的本金分摊系数（实付 ÷ 到账总彩豆）折算，无赠送为 1
-  // 一笔消费可能跨多个充值批次，按批次分别折算后相加
-  function rechargeBatches(fl) {
-    if (fl.meta && Array.isArray(fl.meta.rbatches)) return fl.meta.rbatches.map(function (x) { return Object.assign({}, x, { amount: round2(x.beans * x.coef) }); });
-    var beans = -(fl.parts.recharge || 0);
-    if (!beans) return [];
-    var coef = fl.meta && typeof fl.meta.rcoef === 'number' ? fl.meta.rcoef : 1;
-    return [{ orderNo: '', label: coef === 1 ? '无赠送充值' : '含赠送充值', beans: beans, coef: coef, amount: round2(beans * coef) }];
+  // ---------- 本金分摊（开票与开发者分账共用） ----------
+  // 每份年包、每笔充值各为一个批次，记“未分摊实付（分）”与“未使用彩豆”。
+  // 每笔消费的金额 = 消费彩豆 × 未分摊实付 ÷ 未使用彩豆，四舍五入到分后从未分摊实付中扣除；
+  // 用完批次最后一笔取全部余额，故批次用完时合计恰好等于实付。升级把补差价与补发彩豆并入原批次。
+  function cents(n) { return Math.round(n * 100); }
+  function take(bt, x) {
+    var amt = x >= bt.S - 1e-9 ? bt.R : Math.min(bt.R, Math.round(x * bt.R / bt.S));
+    var line = { orderNo: bt.orderNo, label: bt.label, beans: round2(x), amount: amt / 100, remainPaid: bt.R / 100, remainBeans: round2(bt.S), gift: bt.gift, plan: bt.plan };
+    bt.R -= amt; bt.S = round2(bt.S - x);
+    return line;
+  }
+  function allocations(ws) {
+    var a = acct(ws), plans = {}, pool = [], out = { lines: {}, cleared: [], plans: plans, pool: pool };
+    if (a.base) pool.push({ orderNo: '', label: '历史充值', R: cents(a.base), S: a.base, gift: false });
+    a.plans.forEach(function (p) {
+      var up = (p.upgrades || []).reduce(function (o, u) { o.pay += u.pay; o.beans += u.beans; return o; }, { pay: 0, beans: 0 });
+      plans[p.id] = { orderNo: p.id, label: '年包', name: p.name, R: 0, S: 0, initPaid: p.paid - up.pay, plan: true, gift: true, upgrades: p.upgrades || [] };
+    });
+    sortedFlows(a).forEach(function (fl) {
+      var pb = fl.planId ? plans[fl.planId] : null;
+      if (fl.kind === 'plan' && pb) { pb.R += cents(pb.initPaid); pb.S = round2(pb.S + fl.parts.plan); }
+      else if (fl.kind === 'upgrade' && pb) {
+        var u = pb.upgrades.filter(function (x) { return x.orderNo === fl.orderNo; })[0];
+        pb.R += cents(u ? u.pay : 0); pb.S = round2(pb.S + fl.parts.plan);
+      } else if (fl.kind === 'recharge') {
+        var paid = fl.paid || fl.parts.recharge;
+        pool.push({ orderNo: fl.orderNo, label: fl.gift ? '限时赠送充值' : '充值', R: cents(paid), S: fl.parts.recharge, gift: !!fl.gift });
+      } else if (fl.kind === 'expire' && pb && fl.parts.plan) {
+        out.cleared.push({ planId: fl.planId, beans: -fl.parts.plan, amount: pb.R / 100 }); pb.R = 0; pb.S = 0;
+      } else if (fl.kind === 'consume' && !isFailed(fl)) {
+        var lines = [];
+        var xp = -(fl.parts.plan || 0);
+        if (xp && pb && pb.S > 0) { var l = take(pb, Math.min(xp, pb.S)); l.label = (pb.name || '') + '年包'; lines.push(l); }
+        var xr = round2(-(fl.parts.recharge || 0));
+        for (var i = 0; i < pool.length && xr > 0; i++) {
+          if (pool[i].S <= 0) continue;
+          var t = Math.min(xr, pool[i].S);
+          lines.push(take(pool[i], t)); xr = round2(xr - t);
+        }
+        out.lines[fl.orderNo] = lines;
+      }
+    });
+    return out;
+  }
+  // 可开票明细：无赠送的充值批次合并为一行，年包与含赠送批次逐批展示
+  function invoiceLines(fl) {
+    if (fl.kind !== 'consume' || isFailed(fl)) return [];
+    var lines = allocations().lines[fl.orderNo] || [], plain = null, out = [];
+    lines.forEach(function (l) {
+      if (!l.plan && !l.gift) {
+        if (!plain) { plain = { label: '无赠送充值', beans: 0, amount: 0, plain: true }; out.push(plain); }
+        plain.beans = round2(plain.beans + l.beans); plain.amount = round2(plain.amount + l.amount);
+      } else out.push(l);
+    });
+    return out;
   }
   function invoiceBase(fl) {
-    if (fl.kind !== 'consume' || isFailed(fl)) return 0;
-    return round2(rechargeBatches(fl).reduce(function (n, x) { return n + x.amount; }, 0));
+    return round2(invoiceLines(fl).reduce(function (n, x) { return n + x.amount; }, 0));
   }
   function consumptions(ws) {
     return ledger(ws, true).filter(function (r) { return r.flow.kind === 'consume'; });
@@ -314,6 +358,7 @@
 
   // ---------- 升级测算 ----------
   function calcUpgrade(plan, toTier, cfg) {
+    if (!UPGRADE_ENABLED) return { ok: false, reason: '年包升级暂未开放' };
     var target = planDef(toTier, cfg);
     if (!plan || !target) return { ok: false, reason: '年包信息不存在' };
     if (plan.expireAt < TODAY) return { ok: false, reason: '原年包已到期，不可升级' };
@@ -333,7 +378,7 @@
   }
 
   function upgradeTargets(plan, cfg) {
-    if (!plan) return [];
+    if (!plan || !UPGRADE_ENABLED) return [];
     return salePlans(cfg).map(function (p) { return calcUpgrade(plan, p.tier, cfg); }).filter(function (c) { return c.ok; });
   }
 
@@ -380,7 +425,7 @@
   function invoiceableConsumptions(ws) {
     return consumptions(ws).filter(function (r) { return r.flow.meta && r.flow.meta.invoice === 'eligible' && invoiceBase(r.flow) > 0; });
   }
-  // 提交开票申请：先整体校验，再统一占用资格；充值/年包订单按实付金额，消费仅充值彩豆部分
+  // 提交开票申请：先整体校验，再统一占用资格；充值/年包订单按实付金额，消费按年包与充值彩豆折算金额
   function submitInvoice(kind, ids, details) {
     if (kind !== 'recharge' && kind !== 'consumption') throw new Error('开票来源无效');
     if (!ids || !ids.length) throw new Error('请至少选择一条记录');
@@ -515,11 +560,11 @@
       '<section><h4>兑换</h4><p>1 元 = 1 彩豆，彩豆可用于平台全部智能体。</p></section>' +
       (sale.length ? '<section><h4>年包</h4><table class="bp-mini-table"><thead><tr><th>年包</th><th>价格 / 年</th><th>年度总彩豆</th><th>额度权益</th></tr></thead><tbody>' + rows + '</tbody></table>' +
       '<p>自购买日起 ' + cfg.validityMonths + ' 个月有效，基础及赠送彩豆按同一有效期管理，到期未使用部分清零。可重复购买，每份年包单独计算有效期。</p></section>' +
-      '<section><h4>年包升级</h4><p>生效中的年包可升级到价格更高的在售年包，补差价 = 目标年包价格 − 原年包已付金额；补发彩豆 = 目标年包总彩豆 − 原年包总彩豆。升级后有效期不变，不支持降级。</p></section>' : '') +
+      (UPGRADE_ENABLED ? '<section><h4>年包升级</h4><p>生效中的年包可升级到价格更高的在售年包，补差价 = 目标年包价格 − 原年包已付金额；补发彩豆 = 目标年包总彩豆 − 原年包总彩豆。升级后有效期不变，不支持降级。</p></section>' : '') : '') +
       '<section><h4>单次充值</h4><p>' + cfg.small.map(function (x) { return x + ' 元'; }).join(' / ') + ' 或自定义金额（' + cfg.customMin + '–' + fmtInt(cfg.customMax) + ' 元），长期有效。' + rechargeGiftText(cfg) + '</p></section>' +
       (personal && (cfg.login.on || (cfg.monthly && cfg.monthly.on)) ? '<section><h4>免费彩豆</h4><p>' + freeRuleText(cfg) + '当月有效，月底未使用部分清零；可用于全部智能体，年包用户同样享有。</p></section>' : '') +
       '<section><h4>扣减顺序</h4><p>' + (personal ? '免费彩豆 → ' : '') + '年包彩豆（先到期先用）→ 充值彩豆。</p></section>' +
-      '<section><h4>开票</h4><p>年包、升级和单次充值按实付金额开票；赠送彩豆' + (personal ? '和免费彩豆' : '') + '不开票。消费含充值赠送彩豆时，可开票金额按该笔充值的实付 ÷ 到账彩豆折算。</p></section>';
+      '<section><h4>开票</h4><p>年包和单次充值按实付金额开票；赠送彩豆' + (personal ? '和免费彩豆' : '') + '不开票。消费年包彩豆或充值彩豆可开消费发票，金额按对应年包或充值订单的未分摊实付 ÷ 未使用彩豆折算，用完时合计等于实付。</p></section>';
   }
   function rechargeGiftText(cfg) {
     var p = rechargePromo(cfg);
@@ -615,11 +660,11 @@
   }
 
   window.BeanPlan = {
-    TODAY: TODAY, MAX_ON_SALE: MAX_ON_SALE, KIND: KIND, PART_LABEL: PART_LABEL,
+    TODAY: TODAY, MAX_ON_SALE: MAX_ON_SALE, UPGRADE_ENABLED: UPGRADE_ENABLED, KIND: KIND, PART_LABEL: PART_LABEL,
     fmt: fmt, fmtInt: fmtInt, money: money, esc: esc, param: param, daysBetween: daysBetween,
     loadCfg: loadCfg, saveCfg: saveCfg, defaultCfg: function () { return clone(DEFAULT_CFG); }, planDef: planDef, planView: planView, salePlans: salePlans, cheapestPlan: cheapestPlan, maxRatio: maxRatio, upgradeTargets: upgradeTargets, soldTiers: soldTiers,
     getWs: getWs, isPersonal: isPersonal, walletName: walletName, acct: acct,
-    buckets: buckets, ledger: ledger, consumptions: consumptions, invoiceBase: invoiceBase, rechargeBatches: rechargeBatches, isFailed: isFailed, PHONE: PHONE, SOURCE_LABEL: { free: '免费彩豆', plan: '年包彩豆', recharge: '充值彩豆' }, monthStats: monthStats, activePlans: activePlans, currentPlan: currentPlan,
+    buckets: buckets, ledger: ledger, consumptions: consumptions, invoiceBase: invoiceBase, invoiceLines: invoiceLines, allocations: allocations, isFailed: isFailed, PHONE: PHONE, SOURCE_LABEL: { free: '免费彩豆', plan: '年包彩豆', recharge: '充值彩豆' }, monthStats: monthStats, activePlans: activePlans, currentPlan: currentPlan,
     calcUpgrade: calcUpgrade, createRecharge: createRecharge, createPlan: createPlan, createUpgrade: createUpgrade,
     freeRuleText: freeRuleText, rechargePromo: rechargePromo, rechargeGiftOf: rechargeGiftOf, rechargeGiftText: rechargeGiftText, findOrder: findOrder, invoicesOf: invoicesOf, invoiceableOrders: invoiceableOrders, invoiceableConsumptions: invoiceableConsumptions, submitInvoice: submitInvoice, findInvoice: findInvoice, flowTitle: flowTitle, partsText: partsText, toast: toast, openRules: openRules, resetAll: resetAll
   };
